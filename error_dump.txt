@@ -1,0 +1,220 @@
+﻿
+storage\logs\laravel.log:39:[2026-05-26 06:26:41] testing.ERROR: Flux 
+component [icon.activity] does not exist. (View: C:\Users\brgy\my-blade-app\ven
+dor\livewire\flux\stubs\resources\views\flux\icon\index.blade.php) (View: C:\Us
+ers\brgy\my-blade-app\vendor\livewire\flux\stubs\resources\views\flux\icon\inde
+x.blade.php) (View: C:\Users\brgy\my-blade-app\vendor\livewire\flux\stubs\resou
+rces\views\flux\icon\index.blade.php) (View: C:\Users\brgy\my-blade-app\vendor\
+livewire\flux\stubs\resources\views\flux\icon\index.blade.php) (View: C:\Users\
+brgy\my-blade-app\vendor\livewire\flux\stubs\resources\views\flux\icon\index.bl
+ade.php) {"userId":1,"exception":"[object] 
+(Illuminate\\View\\ViewException(code: 0): Flux component [icon.activity] does 
+not exist. (View: C:\\Users\\brgy\\my-blade-app\\vendor\\livewire\\flux\\stubs\
+\resources\\views\\flux\\icon\\index.blade.php) (View: C:\\Users\\brgy\\my-blad
+e-app\\vendor\\livewire\\flux\\stubs\\resources\\views\\flux\\icon\\index.blade
+.php) (View: C:\\Users\\brgy\\my-blade-app\\vendor\\livewire\\flux\\stubs\\reso
+urces\\views\\flux\\icon\\index.blade.php) (View: C:\\Users\\brgy\\my-blade-app
+\\vendor\\livewire\\flux\\stubs\\resources\\views\\flux\\icon\\index.blade.php)
+ (View: C:\\Users\\brgy\\my-blade-app\\vendor\\livewire\\flux\\stubs\\resources
+\\views\\flux\\icon\\index.blade.php) at C:/Users/brgy/my-blade-app/storage/fra
+mework/views/896cb63ca6f2a07b2cda0bcdc28274a6.php:45)
+storage\logs\laravel.log:41:#0 C:/Users/brgy/my-blade-app/vendor/livewire/livew
+ire/src/Mechanisms/ExtendBlade/ExtendedCompilerEngine.php(58): 
+Illuminate/View/Engines/CompilerEngine->handleViewException()
+storage\logs\laravel.log:42:#1 C:/Users/brgy/my-blade-app/vendor/laravel/framew
+ork/src/Illuminate/View/Engines/PhpEngine.php(59): 
+Livewire/Mechanisms/ExtendBlade/ExtendedCompilerEngine->handleViewException()
+storage\logs\laravel.log:119:[previous exception] [object] 
+(Illuminate\\View\\ViewException(code: 0): Flux component [icon.activity] does 
+not exist. (View: C:\\Users\\brgy\\my-blade-app\\vendor\\livewire\\flux\\stubs\
+\resources\\views\\flux\\icon\\index.blade.php) (View: C:\\Users\\brgy\\my-blad
+e-app\\vendor\\livewire\\flux\\stubs\\resources\\views\\flux\\icon\\index.blade
+.php) (View: C:\\Users\\brgy\\my-blade-app\\vendor\\livewire\\flux\\stubs\\reso
+urces\\views\\flux\\icon\\index.blade.php) (View: C:\\Users\\brgy\\my-blade-app
+\\vendor\\livewire\\flux\\stubs\\resources\\views\\flux\\icon\\index.blade.php)
+ at C:/Users/brgy/my-blade-app/storage/framework/views/896cb63ca6f2a07b2cda0bcd
+c28274a6.php:45)
+storage\logs\laravel.log:121:#0 C:/Users/brgy/my-blade-app/vendor/livewire/live
+wire/src/Mechanisms/ExtendBlade/ExtendedCompilerEngine.php(58): 
+Illuminate/View/Engines/CompilerEngine->handleViewException()
+storage\logs\laravel.log:122:#1 C:/Users/brgy/my-blade-app/vendor/laravel/frame
+work/src/Illuminate/View/Engines/PhpEngine.php(59): 
+Livewire/Mechanisms/ExtendBlade/ExtendedCompilerEngine->handleViewException()
+storage\logs\laravel.log:210:[previous exception] [object] 
+(Illuminate\\View\\ViewException(code: 0): Flux component [icon.activity] does 
+not exist. (View: C:\\Users\\brgy\\my-blade-app\\vendor\\livewire\\flux\\stubs\
+\resources\\views\\flux\\icon\\index.blade.php) (View: C:\\Users\\brgy\\my-blad
+e-app\\vendor\\livewire\\flux\\stubs\\resources\\views\\flux\\icon\\index.blade
+.php) (View: C:\\Users\\brgy\\my-blade-app\\vendor\\livewire\\flux\\stubs\\reso
+urces\\views\\flux\\icon\\index.blade.php) at C:/Users/brgy/my-blade-app/storag
+e/framework/views/896cb63ca6f2a07b2cda0bcdc28274a6.php:45)
+storage\logs\laravel.log:212:#0 C:/Users/brgy/my-blade-app/vendor/livewire/live
+wire/src/Mechanisms/ExtendBlade/ExtendedCompilerEngine.php(58): 
+Illuminate/View/Engines/CompilerEngine->handleViewException()
+storage\logs\laravel.log:213:#1 C:/Users/brgy/my-blade-app/vendor/laravel/frame
+work/src/Illuminate/View/Engines/PhpEngine.php(59): 
+Livewire/Mechanisms/ExtendBlade/ExtendedCompilerEngine->handleViewException()
+storage\logs\laravel.log:312:[previous exception] [object] 
+(Illuminate\\View\\ViewException(code: 0): Flux component [icon.activity] does 
+not exist. (View: C:\\Users\\brgy\\my-blade-app\\vendor\\livewire\\flux\\stubs\
+\resources\\views\\flux\\icon\\index.blade.php) (View: C:\\Users\\brgy\\my-blad
+e-app\\vendor\\livewire\\flux\\stubs\\resources\\views\\flux\\icon\\index.blade
+.php) at C:/Users/brgy/my-blade-app/storage/framework/views/896cb63ca6f2a07b2cd
+a0bcdc28274a6.php:45)
+storage\logs\laravel.log:314:#0 C:/Users/brgy/my-blade-app/vendor/livewire/live
+wire/src/Mechanisms/ExtendBlade/ExtendedCompilerEngine.php(58): 
+Illuminate/View/Engines/CompilerEngine->handleViewException()
+storage\logs\laravel.log:315:#1 C:/Users/brgy/my-blade-app/vendor/laravel/frame
+work/src/Illuminate/View/Engines/PhpEngine.php(59): 
+Livewire/Mechanisms/ExtendBlade/ExtendedCompilerEngine->handleViewException()
+storage\logs\laravel.log:425:[previous exception] [object] 
+(Illuminate\\View\\ViewException(code: 0): Flux component [icon.activity] does 
+not exist. (View: C:\\Users\\brgy\\my-blade-app\\vendor\\livewire\\flux\\stubs\
+\resources\\views\\flux\\icon\\index.blade.php) at C:/Users/brgy/my-blade-app/s
+torage/framework/views/896cb63ca6f2a07b2cda0bcdc28274a6.php:45)
+storage\logs\laravel.log:427:#0 C:/Users/brgy/my-blade-app/vendor/livewire/live
+wire/src/Mechanisms/ExtendBlade/ExtendedCompilerEngine.php(58): 
+Illuminate/View/Engines/CompilerEngine->handleViewException()
+storage\logs\laravel.log:428:#1 C:/Users/brgy/my-blade-app/vendor/laravel/frame
+work/src/Illuminate/View/Engines/PhpEngine.php(59): 
+Livewire/Mechanisms/ExtendBlade/ExtendedCompilerEngine->handleViewException()
+storage\logs\laravel.log:674:[2026-05-26 07:03:15] local.ERROR: Flux component 
+[icon.command] does not exist. (View: C:\Users\brgy\my-blade-app\vendor\livewir
+e\flux\stubs\resources\views\flux\icon\index.blade.php) (View: C:\Users\brgy\my
+-blade-app\vendor\livewire\flux\stubs\resources\views\flux\icon\index.blade.php
+) {"userId":1,"exception":"[object] (Illuminate\\View\\ViewException(code: 0): 
+Flux component [icon.command] does not exist. (View: C:\\Users\\brgy\\my-blade-
+app\\vendor\\livewire\\flux\\stubs\\resources\\views\\flux\\icon\\index.blade.p
+hp) (View: C:\\Users\\brgy\\my-blade-app\\vendor\\livewire\\flux\\stubs\\resour
+ces\\views\\flux\\icon\\index.blade.php) at C:/Users/brgy/my-blade-app/storage/
+framework/views/896cb63ca6f2a07b2cda0bcdc28274a6.php:45)
+storage\logs\laravel.log:676:#0 C:/Users/brgy/my-blade-app/vendor/livewire/live
+wire/src/Mechanisms/ExtendBlade/ExtendedCompilerEngine.php(58): 
+Illuminate/View/Engines/CompilerEngine->handleViewException()
+storage\logs\laravel.log:677:#1 C:/Users/brgy/my-blade-app/vendor/laravel/frame
+work/src/Illuminate/View/Engines/PhpEngine.php(59): 
+Livewire/Mechanisms/ExtendBlade/ExtendedCompilerEngine->handleViewException()
+storage\logs\laravel.log:742:[previous exception] [object] 
+(Illuminate\\View\\ViewException(code: 0): Flux component [icon.command] does 
+not exist. (View: C:\\Users\\brgy\\my-blade-app\\vendor\\livewire\\flux\\stubs\
+\resources\\views\\flux\\icon\\index.blade.php) at C:/Users/brgy/my-blade-app/s
+torage/framework/views/896cb63ca6f2a07b2cda0bcdc28274a6.php:45)
+storage\logs\laravel.log:744:#0 C:/Users/brgy/my-blade-app/vendor/livewire/live
+wire/src/Mechanisms/ExtendBlade/ExtendedCompilerEngine.php(58): 
+Illuminate/View/Engines/CompilerEngine->handleViewException()
+storage\logs\laravel.log:745:#1 C:/Users/brgy/my-blade-app/vendor/laravel/frame
+work/src/Illuminate/View/Engines/PhpEngine.php(59): 
+Livewire/Mechanisms/ExtendBlade/ExtendedCompilerEngine->handleViewException()
+storage\logs\laravel.log:901:[2026-05-26 07:15:00] local.ERROR: Flux component 
+[icon.shield] does not exist. (View: C:\Users\brgy\my-blade-app\vendor\livewire
+\flux\stubs\resources\views\flux\icon\index.blade.php) (View: C:\Users\brgy\my-
+blade-app\vendor\livewire\flux\stubs\resources\views\flux\icon\index.blade.php)
+ {"userId":2,"exception":"[object] (Illuminate\\View\\ViewException(code: 0): 
+Flux component [icon.shield] does not exist. (View: C:\\Users\\brgy\\my-blade-a
+pp\\vendor\\livewire\\flux\\stubs\\resources\\views\\flux\\icon\\index.blade.ph
+p) (View: C:\\Users\\brgy\\my-blade-app\\vendor\\livewire\\flux\\stubs\\resourc
+es\\views\\flux\\icon\\index.blade.php) at C:/Users/brgy/my-blade-app/storage/f
+ramework/views/896cb63ca6f2a07b2cda0bcdc28274a6.php:45)
+storage\logs\laravel.log:903:#0 C:/Users/brgy/my-blade-app/vendor/livewire/live
+wire/src/Mechanisms/ExtendBlade/ExtendedCompilerEngine.php(58): 
+Illuminate/View/Engines/CompilerEngine->handleViewException()
+storage\logs\laravel.log:904:#1 C:/Users/brgy/my-blade-app/vendor/laravel/frame
+work/src/Illuminate/View/Engines/PhpEngine.php(59): 
+Livewire/Mechanisms/ExtendBlade/ExtendedCompilerEngine->handleViewException()
+storage\logs\laravel.log:969:[previous exception] [object] 
+(Illuminate\\View\\ViewException(code: 0): Flux component [icon.shield] does 
+not exist. (View: C:\\Users\\brgy\\my-blade-app\\vendor\\livewire\\flux\\stubs\
+\resources\\views\\flux\\icon\\index.blade.php) at C:/Users/brgy/my-blade-app/s
+torage/framework/views/896cb63ca6f2a07b2cda0bcdc28274a6.php:45)
+storage\logs\laravel.log:971:#0 C:/Users/brgy/my-blade-app/vendor/livewire/live
+wire/src/Mechanisms/ExtendBlade/ExtendedCompilerEngine.php(58): 
+Illuminate/View/Engines/CompilerEngine->handleViewException()
+storage\logs\laravel.log:972:#1 C:/Users/brgy/my-blade-app/vendor/laravel/frame
+work/src/Illuminate/View/Engines/PhpEngine.php(59): 
+Livewire/Mechanisms/ExtendBlade/ExtendedCompilerEngine->handleViewException()
+storage\logs\laravel.log:1128:[2026-05-26 07:24:30] local.ERROR: Flux 
+component [icon.shield] does not exist. (View: C:\Users\brgy\my-blade-app\vendo
+r\livewire\flux\stubs\resources\views\flux\icon\index.blade.php) (View: C:\User
+s\brgy\my-blade-app\vendor\livewire\flux\stubs\resources\views\flux\icon\index.
+blade.php) {"userId":2,"exception":"[object] 
+(Illuminate\\View\\ViewException(code: 0): Flux component [icon.shield] does 
+not exist. (View: C:\\Users\\brgy\\my-blade-app\\vendor\\livewire\\flux\\stubs\
+\resources\\views\\flux\\icon\\index.blade.php) (View: C:\\Users\\brgy\\my-blad
+e-app\\vendor\\livewire\\flux\\stubs\\resources\\views\\flux\\icon\\index.blade
+.php) at C:/Users/brgy/my-blade-app/storage/framework/views/896cb63ca6f2a07b2cd
+a0bcdc28274a6.php:45)
+storage\logs\laravel.log:1130:#0 C:/Users/brgy/my-blade-app/vendor/livewire/liv
+ewire/src/Mechanisms/ExtendBlade/ExtendedCompilerEngine.php(58): 
+Illuminate/View/Engines/CompilerEngine->handleViewException()
+storage\logs\laravel.log:1131:#1 C:/Users/brgy/my-blade-app/vendor/laravel/fram
+ework/src/Illuminate/View/Engines/PhpEngine.php(59): 
+Livewire/Mechanisms/ExtendBlade/ExtendedCompilerEngine->handleViewException()
+storage\logs\laravel.log:1196:[previous exception] [object] 
+(Illuminate\\View\\ViewException(code: 0): Flux component [icon.shield] does 
+not exist. (View: C:\\Users\\brgy\\my-blade-app\\vendor\\livewire\\flux\\stubs\
+\resources\\views\\flux\\icon\\index.blade.php) at C:/Users/brgy/my-blade-app/s
+torage/framework/views/896cb63ca6f2a07b2cda0bcdc28274a6.php:45)
+storage\logs\laravel.log:1198:#0 C:/Users/brgy/my-blade-app/vendor/livewire/liv
+ewire/src/Mechanisms/ExtendBlade/ExtendedCompilerEngine.php(58): 
+Illuminate/View/Engines/CompilerEngine->handleViewException()
+storage\logs\laravel.log:1199:#1 C:/Users/brgy/my-blade-app/vendor/laravel/fram
+ework/src/Illuminate/View/Engines/PhpEngine.php(59): 
+Livewire/Mechanisms/ExtendBlade/ExtendedCompilerEngine->handleViewException()
+storage\logs\laravel.log:1355:[2026-05-28 01:02:55] local.ERROR: Flux 
+component [icon.shield] does not exist. (View: C:\Users\brgy\my-blade-app\vendo
+r\livewire\flux\stubs\resources\views\flux\icon\index.blade.php) (View: C:\User
+s\brgy\my-blade-app\vendor\livewire\flux\stubs\resources\views\flux\icon\index.
+blade.php) {"userId":2,"exception":"[object] 
+(Illuminate\\View\\ViewException(code: 0): Flux component [icon.shield] does 
+not exist. (View: C:\\Users\\brgy\\my-blade-app\\vendor\\livewire\\flux\\stubs\
+\resources\\views\\flux\\icon\\index.blade.php) (View: C:\\Users\\brgy\\my-blad
+e-app\\vendor\\livewire\\flux\\stubs\\resources\\views\\flux\\icon\\index.blade
+.php) at C:/Users/brgy/my-blade-app/storage/framework/views/896cb63ca6f2a07b2cd
+a0bcdc28274a6.php:45)
+storage\logs\laravel.log:1357:#0 C:/Users/brgy/my-blade-app/vendor/livewire/liv
+ewire/src/Mechanisms/ExtendBlade/ExtendedCompilerEngine.php(58): 
+Illuminate/View/Engines/CompilerEngine->handleViewException()
+storage\logs\laravel.log:1358:#1 C:/Users/brgy/my-blade-app/vendor/laravel/fram
+ework/src/Illuminate/View/Engines/PhpEngine.php(59): 
+Livewire/Mechanisms/ExtendBlade/ExtendedCompilerEngine->handleViewException()
+storage\logs\laravel.log:1423:[previous exception] [object] 
+(Illuminate\\View\\ViewException(code: 0): Flux component [icon.shield] does 
+not exist. (View: C:\\Users\\brgy\\my-blade-app\\vendor\\livewire\\flux\\stubs\
+\resources\\views\\flux\\icon\\index.blade.php) at C:/Users/brgy/my-blade-app/s
+torage/framework/views/896cb63ca6f2a07b2cda0bcdc28274a6.php:45)
+storage\logs\laravel.log:1425:#0 C:/Users/brgy/my-blade-app/vendor/livewire/liv
+ewire/src/Mechanisms/ExtendBlade/ExtendedCompilerEngine.php(58): 
+Illuminate/View/Engines/CompilerEngine->handleViewException()
+storage\logs\laravel.log:1426:#1 C:/Users/brgy/my-blade-app/vendor/laravel/fram
+ework/src/Illuminate/View/Engines/PhpEngine.php(59): 
+Livewire/Mechanisms/ExtendBlade/ExtendedCompilerEngine->handleViewException()
+storage\logs\laravel.log:1582:[2026-05-28 01:09:27] local.ERROR: Flux 
+component [icon.shield] does not exist. (View: C:\Users\brgy\my-blade-app\vendo
+r\livewire\flux\stubs\resources\views\flux\icon\index.blade.php) (View: C:\User
+s\brgy\my-blade-app\vendor\livewire\flux\stubs\resources\views\flux\icon\index.
+blade.php) {"userId":2,"exception":"[object] 
+(Illuminate\\View\\ViewException(code: 0): Flux component [icon.shield] does 
+not exist. (View: C:\\Users\\brgy\\my-blade-app\\vendor\\livewire\\flux\\stubs\
+\resources\\views\\flux\\icon\\index.blade.php) (View: C:\\Users\\brgy\\my-blad
+e-app\\vendor\\livewire\\flux\\stubs\\resources\\views\\flux\\icon\\index.blade
+.php) at C:/Users/brgy/my-blade-app/storage/framework/views/896cb63ca6f2a07b2cd
+a0bcdc28274a6.php:45)
+storage\logs\laravel.log:1584:#0 C:/Users/brgy/my-blade-app/vendor/livewire/liv
+ewire/src/Mechanisms/ExtendBlade/ExtendedCompilerEngine.php(58): 
+Illuminate/View/Engines/CompilerEngine->handleViewException()
+storage\logs\laravel.log:1585:#1 C:/Users/brgy/my-blade-app/vendor/laravel/fram
+ework/src/Illuminate/View/Engines/PhpEngine.php(59): 
+Livewire/Mechanisms/ExtendBlade/ExtendedCompilerEngine->handleViewException()
+storage\logs\laravel.log:1650:[previous exception] [object] 
+(Illuminate\\View\\ViewException(code: 0): Flux component [icon.shield] does 
+not exist. (View: C:\\Users\\brgy\\my-blade-app\\vendor\\livewire\\flux\\stubs\
+\resources\\views\\flux\\icon\\index.blade.php) at C:/Users/brgy/my-blade-app/s
+torage/framework/views/896cb63ca6f2a07b2cda0bcdc28274a6.php:45)
+storage\logs\laravel.log:1652:#0 C:/Users/brgy/my-blade-app/vendor/livewire/liv
+ewire/src/Mechanisms/ExtendBlade/ExtendedCompilerEngine.php(58): 
+Illuminate/View/Engines/CompilerEngine->handleViewException()
+storage\logs\laravel.log:1653:#1 C:/Users/brgy/my-blade-app/vendor/laravel/fram
+ework/src/Illuminate/View/Engines/PhpEngine.php(59): 
+Livewire/Mechanisms/ExtendBlade/ExtendedCompilerEngine->handleViewException()
+
+

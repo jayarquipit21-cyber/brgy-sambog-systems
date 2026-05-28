@@ -1,0 +1,187 @@
+{
+  "purok 1": {
+    "rowCount": 195,
+    "columnCount": 80,
+    "headers": [
+      "REGISTRY OF BARANGAY\nINHABITANTS (RBI) 2025",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      95,
+      null
+    ]
+  },
+  "purok 2": {
+    "rowCount": 179,
+    "columnCount": 1,
+    "headers": [
+      "REGISTRY OF BARANGAY\nINHABITANTS (RBI) 2025"
+    ]
+  },
+  "purok 3": {
+    "rowCount": 502,
+    "columnCount": 14,
+    "headers": [
+      "REGISTRY OF BARANGAY INHABITANTS (RBI) 2025\n",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      5
+    ]
+  },
+  "Sheet1": {
+    "rowCount": 59,
+    "columnCount": 3,
+    "headers": [
+      null,
+      "Children in Need of Special Protection (CNSP)",
+      "4Ps (Pantawid Pamilyang Pilipino Program)"
+    ]
+  },
+  "purok 4": {
+    "rowCount": 332,
+    "columnCount": 14,
+    "headers": [
+      "REGISTRY OF BARANGAY\nINHABITANTS (RBI) 2025",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      161
+    ]
+  },
+  "purok 5": {
+    "rowCount": 273,
+    "columnCount": 14,
+    "headers": [
+      "REGISTRY OF BARANGAY\nINHABITANTS (RBI) 2025",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      136
+    ]
+  },
+  "purok 6": {
+    "rowCount": 274,
+    "columnCount": 14,
+    "headers": [
+      "REGISTRY OF BARANGAY\nINHABITANTS (RBI) 2025",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      112
+    ]
+  },
+  "purok 7": {
+    "rowCount": 219,
+    "columnCount": 14,
+    "headers": [
+      "REGISTRY OF BARANGAY\nINHABITANTS (RBI) 2025",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      88
+    ]
+  },
+  "purok 8": {
+    "rowCount": 329,
+    "columnCount": 14,
+    "headers": [
+      "REGISTRY OF BARANGAY\nINHABITANTS (RBI) 2025",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      119
+    ]
+  },
+  "rbi template": {
+    "rowCount": 21,
+    "columnCount": 1,
+    "headers": [
+      "REGISTRY OF BARANGAY \nINHABITANTS (RBI) 2025"
+    ]
+  },
+  "Sheet3": {
+    "rowCount": 1815,
+    "columnCount": 80,
+    "headers": [
+      "REGISTRY OF BARANGAY\nINHABITANTS (RBI) 2025",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  }
+}
