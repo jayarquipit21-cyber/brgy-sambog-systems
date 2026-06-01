@@ -13,11 +13,24 @@ class BookAppointment extends Component
     public string $appointment_time = '';
     public string $purpose = '';
 
-    protected array $rules = [
-        'appointment_date' => 'required|date|after_or_equal:today',
-        'appointment_time' => 'required|string',
-        'purpose' => 'required|string|min:5|max:500',
-    ];
+    public function rules(): array
+    {
+        return [
+            'appointment_date' => [
+                'required',
+                'date',
+                'after_or_equal:today',
+                function ($attribute, $value, $fail) {
+                    $dayOfWeek = date('N', strtotime($value));
+                    if ($dayOfWeek >= 6) {
+                        $fail(__('Appointments are only available from Monday to Friday.'));
+                    }
+                },
+            ],
+            'appointment_time' => 'required|string',
+            'purpose' => 'required|string|min:5|max:500',
+        ];
+    }
 
     public function book(): void
     {
