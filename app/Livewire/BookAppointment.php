@@ -3,7 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Appointment;
-use App\Models\AppointmentClosure;
+// weekday-based closures removed; using date-based closures only
 use App\Models\AppointmentDateClosure;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Auth;
@@ -35,17 +35,7 @@ class BookAppointment extends Component
                         }
                     }
 
-                    // If the date-closure table isn't present or there's no match,
-                    // fall back to weekday closures when available, otherwise default weekend rule.
-                    if (Schema::hasTable('appointment_closures')) {
-                        $closure = AppointmentClosure::where('weekday', $dayOfWeek)->first();
-                        if ($closure && $closure->closed) {
-                            $reason = $closure->reason ? ' ' . $closure->reason : '';
-                            $fail(__('Appointments are not available on this day. :reason', ['reason' => $reason]));
-                        }
-                        return;
-                    }
-
+                    // If there is no date closure, fall back to weekend-only rule.
                     if ($dayOfWeek >= 6) {
                         $fail(__('Appointments are only available from Monday to Friday.'));
                     }
@@ -82,11 +72,6 @@ class BookAppointment extends Component
             $dateClosures = AppointmentDateClosure::where('date', '>=', now()->toDateString())->orderBy('date')->get();
         }
 
-        $weekdayClosures = [];
-        if (Schema::hasTable('appointment_closures')) {
-            $weekdayClosures = AppointmentClosure::where('closed', true)->get()->keyBy('weekday');
-        }
-
-        return view('livewire.book-appointment', ['dateClosures' => $dateClosures, 'weekdayClosures' => $weekdayClosures]);
+        return view('livewire.book-appointment', ['dateClosures' => $dateClosures]);
     }
 }
