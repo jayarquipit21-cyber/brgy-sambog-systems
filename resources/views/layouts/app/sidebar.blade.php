@@ -12,6 +12,10 @@
 
             <flux:sidebar.nav>
                 <flux:sidebar.group :heading="__('Platform')" class="grid">
+                    <flux:sidebar.item icon="globe-alt" :href="route('home')" wire:navigate>
+                        {{ __('Public Homepage') }}
+                    </flux:sidebar.item>
+
                     <flux:sidebar.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
                         {{ __('Dashboard') }}
                     </flux:sidebar.item>
@@ -19,6 +23,9 @@
                     @if(auth()->user()->isAdmin())
                         <flux:sidebar.item icon="users" :href="route('rbi')" :current="request()->routeIs('rbi')" wire:navigate>
                             {{ __('RBI Registry') }}
+                        </flux:sidebar.item>
+                        <flux:sidebar.item icon="table-cells" :href="route('rbi-data')" :current="request()->routeIs('rbi-data')" wire:navigate>
+                            {{ __('RBI Data Table') }}
                         </flux:sidebar.item>
                         <flux:sidebar.item icon="calendar" :href="route('appointments')" :current="request()->routeIs('appointments')" wire:navigate>
                             {{ __('Manage Appointments') }}

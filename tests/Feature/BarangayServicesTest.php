@@ -126,6 +126,7 @@ class BarangayServicesTest extends TestCase
     {
         $this->get(route('dashboard'))->assertRedirect(route('login'));
         $this->get(route('rbi'))->assertRedirect(route('login'));
+        $this->get(route('rbi-data'))->assertRedirect(route('login'));
         $this->get(route('health'))->assertRedirect(route('login'));
         $this->get(route('household'))->assertRedirect(route('login'));
         $this->get(route('appointments'))->assertRedirect(route('login'));
@@ -137,6 +138,7 @@ class BarangayServicesTest extends TestCase
         $this->actingAs($resident);
 
         $this->get(route('rbi'))->assertStatus(403);
+        $this->get(route('rbi-data'))->assertStatus(403);
         $this->get(route('health'))->assertStatus(403);
         $this->get(route('household'))->assertStatus(403);
         
@@ -150,6 +152,7 @@ class BarangayServicesTest extends TestCase
         $this->actingAs($health);
 
         $this->get(route('rbi'))->assertStatus(403);
+        $this->get(route('rbi-data'))->assertStatus(403);
         $this->get(route('household'))->assertStatus(403);
 
         $this->get(route('health'))->assertOk();
@@ -163,6 +166,7 @@ class BarangayServicesTest extends TestCase
         $this->actingAs($head);
 
         $this->get(route('rbi'))->assertStatus(403);
+        $this->get(route('rbi-data'))->assertStatus(403);
         $this->get(route('health'))->assertStatus(403);
 
         $this->get(route('household'))->assertOk();
@@ -177,9 +181,14 @@ class BarangayServicesTest extends TestCase
 
         $this->get(route('dashboard'))->assertOk();
         $this->get(route('rbi'))->assertOk();
+        $this->get(route('rbi-data'))->assertOk();
         $this->get(route('health'))->assertOk();
         $this->get(route('household'))->assertOk();
         $this->get(route('appointments'))->assertOk();
+
+        // Check if the component renders successfully
+        \Livewire\Livewire::test(\App\Livewire\Admin\RbiDataTable::class)
+            ->assertOk();
     }
 
     public function test_admin_can_create_household_head(): void

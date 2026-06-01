@@ -67,6 +67,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('pages.rbi');
     })->name('rbi');
 
+    Route::get('rbi-data', function () {
+        if (!auth()->user()->isAdmin()) {
+            abort(403, 'Unauthorized.');
+        }
+        return view('pages.rbi-data');
+    })->name('rbi-data');
+
     // Health officer routes
     Route::get('health', function () {
         if (!auth()->user()->isHealthAdmin() && !auth()->user()->isAdmin()) {
