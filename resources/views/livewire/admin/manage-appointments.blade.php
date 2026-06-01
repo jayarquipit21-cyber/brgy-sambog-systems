@@ -25,7 +25,7 @@
     </div>
 
     <div class="mb-6">
-        <livewire:admin.manage-closures />
+        <livewire:admin.manage-date-closures />
     </div>
 
     @if($appointments->isEmpty())

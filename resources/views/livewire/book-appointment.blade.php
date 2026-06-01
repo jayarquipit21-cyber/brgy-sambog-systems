@@ -5,13 +5,20 @@
     </div>
 
     <form wire:submit="book" class="space-y-4">
-        @if(isset($closures) && $closures->count())
+        @if((isset($dateClosures) && $dateClosures->count()) || (isset($weekdayClosures) && $weekdayClosures->count()))
             <div class="bg-yellow-50 border border-yellow-200 p-3 rounded text-sm text-zinc-800">
                 <strong>Closures:</strong>
                 <ul class="list-disc pl-5 mt-1">
-                    @foreach($closures as $weekday => $closure)
-                        <li>{{ ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'][$weekday-1] }}: {{ $closure->reason ?? 'Closed' }}</li>
-                    @endforeach
+                    @if(isset($dateClosures))
+                        @foreach($dateClosures as $c)
+                            <li>{{ $c->date->format('M d, Y') }}: {{ $c->reason ?? 'Closed' }}</li>
+                        @endforeach
+                    @endif
+                    @if(isset($weekdayClosures))
+                        @foreach($weekdayClosures as $weekday => $closure)
+                            <li>{{ ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'][$weekday-1] }}: {{ $closure->reason ?? 'Closed' }}</li>
+                        @endforeach
+                    @endif
                 </ul>
             </div>
         @endif

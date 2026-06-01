@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Appointment;
 use App\Models\AppointmentClosure;
+use App\Models\AppointmentDateClosure;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -24,19 +25,29 @@ class BookAppointment extends Component
                 'after_or_equal:today',
                 function ($attribute, $value, $fail) {
                     $dayOfWeek = date('N', strtotime($value));
-                    // If the closures table is not present (tests or before migration),
-                    // fall back to default weekend-only restriction.
-                    if (! Schema::hasTable('appointment_closures')) {
-                        if ($dayOfWeek >= 6) {
-                            $fail(__('Appointments are only available from Monday to Friday.'));
+                    // Prefer explicit date closures when present
+                    if (Schema::hasTable('appointment_date_closures')) {
+                        $dateClosure = AppointmentDateClosure::where('date', $value)->first();
+                        if ($dateClosure) {
+                            $reason = $dateClosure->reason ? ' ' . $dateClosure->reason : '';
+                            $fail(__('Appointments are not available on this date. :reason', ['reason' => $reason]));
+                            return;
+                        }
+                    }
+
+                    // If the date-closure table isn't present or there's no match,
+                    // fall back to weekday closures when available, otherwise default weekend rule.
+                    if (Schema::hasTable('appointment_closures')) {
+                        $closure = AppointmentClosure::where('weekday', $dayOfWeek)->first();
+                        if ($closure && $closure->closed) {
+                            $reason = $closure->reason ? ' ' . $closure->reason : '';
+                            $fail(__('Appointments are not available on this day. :reason', ['reason' => $reason]));
                         }
                         return;
                     }
 
-                    $closure = AppointmentClosure::where('weekday', $dayOfWeek)->first();
-                    if ($closure && $closure->closed) {
-                        $reason = $closure->reason ? ' ' . $closure->reason : '';
-                        $fail(__('Appointments are not available on this day. :reason', ['reason' => $reason]));
+                    if ($dayOfWeek >= 6) {
+                        $fail(__('Appointments are only available from Monday to Friday.'));
                     }
                 },
             ],
@@ -66,7 +77,16 @@ class BookAppointment extends Component
 
     public function render()
     {
-        $closures = AppointmentClosure::where('closed', true)->get()->keyBy('weekday');
-        return view('livewire.book-appointment', ['closures' => $closures]);
+        $dateClosures = [];
+        if (Schema::hasTable('appointment_date_closures')) {
+            $dateClosures = AppointmentDateClosure::where('date', '>=', now()->toDateString())->orderBy('date')->get();
+        }
+
+        $weekdayClosures = [];
+        if (Schema::hasTable('appointment_closures')) {
+            $weekdayClosures = AppointmentClosure::where('closed', true)->get()->keyBy('weekday');
+        }
+
+        return view('livewire.book-appointment', ['dateClosures' => $dateClosures, 'weekdayClosures' => $weekdayClosures]);
     }
 }
