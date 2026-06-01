@@ -105,6 +105,14 @@
                                 @else
                                     <span class="text-xs text-zinc-400 dark:text-zinc-600">-</span>
                                 @endif
+                                @if($apt->status !== 'pending')
+                                    <button 
+                                        wire:click="delete({{ $apt->id }})"
+                                        class="text-xs text-red-500 hover:text-red-700 font-semibold ml-2"
+                                    >
+                                        Delete
+                                    </button>
+                                @endif
                             </td>
                         </tr>
                     @endforeach

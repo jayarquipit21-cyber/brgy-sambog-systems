@@ -35,6 +35,13 @@ class ManageAppointments extends Component
         Flux::toast(variant: 'success', text: __('Appointment has been rejected/cancelled.'));
     }
 
+    public function delete(int $id): void
+    {
+        $appointment = Appointment::findOrFail($id);
+        $appointment->delete();
+        Flux::toast(variant: 'success', text: __('Appointment record deleted.'));
+    }
+
     public function render()
     {
         $query = Appointment::with('user.resident')
