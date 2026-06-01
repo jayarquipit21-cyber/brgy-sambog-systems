@@ -34,6 +34,7 @@
                 min="{{ date('Y-m-d') }}"
                 onchange="const d = new Date(this.value); const day = d.getUTCDay(); if(day === 0 || day === 6){ alert('Appointments may be closed on weekends. Please check closure notices.'); }"
             />
+            <p id="closure_notice" class="text-xs text-red-600 mt-1"></p>
             @error('appointment_date') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
         </div>
 
@@ -73,9 +74,39 @@
 
         <!-- Submit -->
         <div class="flex justify-end pt-2">
-            <flux:button variant="primary" type="submit" class="bg-[#f53003] hover:bg-[#d62700] text-white py-2 px-4 rounded-lg font-medium text-sm transition shadow-sm">
+            <flux:button id="book_submit" variant="primary" type="submit" class="bg-[#f53003] hover:bg-[#d62700] text-white py-2 px-4 rounded-lg font-medium text-sm transition shadow-sm">
                 Book Appointment
             </flux:button>
         </div>
     </form>
+    <script>
+        (function(){
+            // Build map of closed dates -> reason
+            const dateClosures = @json(isset($dateClosures) ? $dateClosures->map(function($c){ return ['date' => $c->date->toDateString(), 'reason' => $c->reason]; }) : []);
+            const closedMap = new Map(dateClosures.map(d => [d.date, d.reason]));
+            const dateInput = document.getElementById('appointment_date');
+            const submitBtn = document.getElementById('book_submit');
+            const closureNotice = document.getElementById('closure_notice');
+
+            function check(dateStr){
+                if(!dateStr){ submitBtn.disabled = false; closureNotice.textContent = ''; return; }
+                if(closedMap.has(dateStr)){
+                    const reason = closedMap.get(dateStr) || 'Closed';
+                    alert('Appointments are closed on this date. ' + reason);
+                    dateInput.value = '';
+                    submitBtn.disabled = true;
+                    closureNotice.textContent = 'Closed: ' + reason;
+                } else {
+                    submitBtn.disabled = false;
+                    closureNotice.textContent = '';
+                }
+            }
+
+            if(dateInput){
+                dateInput.addEventListener('change', function(){ check(this.value); });
+                // initial check
+                check(dateInput.value);
+            }
+        })();
+    </script>
 </div>
