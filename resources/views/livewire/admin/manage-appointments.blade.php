@@ -24,6 +24,10 @@
         </div>
     </div>
 
+    <div class="mb-6">
+        <livewire:admin.manage-closures />
+    </div>
+
     @if($appointments->isEmpty())
         <div class="text-center py-12 text-zinc-400 dark:text-zinc-500 bg-zinc-50 dark:bg-zinc-900/50 rounded-2xl border border-dashed border-zinc-200 dark:border-zinc-800 p-8">
             <svg class="mx-auto text-zinc-350 dark:text-zinc-700 mb-4" width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor">

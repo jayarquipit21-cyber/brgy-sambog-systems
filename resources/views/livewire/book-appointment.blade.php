@@ -5,6 +5,16 @@
     </div>
 
     <form wire:submit="book" class="space-y-4">
+        @if(isset($closures) && $closures->count())
+            <div class="bg-yellow-50 border border-yellow-200 p-3 rounded text-sm text-zinc-800">
+                <strong>Closures:</strong>
+                <ul class="list-disc pl-5 mt-1">
+                    @foreach($closures as $weekday => $closure)
+                        <li>{{ ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'][$weekday-1] }}: {{ $closure->reason ?? 'Closed' }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <!-- Date -->
         <div>
             <label for="appointment_date" class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Preferred Pickup Date</label>
@@ -15,7 +25,7 @@
                 class="w-full rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-2 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#f53003] text-sm"
                 required
                 min="{{ date('Y-m-d') }}"
-                onchange="const d = new Date(this.value); const day = d.getUTCDay(); if(day === 0 || day === 6){ alert('Appointments are only available from Monday to Friday.'); this.value = ''; }"
+                onchange="const d = new Date(this.value); const day = d.getUTCDay(); if(day === 0 || day === 6){ alert('Appointments may be closed on weekends. Please check closure notices.'); }"
             />
             @error('appointment_date') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
         </div>

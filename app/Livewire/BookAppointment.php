@@ -3,6 +3,8 @@
 namespace App\Livewire;
 
 use App\Models\Appointment;
+use App\Models\AppointmentClosure;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Flux\Flux;
@@ -22,8 +24,19 @@ class BookAppointment extends Component
                 'after_or_equal:today',
                 function ($attribute, $value, $fail) {
                     $dayOfWeek = date('N', strtotime($value));
-                    if ($dayOfWeek >= 6) {
-                        $fail(__('Appointments are only available from Monday to Friday.'));
+                    // If the closures table is not present (tests or before migration),
+                    // fall back to default weekend-only restriction.
+                    if (! Schema::hasTable('appointment_closures')) {
+                        if ($dayOfWeek >= 6) {
+                            $fail(__('Appointments are only available from Monday to Friday.'));
+                        }
+                        return;
+                    }
+
+                    $closure = AppointmentClosure::where('weekday', $dayOfWeek)->first();
+                    if ($closure && $closure->closed) {
+                        $reason = $closure->reason ? ' ' . $closure->reason : '';
+                        $fail(__('Appointments are not available on this day. :reason', ['reason' => $reason]));
                     }
                 },
             ],
@@ -53,6 +66,7 @@ class BookAppointment extends Component
 
     public function render()
     {
-        return view('livewire.book-appointment');
+        $closures = AppointmentClosure::where('closed', true)->get()->keyBy('weekday');
+        return view('livewire.book-appointment', ['closures' => $closures]);
     }
 }
