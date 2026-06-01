@@ -58,6 +58,7 @@
                 <flux:text variant="subtle" class="text-xs text-zinc-500 dark:text-zinc-400">Search and filter dynamic resident registries parsed from the RBI workbook.</flux:text>
             </div>
             <div class="flex flex-col sm:flex-row gap-3">
+                <flux:button variant="primary" icon="plus" wire:click="openCreateModal" class="cursor-pointer text-sm py-1.5">{{ __('Add Household Head') }}</flux:button>
                 <input 
                     type="text" 
                     wire:model.live="search" 
@@ -153,4 +154,77 @@
             </div>
         @endif
     </div>
+
+    <!-- Add Household Head Modal -->
+    <flux:modal name="add-household-head" class="max-w-2xl" wire:model="showCreateModal">
+        <form wire:submit="saveHouseholdHead" class="space-y-6">
+            <div>
+                <flux:heading size="lg">{{ __('Add New Household Head') }}</flux:heading>
+                <flux:subheading>{{ __('Creates a new Household unit, Resident profile, and associated User login account.') }}</flux:subheading>
+            </div>
+
+            <!-- Household Details -->
+            <div class="border-t border-zinc-200 dark:border-zinc-800 pt-4">
+                <h3 class="text-sm font-semibold text-zinc-900 dark:text-white mb-3">Household Details</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <flux:input wire:model="household_no" label="Household Number" placeholder="e.g. 0001" required />
+                    <flux:select wire:model="purok_no" label="Purok" required>
+                        <option value="">Select Purok</option>
+                        @for($i=1; $i<=8; $i++)
+                            <option value="{{ $i }}">Purok {{ $i }}</option>
+                        @endfor
+                    </flux:select>
+                    <flux:input wire:model="address" label="Address" placeholder="e.g. Sambog, Corella, Bohol" required />
+                </div>
+            </div>
+
+            <!-- Personal Details -->
+            <div class="border-t border-zinc-200 dark:border-zinc-800 pt-4">
+                <h3 class="text-sm font-semibold text-zinc-900 dark:text-white mb-3">Personal Details</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <flux:input wire:model="first_name" label="First Name" required />
+                    <flux:input wire:model="middle_name" label="Middle Name" />
+                    <flux:input wire:model="last_name" label="Last Name" required />
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 mt-4">
+                    <flux:input wire:model="extension" label="Extension (Jr/Sr/etc)" />
+                    <flux:input wire:model="birthdate" type="date" label="Birthdate" required />
+                    <flux:select wire:model="sex" label="Sex" required>
+                        <option value="">Select Sex</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </flux:select>
+                    <flux:select wire:model="civil_status" label="Civil Status" required>
+                        <option value="">Select Civil Status</option>
+                        <option value="Single">Single</option>
+                        <option value="Married">Married</option>
+                        <option value="Widowed">Widowed</option>
+                        <option value="Separated">Separated</option>
+                        <option value="Divorced">Divorced</option>
+                    </flux:select>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                    <flux:input wire:model="citizenship" label="Citizenship" required />
+                    <flux:input wire:model="mobile_number" label="Mobile Number" />
+                </div>
+            </div>
+
+            <!-- Account Details -->
+            <div class="border-t border-zinc-200 dark:border-zinc-800 pt-4">
+                <h3 class="text-sm font-semibold text-zinc-900 dark:text-white mb-3">Account Details</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <flux:input wire:model="email" type="email" label="Email Address (Username)" placeholder="name@barangay.gov" required />
+                    <flux:input wire:model="password" type="password" label="Password" required viewable />
+                </div>
+            </div>
+
+            <!-- Footer Buttons -->
+            <div class="flex justify-end gap-2 border-t border-zinc-200 dark:border-zinc-800 pt-4">
+                <flux:modal.close>
+                    <flux:button variant="filled">{{ __('Cancel') }}</flux:button>
+                </flux:modal.close>
+                <flux:button variant="primary" type="submit">{{ __('Save Household Head') }}</flux:button>
+            </div>
+        </form>
+    </flux:modal>
 </div>

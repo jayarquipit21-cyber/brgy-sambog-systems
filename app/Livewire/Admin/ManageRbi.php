@@ -4,6 +4,9 @@ namespace App\Livewire\Admin;
 
 use App\Models\Resident;
 use App\Models\Household;
+use App\Models\User;
+use Flux\Flux;
+use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -14,6 +17,105 @@ class ManageRbi extends Component
     public string $search = '';
     public string $purokFilter = '';
     public string $voterFilter = '';
+
+    // Form fields for Household Head creation
+    public bool $showCreateModal = false;
+
+    public string $household_no = '';
+    public string $purok_no = '';
+    public string $address = '';
+
+    public string $first_name = '';
+    public string $middle_name = '';
+    public string $last_name = '';
+    public string $extension = '';
+    public string $birthdate = '';
+    public string $sex = '';
+    public string $civil_status = '';
+    public string $citizenship = 'Filipino';
+    public string $mobile_number = '';
+    public string $email = '';
+    public string $password = '';
+
+    protected function rules(): array
+    {
+        return [
+            'household_no' => 'required|string|max:255',
+            'purok_no' => 'required|integer|between:1,8',
+            'address' => 'required|string|max:255',
+            
+            'first_name' => 'required|string|max:255',
+            'middle_name' => 'nullable|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'extension' => 'nullable|string|max:10',
+            'birthdate' => 'required|date|before:today',
+            'sex' => 'required|in:Male,Female',
+            'civil_status' => 'required|string|max:50',
+            'citizenship' => 'required|string|max:255',
+            'mobile_number' => 'nullable|string|max:20',
+            
+            'email' => 'required|email|max:255|unique:users,email',
+            'password' => 'required|string|min:8',
+        ];
+    }
+
+    public function openCreateModal(): void
+    {
+        $this->resetErrorBag();
+        $this->reset([
+            'household_no', 'purok_no', 'address',
+            'first_name', 'middle_name', 'last_name', 'extension',
+            'birthdate', 'sex', 'civil_status', 'citizenship', 'mobile_number',
+            'email', 'password'
+        ]);
+        $this->citizenship = 'Filipino';
+        $this->showCreateModal = true;
+    }
+
+    public function saveHouseholdHead()
+    {
+        $this->validate();
+
+        // 1. Create Household
+        $household = Household::create([
+            'household_no' => $this->household_no,
+            'purok_no' => $this->purok_no,
+            'address' => $this->address,
+        ]);
+
+        // 2. Create User account
+        $user = User::create([
+            'name' => trim($this->first_name . ' ' . $this->last_name),
+            'email' => strtolower($this->email),
+            'password' => bcrypt($this->password),
+            'role' => 'household_head',
+        ]);
+
+        // 3. Create Resident profile
+        $birthDateCarbon = Carbon::parse($this->birthdate);
+        $age = $birthDateCarbon->age;
+
+        Resident::create([
+            'household_id' => $household->id,
+            'user_id' => $user->id,
+            'first_name' => $this->first_name,
+            'middle_name' => $this->middle_name,
+            'last_name' => $this->last_name,
+            'extension' => $this->extension,
+            'birthdate' => $this->birthdate,
+            'age' => $age,
+            'sex' => $this->sex,
+            'civil_status' => $this->civil_status,
+            'citizenship' => $this->citizenship,
+            'mobile_number' => $this->mobile_number,
+            'email_address' => strtolower($this->email),
+            'relationship_to_head' => 'Household Head',
+        ]);
+
+        $this->showCreateModal = false;
+
+        Flux::toast(variant: 'success', text: __('Household Head and Household created successfully.'));
+    }
 
     // Reset pagination when search or filters change
     public function updatingSearch(): void

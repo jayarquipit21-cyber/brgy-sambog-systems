@@ -21,7 +21,8 @@
                 <flux:heading size="lg" level="2" class="text-zinc-900 dark:text-white font-semibold">My Household Registry</flux:heading>
                 <flux:text variant="subtle" class="text-xs text-zinc-500 dark:text-zinc-400">View official members and details registered for your household.</flux:text>
             </div>
-            <div class="mt-4 md:mt-0 flex flex-wrap gap-4 text-sm text-zinc-600 dark:text-zinc-400">
+            <div class="mt-4 md:mt-0 flex flex-wrap items-center gap-4 text-sm text-zinc-600 dark:text-zinc-400">
+                <flux:button variant="primary" icon="plus" wire:click="openCreateModal" class="cursor-pointer">{{ __('Add Household Member') }}</flux:button>
                 <div class="bg-zinc-50 dark:bg-zinc-800 px-3 py-1.5 rounded-lg border border-zinc-100 dark:border-zinc-800">
                     <span class="font-semibold text-zinc-500 dark:text-zinc-400">Household No:</span>
                     <span class="text-zinc-900 dark:text-white font-medium">{{ $household->household_no }}</span>
@@ -81,5 +82,119 @@
                 </tbody>
             </table>
         </div>
-    @endif
+        @endif
+
+    <!-- Add Resident Modal -->
+    <flux:modal name="add-member-modal" class="max-w-3xl" wire:model="showCreateModal">
+        <form wire:submit="saveResident" class="space-y-6">
+            <div>
+                <flux:heading size="lg">{{ __('Add Household Member') }}</flux:heading>
+                <flux:subheading>{{ __('Fill out the details of the family/household member to register them under your household unit.') }}</flux:subheading>
+            </div>
+
+            <!-- Basic Information -->
+            <div class="border-t border-zinc-200 dark:border-zinc-800 pt-4">
+                <h3 class="text-sm font-semibold text-zinc-900 dark:text-white mb-3">Basic Information</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                    <flux:input wire:model="first_name" label="First Name" required />
+                    <flux:input wire:model="middle_name" label="Middle Name" />
+                    <flux:input wire:model="last_name" label="Last Name" required />
+                    <flux:input wire:model="extension" label="Extension (Jr/Sr/etc)" />
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 mt-4">
+                    <flux:input wire:model="relationship_to_head" label="Relationship to Head" placeholder="e.g. Spouse, Son, Daughter" required />
+                    <flux:input wire:model="birthdate" type="date" label="Birthdate" required />
+                    <flux:select wire:model="sex" label="Sex" required>
+                        <option value="">Select Sex</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </flux:select>
+                    <flux:select wire:model="civil_status" label="Civil Status" required>
+                        <option value="">Select Civil Status</option>
+                        <option value="Single">Single</option>
+                        <option value="Married">Married</option>
+                        <option value="Widowed">Widowed</option>
+                        <option value="Separated">Separated</option>
+                        <option value="Divorced">Divorced</option>
+                    </flux:select>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
+                    <flux:input wire:model="citizenship" label="Citizenship" required />
+                    <flux:input wire:model="mobile_number" label="Mobile Number" />
+                    <flux:input wire:model="email_address" type="email" label="Email Address" />
+                </div>
+            </div>
+
+            <!-- Education & Employment -->
+            <div class="border-t border-zinc-200 dark:border-zinc-800 pt-4">
+                <h3 class="text-sm font-semibold text-zinc-900 dark:text-white mb-3">Education & Employment</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <flux:select wire:model="educational_status" label="Educational Status" required>
+                        <option value="">Select Educational Status</option>
+                        <option value="Enrolled">Enrolled</option>
+                        <option value="Not Enrolled">Not Enrolled</option>
+                        <option value="Graduated">Graduated</option>
+                        <option value="N/A">Not Applicable</option>
+                    </flux:select>
+                    <flux:select wire:model="work_status" label="Work / Employment Status" required>
+                        <option value="">Select Work Status</option>
+                        <option value="Employed">Employed</option>
+                        <option value="Unemployed">Unemployed</option>
+                        <option value="Underemployed">Underemployed</option>
+                        <option value="Student">Student</option>
+                        <option value="Retired">Retired</option>
+                        <option value="N/A">Not Applicable</option>
+                    </flux:select>
+                </div>
+            </div>
+
+            <!-- Voter Information -->
+            <div class="border-t border-zinc-200 dark:border-zinc-800 pt-4">
+                <h3 class="text-sm font-semibold text-zinc-900 dark:text-white mb-3">Voter Information</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <flux:select wire:model="registered_national_voter" label="Registered National Voter?" required>
+                        <option value="">Select Option</option>
+                        <option value="Y">Yes</option>
+                        <option value="N">No</option>
+                    </flux:select>
+                    <flux:select wire:model="registered_sk_voter" label="Registered SK Voter?" required>
+                        <option value="">Select Option</option>
+                        <option value="Y">Yes</option>
+                        <option value="N">No</option>
+                    </flux:select>
+                    <flux:select wire:model="resident_voter" label="Resident Voter?" required>
+                        <option value="">Select Option</option>
+                        <option value="Y">Yes</option>
+                        <option value="N">No</option>
+                    </flux:select>
+                </div>
+            </div>
+
+            <!-- Health & Vaccination Info -->
+            <div class="border-t border-zinc-200 dark:border-zinc-800 pt-4">
+                <h3 class="text-sm font-semibold text-zinc-900 dark:text-white mb-3">Health & Vaccination Info</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <flux:select wire:model="fully_vaccinated" label="Fully Vaccinated (COVID-19)?" required>
+                        <option value="">Select Option</option>
+                        <option value="Y">Yes</option>
+                        <option value="N">No</option>
+                    </flux:select>
+                    <flux:select wire:model="has_philhealth" label="Has PhilHealth?" required>
+                        <option value="">Select Option</option>
+                        <option value="Y">Yes</option>
+                        <option value="N">No</option>
+                    </flux:select>
+                    <flux:input wire:model="health_condition" label="Chronic Health Conditions" placeholder="e.g. Hypertension, Diabetes, None" />
+                </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="flex justify-end gap-2 border-t border-zinc-200 dark:border-zinc-800 pt-4">
+                <flux:modal.close>
+                    <flux:button variant="filled">{{ __('Cancel') }}</flux:button>
+                </flux:modal.close>
+                <flux:button variant="primary" type="submit">{{ __('Save Member') }}</flux:button>
+            </div>
+        </form>
+    </flux:modal>
 </div>
