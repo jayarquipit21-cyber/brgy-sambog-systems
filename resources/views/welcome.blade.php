@@ -293,9 +293,9 @@
                     <!-- Captain -->
                     <div class="bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200 dark:border-zinc-800/80 p-6 flex flex-col items-center text-center shadow-sm">
                         <div class="h-20 w-20 rounded-full premium-gradient flex items-center justify-center text-white text-xl font-bold font-outfit shadow-md">
-                            JD
+                            RA
                         </div>
-                        <h4 class="font-bold text-zinc-950 dark:text-white mt-4 font-outfit">Hon. John Doe</h4>
+                        <h4 class="font-bold text-zinc-950 dark:text-white mt-4 font-outfit">Hon. Rey Anthony N. Rebuta</h4>
                         <span class="text-[10px] text-brand uppercase font-extrabold tracking-wider mt-1">Barangay Captain</span>
                         <p class="text-[11px] text-zinc-500 mt-2 font-light">Overseeing overall community administration and development.</p>
                     </div>
@@ -313,19 +313,19 @@
                     <!-- Councilor 2 -->
                     <div class="bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200 dark:border-zinc-800/80 p-6 flex flex-col items-center text-center shadow-sm">
                         <div class="h-20 w-20 rounded-full bg-zinc-800 flex items-center justify-center text-zinc-300 text-xl font-bold font-outfit">
-                            RJ
+                            AR
                         </div>
-                        <h4 class="font-bold text-zinc-950 dark:text-white mt-4 font-outfit">Hon. Robert Jones</h4>
-                        <span class="text-[10px] text-zinc-500 uppercase font-extrabold tracking-wider mt-1">Committee on Finance</span>
+                        <h4 class="font-bold text-zinc-950 dark:text-white mt-4 font-outfit">Arnel T. Itong</h4>
+                        <span class="text-[10px] text-zinc-500 uppercase font-extrabold tracking-wider mt-1">Barangay Treasurer</span>
                         <p class="text-[11px] text-zinc-500 mt-2 font-light">Handling budgetary resources and community development allocations.</p>
                     </div>
 
                     <!-- Secretary -->
                     <div class="bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200 dark:border-zinc-800/80 p-6 flex flex-col items-center text-center shadow-sm">
                         <div class="h-20 w-20 rounded-full bg-zinc-800 flex items-center justify-center text-zinc-300 text-xl font-bold font-outfit">
-                            EM
+                            CE
                         </div>
-                        <h4 class="font-bold text-zinc-950 dark:text-white mt-4 font-outfit">Emily Miller</h4>
+                        <h4 class="font-bold text-zinc-950 dark:text-white mt-4 font-outfit">Cecilia S. Daquio</h4>
                         <span class="text-[10px] text-zinc-500 uppercase font-extrabold tracking-wider mt-1">Barangay Secretary</span>
                         <p class="text-[11px] text-zinc-500 mt-2 font-light">Managing document issuance, clearances database, and slot scheduling.</p>
                     </div>
