@@ -118,9 +118,9 @@
             <!-- SECTION 1: Gorgeous Municipal Hero Banner -->
             <section class="relative overflow-hidden py-24 sm:py-32 bg-zinc-950 text-white">
                 <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-zinc-800/50 via-zinc-950 to-zinc-950 z-0"></div>
-                <div class="absolute -right-20 -bottom-20 h-96 w-96 rounded-full bg-brand/10 blur-3xl"></div>
+                <div class="absolute -right-20 -bottom-20 h-96 w-96 rounded-full bg-brand/10 blur-3xl z-0"></div>
                 
-                <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
+                <div class="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
                     <span class="inline-flex items-center gap-1.5 px-3.5 py-1 bg-brand/10 border border-brand/25 text-brand rounded-full text-xs font-bold tracking-wider uppercase">
                         <span class="h-1.5 w-1.5 rounded-full bg-brand animate-pulse"></span>
                         Official Municipal Domain
