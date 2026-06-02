@@ -47,6 +47,13 @@
     }
 }
 
+/* Project brand utilities (used across views) */
+.text-brand { color: #f53003; }
+.bg-brand { background-color: #f53003; }
+.hover\:bg-brand-dark:hover { background-color: #d62700; }
+.bg-brand\/10 { background-color: rgba(245,48,3,0.1); }
+.border-brand\/25 { border-color: rgba(245,48,3,0.25); }
+
 [data-flux-field]:not(ui-radio, ui-checkbox) {
     @apply grid gap-2;
 }

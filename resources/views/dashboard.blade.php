@@ -139,6 +139,14 @@
                             <flux:icon.arrow-right class="size-3.5 text-zinc-400 group-hover:text-orange-600 group-hover:translate-x-1 transition" />
                         </a>
 
+                        <a href="{{ route('admin.announcements') }}" class="group flex items-center justify-between p-3.5 bg-zinc-50 hover:bg-orange-50/50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 hover:border-orange-500/20 rounded-xl transition duration-300">
+                            <div class="flex items-center gap-3">
+                                <flux:icon name="megaphone" class="size-4 text-orange-600 dark:text-orange-500 group-hover:scale-110 transition" />
+                                <span class="text-xs font-bold text-zinc-700 dark:text-zinc-300 group-hover:text-zinc-900 dark:group-hover:text-white transition">Manage Announcements</span>
+                            </div>
+                            <flux:icon.arrow-right class="size-3.5 text-zinc-400 group-hover:text-orange-600 group-hover:translate-x-1 transition" />
+                        </a>
+
                         <a href="{{ route('health') }}" class="group flex items-center justify-between p-3.5 bg-zinc-50 hover:bg-rose-50/50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 hover:border-rose-500/20 rounded-xl transition duration-300">
                             <div class="flex items-center gap-3">
                                 <flux:icon name="heart" class="size-4 text-rose-600 dark:text-rose-500 group-hover:scale-110 transition" />

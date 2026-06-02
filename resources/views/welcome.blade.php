@@ -67,25 +67,27 @@
         
         <!-- Sticky Premium Header / Navigation Bar -->
         <header class="sticky top-0 z-50 glassmorphism border-b border-zinc-200 dark:border-zinc-800/80 transition-all duration-300">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+                <div class="max-w-8xl mx-auto px-2 sm:px-4 lg:px-6 h-20 flex items-center justify-between">
                 <!-- Municipal Branding -->
-                <a href="#" class="flex items-center gap-3 group">
-                    <div class="h-11 w-11 rounded-xl premium-gradient flex items-center justify-center text-white font-black text-xl shadow-lg shadow-orange-500/20 font-outfit transform group-hover:scale-105 transition duration-300">
+                <a href="#" class="flex items-center gap-3 group flex-shrink-0">
+                    <div class="h-10 w-10 rounded-xl premium-gradient flex items-center justify-center text-white font-black text-lg shadow-md font-outfit transform group-hover:scale-105 transition duration-300">
                         BC
                     </div>
-                    <div>
-                        <span class="text-xl font-black tracking-tight text-zinc-950 dark:text-white font-outfit">Brgy. Sambog, Corella, Bohol</span>
+                    <div class="min-w-0">
+                        <span class="text-lg sm:text-xl font-black tracking-tight text-zinc-950 dark:text-white font-outfit max-w-[220px] truncate block">Brgy. Sambog, Corella, Bohol</span>
                         <div class="text-[9px] text-zinc-500 dark:text-zinc-400 font-bold uppercase tracking-widest mt-0.5">Official Inhabitant Portal</div>
                     </div>
                 </a>
 
                 <!-- Navigation Links for a comprehensive website experience -->
-                <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-zinc-600 dark:text-zinc-300">
-                    <a href="#about" class="hover:text-brand transition">About Us</a>
-                    <a href="#services" class="hover:text-brand transition">Public Services</a>
-                    <a href="#demographics" class="hover:text-brand transition">Statistics</a>
-                    <a href="#officials" class="hover:text-brand transition">Local Council</a>
-                    <a href="#announcements" class="hover:text-brand transition">Announcements</a>
+                <nav class="hidden md:flex flex-1 items-center justify-center gap-3 text-sm font-semibold text-zinc-600 dark:text-zinc-300">
+                    <a href="#about" class="px-2 py-2 rounded-md hover:bg-brand/10 hover:text-brand transition">About Us</a>
+                    <a href="#services" class="px-2 py-2 rounded-md hover:bg-brand/10 hover:text-brand transition">Public Services</a>
+                    <a href="#officials" class="px-2 py-2 rounded-md hover:bg-brand/10 hover:text-brand transition">Local Council</a>
+                    <a href="#demographics" class="px-2 py-2 rounded-md hover:bg-brand/10 hover:text-brand transition">Statistics</a>
+                    <a href="{{ route('home') }}#places" class="px-2 py-2 rounded-md hover:bg-brand/10 hover:text-brand transition">Places</a>
+                    <a href="{{ route('home') }}#announcements" class="px-2 py-2 rounded-md hover:bg-brand/10 hover:text-brand transition">Announcements</a>
+                    <a href="{{ route('home') }}#contacts" class="px-2 py-2 rounded-md hover:bg-brand/10 hover:text-brand transition">Contacts</a>
                 </nav>
 
                 <!-- Authentication Portal Access -->
@@ -93,7 +95,7 @@
                     @auth
                         <div class="flex items-center gap-3">
                             <span class="text-xs text-zinc-500 dark:text-zinc-400 hidden lg:inline-block font-semibold">Hello, {{ Auth::user()->name }}</span>
-                            <a href="{{ route('dashboard') }}" class="inline-flex items-center justify-center px-5 py-2.5 text-xs font-bold text-white bg-brand hover:bg-brand-dark rounded-xl transition shadow-md shadow-orange-500/10 font-outfit">
+                            <a href="{{ route('dashboard') }}" class="inline-flex items-center justify-center px-4 py-2 text-xs font-bold text-white bg-brand hover:bg-brand-dark rounded-lg transition shadow-md shadow-orange-500/10 font-outfit">
                                 Go to Workspace
                             </a>
                             <form method="POST" action="{{ route('logout') }}" class="inline">
@@ -104,7 +106,7 @@
                             </form>
                         </div>
                     @else
-                        <a href="{{ route('login') }}" class="inline-flex items-center justify-center px-5 py-2.5 text-xs font-bold text-white bg-brand hover:bg-brand-dark rounded-xl transition shadow-md shadow-orange-500/10 font-outfit">
+                        <a href="{{ route('login') }}" class="inline-flex items-center justify-center px-4 py-2 text-xs font-bold text-white bg-brand hover:bg-brand-dark rounded-lg transition shadow-md shadow-orange-500/10 font-outfit">
                             Access Portal
                         </a>
                     @endauth
@@ -134,55 +136,11 @@
                         Welcome to our official municipal website. Stay connected with community stats, schedule secure clearance pick-ups, and get in touch with local council updates effortlessly.
                     </p>
                     
-                    <div class="flex flex-wrap items-center justify-center gap-4 pt-4">
-                        @auth
-                            <a href="{{ route('dashboard') }}" class="px-8 py-4 bg-brand hover:bg-brand-dark text-white font-bold rounded-xl shadow-lg transition transform hover:-translate-y-0.5 font-outfit">
-                                Open Services Portal
-                            </a>
-                        @else
-                            <a href="{{ route('login') }}" class="px-8 py-4 bg-brand hover:bg-brand-dark text-white font-bold rounded-xl shadow-lg transition transform hover:-translate-y-0.5 font-outfit">
-                                Resident Login
-                            </a>
-                        @endauth
-                        <a href="#about" class="px-8 py-4 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-bold rounded-xl border border-zinc-700/80 transition font-outfit">
-                            Explore Community
-                        </a>
-                    </div>
+                    <!-- Hero CTAs removed; primary access available in header -->
                 </div>
             </section>
 
-            <!-- SECTION 2: Dynamic Live Stats Grid -->
-            <section id="demographics" class="relative z-20 -mt-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl p-8 sm:p-10 shadow-2xl grid grid-cols-2 lg:grid-cols-4 gap-8 divide-y lg:divide-y-0 lg:divide-x divide-zinc-200 dark:divide-zinc-800">
-                    
-                    <div class="flex flex-col items-center text-center p-4">
-                        <span class="text-xs uppercase font-extrabold tracking-wider text-zinc-400">Total Population</span>
-                        <span class="text-4xl sm:text-5xl font-black text-brand font-outfit mt-2">{{ number_format($totalResidents) }}</span>
-                        <span class="text-xs text-zinc-500 mt-1 font-semibold">Registered Inhabitants</span>
-                    </div>
-
-                    <div class="flex flex-col items-center text-center p-4 pt-8 lg:pt-4">
-                        <span class="text-xs uppercase font-extrabold tracking-wider text-zinc-400">Total Households</span>
-                        <span class="text-4xl sm:text-5xl font-black text-zinc-900 dark:text-white font-outfit mt-2">{{ number_format($totalHouseholds) }}</span>
-                        <span class="text-xs text-zinc-500 mt-1 font-semibold">Active Family Units</span>
-                    </div>
-
-                    <div class="flex flex-col items-center text-center p-4 pt-8 lg:pt-4">
-                        <span class="text-xs uppercase font-extrabold tracking-wider text-zinc-400">Senior Citizens</span>
-                        <span class="text-4xl sm:text-5xl font-black text-zinc-900 dark:text-white font-outfit mt-2">{{ number_format($seniorCitizens) }}</span>
-                        <span class="text-xs text-zinc-500 mt-1 font-semibold">Supported Seniors (60+)</span>
-                    </div>
-
-                    <div class="flex flex-col items-center text-center p-4 pt-8 lg:pt-4">
-                        <span class="text-xs uppercase font-extrabold tracking-wider text-zinc-400">Immunization Rate</span>
-                        <span class="text-4xl sm:text-5xl font-black text-emerald-500 font-outfit mt-2">
-                            {{ $totalResidents > 0 ? number_format(($vaccinatedCount / $totalResidents) * 100, 1) : 0 }}%
-                        </span>
-                        <span class="text-xs text-zinc-500 mt-1 font-semibold">Vaccinated Inhabitants</span>
-                    </div>
-
-                </div>
-            </section>
+            <!-- SECTION 2: (moved) Dynamic Live Stats Grid will appear later -->
 
             <!-- SECTION 3: About Barangay Corella -->
             <section id="about" class="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -332,37 +290,90 @@
                 </div>
             </section>
 
-            <!-- SECTION 6: Premium Announcements Feed -->
-            <section id="announcements" class="py-24 bg-zinc-100 dark:bg-zinc-900/40 border-t border-zinc-200 dark:border-zinc-900">
+            <!-- SECTION 6: Demographics (styled like other sections) -->
+            <section id="demographics" class="py-24 bg-zinc-100 dark:bg-zinc-900/40 border-y border-zinc-200 dark:border-zinc-900">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
                     <div class="text-center max-w-2xl mx-auto space-y-3">
-                        <span class="text-brand text-xs font-bold uppercase tracking-widest font-outfit">Bulletins & Feeds</span>
-                        <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight font-outfit text-zinc-950 dark:text-white">Community Notice Board</h2>
-                        <p class="text-zinc-500 text-xs leading-relaxed font-light">
-                            Stay up-to-date with official statements, seasonal alerts, and local assembly programs.
-                        </p>
+                        <span class="text-brand text-xs font-bold uppercase tracking-widest font-outfit">Inhabitants</span>
+                        <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight font-outfit text-zinc-950 dark:text-white">Community Statistics</h2>
+                        <p class="text-zinc-500 text-xs leading-relaxed font-light">A quick snapshot of our registered population, households, senior citizens, and immunization coverage — updated from our household registry.</p>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        
-                        <div class="bg-white dark:bg-zinc-900 p-8 rounded-3xl border border-zinc-200/50 dark:border-zinc-800/80 shadow-sm space-y-4">
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-orange-500/10 text-brand uppercase">Public Service Notice</span>
-                            <h4 class="text-lg font-bold font-outfit text-zinc-950 dark:text-white">Physical Document Collection Slots Open</h4>
-                            <p class="text-zinc-500 text-xs leading-relaxed font-light">
-                                Residents can now request personal pickup slots directly via their authenticated inhabitant dashboard. Approved clearancces or indigency certificates can be picked up at the Barangay Hall on business days.
-                            </p>
-                            <div class="text-[10px] text-zinc-400 font-semibold">Published: Today</div>
+                    <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl p-8 sm:p-10 shadow-2xl grid grid-cols-2 lg:grid-cols-4 gap-8 divide-y lg:divide-y-0 lg:divide-x divide-zinc-200 dark:divide-zinc-800">
+                        <div class="flex flex-col items-center text-center p-4">
+                            <span class="text-xs uppercase font-extrabold tracking-wider text-zinc-400">Total Population</span>
+                            <span class="text-4xl sm:text-5xl font-black text-brand font-outfit mt-2">{{ number_format($totalResidents) }}</span>
+                            <span class="text-xs text-zinc-500 mt-1 font-semibold">Registered Inhabitants</span>
                         </div>
 
-                        <div class="bg-white dark:bg-zinc-900 p-8 rounded-3xl border border-zinc-200/50 dark:border-zinc-800/80 shadow-sm space-y-4">
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/10 text-blue-500 uppercase">Health Bulletin</span>
-                            <h4 class="text-lg font-bold font-outfit text-zinc-950 dark:text-white">Pediatric Wellness and Vaccination Checkup</h4>
-                            <p class="text-zinc-500 text-xs leading-relaxed font-light">
-                                In coordination with the Barangay Health Office, a comprehensive demographic assessment is active to monitor vaccination coverages and nutritional statuses for children in Purok 1 to 8.
-                            </p>
-                            <div class="text-[10px] text-zinc-400 font-semibold">Published: Yesterday</div>
+                        <div class="flex flex-col items-center text-center p-4">
+                            <span class="text-xs uppercase font-extrabold tracking-wider text-zinc-400">Total Households</span>
+                            <span class="text-4xl sm:text-5xl font-black text-zinc-900 dark:text-white font-outfit mt-2">{{ number_format($totalHouseholds) }}</span>
+                            <span class="text-xs text-zinc-500 mt-1 font-semibold">Active Family Units</span>
                         </div>
 
+                        <div class="flex flex-col items-center text-center p-4">
+                            <span class="text-xs uppercase font-extrabold tracking-wider text-zinc-400">Senior Citizens</span>
+                            <span class="text-4xl sm:text-5xl font-black text-zinc-900 dark:text-white font-outfit mt-2">{{ number_format($seniorCitizens) }}</span>
+                            <span class="text-xs text-zinc-500 mt-1 font-semibold">Supported Seniors (60+)</span>
+                        </div>
+
+                        <div class="flex flex-col items-center text-center p-4">
+                            <span class="text-xs uppercase font-extrabold tracking-wider text-zinc-400">Immunization Rate</span>
+                            <span class="text-4xl sm:text-5xl font-black text-emerald-500 font-outfit mt-2">{{ $totalResidents > 0 ? number_format(($vaccinatedCount / $totalResidents) * 100, 1) : 0 }}%</span>
+                            <span class="text-xs text-zinc-500 mt-1 font-semibold">Vaccinated Inhabitants</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 7: Recommended Places -->
+            <section id="places" class="py-12 bg-white dark:bg-zinc-950">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <livewire:recommended-places />
+                </div>
+            </section>
+
+            <!-- SECTION 8: Premium Announcements Feed (Livewire) -->
+            <section id="announcements" class="py-24 bg-zinc-100 dark:bg-zinc-900/40 border-t border-zinc-200 dark:border-zinc-900">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <livewire:announcements />
+                </div>
+            </section>
+
+            <!-- SECTION 9: Contact Numbers -->
+            <section id="contacts" class="py-12 bg-white dark:bg-zinc-950 border-t border-zinc-200 dark:border-zinc-800">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center max-w-2xl mx-auto space-y-3 mb-6">
+                        <span class="text-brand text-xs font-bold uppercase tracking-widest font-outfit">Get In Touch</span>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight font-outfit text-zinc-950 dark:text-white">Important Contact Numbers</h2>
+                        <p class="text-zinc-500 text-sm leading-relaxed">Phone numbers for quick access to barangay services and emergency hotlines.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div class="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm text-center">
+                            <div class="font-bold text-zinc-900 dark:text-white">Barangay Office</div>
+                            <div class="text-brand font-mono mt-2">(038) 123-4567</div>
+                            <div class="text-xs text-zinc-500 mt-1">Office Hours: 8am–5pm</div>
+                        </div>
+
+                        <div class="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm text-center">
+                            <div class="font-bold text-zinc-900 dark:text-white">Health Hotline</div>
+                            <div class="text-brand font-mono mt-2">+63 917 000 1111</div>
+                            <div class="text-xs text-zinc-500 mt-1">For health concerns & immunization</div>
+                        </div>
+
+                        <div class="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm text-center">
+                            <div class="font-bold text-zinc-900 dark:text-white">Police / Emergency</div>
+                            <div class="text-brand font-mono mt-2">911 / (038) 765-4321</div>
+                            <div class="text-xs text-zinc-500 mt-1">Immediate assistance</div>
+                        </div>
+
+                        <div class="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm text-center">
+                            <div class="font-bold text-zinc-900 dark:text-white">Fire Department</div>
+                            <div class="text-brand font-mono mt-2">+63 927 222 3333</div>
+                            <div class="text-xs text-zinc-500 mt-1">Fire & Rescue</div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -413,7 +424,7 @@
                     <ul class="space-y-2 text-xs text-zinc-500">
                         <li>Email: <span class="text-zinc-300 font-medium">support@corella.gov</span></li>
                         <li>Hotline: <span class="text-zinc-300 font-medium">+63 912 345 6789</span></li>
-                        <li>Address: <span class="text-zinc-300 font-medium">Barangay Hall, Brgy. Sambog, Corella, Bohol</span></li>
+                        <li>Address: <span class="text-zinc-300 font-medium">Brgy. Sambog, Corella, Bohol</span></li>
                     </ul>
                 </div>
 

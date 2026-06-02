@@ -25,6 +25,9 @@
                     <flux:navbar.item icon="calendar" :href="route('appointments')" :current="request()->routeIs('appointments')" wire:navigate>
                         {{ __('Manage Appointments') }}
                     </flux:navbar.item>
+                    <flux:navbar.item icon="megaphone" :href="route('admin.announcements')" :current="request()->routeIs('admin.announcements')" wire:navigate>
+                        {{ __('Manage Announcements') }}
+                    </flux:navbar.item>
                 @endif
 
                 @if(auth()->user()->isHealthAdmin())
@@ -98,6 +101,9 @@
                         </flux:sidebar.item>
                         <flux:sidebar.item icon="calendar" :href="route('appointments')" :current="request()->routeIs('appointments')" wire:navigate>
                             {{ __('Manage Appointments') }}
+                        </flux:sidebar.item>
+                        <flux:sidebar.item icon="megaphone" :href="route('admin.announcements')" :current="request()->routeIs('admin.announcements')" wire:navigate>
+                            {{ __('Manage Announcements') }}
                         </flux:sidebar.item>
                     @endif
 
