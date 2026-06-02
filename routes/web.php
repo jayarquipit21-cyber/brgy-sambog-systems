@@ -12,6 +12,14 @@ Route::get('/', function () {
     return view('welcome', $stats);
 })->name('home');
 
+// Public holidays page (lists upcoming national holidays)
+Route::get('holidays', function () {
+    $start = now()->startOfDay();
+    $end = now()->addYear()->endOfDay();
+    $holidays = \App\Services\HolidaysService::upcomingBetween($start, $end);
+    return view('pages.holidays', ['holidays' => $holidays]);
+})->name('holidays');
+
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         $user = auth()->user();

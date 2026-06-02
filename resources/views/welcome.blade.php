@@ -128,11 +128,11 @@
                         Official Municipal Domain
                     </span>
                     
-                    <h1 class="text-4xl sm:text-7xl font-black font-outfit tracking-tight leading-none text-white max-w-5xl mx-auto">
+                    <h1 class="text-5xl sm:text-8xl font-black font-outfit tracking-tight leading-none text-white max-w-5xl mx-auto">
                         Empowering Citizens, Shaping <span class="text-transparent bg-clip-text premium-gradient">Brgy. Sambog, Corella, Bohol</span>
                     </h1>
                     
-                    <p class="text-base sm:text-xl text-zinc-400 max-w-3xl mx-auto leading-relaxed font-light">
+                    <p class="text-lg sm:text-2xl text-zinc-400 max-w-3xl mx-auto leading-relaxed font-light">
                         Welcome to our official municipal website. Stay connected with community stats, schedule secure clearance pick-ups, and get in touch with local council updates effortlessly.
                     </p>
                     
@@ -146,24 +146,24 @@
             <section id="about" class="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                 <div class="space-y-6">
                     <span class="text-brand text-xs font-bold uppercase tracking-widest font-outfit">Local Heritage</span>
-                    <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight font-outfit text-zinc-950 dark:text-white">
+                    <h2 class="text-4xl sm:text-5xl font-extrabold tracking-tight font-outfit text-zinc-950 dark:text-white">
                         Serving Our Community with Innovation & Transparency
                     </h2>
-                    <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed font-light text-sm">
+                    <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed font-light text-base sm:text-lg">
                         Brgy. Sambog, Corella, Bohol is dedicated to implementing progressive municipal policies that empower every household unit. By structuring our official registries dynamically, we ensure absolute transparency, quick clearances scheduling, and high-security standards for local health datasets.
                     </p>
-                    <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed font-light text-sm">
+                    <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed font-light text-base sm:text-lg">
                         Our neighborhood consists of dynamic Purok zones, each monitored closely to provide equal support to vulnerable sectors, pediatric nutritional coverages, and senior citizen wellness programs.
                     </p>
                 </div>
-                <div class="relative overflow-hidden rounded-3xl bg-zinc-900 border border-zinc-800 p-8 shadow-xl space-y-6">
+                    <div class="relative overflow-hidden rounded-3xl bg-zinc-900 border border-zinc-800 p-8 shadow-xl space-y-6">
                     <div class="absolute -right-10 -bottom-10 h-32 w-32 rounded-full bg-brand/5 blur-xl"></div>
-                    <h4 class="text-base font-bold text-white font-outfit">Brgy. Sambog Local Dev Sandbox</h4>
-                    <p class="text-xs text-zinc-400 leading-relaxed">
+                    <h4 class="text-lg font-bold text-white font-outfit">Brgy. Sambog Local Dev Sandbox</h4>
+                    <p class="text-sm text-zinc-400 leading-relaxed">
                         Testing role authorization, RBAC parameters, or database layer query limits? Access these pre-seeded sandbox accounts using password: <code class="text-brand font-mono font-bold bg-brand/10 px-1 py-0.5 rounded">password</code>
                     </p>
                     
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
                         <div class="bg-zinc-950 p-3.5 rounded-xl border border-zinc-800">
                             <div class="font-bold text-white">Barangay Admin</div>
                             <div class="font-mono text-zinc-400 mt-1 select-all">admin@barangay.gov</div>
@@ -189,8 +189,8 @@
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
                     <div class="text-center max-w-2xl mx-auto space-y-3">
                         <span class="text-brand text-xs font-bold uppercase tracking-widest font-outfit">Citizen Welfare</span>
-                        <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight font-outfit text-zinc-950 dark:text-white">Public Municipal Services</h2>
-                        <p class="text-zinc-500 text-xs leading-relaxed font-light">
+                        <h2 class="text-4xl sm:text-5xl font-extrabold tracking-tight font-outfit text-zinc-950 dark:text-white">Public Municipal Services</h2>
+                        <p class="text-zinc-500 text-sm sm:text-base leading-relaxed font-light">
                             Explore dynamic public programs structured to deliver premium governance solutions directly to Brgy. Sambog, Corella, Bohol's inhabitants.
                         </p>
                     </div>
@@ -203,8 +203,8 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                 </svg>
                             </div>
-                            <h3 class="font-bold text-lg font-outfit mb-3 text-zinc-950 dark:text-white">Barangay Clearances</h3>
-                            <p class="text-zinc-500 text-xs leading-relaxed font-light">
+                            <h3 class="font-bold text-xl font-outfit mb-3 text-zinc-950 dark:text-white">Barangay Clearances</h3>
+                            <p class="text-zinc-500 text-sm leading-relaxed font-light">
                                 Schedule personal pick-up slots at the Barangay Hall to pick up processed official clearances, indigency certifications, and administrative paperworks safely.
                             </p>
                         </div>
@@ -215,8 +215,8 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                                 </svg>
                             </div>
-                            <h3 class="font-bold text-lg font-outfit mb-3 text-zinc-950 dark:text-white">Household Registry</h3>
-                            <p class="text-zinc-500 text-xs leading-relaxed font-light">
+                            <h3 class="font-bold text-xl font-outfit mb-3 text-zinc-950 dark:text-white">Household Registry</h3>
+                            <p class="text-zinc-500 text-sm leading-relaxed font-light">
                                 Verified household heads can instantly review registered residents inside their family units, directly sync demographic statuses, and manage appointment requests.
                             </p>
                         </div>
@@ -227,8 +227,8 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                                 </svg>
                             </div>
-                            <h3 class="font-bold text-lg font-outfit mb-3 text-zinc-950 dark:text-white">Vulnerable Health Support</h3>
-                            <p class="text-zinc-500 text-xs leading-relaxed font-light">
+                            <h3 class="font-bold text-xl font-outfit mb-3 text-zinc-950 dark:text-white">Vulnerable Health Support</h3>
+                            <p class="text-zinc-500 text-sm leading-relaxed font-light">
                                 Directing health administration officers with age-dynamic indicators to filter chronic adult conditions or track stunting metrics for pediatric age brackets.
                             </p>
                         </div>
@@ -241,8 +241,8 @@
             <section id="officials" class="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
                 <div class="text-center max-w-2xl mx-auto space-y-3">
                     <span class="text-brand text-xs font-bold uppercase tracking-widest font-outfit">Barangay Leadership</span>
-                    <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight font-outfit text-zinc-950 dark:text-white">Local Barangay Council</h2>
-                    <p class="text-zinc-500 text-xs leading-relaxed font-light">
+                    <h2 class="text-4xl sm:text-5xl font-extrabold tracking-tight font-outfit text-zinc-950 dark:text-white">Local Barangay Council</h2>
+                    <p class="text-zinc-500 text-sm leading-relaxed font-light">
                         Meet the dedicated leaders coordinating the development and administrative operations of Brgy. Sambog, Corella, Bohol.
                     </p>
                 </div>
@@ -253,9 +253,9 @@
                         <div class="h-20 w-20 rounded-full premium-gradient flex items-center justify-center text-white text-xl font-bold font-outfit shadow-md">
                             RA
                         </div>
-                        <h4 class="font-bold text-zinc-950 dark:text-white mt-4 font-outfit">Hon. Rey Anthony N. Rebuta</h4>
-                        <span class="text-[10px] text-brand uppercase font-extrabold tracking-wider mt-1">Barangay Captain</span>
-                        <p class="text-[11px] text-zinc-500 mt-2 font-light">Overseeing overall community administration and development.</p>
+                        <h4 class="font-bold text-lg text-zinc-950 dark:text-white mt-4 font-outfit">Hon. Rey Anthony N. Rebuta</h4>
+                        <span class="text-xs text-brand uppercase font-extrabold tracking-wider mt-1">Barangay Captain</span>
+                        <p class="text-sm text-zinc-500 mt-2 font-light">Overseeing overall community administration and development.</p>
                     </div>
 
                     <!-- Councilor 1 -->
@@ -263,9 +263,9 @@
                         <div class="h-20 w-20 rounded-full bg-zinc-800 flex items-center justify-center text-zinc-300 text-xl font-bold font-outfit">
                             AS
                         </div>
-                        <h4 class="font-bold text-zinc-950 dark:text-white mt-4 font-outfit">Hon. Alice Smith</h4>
-                        <span class="text-[10px] text-zinc-500 uppercase font-extrabold tracking-wider mt-1">Committee on Health</span>
-                        <p class="text-[11px] text-zinc-500 mt-2 font-light">Coordinating public health drives and vaccination metrics monitoring.</p>
+                        <h4 class="font-bold text-lg text-zinc-950 dark:text-white mt-4 font-outfit">Hon. Alice Smith</h4>
+                        <span class="text-xs text-zinc-500 uppercase font-extrabold tracking-wider mt-1">Committee on Health</span>
+                        <p class="text-sm text-zinc-500 mt-2 font-light">Coordinating public health drives and vaccination metrics monitoring.</p>
                     </div>
 
                     <!-- Councilor 2 -->
@@ -273,9 +273,9 @@
                         <div class="h-20 w-20 rounded-full bg-zinc-800 flex items-center justify-center text-zinc-300 text-xl font-bold font-outfit">
                             AR
                         </div>
-                        <h4 class="font-bold text-zinc-950 dark:text-white mt-4 font-outfit">Arnel T. Itong</h4>
-                        <span class="text-[10px] text-zinc-500 uppercase font-extrabold tracking-wider mt-1">Barangay Treasurer</span>
-                        <p class="text-[11px] text-zinc-500 mt-2 font-light">Handling budgetary resources and community development allocations.</p>
+                        <h4 class="font-bold text-lg text-zinc-950 dark:text-white mt-4 font-outfit">Arnel T. Itong</h4>
+                        <span class="text-xs text-zinc-500 uppercase font-extrabold tracking-wider mt-1">Barangay Treasurer</span>
+                        <p class="text-sm text-zinc-500 mt-2 font-light">Handling budgetary resources and community development allocations.</p>
                     </div>
 
                     <!-- Secretary -->
@@ -283,9 +283,9 @@
                         <div class="h-20 w-20 rounded-full bg-zinc-800 flex items-center justify-center text-zinc-300 text-xl font-bold font-outfit">
                             CE
                         </div>
-                        <h4 class="font-bold text-zinc-950 dark:text-white mt-4 font-outfit">Cecilia S. Daquio</h4>
-                        <span class="text-[10px] text-zinc-500 uppercase font-extrabold tracking-wider mt-1">Barangay Secretary</span>
-                        <p class="text-[11px] text-zinc-500 mt-2 font-light">Managing document issuance, clearances database, and slot scheduling.</p>
+                        <h4 class="font-bold text-lg text-zinc-950 dark:text-white mt-4 font-outfit">Cecilia S. Daquio</h4>
+                        <span class="text-xs text-zinc-500 uppercase font-extrabold tracking-wider mt-1">Barangay Secretary</span>
+                        <p class="text-sm text-zinc-500 mt-2 font-light">Managing document issuance, clearances database, and slot scheduling.</p>
                     </div>
                 </div>
             </section>
@@ -295,33 +295,33 @@
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
                     <div class="text-center max-w-2xl mx-auto space-y-3">
                         <span class="text-brand text-xs font-bold uppercase tracking-widest font-outfit">Inhabitants</span>
-                        <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight font-outfit text-zinc-950 dark:text-white">Community Statistics</h2>
-                        <p class="text-zinc-500 text-xs leading-relaxed font-light">A quick snapshot of our registered population, households, senior citizens, and immunization coverage — updated from our household registry.</p>
+                        <h2 class="text-4xl sm:text-5xl font-extrabold tracking-tight font-outfit text-zinc-950 dark:text-white">Community Statistics</h2>
+                        <p class="text-zinc-500 text-sm leading-relaxed font-light">A quick snapshot of our registered population, households, senior citizens, and immunization coverage — updated from our household registry.</p>
                     </div>
 
                     <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl p-8 sm:p-10 shadow-2xl grid grid-cols-2 lg:grid-cols-4 gap-8 divide-y lg:divide-y-0 lg:divide-x divide-zinc-200 dark:divide-zinc-800">
                         <div class="flex flex-col items-center text-center p-4">
-                            <span class="text-xs uppercase font-extrabold tracking-wider text-zinc-400">Total Population</span>
-                            <span class="text-4xl sm:text-5xl font-black text-brand font-outfit mt-2">{{ number_format($totalResidents) }}</span>
-                            <span class="text-xs text-zinc-500 mt-1 font-semibold">Registered Inhabitants</span>
+                            <span class="text-sm uppercase font-extrabold tracking-wider text-zinc-400">Total Population</span>
+                                <span class="text-5xl sm:text-6xl font-black text-brand font-outfit mt-2">{{ number_format($totalResidents) }}</span>
+                                <span class="text-sm text-zinc-500 mt-1 font-semibold">Registered Inhabitants</span>
                         </div>
 
                         <div class="flex flex-col items-center text-center p-4">
-                            <span class="text-xs uppercase font-extrabold tracking-wider text-zinc-400">Total Households</span>
-                            <span class="text-4xl sm:text-5xl font-black text-zinc-900 dark:text-white font-outfit mt-2">{{ number_format($totalHouseholds) }}</span>
-                            <span class="text-xs text-zinc-500 mt-1 font-semibold">Active Family Units</span>
+                            <span class="text-sm uppercase font-extrabold tracking-wider text-zinc-400">Total Households</span>
+                                <span class="text-5xl sm:text-6xl font-black text-zinc-900 dark:text-white font-outfit mt-2">{{ number_format($totalHouseholds) }}</span>
+                                <span class="text-sm text-zinc-500 mt-1 font-semibold">Active Family Units</span>
                         </div>
 
                         <div class="flex flex-col items-center text-center p-4">
-                            <span class="text-xs uppercase font-extrabold tracking-wider text-zinc-400">Senior Citizens</span>
-                            <span class="text-4xl sm:text-5xl font-black text-zinc-900 dark:text-white font-outfit mt-2">{{ number_format($seniorCitizens) }}</span>
-                            <span class="text-xs text-zinc-500 mt-1 font-semibold">Supported Seniors (60+)</span>
+                            <span class="text-sm uppercase font-extrabold tracking-wider text-zinc-400">Senior Citizens</span>
+                                <span class="text-5xl sm:text-6xl font-black text-zinc-900 dark:text-white font-outfit mt-2">{{ number_format($seniorCitizens) }}</span>
+                                <span class="text-sm text-zinc-500 mt-1 font-semibold">Supported Seniors (60+)</span>
                         </div>
 
                         <div class="flex flex-col items-center text-center p-4">
-                            <span class="text-xs uppercase font-extrabold tracking-wider text-zinc-400">Immunization Rate</span>
-                            <span class="text-4xl sm:text-5xl font-black text-emerald-500 font-outfit mt-2">{{ $totalResidents > 0 ? number_format(($vaccinatedCount / $totalResidents) * 100, 1) : 0 }}%</span>
-                            <span class="text-xs text-zinc-500 mt-1 font-semibold">Vaccinated Inhabitants</span>
+                            <span class="text-sm uppercase font-extrabold tracking-wider text-zinc-400">Immunization Rate</span>
+                                <span class="text-5xl sm:text-6xl font-black text-emerald-500 font-outfit mt-2">{{ $totalResidents > 0 ? number_format(($vaccinatedCount / $totalResidents) * 100, 1) : 0 }}%</span>
+                                <span class="text-sm text-zinc-500 mt-1 font-semibold">Vaccinated Inhabitants</span>
                         </div>
                     </div>
                 </div>
@@ -405,6 +405,7 @@
                         <li><a href="#services" class="hover:text-white transition">Public Services</a></li>
                         <li><a href="#demographics" class="hover:text-white transition">Inhabitants Statistics</a></li>
                         <li><a href="#officials" class="hover:text-white transition">Barangay Council</a></li>
+                        <li><a href="{{ route('holidays') }}" class="hover:text-white transition">National Holidays</a></li>
                     </ul>
                 </div>
 

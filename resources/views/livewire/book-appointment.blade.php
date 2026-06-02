@@ -21,6 +21,25 @@
                     @endif
                 </ul>
             </div>
+            
+            {{-- Holiday dates toggle button (shows national holidays but not admin-managed closures) --}}
+            <div class="mt-3">
+                <button id="toggleHolidays" type="button" class="inline-flex items-center gap-2 px-3 py-2 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-md text-sm hover:shadow-sm">
+                    Show Holiday Dates
+                </button>
+
+                <div id="holidaysPanel" class="mt-3 hidden bg-white dark:bg-zinc-900 p-3 rounded border border-zinc-200 dark:border-zinc-800 text-sm">
+                    @if(isset($holidays) && count($holidays))
+                        <ul class="list-disc pl-5 space-y-1">
+                            @foreach($holidays as $h)
+                                <li>{{ \Illuminate\Support\Carbon::parse($h['date'])->format('M d, Y') }}: {{ $h['name'] }}</li>
+                            @endforeach
+                        </ul>
+                    @else
+                        <div class="text-zinc-500">No upcoming national holidays.</div>
+                    @endif
+                </div>
+            </div>
         @endif
         <!-- Date -->
         <div>
@@ -108,5 +127,23 @@
                 check(dateInput.value);
             }
         })();
+
+        // Holiday toggle
+        document.addEventListener('DOMContentLoaded', function(){
+            const btn = document.getElementById('toggleHolidays');
+            const panel = document.getElementById('holidaysPanel');
+            if(btn && panel){
+                btn.addEventListener('click', function(){
+                    const open = !panel.classList.contains('hidden');
+                    if(open){
+                        panel.classList.add('hidden');
+                        btn.textContent = 'Show Holiday Dates';
+                    } else {
+                        panel.classList.remove('hidden');
+                        btn.textContent = 'Hide Holiday Dates';
+                    }
+                });
+            }
+        });
     </script>
 </div>
