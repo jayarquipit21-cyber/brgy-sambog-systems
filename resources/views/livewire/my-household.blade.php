@@ -48,11 +48,11 @@
                 </thead>
                 <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">
                     @foreach($members as $member)
-                        <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition {{ $member->id === $resident->id ? 'bg-[#f53003]/5 dark:bg-[#f53003]/10 font-medium' : '' }}">
+                        <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition {{ $member->id === $resident->id ? 'bg-brand/5 dark:bg-brand/10 font-medium' : '' }}">
                             <td class="py-3 px-4 text-zinc-900 dark:text-white">
                                 {{ $member->full_name }}
                                 @if($member->id === $resident->id)
-                                    <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-[#f53003] text-white">
+                                    <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-brand text-white">
                                         You
                                     </span>
                                 @endif

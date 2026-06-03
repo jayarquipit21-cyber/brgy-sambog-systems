@@ -11,7 +11,7 @@
     <form wire:submit.prevent="add" class="flex gap-2 mb-3">
         <input type="date" wire:model="date" class="rounded border px-2 py-1" required />
         <input type="text" wire:model="reason" placeholder="Reason (optional)" class="rounded border px-2 py-1 flex-1" />
-        <button type="submit" class="bg-[#f53003] text-white px-3 rounded">Add</button>
+        <button type="submit" class="bg-brand hover:bg-brand-dark text-white px-3 rounded transition duration-200">Add</button>
     </form>
 
     <div class="space-y-2">

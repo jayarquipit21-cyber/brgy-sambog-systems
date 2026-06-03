@@ -35,18 +35,18 @@
             .font-outfit {
                 font-family: 'Outfit', sans-serif;
             }
-            /* Premium Red-Orange Color Theme */
+            /* Premium Emerald & Mint Color Theme */
             .text-brand {
-                color: #f53003;
+                color: #047857;
             }
             .bg-brand {
-                background-color: #f53003;
+                background-color: #047857;
             }
             .hover\:bg-brand-dark:hover {
-                background-color: #d62700;
+                background-color: #065f46;
             }
             .premium-gradient {
-                background: linear-gradient(135deg, #f53003 0%, #ff6b4a 100%);
+                background: linear-gradient(135deg, #047857 0%, #14b8a6 100%);
             }
             .premium-gradient-dark {
                 background: linear-gradient(135deg, #18181b 0%, #09090b 100%);
@@ -95,7 +95,7 @@
                     @auth
                         <div class="flex items-center gap-3">
                             <span class="text-xs text-zinc-500 dark:text-zinc-400 hidden lg:inline-block font-semibold">Hello, {{ Auth::user()->name }}</span>
-                            <a href="{{ route('dashboard') }}" class="inline-flex items-center justify-center px-4 py-2 text-xs font-bold text-white bg-brand hover:bg-brand-dark rounded-lg transition shadow-md shadow-orange-500/10 font-outfit">
+                            <a href="{{ route('dashboard') }}" class="inline-flex items-center justify-center px-4 py-2 text-xs font-bold text-white bg-brand hover:bg-brand-dark rounded-lg transition shadow-md shadow-emerald-500/10 font-outfit">
                                 Go to Workspace
                             </a>
                             <form method="POST" action="{{ route('logout') }}" class="inline">
@@ -106,7 +106,7 @@
                             </form>
                         </div>
                     @else
-                        <a href="{{ route('login') }}" class="inline-flex items-center justify-center px-4 py-2 text-xs font-bold text-white bg-brand hover:bg-brand-dark rounded-lg transition shadow-md shadow-orange-500/10 font-outfit">
+                        <a href="{{ route('login') }}" class="inline-flex items-center justify-center px-4 py-2 text-xs font-bold text-white bg-brand hover:bg-brand-dark rounded-lg transition shadow-md shadow-emerald-500/10 font-outfit">
                             Access Portal
                         </a>
                     @endauth
@@ -198,7 +198,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                         
                         <div class="bg-white dark:bg-zinc-900 p-8 rounded-3xl shadow-sm border border-zinc-200/50 dark:border-zinc-800/80 hover:shadow-md transition duration-300">
-                            <div class="p-3 bg-red-500/10 text-brand rounded-2xl w-fit mb-6">
+                            <div class="p-3 bg-emerald-500/10 text-brand rounded-2xl w-fit mb-6">
                                 <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                 </svg>

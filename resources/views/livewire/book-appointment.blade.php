@@ -48,7 +48,7 @@
                 id="appointment_date"
                 type="date" 
                 wire:model="appointment_date"
-                class="w-full rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-2 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#f53003] text-sm"
+                class="w-full rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-2 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand text-sm"
                 required
                 min="{{ date('Y-m-d') }}"
                 onchange="const d = new Date(this.value); const day = d.getUTCDay(); if(day === 0 || day === 6){ alert('Appointments may be closed on weekends. Please check closure notices.'); }"
@@ -63,7 +63,7 @@
             <select 
                 id="appointment_time"
                 wire:model="appointment_time"
-                class="w-full rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-2 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#f53003] text-sm"
+                class="w-full rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-2 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand text-sm"
                 required
             >
                 <option value="">Select a time slot</option>
@@ -85,7 +85,7 @@
                 wire:model="purpose"
                 rows="3"
                 placeholder="e.g. Requesting 1 copy of Barangay Clearance and 1 copy of Certificate of Indigency for job application purposes."
-                class="w-full rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-2 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#f53003] text-sm"
+                class="w-full rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-2 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand text-sm"
                 required
             ></textarea>
             @error('purpose') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
@@ -93,7 +93,7 @@
 
         <!-- Submit -->
         <div class="flex justify-end pt-2">
-            <flux:button id="book_submit" variant="primary" type="submit" class="bg-[#f53003] hover:bg-[#d62700] text-white py-2 px-4 rounded-lg font-medium text-sm transition shadow-sm">
+            <flux:button id="book_submit" variant="primary" type="submit" class="bg-brand hover:bg-brand-dark text-white py-2 px-4 rounded-lg font-medium text-sm transition shadow-sm">
                 Book Appointment
             </flux:button>
         </div>
