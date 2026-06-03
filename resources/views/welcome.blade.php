@@ -118,7 +118,7 @@
         <main class="flex-grow">
             
             <!-- SECTION 1: Gorgeous Municipal Hero Banner -->
-            <section class="relative overflow-hidden py-24 sm:py-32 bg-zinc-950 text-white">
+            <section class="relative overflow-hidden py-16 sm:py-24 bg-zinc-950 text-white">
                 <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-zinc-800/50 via-zinc-950 to-zinc-950 z-0"></div>
                 <div class="absolute -right-20 -bottom-20 h-96 w-96 rounded-full bg-brand/10 blur-3xl z-0"></div>
                 
@@ -143,7 +143,7 @@
             <!-- SECTION 2: (moved) Dynamic Live Stats Grid will appear later -->
 
             <!-- SECTION 3: About Barangay Corella -->
-            <section id="about" class="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <section id="about" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                 <div class="space-y-6">
                     <span class="text-brand text-xs font-bold uppercase tracking-widest font-outfit">Local Heritage</span>
                     <h2 class="text-4xl sm:text-5xl font-extrabold tracking-tight font-outfit text-zinc-950 dark:text-white">
@@ -185,7 +185,7 @@
             </section>
 
             <!-- SECTION 4: Public Services Offered -->
-            <section id="services" class="py-24 bg-zinc-100 dark:bg-zinc-900/40 border-y border-zinc-200 dark:border-zinc-900">
+            <section id="services" class="py-16 bg-zinc-100 dark:bg-zinc-900/40 border-y border-zinc-200 dark:border-zinc-900">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
                     <div class="text-center max-w-2xl mx-auto space-y-3">
                         <span class="text-brand text-xs font-bold uppercase tracking-widest font-outfit">Citizen Welfare</span>
@@ -238,7 +238,7 @@
             </section>
 
             <!-- SECTION 5: Local Council / Officials Showcase -->
-            <section id="officials" class="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+            <section id="officials" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
                 <div class="text-center max-w-2xl mx-auto space-y-3">
                     <span class="text-brand text-xs font-bold uppercase tracking-widest font-outfit">Barangay Leadership</span>
                     <h2 class="text-4xl sm:text-5xl font-extrabold tracking-tight font-outfit text-zinc-950 dark:text-white">Local Barangay Council</h2>
@@ -291,7 +291,7 @@
             </section>
 
             <!-- SECTION 6: Demographics (styled like other sections) -->
-            <section id="demographics" class="py-24 bg-zinc-100 dark:bg-zinc-900/40 border-y border-zinc-200 dark:border-zinc-900">
+            <section id="demographics" class="py-16 bg-zinc-100 dark:bg-zinc-900/40 border-y border-zinc-200 dark:border-zinc-900">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
                     <div class="text-center max-w-2xl mx-auto space-y-3">
                         <span class="text-brand text-xs font-bold uppercase tracking-widest font-outfit">Inhabitants</span>
@@ -328,21 +328,21 @@
             </section>
 
             <!-- SECTION 7: Recommended Places -->
-            <section id="places" class="py-12 bg-white dark:bg-zinc-950">
+            <section id="places" class="py-8 bg-white dark:bg-zinc-950">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <livewire:recommended-places />
                 </div>
             </section>
 
             <!-- SECTION 8: Premium Announcements Feed (Livewire) -->
-            <section id="announcements" class="py-24 bg-zinc-100 dark:bg-zinc-900/40 border-t border-zinc-200 dark:border-zinc-900">
+            <section id="announcements" class="py-16 bg-zinc-100 dark:bg-zinc-900/40 border-t border-zinc-200 dark:border-zinc-900">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <livewire:announcements />
                 </div>
             </section>
 
             <!-- SECTION 9: Contact Numbers -->
-            <section id="contacts" class="py-12 bg-white dark:bg-zinc-950 border-t border-zinc-200 dark:border-zinc-800">
+            <section id="contacts" class="py-8 bg-white dark:bg-zinc-950 border-t border-zinc-200 dark:border-zinc-800">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="text-center max-w-2xl mx-auto space-y-3 mb-6">
                         <span class="text-brand text-xs font-bold uppercase tracking-widest font-outfit">Get In Touch</span>
