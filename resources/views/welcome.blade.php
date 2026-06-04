@@ -64,21 +64,30 @@
                 background: linear-gradient(135deg, #18181b 0%, #09090b 100%);
             }
             .glassmorphism {
-                background: rgba(255, 255, 255, 0.85);
-                backdrop-filter: blur(12px);
-                -webkit-backdrop-filter: blur(12px);
+                background: rgba(255, 255, 255, 0.88);
+                backdrop-filter: blur(16px);
+                -webkit-backdrop-filter: blur(16px);
             }
             .dark .glassmorphism {
-                background: rgba(18, 18, 18, 0.85);
-                backdrop-filter: blur(12px);
-                -webkit-backdrop-filter: blur(12px);
+                background: rgba(9, 9, 11, 0.85);
+                backdrop-filter: blur(16px);
+                -webkit-backdrop-filter: blur(16px);
+            }
+            /* Subtle dot-grid mesh overlay */
+            .bg-mesh {
+                background-image: radial-gradient(circle, rgba(16,185,129,0.07) 1px, transparent 1px);
+                background-size: 28px 28px;
+            }
+            .dark .bg-mesh {
+                background-image: radial-gradient(circle, rgba(52,211,153,0.06) 1px, transparent 1px);
+                background-size: 28px 28px;
             }
         </style>
     </head>
-    <body class="bg-gradient-to-br from-emerald-200/60 via-zinc-50/80 to-teal-200/50 dark:from-zinc-950 dark:via-emerald-900/35 dark:to-zinc-900 text-zinc-900 dark:text-zinc-100 min-h-screen flex flex-col transition-colors duration-300">
+    <body class="bg-gradient-to-br from-emerald-50 via-white to-teal-50 dark:from-zinc-950 dark:via-emerald-950 dark:to-zinc-900 text-zinc-900 dark:text-zinc-100 min-h-screen flex flex-col transition-colors duration-300">
         
         <!-- Sticky Premium Header / Navigation Bar -->
-        <header class="sticky top-0 z-50 glassmorphism border-b border-zinc-200 dark:border-zinc-800/80 transition-all duration-300">
+        <header class="sticky top-0 z-50 glassmorphism border-b border-emerald-100 dark:border-emerald-900/40 transition-all duration-300">
                 <div class="max-w-8xl mx-auto px-2 sm:px-4 lg:px-6 h-20 flex items-center justify-between">
                 <!-- Municipal Branding -->
                 <a href="#" class="flex items-center gap-3 group flex-shrink-0">
@@ -188,7 +197,7 @@
         </header>
 
         <!-- Main Content Area -->
-        <main class="flex-grow">
+        <main class="flex-grow bg-mesh">
             
             <!-- SECTION 1: Gorgeous Municipal Hero Banner -->
             <section class="relative overflow-hidden py-16 sm:py-24 bg-gradient-to-br from-zinc-950 via-emerald-950 to-zinc-900 text-white">
