@@ -97,7 +97,7 @@
             }
         </style>
     </head>
-    <body class="bg-gradient-to-br from-emerald-300 via-emerald-100 to-teal-200 dark:from-zinc-950 dark:via-emerald-950 dark:to-zinc-900 text-zinc-900 dark:text-zinc-100 min-h-screen flex flex-col transition-colors duration-300">
+    <body class="bg-gradient-to-br from-emerald-200 via-emerald-50 to-teal-100 dark:from-zinc-950 dark:via-emerald-950 dark:to-zinc-900 text-zinc-900 dark:text-zinc-100 min-h-screen flex flex-col transition-colors duration-300">
         
         <!-- Sticky Premium Header / Navigation Bar -->
         <header class="sticky top-0 z-50 glassmorphism border-b border-emerald-100 dark:border-emerald-900/40 transition-all duration-300">
@@ -213,7 +213,7 @@
         <main class="flex-grow bg-mesh">
             
             <!-- SECTION 1: Gorgeous Municipal Hero Banner -->
-            <section class="relative overflow-hidden py-16 sm:py-24 bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-700 dark:from-zinc-950 dark:via-emerald-950 dark:to-zinc-900 text-white">
+            <section class="relative overflow-hidden py-16 sm:py-24 bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-600 dark:from-zinc-950 dark:via-emerald-950 dark:to-zinc-900 text-white">
                 <!-- Radial overlay for depth -->
                 <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-white/10 via-transparent to-transparent dark:from-emerald-900/30 dark:via-zinc-950 dark:to-zinc-950 z-0"></div>
                 <!-- Glow orbs -->
