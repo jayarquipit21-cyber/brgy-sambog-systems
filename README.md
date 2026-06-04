@@ -1,98 +1,132 @@
-﻿🏛️ Barangay Sambog — Inhabitant Management System
-A web-based management system built for Barangay Corella/Sambog to digitize and streamline inhabitant records, household data, health monitoring, and document pickup scheduling.
+🏛️ Barangay Sambog — Inhabitant Management System
 
-📋 Overview
-This system replaces manual paper-based barangay processes with a secure, role-based digital platform. Officials can manage the Record of Barangay Inhabitants (RBI), track household demographics by Purok zone, monitor public health data, and handle document clearance appointments — all from one workspace.
+A modern, web-based management system built for Barangay Sambog to digitize, secure, and streamline inhabitant records, household data, public health monitoring, local directory, and document pickup scheduling.
 
-✨ Features
+---
 
-Role-based dashboards — Separate views for Administrators, Public Health Officers, Household Heads, and Resident Inhabitants
-Inhabitants Registry (RBI) — Filterable and searchable record of all registered barangay residents
-Household Management — Track household units, addresses, Purok assignments, and member counts
-Purok Demographics — Visual population distribution charts per Purok zone
-Health Records Module — Monitor vaccination coverage, chronic conditions, pediatric and senior cases
-Document Pickup Scheduling — Residents can book and track clearance appointment slots; admins approve or reject
-Dark mode support — Full light/dark theme throughout the UI
+## 📋 Overview
 
+This platform replaces traditional manual paper-based barangay administration with a secure, role-based digital system. Powered by **Laravel 12**, **Livewire v4**, and **Flux UI**, it enables Barangay Officials to manage the Record of Barangay Inhabitants (RBI), map household demographics across Purok zones, monitor community vaccination/health metrics, publish announcements, highlight community places, and schedule certificate/clearance collections.
 
-👥 User Roles
-RoleAccessBarangay AdministratorFull access — residents, households, appointments, health dataPublic Health OfficerHealth records, vaccination stats, case monitoringHousehold HeadOwn household info and appointment bookingsResident InhabitantPersonal appointment history only
+---
 
-🛠️ Tech Stack
+## 👥 User Roles & Access Control
 
-Framework: Laravel 12+ with Livewire v4
-UI Components: Flux UI (livewire/flux v2)
-Styling: Tailwind CSS v4
-Database: SQLite (local) / MySQL (production)
-Auth: Laravel Fortify
-Build Tool: Vite
+The system implements strict role-based access control (RBAC) to ensure resident data privacy:
 
+| Role | Description & Access Rights |
+| :--- | :--- |
+| **Barangay Administrator (`admin`)** | Full read/write access to all resources: resident files, household structures, announcements, local directory, appointment queues, and blackout date settings. |
+| **Public Health Officer (`health_admin`)** | View and update health monitoring profiles, vaccination stats, and vulnerable groups. Strict privacy scopes ensure private financial (income) and voter data are omitted from their queries. |
+| **Household Head (`household_head`)** | Manage their own household profile and register/update members. Can book and track document pickup appointments. |
+| **Resident Inhabitant (`resident`)** | Access personal profile dashboard and schedule document pickup appointments. |
 
-🚀 Getting Started
-Requirements
+---
 
-PHP 8.3+
-Composer
-Node.js & npm
-SQLite or MySQL
+## ✨ Features
 
-Installation
-bash# Clone the repository
-git clone https://github.com/jayarquipit21-cyber/brgy-sambog-systems.git
-cd brgy-sambog-systems
+### 1. Inhabitants Registry (RBI)
+- **Searchable & Filterable Directory**: Quick lookup by name, age, sex, civil status, and educational status.
+- **Purok Demographics**: Visual population distribution stats and listings sorted by Purok zones (Purok 1 to 7).
 
-# Install PHP dependencies
-composer install
+### 2. Household Management
+- **Structured Households**: Organize residences using unique household numbers (`household_no`) and Purok assignments.
+- **Member Directory**: Household heads can dynamically update member lists, register births, and declare relationships.
 
-# Install JS dependencies
-npm install
+### 3. Public Health Module
+- **Health Indicators**: Track chronic conditions, nutritional classifications, and vulnerable sectors (Seniors, PWD, Pregnant, etc.).
+- **Vaccination Tracker**: Record COVID-19 vaccination status (Dose 1, Dose 2, boosters, vaccine brands) and PhilHealth membership details.
+- **Pediatric & Senior Case Load Counters**: Specialized counters for health admins to monitor high-risk demographics.
 
-# Set up environment
-cp .env.example .env
-php artisan key:generate
+### 4. Appointment & Clearance Scheduler
+- **Appointment Booking**: Inhabitants can select preferred dates and times for document pickups (e.g., Barangay Clearance, Certificate of Indigency).
+- **Date Closures**: Admins can declare "blackout dates" (e.g., national holidays, staff training days) to prevent scheduling on closed days.
+- **Validation Rules**: Prevents weekend bookings, past date choices, or overlapping slots.
 
-# Run migrations
-php artisan migrate
+### 5. Community Announcements
+- **Announcements Feed**: Dynamic board displaying general, health, and emergency advisories.
+- **Pinned Announcements**: Admins can pin important updates to the top of the resident dashboards.
 
-# Build assets
-npm run build
-Running locally
-bashcomposer run dev
-This starts the Laravel server, queue listener, and Vite dev server concurrently.
+### 6. Recommended Places Directory
+- **Local Attractions**: Showcases community spots, landmarks, and utility offices.
+- **Purok Categorization**: Groups recommended places by Purok zone.
 
-⚙️ Environment Variables
-Copy .env.example to .env and fill in your values:
-envAPP_NAME="Brgy Sambog System"
-APP_URL=http://localhost
+---
 
-DB_CONNECTION=sqlite
-# or for MySQL:
-# DB_CONNECTION=mysql
-# DB_HOST=127.0.0.1
-# DB_DATABASE=brgy_sambog
-# DB_USERNAME=root
-# DB_PASSWORD=
+## 🛠️ Tech Stack
 
-🔒 Security & Privacy Notice
-This system handles sensitive personal data of barangay residents protected under the Philippine Data Privacy Act of 2012 (RA 10173).
+- **Backend Framework**: Laravel 12+
+- **Frontend Interactivity**: Livewire v4
+- **UI Components**: [Flux UI](https://fluxui.dev/) (livewire/flux v2)
+- **Styling**: Tailwind CSS v4 with full light and dark mode capability
+- **Authentication**: Laravel Fortify (supports secure session auth, Passkeys, and Two-Factor Authentication)
+- **Database**: SQLite (Local development) / MySQL or PostgreSQL (Production)
+- **Build System**: Vite
 
-Never commit .env files, database dumps, or any resident data files (.xlsx, .csv, .sqlite) to version control
-Ensure the repository remains private when handling real inhabitant records
-Access must be restricted to authorized barangay personnel only
+---
 
+## 📁 Database Schema
 
-📁 Project Structure
-app/
-  Http/
-    Livewire/       # Livewire components
-  Models/           # Eloquent models (User, Household, Resident, etc.)
-resources/
-  views/
-    flux/           # Custom Flux component overrides
-    livewire/       # Livewire blade views
-database/
-  migrations/       # Database schema
-  seeders/          # Test data seeders
+The database consists of the following key tables:
 
-📄 License
-This project is developed for Barangay Corella/Sambog as an academic/community project. All resident data used during development must be synthetic or anonymized.
+- **`users`**: Manages credentials, roles (`admin`, `health_admin`, `household_head`, `resident`), and 2FA credentials.
+- **`households`**: Stores household identifiers, address details, and geographic Purok zoning information.
+- **`residents`**: Contains detailed personal, educational, employment, voter status, and health indicators for each resident.
+- **`appointments`**: Handles scheduled document clearances, statuses (`pending`, `approved`, `completed`, `cancelled`), and admin notes.
+- **`appointment_date_closures`**: Blacklisted calendar dates on which appointments cannot be booked.
+- **`places`**: Geographic directory of local landmarks, utility buildings, and recommended spots.
+- **`announcements`**: Broadcasted news, alerts, and emergency updates published by administrators.
+
+---
+
+## 🚀 Getting Started
+
+### Requirements
+- **PHP 8.3+**
+- **Composer**
+- **Node.js 20+** & **npm**
+- **SQLite** (or MySQL)
+
+### Installation
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/jayarquipit21-cyber/brgy-sambog-systems.git
+   cd brgy-sambog-systems
+   ```
+
+2. **Install PHP and JS Dependencies**
+   ```bash
+   composer install
+   npm install
+   ```
+
+3. **Configure Environment**
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
+
+4. **Run Database Migrations & Seeds**
+   ```bash
+   php artisan migrate --seed
+   ```
+
+5. **Build Frontend Assets**
+   ```bash
+   npm run build
+   ```
+
+6. **Run Locally**
+   ```bash
+   composer run dev
+   ```
+   *This starts the Laravel local server, background queues, and Vite asset compiler concurrently.*
+
+---
+
+## 🔒 Security & Privacy Compliance
+
+This system handles sensitive resident data protected under the **Philippine Data Privacy Act of 2012 (RA 10173)**. 
+
+- **Data Minimization**: SQL queries within the health officer dashboard strictly scope out highly private fields (e.g., `income`, `registered_national_voter`) using Eloquent selections.
+- **Local Safety**: Never commit local database files (`.sqlite`), environment files (`.env`), or actual spreadsheet records containing real inhabitant data. Use synthetic data for testing.
