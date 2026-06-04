@@ -36,9 +36,9 @@
 
     <form wire:submit="book" class="space-y-4">
         @if((isset($dateClosures) && $dateClosures->count()) || (isset($weekdayClosures) && $weekdayClosures->count()))
-            <div class="bg-yellow-50 border border-yellow-200 p-3 rounded text-sm text-zinc-800 mb-3">
-                <strong>Closures:</strong>
-                <ul class="list-disc pl-5 mt-1">
+            <div class="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/50 p-3 rounded-lg text-sm text-amber-900 dark:text-amber-300 mb-3">
+                <strong class="font-semibold">Closures:</strong>
+                <ul class="list-disc pl-5 mt-1 space-y-0.5">
                     @if(isset($dateClosures))
                         @foreach($dateClosures as $c)
                             <li>{{ $c->date->format('M d, Y') }}: {{ $c->reason ?? 'Closed' }}</li>
@@ -84,7 +84,7 @@
                 required
                 min="{{ date('Y-m-d') }}"
             />
-            <p id="closure_notice" class="text-xs text-red-600 mt-1" x-text="isClosed ? 'Closed: ' + closureReason : ''"></p>
+            <p id="closure_notice" class="text-xs text-red-600 dark:text-red-400 mt-1" x-text="isClosed ? 'Closed: ' + closureReason : ''"></p>
             @error('appointment_date') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
         </div>
 

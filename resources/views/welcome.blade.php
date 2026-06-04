@@ -6,6 +6,18 @@
         <title>Brgy. Sambog, Corella, Bohol - Official Municipal Website</title>
         <link rel="icon" href="/favicon.ico" sizes="any">
         
+        <!-- Theme Initialization script to prevent flash of wrong theme -->
+        <script>
+            (function() {
+                const theme = localStorage.getItem('theme') || 'system';
+                if (theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            })();
+        </script>
+        
         <!-- Google Fonts: Inter & Outfit -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -63,7 +75,7 @@
             }
         </style>
     </head>
-    <body class="bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 min-h-screen flex flex-col transition-colors duration-300">
+    <body class="bg-gradient-to-br from-emerald-200/60 via-zinc-50/80 to-teal-200/50 dark:from-zinc-950 dark:via-emerald-900/35 dark:to-zinc-900 text-zinc-900 dark:text-zinc-100 min-h-screen flex flex-col transition-colors duration-300">
         
         <!-- Sticky Premium Header / Navigation Bar -->
         <header class="sticky top-0 z-50 glassmorphism border-b border-zinc-200 dark:border-zinc-800/80 transition-all duration-300">
@@ -92,6 +104,67 @@
 
                 <!-- Authentication Portal Access -->
                 <div class="flex items-center gap-4">
+                    <!-- Theme Switcher -->
+                    <div x-data="{
+                        theme: localStorage.getItem('theme') || 'system',
+                        open: false,
+                        applyTheme() {
+                            if (this.theme === 'dark' || (this.theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                                document.documentElement.classList.add('dark');
+                            } else {
+                                document.documentElement.classList.remove('dark');
+                            }
+                            localStorage.setItem('theme', this.theme);
+                        }
+                    }"
+                    x-init="
+                        applyTheme();
+                        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+                            if (theme === 'system') applyTheme();
+                        });
+                        $watch('theme', () => applyTheme());
+                    "
+                    class="relative"
+                    >
+                        <button @click="open = !open" type="button" class="flex items-center justify-center p-2 rounded-lg bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-900/50 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 transition cursor-pointer">
+                            <span x-show="theme === 'light'">
+                                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
+                                </svg>
+                            </span>
+                            <span x-show="theme === 'dark'" x-cloak>
+                                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                                </svg>
+                            </span>
+                            <span x-show="theme === 'system'" x-cloak>
+                                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                            </span>
+                        </button>
+
+                        <div x-show="open" @click.away="open = false" x-cloak class="absolute right-0 mt-2 w-32 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-lg py-1 z-50 text-xs">
+                            <button @click="theme = 'light'; open = false" class="w-full text-left px-3 py-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 flex items-center gap-2 text-zinc-700 dark:text-zinc-300">
+                                <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
+                                </svg>
+                                Light
+                            </button>
+                            <button @click="theme = 'dark'; open = false" class="w-full text-left px-3 py-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 flex items-center gap-2 text-zinc-700 dark:text-zinc-300">
+                                <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                                </svg>
+                                Dark
+                            </button>
+                            <button @click="theme = 'system'; open = false" class="w-full text-left px-3 py-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 flex items-center gap-2 text-zinc-700 dark:text-zinc-300">
+                                <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                                System
+                            </button>
+                        </div>
+                    </div>
                     @auth
                         <div class="flex items-center gap-3">
                             <span class="text-xs text-zinc-500 dark:text-zinc-400 hidden lg:inline-block font-semibold">Hello, {{ Auth::user()->name }}</span>
@@ -186,7 +259,7 @@
             </section>
 
             <!-- SECTION 4: Public Services Offered -->
-            <section id="services" class="py-16 bg-zinc-100 dark:bg-zinc-900/40 border-y border-zinc-200 dark:border-zinc-900">
+            <section id="services" class="py-16 bg-emerald-50/30 dark:bg-emerald-950/10 border-y border-zinc-200 dark:border-zinc-900">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
                     <div class="text-center max-w-2xl mx-auto space-y-3">
                         <span class="text-brand text-xs font-bold uppercase tracking-widest font-outfit">Citizen Welfare</span>
@@ -198,7 +271,7 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                         
-                        <div class="bg-white dark:bg-zinc-900 p-8 rounded-3xl shadow-sm border border-zinc-200/50 dark:border-zinc-800/80 hover:shadow-md transition duration-300">
+                        <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md p-8 rounded-3xl shadow-sm border border-zinc-200/50 dark:border-zinc-800/80 hover:shadow-md transition duration-300">
                             <div class="p-3 bg-emerald-500/10 text-brand rounded-2xl w-fit mb-6">
                                 <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -210,7 +283,7 @@
                             </p>
                         </div>
 
-                        <div class="bg-white dark:bg-zinc-900 p-8 rounded-3xl shadow-sm border border-zinc-200/50 dark:border-zinc-800/80 hover:shadow-md transition duration-300">
+                        <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md p-8 rounded-3xl shadow-sm border border-zinc-200/50 dark:border-zinc-800/80 hover:shadow-md transition duration-300">
                             <div class="p-3 bg-emerald-500/10 text-emerald-500 rounded-2xl w-fit mb-6">
                                 <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -222,7 +295,7 @@
                             </p>
                         </div>
 
-                        <div class="bg-white dark:bg-zinc-900 p-8 rounded-3xl shadow-sm border border-zinc-200/50 dark:border-zinc-800/80 hover:shadow-md transition duration-300">
+                        <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md p-8 rounded-3xl shadow-sm border border-zinc-200/50 dark:border-zinc-800/80 hover:shadow-md transition duration-300">
                             <div class="p-3 bg-blue-500/10 text-blue-500 rounded-2xl w-fit mb-6">
                                 <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
@@ -250,7 +323,7 @@
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                     <!-- Captain -->
-                    <div class="bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200 dark:border-zinc-800/80 p-6 flex flex-col items-center text-center shadow-sm">
+                    <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md rounded-3xl border border-zinc-200 dark:border-zinc-800/80 p-6 flex flex-col items-center text-center shadow-sm">
                         <div class="h-20 w-20 rounded-full premium-gradient flex items-center justify-center text-white text-xl font-bold font-outfit shadow-md">
                             RA
                         </div>
@@ -260,7 +333,7 @@
                     </div>
 
                     <!-- Councilor 1 -->
-                    <div class="bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200 dark:border-zinc-800/80 p-6 flex flex-col items-center text-center shadow-sm">
+                    <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md rounded-3xl border border-zinc-200 dark:border-zinc-800/80 p-6 flex flex-col items-center text-center shadow-sm">
                         <div class="h-20 w-20 rounded-full bg-zinc-800 flex items-center justify-center text-zinc-300 text-xl font-bold font-outfit">
                             AS
                         </div>
@@ -270,7 +343,7 @@
                     </div>
 
                     <!-- Councilor 2 -->
-                    <div class="bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200 dark:border-zinc-800/80 p-6 flex flex-col items-center text-center shadow-sm">
+                    <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md rounded-3xl border border-zinc-200 dark:border-zinc-800/80 p-6 flex flex-col items-center text-center shadow-sm">
                         <div class="h-20 w-20 rounded-full bg-zinc-800 flex items-center justify-center text-zinc-300 text-xl font-bold font-outfit">
                             AR
                         </div>
@@ -280,7 +353,7 @@
                     </div>
 
                     <!-- Secretary -->
-                    <div class="bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200 dark:border-zinc-800/80 p-6 flex flex-col items-center text-center shadow-sm">
+                    <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md rounded-3xl border border-zinc-200 dark:border-zinc-800/80 p-6 flex flex-col items-center text-center shadow-sm">
                         <div class="h-20 w-20 rounded-full bg-zinc-800 flex items-center justify-center text-zinc-300 text-xl font-bold font-outfit">
                             CE
                         </div>
@@ -292,7 +365,7 @@
             </section>
 
             <!-- SECTION 6: Demographics (styled like other sections) -->
-            <section id="demographics" class="py-16 bg-zinc-100 dark:bg-zinc-900/40 border-y border-zinc-200 dark:border-zinc-900">
+            <section id="demographics" class="py-16 bg-emerald-50/30 dark:bg-emerald-950/10 border-y border-zinc-200 dark:border-zinc-900">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
                     <div class="text-center max-w-2xl mx-auto space-y-3">
                         <span class="text-brand text-xs font-bold uppercase tracking-widest font-outfit">Inhabitants</span>
@@ -300,7 +373,7 @@
                         <p class="text-zinc-500 text-sm leading-relaxed font-light">A quick snapshot of our registered population, households, senior citizens, and immunization coverage — updated from our household registry.</p>
                     </div>
 
-                    <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl p-8 sm:p-10 shadow-2xl grid grid-cols-2 lg:grid-cols-4 gap-8 divide-y lg:divide-y-0 lg:divide-x divide-zinc-200 dark:divide-zinc-800">
+                    <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md border border-zinc-200 dark:border-zinc-800 rounded-3xl p-8 sm:p-10 shadow-2xl grid grid-cols-2 lg:grid-cols-4 gap-8 divide-y lg:divide-y-0 lg:divide-x divide-zinc-200 dark:divide-zinc-800">
                         <div class="flex flex-col items-center text-center p-4">
                             <span class="text-sm uppercase font-extrabold tracking-wider text-zinc-400">Total Population</span>
                                 <span class="text-5xl sm:text-6xl font-black text-brand font-outfit mt-2">{{ number_format($totalResidents) }}</span>
@@ -329,21 +402,21 @@
             </section>
 
             <!-- SECTION 7: Recommended Places -->
-            <section id="places" class="py-8 bg-white dark:bg-zinc-950">
+            <section id="places" class="py-8 bg-transparent">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <livewire:recommended-places />
                 </div>
             </section>
 
             <!-- SECTION 8: Premium Announcements Feed (Livewire) -->
-            <section id="announcements" class="py-16 bg-zinc-100 dark:bg-zinc-900/40 border-t border-zinc-200 dark:border-zinc-900">
+            <section id="announcements" class="py-16 bg-emerald-50/30 dark:bg-emerald-950/10 border-t border-zinc-200 dark:border-zinc-900">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <livewire:announcements />
                 </div>
             </section>
 
             <!-- SECTION 9: Contact Numbers -->
-            <section id="contacts" class="py-8 bg-white dark:bg-zinc-950 border-t border-zinc-200 dark:border-zinc-800">
+            <section id="contacts" class="py-8 bg-transparent border-t border-zinc-200 dark:border-zinc-800">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="text-center max-w-2xl mx-auto space-y-3 mb-6">
                         <span class="text-brand text-xs font-bold uppercase tracking-widest font-outfit">Get In Touch</span>
@@ -352,25 +425,25 @@
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                        <div class="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm text-center">
+                        <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm text-center">
                             <div class="font-bold text-zinc-900 dark:text-white">Barangay Office</div>
                             <div class="text-brand font-mono mt-2">(038) 123-4567</div>
                             <div class="text-xs text-zinc-500 mt-1">Office Hours: 8am–5pm</div>
                         </div>
 
-                        <div class="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm text-center">
+                        <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm text-center">
                             <div class="font-bold text-zinc-900 dark:text-white">Health Hotline</div>
                             <div class="text-brand font-mono mt-2">+63 917 000 1111</div>
                             <div class="text-xs text-zinc-500 mt-1">For health concerns & immunization</div>
                         </div>
 
-                        <div class="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm text-center">
+                        <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm text-center">
                             <div class="font-bold text-zinc-900 dark:text-white">Police / Emergency</div>
                             <div class="text-brand font-mono mt-2">911 / (038) 765-4321</div>
                             <div class="text-xs text-zinc-500 mt-1">Immediate assistance</div>
                         </div>
 
-                        <div class="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm text-center">
+                        <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm text-center">
                             <div class="font-bold text-zinc-900 dark:text-white">Fire Department</div>
                             <div class="text-brand font-mono mt-2">+63 927 222 3333</div>
                             <div class="text-xs text-zinc-500 mt-1">Fire & Rescue</div>
