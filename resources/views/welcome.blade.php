@@ -225,7 +225,7 @@
                 <div class="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
                     <span class="inline-flex items-center gap-1.5 px-3.5 py-1 bg-white/20 border border-white/40 text-white dark:bg-emerald-500/15 dark:border-emerald-400/40 dark:text-emerald-300 rounded-full text-xs font-bold tracking-wider uppercase">
                         <span class="h-1.5 w-1.5 rounded-full bg-white dark:bg-emerald-400 animate-pulse"></span>
-                        Official Municipal Domain
+                        Official Barangay Domain
                     </span>
 
                     <h1 class="text-5xl sm:text-8xl font-black font-outfit tracking-tight leading-none text-white max-w-5xl mx-auto drop-shadow-sm">
