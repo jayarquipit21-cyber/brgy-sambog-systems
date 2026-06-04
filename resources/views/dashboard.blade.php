@@ -2,28 +2,30 @@
     <div class="space-y-8 pb-12">
         
         <!-- Premium Welcome Banner with High-Contrast Animated Gradients -->
-        <div class="relative overflow-hidden rounded-3xl border border-emerald-900/30 bg-gradient-to-br from-zinc-950 via-emerald-950/35 to-teal-950/20 p-8 shadow-2xl transition-all duration-300">
-            <!-- Background lights -->
-            <div class="absolute -right-24 -bottom-24 h-56 w-56 rounded-full bg-gradient-to-tr from-emerald-500/20 to-teal-500/25 blur-3xl opacity-80"></div>
-            <div class="absolute -left-20 -top-20 h-56 w-56 rounded-full bg-gradient-to-br from-teal-500/10 to-cyan-500/10 blur-3xl opacity-60"></div>
-            
+        <div class="relative overflow-hidden rounded-3xl border border-emerald-700/40 bg-gradient-to-br from-zinc-950 via-emerald-950 to-zinc-900 p-8 shadow-2xl transition-all duration-300">
+            <!-- Background glow orbs -->
+            <div class="absolute -right-16 -bottom-16 h-64 w-64 rounded-full bg-gradient-to-tr from-emerald-500/30 to-teal-400/30 blur-3xl"></div>
+            <div class="absolute -left-16 -top-16 h-64 w-64 rounded-full bg-gradient-to-br from-teal-500/20 to-emerald-400/20 blur-3xl"></div>
+            <!-- Subtle green shimmer across top -->
+            <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-emerald-400/50 to-transparent"></div>
+
             <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
                 <div class="space-y-3">
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-gradient-to-r from-emerald-500/20 to-teal-500/20 border border-emerald-500/30 text-emerald-400 rounded-full text-[10px] font-extrabold tracking-wider uppercase">
-                        <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-ping"></span>
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-500/15 border border-emerald-400/40 text-emerald-300 rounded-full text-[10px] font-extrabold tracking-wider uppercase">
+                        <span class="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-ping"></span>
                         Brgy. Sambog, Corella, Bohol Workspace
                     </span>
-                    <h2 class="text-3xl font-black font-outfit sm:text-4xl text-white tracking-tight leading-none">
-                        Hello, <span class="bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-450 bg-clip-text text-transparent font-black">{{ auth()->user()->name }}</span>
+                    <h2 class="text-3xl font-black font-outfit sm:text-4xl text-white tracking-tight leading-none drop-shadow-sm">
+                        Hello, <span class="bg-gradient-to-r from-emerald-300 via-teal-200 to-cyan-300 bg-clip-text text-transparent font-black">{{ auth()->user()->name }}</span>
                     </h2>
-                    <p class="text-zinc-300 text-xs sm:text-sm max-w-2xl font-normal leading-relaxed">
+                    <p class="text-zinc-200 text-xs sm:text-sm max-w-2xl font-normal leading-relaxed">
                         Welcome to your official inhabitant management and public services center. Access filtered registries, Purok demographic matrices, and pickup slots securely.
                     </p>
                 </div>
-                
+
                 <!-- Quick Badge with user role -->
-                <div class="flex items-center gap-3 bg-zinc-900/90 backdrop-blur-md border border-zinc-800 px-4 py-3 rounded-2xl w-fit shadow-xl">
-                    <div class="p-2.5 rounded-xl bg-emerald-500/20 text-emerald-400">
+                <div class="flex items-center gap-3 bg-zinc-950/80 backdrop-blur-md border border-emerald-800/60 px-4 py-3 rounded-2xl w-fit shadow-xl">
+                    <div class="p-2.5 rounded-xl bg-emerald-400/20 text-emerald-300">
                         <flux:icon name="shield-check" class="size-5" />
                     </div>
                     <div>
