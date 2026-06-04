@@ -23,19 +23,19 @@
     --color-zinc-900: #171717;
     --color-zinc-950: #0a0a0a;
 
-    --color-accent: var(--color-emerald-700);
-    --color-accent-content: var(--color-emerald-700);
+    --color-accent: var(--color-emerald-500);
+    --color-accent-content: var(--color-emerald-500);
     --color-accent-foreground: var(--color-white);
 
-    --color-brand: var(--color-emerald-700);
-    --color-brand-dark: var(--color-emerald-800);
+    --color-brand: var(--color-emerald-500);
+    --color-brand-dark: var(--color-emerald-600);
     --color-brand-light: var(--color-emerald-50);
 }
 
 @layer theme {
     .dark {
-        --color-accent: var(--color-emerald-500);
-        --color-accent-content: var(--color-emerald-500);
+        --color-accent: var(--color-emerald-300);
+        --color-accent-content: var(--color-emerald-300);
         --color-accent-foreground: var(--color-zinc-950);
     }
 }
@@ -55,8 +55,8 @@
 .text-brand { color: var(--color-brand); }
 .bg-brand { background-color: var(--color-brand); }
 .hover\:bg-brand-dark:hover { background-color: var(--color-brand-dark); }
-.bg-brand\/10 { background-color: rgba(4, 120, 87, 0.1); }
-.border-brand\/25 { border-color: rgba(4, 120, 87, 0.25); }
+.bg-brand\/10 { background-color: rgba(16, 185, 129, 0.1); }
+.border-brand\/25 { border-color: rgba(16, 185, 129, 0.25); }
 
 [data-flux-field]:not(ui-radio, ui-checkbox) {
     @apply grid gap-2;

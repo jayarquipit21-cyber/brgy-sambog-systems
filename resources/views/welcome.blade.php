@@ -49,16 +49,16 @@
             }
             /* Premium Emerald & Mint Color Theme */
             .text-brand {
-                color: #047857;
+                color: #10b981;
             }
             .bg-brand {
-                background-color: #047857;
+                background-color: #10b981;
             }
             .hover\:bg-brand-dark:hover {
-                background-color: #065f46;
+                background-color: #059669;
             }
             .premium-gradient {
-                background: linear-gradient(135deg, #047857 0%, #14b8a6 100%);
+                background: linear-gradient(135deg, #10b981 0%, #14b8a6 100%);
             }
             .premium-gradient-dark {
                 background: linear-gradient(135deg, #18181b 0%, #09090b 100%);
