@@ -233,7 +233,7 @@
                     </h1>
 
                     <p class="text-lg sm:text-2xl text-white/85 dark:text-zinc-200 max-w-3xl mx-auto leading-relaxed font-light">
-                        Welcome to our official municipal website. Stay connected with community stats, schedule secure clearance pick-ups, and get in touch with local council updates effortlessly.
+                        Welcome to our official barangay website. Stay connected with community stats, schedule secure clearance pick-ups, and get in touch with local council updates effortlessly.
                     </p>
 
                     <!-- Hero CTAs removed; primary access available in header -->
