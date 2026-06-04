@@ -1,4 +1,34 @@
-<div class="bg-white dark:bg-zinc-900 shadow-md rounded-xl p-6 border border-zinc-200 dark:border-zinc-800">
+<div class="bg-white dark:bg-zinc-900 shadow-md rounded-xl p-6 border border-zinc-200 dark:border-zinc-800"
+     x-data="{
+         openHolidays: false,
+         dateClosures: @js(isset($dateClosures) ? $dateClosures->map(fn($c) => ['date' => $c->date->toDateString(), 'reason' => $c->reason]) : []),
+         isClosed: false,
+         closureReason: '',
+         checkClosure(dateStr) {
+             if (!dateStr) {
+                 this.isClosed = false;
+                 this.closureReason = '';
+                 return;
+             }
+             const closure = this.dateClosures.find(c => c.date === dateStr);
+             if (closure) {
+                 this.isClosed = true;
+                 this.closureReason = closure.reason || 'Closed';
+                 alert('Appointments are closed on this date. ' + this.closureReason);
+                 $wire.set('appointment_date', '');
+             } else {
+                 this.isClosed = false;
+                 this.closureReason = '';
+                 const d = new Date(dateStr);
+                 const day = d.getUTCDay();
+                 if (day === 0 || day === 6) {
+                     alert('Appointments may be closed on weekends. Please check closure notices.');
+                 }
+             }
+         }
+     }"
+     x-init="checkClosure($wire.get('appointment_date'))"
+>
     <div class="mb-4">
         <flux:heading size="lg" level="2" class="text-zinc-900 dark:text-white font-semibold">Book a Document Pickup Appointment</flux:heading>
         <flux:text variant="subtle" class="text-xs text-zinc-500 dark:text-zinc-400">Specify the documents you need and choose a date to pick them up personally.</flux:text>
@@ -6,7 +36,7 @@
 
     <form wire:submit="book" class="space-y-4">
         @if((isset($dateClosures) && $dateClosures->count()) || (isset($weekdayClosures) && $weekdayClosures->count()))
-            <div class="bg-yellow-50 border border-yellow-200 p-3 rounded text-sm text-zinc-800">
+            <div class="bg-yellow-50 border border-yellow-200 p-3 rounded text-sm text-zinc-800 mb-3">
                 <strong>Closures:</strong>
                 <ul class="list-disc pl-5 mt-1">
                     @if(isset($dateClosures))
@@ -21,26 +51,27 @@
                     @endif
                 </ul>
             </div>
-            
-            {{-- Holiday dates toggle button (shows national holidays but not admin-managed closures) --}}
-            <div class="mt-3">
-                <button id="toggleHolidays" type="button" class="inline-flex items-center gap-2 px-3 py-2 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-md text-sm hover:shadow-sm">
-                    Show Holiday Dates
-                </button>
-
-                <div id="holidaysPanel" class="mt-3 hidden bg-white dark:bg-zinc-900 p-3 rounded border border-zinc-200 dark:border-zinc-800 text-sm">
-                    @if(isset($holidays) && count($holidays))
-                        <ul class="list-disc pl-5 space-y-1">
-                            @foreach($holidays as $h)
-                                <li>{{ \Illuminate\Support\Carbon::parse($h['date'])->format('M d, Y') }}: {{ $h['name'] }}</li>
-                            @endforeach
-                        </ul>
-                    @else
-                        <div class="text-zinc-500">No upcoming national holidays.</div>
-                    @endif
-                </div>
-            </div>
         @endif
+            
+        {{-- Holiday dates toggle button (shows national holidays but not admin-managed closures) --}}
+        <div class="mt-3">
+            <button @click="openHolidays = !openHolidays" type="button" class="inline-flex items-center gap-2 px-3 py-2 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-md text-sm hover:shadow-sm">
+                <span x-text="openHolidays ? 'Hide Holiday Dates' : 'Show Holiday Dates'">Show Holiday Dates</span>
+            </button>
+
+            <div x-show="openHolidays" x-cloak class="mt-3 bg-white dark:bg-zinc-900 p-3 rounded border border-zinc-200 dark:border-zinc-800 text-sm">
+                @if(isset($holidays) && count($holidays))
+                    <ul class="list-disc pl-5 space-y-1">
+                        @foreach($holidays as $h)
+                            <li>{{ \Illuminate\Support\Carbon::parse($h['date'])->format('M d, Y') }}: {{ $h['name'] }}</li>
+                        @endforeach
+                    </ul>
+                @else
+                    <div class="text-zinc-500">No upcoming national holidays.</div>
+                @endif
+            </div>
+        </div>
+
         <!-- Date -->
         <div>
             <label for="appointment_date" class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Preferred Pickup Date</label>
@@ -48,12 +79,12 @@
                 id="appointment_date"
                 type="date" 
                 wire:model="appointment_date"
+                @change="checkClosure($event.target.value)"
                 class="w-full rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-2 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand text-sm"
                 required
                 min="{{ date('Y-m-d') }}"
-                onchange="const d = new Date(this.value); const day = d.getUTCDay(); if(day === 0 || day === 6){ alert('Appointments may be closed on weekends. Please check closure notices.'); }"
             />
-            <p id="closure_notice" class="text-xs text-red-600 mt-1"></p>
+            <p id="closure_notice" class="text-xs text-red-600 mt-1" x-text="isClosed ? 'Closed: ' + closureReason : ''"></p>
             @error('appointment_date') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
         </div>
 
@@ -93,57 +124,9 @@
 
         <!-- Submit -->
         <div class="flex justify-end pt-2">
-            <flux:button id="book_submit" variant="primary" type="submit" class="bg-brand hover:bg-brand-dark text-white py-2 px-4 rounded-lg font-medium text-sm transition shadow-sm">
+            <flux:button id="book_submit" variant="primary" type="submit" x-bind:disabled="isClosed" class="bg-brand hover:bg-brand-dark text-white py-2 px-4 rounded-lg font-medium text-sm transition shadow-sm">
                 Book Appointment
             </flux:button>
         </div>
     </form>
-    <script>
-        (function(){
-            // Build map of closed dates -> reason
-            const dateClosures = @json(isset($dateClosures) ? $dateClosures->map(function($c){ return ['date' => $c->date->toDateString(), 'reason' => $c->reason]; }) : []);
-            const closedMap = new Map(dateClosures.map(d => [d.date, d.reason]));
-            const dateInput = document.getElementById('appointment_date');
-            const submitBtn = document.getElementById('book_submit');
-            const closureNotice = document.getElementById('closure_notice');
-
-            function check(dateStr){
-                if(!dateStr){ submitBtn.disabled = false; closureNotice.textContent = ''; return; }
-                if(closedMap.has(dateStr)){
-                    const reason = closedMap.get(dateStr) || 'Closed';
-                    alert('Appointments are closed on this date. ' + reason);
-                    dateInput.value = '';
-                    submitBtn.disabled = true;
-                    closureNotice.textContent = 'Closed: ' + reason;
-                } else {
-                    submitBtn.disabled = false;
-                    closureNotice.textContent = '';
-                }
-            }
-
-            if(dateInput){
-                dateInput.addEventListener('change', function(){ check(this.value); });
-                // initial check
-                check(dateInput.value);
-            }
-        })();
-
-        // Holiday toggle
-        document.addEventListener('DOMContentLoaded', function(){
-            const btn = document.getElementById('toggleHolidays');
-            const panel = document.getElementById('holidaysPanel');
-            if(btn && panel){
-                btn.addEventListener('click', function(){
-                    const open = !panel.classList.contains('hidden');
-                    if(open){
-                        panel.classList.add('hidden');
-                        btn.textContent = 'Show Holiday Dates';
-                    } else {
-                        panel.classList.remove('hidden');
-                        btn.textContent = 'Hide Holiday Dates';
-                    }
-                });
-            }
-        });
-    </script>
 </div>
