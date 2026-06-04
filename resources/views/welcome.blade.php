@@ -118,9 +118,10 @@
         <main class="flex-grow">
             
             <!-- SECTION 1: Gorgeous Municipal Hero Banner -->
-            <section class="relative overflow-hidden py-16 sm:py-24 bg-zinc-950 text-white">
-                <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-zinc-800/50 via-zinc-950 to-zinc-950 z-0"></div>
-                <div class="absolute -right-20 -bottom-20 h-96 w-96 rounded-full bg-brand/10 blur-3xl z-0"></div>
+            <section class="relative overflow-hidden py-16 sm:py-24 bg-gradient-to-br from-zinc-950 via-emerald-950/35 to-teal-950/20 text-white">
+                <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-emerald-950/20 via-zinc-950 to-zinc-950 z-0"></div>
+                <div class="absolute -right-20 -bottom-20 h-96 w-96 rounded-full bg-emerald-500/10 blur-3xl z-0"></div>
+                <div class="absolute -left-20 -top-20 h-96 w-96 rounded-full bg-teal-500/5 blur-3xl z-0"></div>
                 
                 <div class="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
                     <span class="inline-flex items-center gap-1.5 px-3.5 py-1 bg-brand/10 border border-brand/25 text-brand rounded-full text-xs font-bold tracking-wider uppercase">
