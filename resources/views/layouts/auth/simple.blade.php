@@ -6,7 +6,7 @@
         <!-- Theme init: prevents flash of wrong theme, mirrors homepage logic -->
         <script>
             (function () {
-                const theme = localStorage.getItem('theme') || 'system';
+                const theme = localStorage.getItem('flux.appearance') || localStorage.getItem('theme') || 'system';
                 if (theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
                     document.documentElement.classList.add('dark');
                 } else {

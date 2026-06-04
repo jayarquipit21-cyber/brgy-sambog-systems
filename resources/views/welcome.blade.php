@@ -9,7 +9,7 @@
         <!-- Theme Initialization script to prevent flash of wrong theme -->
         <script>
             (function() {
-                const theme = localStorage.getItem('theme') || 'system';
+                const theme = localStorage.getItem('flux.appearance') || localStorage.getItem('theme') || 'system';
                 if (theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
                     document.documentElement.classList.add('dark');
                 } else {
@@ -128,7 +128,7 @@
                 <div class="flex items-center gap-4">
                     <!-- Theme Switcher -->
                     <div x-data="{
-                        theme: localStorage.getItem('theme') || 'system',
+                        theme: localStorage.getItem('flux.appearance') || localStorage.getItem('theme') || 'system',
                         open: false,
                         applyTheme() {
                             if (this.theme === 'dark' || (this.theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -137,6 +137,7 @@
                                 document.documentElement.classList.remove('dark');
                             }
                             localStorage.setItem('theme', this.theme);
+                            localStorage.setItem('flux.appearance', this.theme);
                         }
                     }"
                     x-init="
@@ -256,29 +257,29 @@
                         Our neighborhood consists of dynamic Purok zones, each monitored closely to provide equal support to vulnerable sectors, pediatric nutritional coverages, and senior citizen wellness programs.
                     </p>
                 </div>
-                    <div class="relative overflow-hidden rounded-3xl bg-zinc-900 border border-zinc-800 p-8 shadow-xl space-y-6">
+                <div class="relative overflow-hidden rounded-3xl bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md border border-emerald-100 dark:border-zinc-800/80 p-8 shadow-xl space-y-6 transition duration-300">
                     <div class="absolute -right-10 -bottom-10 h-32 w-32 rounded-full bg-brand/5 blur-xl"></div>
-                    <h4 class="text-lg font-bold text-white font-outfit">Brgy. Sambog Local Dev Sandbox</h4>
-                    <p class="text-sm text-zinc-400 leading-relaxed">
-                        Testing role authorization, RBAC parameters, or database layer query limits? Access these pre-seeded sandbox accounts using password: <code class="text-brand font-mono font-bold bg-brand/10 px-1 py-0.5 rounded">password</code>
+                    <h4 class="text-lg font-bold text-zinc-950 dark:text-white font-outfit">Brgy. Sambog Local Dev Sandbox</h4>
+                    <p class="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                        Testing role authorization, RBAC parameters, or database layer query limits? Access these pre-seeded sandbox accounts using password: <code class="text-brand font-mono font-bold bg-brand/10 px-1.5 py-0.5 rounded">password</code>
                     </p>
                     
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-                        <div class="bg-zinc-950 p-3.5 rounded-xl border border-zinc-800">
-                            <div class="font-bold text-white">Barangay Admin</div>
-                            <div class="font-mono text-zinc-400 mt-1 select-all">admin@barangay.gov</div>
+                        <div class="bg-emerald-50/40 dark:bg-zinc-950/80 p-3.5 rounded-xl border border-emerald-100/50 dark:border-zinc-800/80">
+                            <div class="font-bold text-zinc-900 dark:text-white">Barangay Admin</div>
+                            <div class="font-mono text-zinc-600 dark:text-zinc-400 mt-1 select-all">admin@barangay.gov</div>
                         </div>
-                        <div class="bg-zinc-950 p-3.5 rounded-xl border border-zinc-800">
-                            <div class="font-bold text-white">Health Admin</div>
-                            <div class="font-mono text-zinc-400 mt-1 select-all">health@barangay.gov</div>
+                        <div class="bg-emerald-50/40 dark:bg-zinc-950/80 p-3.5 rounded-xl border border-emerald-100/50 dark:border-zinc-800/80">
+                            <div class="font-bold text-zinc-900 dark:text-white">Health Admin</div>
+                            <div class="font-mono text-zinc-600 dark:text-zinc-400 mt-1 select-all">health@barangay.gov</div>
                         </div>
-                        <div class="bg-zinc-950 p-3.5 rounded-xl border border-zinc-800">
-                            <div class="font-bold text-white">Household Head</div>
-                            <div class="font-mono text-zinc-400 mt-1 select-all">head@barangay.gov</div>
+                        <div class="bg-emerald-50/40 dark:bg-zinc-950/80 p-3.5 rounded-xl border border-emerald-100/50 dark:border-zinc-800/80">
+                            <div class="font-bold text-zinc-900 dark:text-white">Household Head</div>
+                            <div class="font-mono text-zinc-600 dark:text-zinc-400 mt-1 select-all">head@barangay.gov</div>
                         </div>
-                        <div class="bg-zinc-950 p-3.5 rounded-xl border border-zinc-800">
-                            <div class="font-bold text-white">Resident Member</div>
-                            <div class="font-mono text-zinc-400 mt-1 select-all">resident@barangay.gov</div>
+                        <div class="bg-emerald-50/40 dark:bg-zinc-950/80 p-3.5 rounded-xl border border-emerald-100/50 dark:border-zinc-800/80">
+                            <div class="font-bold text-zinc-900 dark:text-white">Resident Member</div>
+                            <div class="font-mono text-zinc-600 dark:text-zinc-400 mt-1 select-all">resident@barangay.gov</div>
                         </div>
                     </div>
                 </div>
