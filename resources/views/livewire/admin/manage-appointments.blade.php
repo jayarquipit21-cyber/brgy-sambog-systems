@@ -64,7 +64,7 @@
                             </td>
                             <td class="py-3 px-4 text-center">
                                 @if($apt->status === 'pending')
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-50 text-amber-800 border border-amber-200 dark:bg-amber-950/30 dark:text-amber-400 dark:border-amber-900/50">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-zinc-100 text-zinc-700 border border-zinc-300 dark:bg-zinc-800/60 dark:text-zinc-300 dark:border-zinc-700">
                                         Pending
                                     </span>
                                 @elseif($apt->status === 'approved')

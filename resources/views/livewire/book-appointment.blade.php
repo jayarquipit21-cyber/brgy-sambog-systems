@@ -36,7 +36,7 @@
 
     <form wire:submit="book" class="space-y-4">
         @if((isset($dateClosures) && $dateClosures->count()) || (isset($weekdayClosures) && $weekdayClosures->count()))
-            <div class="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/50 p-3 rounded-lg text-sm text-amber-900 dark:text-amber-300 mb-3">
+            <div class="bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900/50 p-3 rounded-lg text-sm text-emerald-900 dark:text-emerald-300 mb-3">
                 <strong class="font-semibold">Closures:</strong>
                 <ul class="list-disc pl-5 mt-1 space-y-0.5">
                     @if(isset($dateClosures))
