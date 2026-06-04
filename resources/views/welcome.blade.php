@@ -481,7 +481,7 @@
         </main>
 
         <!-- FOOTER: Standard Premium Municipal Footer Layout -->
-        <footer class="bg-zinc-950 text-zinc-400 py-16 border-t border-zinc-800/50 transition-colors">
+        <footer class="bg-zinc-100 dark:bg-zinc-950 text-zinc-500 dark:text-zinc-400 py-16 border-t border-zinc-200 dark:border-zinc-800/50 transition-colors duration-300">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-12 text-sm font-light">
                 
                 <!-- Brand Unit -->
@@ -490,55 +490,55 @@
                         <div class="h-9 w-9 rounded-lg premium-gradient flex items-center justify-center text-white font-black text-lg font-outfit">
                             BC
                         </div>
-                        <span class="text-lg font-bold tracking-tight text-white font-outfit">Brgy. Sambog, Corella, Bohol</span>
+                        <span class="text-lg font-bold tracking-tight text-zinc-900 dark:text-white font-outfit">Brgy. Sambog, Corella, Bohol</span>
                     </div>
-                    <p class="text-xs text-zinc-500 leading-relaxed font-light">
+                    <p class="text-xs text-zinc-500 dark:text-zinc-500 leading-relaxed font-light">
                         Official inhabitant demographic registry and secure pick-up scheduling workspace portal domain.
                     </p>
                 </div>
 
                 <!-- Quick Navigation Links -->
                 <div class="space-y-4">
-                    <h5 class="text-white font-bold font-outfit text-xs uppercase tracking-wider">Site Map</h5>
+                    <h5 class="text-zinc-900 dark:text-white font-bold font-outfit text-xs uppercase tracking-wider">Site Map</h5>
                     <ul class="space-y-2 text-xs">
-                        <li><a href="#about" class="hover:text-white transition">About Us</a></li>
-                        <li><a href="#services" class="hover:text-white transition">Public Services</a></li>
-                        <li><a href="#demographics" class="hover:text-white transition">Inhabitants Statistics</a></li>
-                        <li><a href="#officials" class="hover:text-white transition">Barangay Council</a></li>
-                        <li><a href="{{ route('holidays') }}" class="hover:text-white transition">National Holidays</a></li>
+                        <li><a href="#about" class="hover:text-zinc-900 dark:hover:text-white transition">About Us</a></li>
+                        <li><a href="#services" class="hover:text-zinc-900 dark:hover:text-white transition">Public Services</a></li>
+                        <li><a href="#demographics" class="hover:text-zinc-900 dark:hover:text-white transition">Inhabitants Statistics</a></li>
+                        <li><a href="#officials" class="hover:text-zinc-900 dark:hover:text-white transition">Barangay Council</a></li>
+                        <li><a href="{{ route('holidays') }}" class="hover:text-zinc-900 dark:hover:text-white transition">National Holidays</a></li>
                     </ul>
                 </div>
 
                 <!-- Operating Hours -->
                 <div class="space-y-4">
-                    <h5 class="text-white font-bold font-outfit text-xs uppercase tracking-wider">Barangay Office Hours</h5>
+                    <h5 class="text-zinc-900 dark:text-white font-bold font-outfit text-xs uppercase tracking-wider">Barangay Office Hours</h5>
                     <ul class="space-y-2 text-xs text-zinc-500">
-                        <li>Monday - Friday: <span class="text-zinc-300 font-medium">8:00 AM - 5:00 PM</span></li>
-                        <li>Saturday - Sunday: <span class="text-zinc-300 font-medium">Closed</span></li>
-                        <li>National Holidays: <span class="text-zinc-300 font-medium">Closed</span></li>
+                        <li>Monday - Friday: <span class="text-zinc-700 dark:text-zinc-300 font-medium">8:00 AM - 5:00 PM</span></li>
+                        <li>Saturday - Sunday: <span class="text-zinc-700 dark:text-zinc-300 font-medium">Closed</span></li>
+                        <li>National Holidays: <span class="text-zinc-700 dark:text-zinc-300 font-medium">Closed</span></li>
                     </ul>
                 </div>
 
                 <!-- Contacts -->
                 <div class="space-y-4">
-                    <h5 class="text-white font-bold font-outfit text-xs uppercase tracking-wider">Contact Details</h5>
+                    <h5 class="text-zinc-900 dark:text-white font-bold font-outfit text-xs uppercase tracking-wider">Contact Details</h5>
                     <ul class="space-y-2 text-xs text-zinc-500">
-                        <li>Email: <span class="text-zinc-300 font-medium">support@corella.gov</span></li>
-                        <li>Hotline: <span class="text-zinc-300 font-medium">+63 912 345 6789</span></li>
-                        <li>Address: <span class="text-zinc-300 font-medium">Brgy. Sambog, Corella, Bohol</span></li>
+                        <li>Email: <span class="text-zinc-700 dark:text-zinc-300 font-medium">support@corella.gov</span></li>
+                        <li>Hotline: <span class="text-zinc-700 dark:text-zinc-300 font-medium">+63 912 345 6789</span></li>
+                        <li>Address: <span class="text-zinc-700 dark:text-zinc-300 font-medium">Brgy. Sambog, Corella, Bohol</span></li>
                     </ul>
                 </div>
 
             </div>
 
             <!-- Legals -->
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-zinc-900 mt-12 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-600">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-zinc-200 dark:border-zinc-900 mt-12 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-400 dark:text-zinc-600">
                 <div>
                     &copy; {{ date('Y') }} Brgy. Sambog, Corella, Bohol Municipal Government. All rights reserved.
                 </div>
                 <div class="flex gap-6">
-                    <a href="#" class="hover:text-zinc-400 transition">Privacy Policy</a>
-                    <a href="#" class="hover:text-zinc-400 transition">Terms of Governance</a>
+                    <a href="#" class="hover:text-zinc-700 dark:hover:text-zinc-400 transition">Privacy Policy</a>
+                    <a href="#" class="hover:text-zinc-700 dark:hover:text-zinc-400 transition">Terms of Governance</a>
                 </div>
             </div>
         </footer>
