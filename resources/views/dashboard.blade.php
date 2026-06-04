@@ -2,34 +2,34 @@
     <div class="space-y-8 pb-12">
         
         <!-- Premium Welcome Banner with High-Contrast Animated Gradients -->
-        <div class="relative overflow-hidden rounded-3xl border border-emerald-700/40 bg-gradient-to-br from-zinc-950 via-emerald-950 to-zinc-900 p-8 shadow-2xl transition-all duration-300">
+        <div class="relative overflow-hidden rounded-3xl border border-emerald-300/30 dark:border-emerald-700/40 bg-gradient-to-br from-emerald-500 via-emerald-650 to-teal-600 dark:from-zinc-950 dark:via-emerald-950 dark:to-zinc-900 p-8 shadow-2xl transition-all duration-300">
             <!-- Background glow orbs -->
-            <div class="absolute -right-16 -bottom-16 h-64 w-64 rounded-full bg-gradient-to-tr from-emerald-500/30 to-teal-400/30 blur-3xl"></div>
-            <div class="absolute -left-16 -top-16 h-64 w-64 rounded-full bg-gradient-to-br from-teal-500/20 to-emerald-400/20 blur-3xl"></div>
+            <div class="absolute -right-16 -bottom-16 h-64 w-64 rounded-full bg-gradient-to-tr from-emerald-400/40 to-teal-300/40 dark:from-emerald-500/30 dark:to-teal-400/30 blur-3xl"></div>
+            <div class="absolute -left-16 -top-16 h-64 w-64 rounded-full bg-gradient-to-br from-teal-400/30 to-emerald-300/30 dark:from-teal-500/20 dark:to-emerald-400/20 blur-3xl"></div>
             <!-- Subtle green shimmer across top -->
-            <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-emerald-400/50 to-transparent"></div>
+            <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/40 dark:via-emerald-400/50 to-transparent"></div>
 
             <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
                 <div class="space-y-3">
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-500/15 border border-emerald-400/40 text-emerald-300 rounded-full text-[10px] font-extrabold tracking-wider uppercase">
-                        <span class="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-white/20 border border-white/30 text-white dark:bg-emerald-500/15 dark:border-emerald-400/40 dark:text-emerald-300 rounded-full text-[10px] font-extrabold tracking-wider uppercase">
+                        <span class="h-1.5 w-1.5 rounded-full bg-white dark:bg-emerald-400 animate-ping"></span>
                         Brgy. Sambog, Corella, Bohol Workspace
                     </span>
                     <h2 class="text-3xl font-black font-outfit sm:text-4xl text-white tracking-tight leading-none drop-shadow-sm">
-                        Hello, <span class="bg-gradient-to-r from-emerald-300 via-teal-200 to-cyan-300 bg-clip-text text-transparent font-black">{{ auth()->user()->name }}</span>
+                        Hello, <span class="bg-gradient-to-r from-white via-emerald-100 to-teal-50 dark:from-emerald-300 dark:via-teal-200 dark:to-cyan-300 bg-clip-text text-transparent font-black">{{ auth()->user()->name }}</span>
                     </h2>
-                    <p class="text-zinc-200 text-xs sm:text-sm max-w-2xl font-normal leading-relaxed">
+                    <p class="text-white/90 dark:text-zinc-200 text-xs sm:text-sm max-w-2xl font-normal leading-relaxed">
                         Welcome to your official inhabitant management and public services center. Access filtered registries, Purok demographic matrices, and pickup slots securely.
                     </p>
                 </div>
 
                 <!-- Quick Badge with user role -->
-                <div class="flex items-center gap-3 bg-zinc-950/80 backdrop-blur-md border border-emerald-800/60 px-4 py-3 rounded-2xl w-fit shadow-xl">
-                    <div class="p-2.5 rounded-xl bg-emerald-400/20 text-emerald-300">
+                <div class="flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/20 dark:bg-zinc-950/80 dark:border-emerald-800/60 px-4 py-3 rounded-2xl w-fit shadow-xl">
+                    <div class="p-2.5 rounded-xl bg-white/20 text-white dark:bg-emerald-400/20 dark:text-emerald-300">
                         <flux:icon name="shield-check" class="size-5" />
                     </div>
                     <div>
-                        <div class="text-[9px] uppercase tracking-widest text-zinc-400 font-extrabold">Active Role</div>
+                        <div class="text-[9px] uppercase tracking-widest text-emerald-100 dark:text-zinc-400 font-extrabold">Active Role</div>
                         <div class="text-xs font-black text-white font-outfit">
                             @if(auth()->user()->isAdmin())
                                 Barangay Administrator
