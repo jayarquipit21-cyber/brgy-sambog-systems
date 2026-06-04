@@ -58,7 +58,7 @@
                 background-color: #059669;
             }
             .premium-gradient {
-                background: linear-gradient(135deg, #10b981 0%, #14b8a6 100%);
+                background: linear-gradient(135deg, #34d399 0%, #2dd4bf 100%);
             }
             .premium-gradient-dark {
                 background: linear-gradient(135deg, #18181b 0%, #09090b 100%);
@@ -191,25 +191,29 @@
         <main class="flex-grow">
             
             <!-- SECTION 1: Gorgeous Municipal Hero Banner -->
-            <section class="relative overflow-hidden py-16 sm:py-24 bg-gradient-to-br from-zinc-950 via-emerald-950/35 to-teal-950/20 text-white">
-                <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-emerald-950/20 via-zinc-950 to-zinc-950 z-0"></div>
-                <div class="absolute -right-20 -bottom-20 h-96 w-96 rounded-full bg-emerald-500/10 blur-3xl z-0"></div>
-                <div class="absolute -left-20 -top-20 h-96 w-96 rounded-full bg-teal-500/5 blur-3xl z-0"></div>
-                
+            <section class="relative overflow-hidden py-16 sm:py-24 bg-gradient-to-br from-zinc-950 via-emerald-950 to-zinc-900 text-white">
+                <!-- Solid radial overlay -->
+                <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-emerald-900/30 via-zinc-950 to-zinc-950 z-0"></div>
+                <!-- Glow orbs -->
+                <div class="absolute -right-20 -bottom-20 h-96 w-96 rounded-full bg-emerald-500/25 blur-3xl z-0"></div>
+                <div class="absolute -left-20 -top-20 h-96 w-96 rounded-full bg-teal-400/20 blur-3xl z-0"></div>
+                <!-- Top shimmer line -->
+                <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-emerald-400/50 to-transparent z-10"></div>
+
                 <div class="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
-                    <span class="inline-flex items-center gap-1.5 px-3.5 py-1 bg-brand/10 border border-brand/25 text-brand rounded-full text-xs font-bold tracking-wider uppercase">
-                        <span class="h-1.5 w-1.5 rounded-full bg-brand animate-pulse"></span>
+                    <span class="inline-flex items-center gap-1.5 px-3.5 py-1 bg-emerald-500/15 border border-emerald-400/40 text-emerald-300 rounded-full text-xs font-bold tracking-wider uppercase">
+                        <span class="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
                         Official Municipal Domain
                     </span>
-                    
-                    <h1 class="text-5xl sm:text-8xl font-black font-outfit tracking-tight leading-none text-white max-w-5xl mx-auto">
+
+                    <h1 class="text-5xl sm:text-8xl font-black font-outfit tracking-tight leading-none text-white max-w-5xl mx-auto drop-shadow-sm">
                         Empowering Citizens, Shaping <span class="text-transparent bg-clip-text premium-gradient">Brgy. Sambog, Corella, Bohol</span>
                     </h1>
-                    
-                    <p class="text-lg sm:text-2xl text-zinc-400 max-w-3xl mx-auto leading-relaxed font-light">
+
+                    <p class="text-lg sm:text-2xl text-zinc-200 max-w-3xl mx-auto leading-relaxed font-light">
                         Welcome to our official municipal website. Stay connected with community stats, schedule secure clearance pick-ups, and get in touch with local council updates effortlessly.
                     </p>
-                    
+
                     <!-- Hero CTAs removed; primary access available in header -->
                 </div>
             </section>
