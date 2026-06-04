@@ -12,7 +12,7 @@
 
             <flux:sidebar.nav>
                 <flux:sidebar.group :heading="__('Platform')" class="grid">
-                    <flux:sidebar.item icon="globe-alt" :href="route('home')" wire:navigate>
+                    <flux:sidebar.item icon="globe-alt" :href="route('home')">
                         {{ __('Public Homepage') }}
                     </flux:sidebar.item>
 

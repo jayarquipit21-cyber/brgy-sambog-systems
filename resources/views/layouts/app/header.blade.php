@@ -10,7 +10,7 @@
             <x-app-logo href="{{ route('dashboard') }}" wire:navigate />
 
             <flux:navbar class="-mb-px max-lg:hidden">
-                <flux:navbar.item icon="globe-alt" :href="route('home')" wire:navigate>
+                <flux:navbar.item icon="globe-alt" :href="route('home')">
                     {{ __('Public Homepage') }}
                 </flux:navbar.item>
 
@@ -87,7 +87,7 @@
 
             <flux:sidebar.nav>
                 <flux:sidebar.group :heading="__('Platform')">
-                    <flux:sidebar.item icon="globe-alt" :href="route('home')" wire:navigate>
+                    <flux:sidebar.item icon="globe-alt" :href="route('home')">
                         {{ __('Public Homepage') }}
                     </flux:sidebar.item>
 
