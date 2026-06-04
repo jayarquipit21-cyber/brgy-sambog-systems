@@ -75,16 +75,16 @@
             }
             /* Subtle dot-grid mesh overlay */
             .bg-mesh {
-                background-image: radial-gradient(circle, rgba(16,185,129,0.07) 1px, transparent 1px);
-                background-size: 28px 28px;
+                background-image: radial-gradient(circle, rgba(4,120,87,0.15) 1px, transparent 1px);
+                background-size: 24px 24px;
             }
             .dark .bg-mesh {
-                background-image: radial-gradient(circle, rgba(52,211,153,0.06) 1px, transparent 1px);
-                background-size: 28px 28px;
+                background-image: radial-gradient(circle, rgba(52,211,153,0.07) 1px, transparent 1px);
+                background-size: 24px 24px;
             }
         </style>
     </head>
-    <body class="bg-gradient-to-br from-emerald-50 via-white to-teal-50 dark:from-zinc-950 dark:via-emerald-950 dark:to-zinc-900 text-zinc-900 dark:text-zinc-100 min-h-screen flex flex-col transition-colors duration-300">
+    <body class="bg-gradient-to-br from-emerald-300 via-emerald-100 to-teal-200 dark:from-zinc-950 dark:via-emerald-950 dark:to-zinc-900 text-zinc-900 dark:text-zinc-100 min-h-screen flex flex-col transition-colors duration-300">
         
         <!-- Sticky Premium Header / Navigation Bar -->
         <header class="sticky top-0 z-50 glassmorphism border-b border-emerald-100 dark:border-emerald-900/40 transition-all duration-300">
