@@ -28,27 +28,27 @@ class BookAppointment extends Component
                 function ($attribute, $value, $fail) {
                     $dayOfWeek = date('N', strtotime($value));
                     // Prefer explicit date closures when present
-                        // Prefer explicit date closures when present in DB
-                        if (Schema::hasTable('appointment_date_closures')) {
-                            $dateClosure = AppointmentDateClosure::where('date', $value)->first();
-                            if ($dateClosure) {
-                                $reason = $dateClosure->reason ? ' ' . $dateClosure->reason : '';
-                                $fail(__('Appointments are not available on this date. :reason', ['reason' => $reason]));
-                                return;
-                            }
-                        }
-
-                        // Check national holidays (closed by default). These are NOT stored in the manage closures table.
-                        $holidayName = HolidaysService::isHoliday($value);
-                        if ($holidayName) {
-                            $fail(__('Appointments are not available on this date. :reason', ['reason' => 'Holiday: ' . $holidayName]));
+                    // Prefer explicit date closures when present in DB
+                    if (Schema::hasTable('appointment_date_closures')) {
+                        $dateClosure = AppointmentDateClosure::where('date', $value)->first();
+                        if ($dateClosure) {
+                            $reason = $dateClosure->reason ? ' ' . $dateClosure->reason : '';
+                            $fail(__('Appointments are not available on this date. :reason', ['reason' => $reason]));
                             return;
                         }
+                    }
 
-                        // If there is no date closure or holiday, fall back to weekend-only rule.
-                        if ($dayOfWeek >= 6) {
-                            $fail(__('Appointments are only available from Monday to Friday.'));
-                        }
+                    // Check national holidays (closed by default). These are NOT stored in the manage closures table.
+                    $holidayName = HolidaysService::isHoliday($value);
+                    if ($holidayName) {
+                        $fail(__('Appointments are not available on this date. :reason', ['reason' => 'Holiday: ' . $holidayName]));
+                        return;
+                    }
+
+                    // If there is no date closure or holiday, fall back to weekend-only rule.
+                    if ($dayOfWeek >= 6) {
+                        $fail(__('Appointments are only available from Monday to Friday.'));
+                    }
                 },
             ],
             'appointment_time' => 'required|string',
