@@ -1,7 +1,7 @@
 <div class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center max-w-2xl mx-auto space-y-3">
-        <span class="text-brand text-xs font-bold uppercase tracking-widest font-outfit">Community Picks</span>
-        <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight font-outfit text-zinc-950 dark:text-white">Recommended Places Nearby</h2>
+        <span class="text-brand text-lg font-bold uppercase tracking-wider font-outfit">Community Picks</span>
+        <h2 class="text-5xl font-extrabold tracking-tight font-outfit text-zinc-950 dark:text-white">Recommended Places Nearby</h2>
         <p class="text-zinc-500 text-xs leading-relaxed font-light">Curated spots in Brgy. Sambog — essential services and popular locations for residents.</p>
     </div>
 

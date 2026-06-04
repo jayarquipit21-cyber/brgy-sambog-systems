@@ -1,7 +1,7 @@
 <div class="py-20 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center max-w-3xl mx-auto space-y-3 mb-8">
-        <span class="text-brand text-sm font-bold uppercase tracking-widest font-outfit">Bulletins & Feeds</span>
-        <h2 class="text-4xl sm:text-5xl font-extrabold tracking-tight font-outfit text-zinc-950 dark:text-white">Community Notice Board</h2>
+        <span class="text-brand text-lg font-bold uppercase tracking-wider font-outfit">Bulletins & Feeds</span>
+        <h2 class="text-5xl font-extrabold tracking-tight font-outfit text-zinc-950 dark:text-white">Community Notice Board</h2>
         <p class="text-zinc-500 text-sm leading-relaxed font-light">Official statements, seasonal alerts, and local assembly programs.</p>
     </div>
 

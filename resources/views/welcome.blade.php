@@ -244,10 +244,10 @@
             <!-- SECTION 2: (moved) Dynamic Live Stats Grid will appear later -->
 
             <!-- SECTION 3: About Barangay Corella -->
-            <section id="about" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <section id="about" class="scroll-mt-24 py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                 <div class="space-y-6">
-                    <span class="text-brand text-xs font-bold uppercase tracking-widest font-outfit">Local Heritage</span>
-                    <h2 class="text-4xl sm:text-5xl font-extrabold tracking-tight font-outfit text-zinc-950 dark:text-white">
+                    <span class="text-brand text-lg font-bold uppercase tracking-wider font-outfit">Local Heritage</span>
+                    <h2 class="text-5xl font-extrabold tracking-tight font-outfit text-zinc-950 dark:text-white">
                         Serving Our Community with Innovation & Transparency
                     </h2>
                     <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed font-light text-base sm:text-lg">
@@ -265,19 +265,19 @@
                     </p>
                     
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-                        <div class="bg-emerald-50/40 dark:bg-zinc-950/80 p-3.5 rounded-xl border border-emerald-100/50 dark:border-zinc-800/80">
+                        <div class="bg-white dark:bg-zinc-950/80 p-3.5 rounded-xl border border-emerald-200 dark:border-zinc-800/80 shadow-sm hover:shadow-md transition-shadow">
                             <div class="font-bold text-zinc-900 dark:text-white">Barangay Admin</div>
                             <div class="font-mono text-zinc-600 dark:text-zinc-400 mt-1 select-all">admin@barangay.gov</div>
                         </div>
-                        <div class="bg-emerald-50/40 dark:bg-zinc-950/80 p-3.5 rounded-xl border border-emerald-100/50 dark:border-zinc-800/80">
+                        <div class="bg-white dark:bg-zinc-950/80 p-3.5 rounded-xl border border-emerald-200 dark:border-zinc-800/80 shadow-sm hover:shadow-md transition-shadow">
                             <div class="font-bold text-zinc-900 dark:text-white">Health Admin</div>
                             <div class="font-mono text-zinc-600 dark:text-zinc-400 mt-1 select-all">health@barangay.gov</div>
                         </div>
-                        <div class="bg-emerald-50/40 dark:bg-zinc-950/80 p-3.5 rounded-xl border border-emerald-100/50 dark:border-zinc-800/80">
+                        <div class="bg-white dark:bg-zinc-950/80 p-3.5 rounded-xl border border-emerald-200 dark:border-zinc-800/80 shadow-sm hover:shadow-md transition-shadow">
                             <div class="font-bold text-zinc-900 dark:text-white">Household Head</div>
                             <div class="font-mono text-zinc-600 dark:text-zinc-400 mt-1 select-all">head@barangay.gov</div>
                         </div>
-                        <div class="bg-emerald-50/40 dark:bg-zinc-950/80 p-3.5 rounded-xl border border-emerald-100/50 dark:border-zinc-800/80">
+                        <div class="bg-white dark:bg-zinc-950/80 p-3.5 rounded-xl border border-emerald-200 dark:border-zinc-800/80 shadow-sm hover:shadow-md transition-shadow">
                             <div class="font-bold text-zinc-900 dark:text-white">Resident Member</div>
                             <div class="font-mono text-zinc-600 dark:text-zinc-400 mt-1 select-all">resident@barangay.gov</div>
                         </div>
@@ -285,12 +285,11 @@
                 </div>
             </section>
 
-            <!-- SECTION 4: Public Services Offered -->
-            <section id="services" class="py-16 bg-emerald-50/30 dark:bg-emerald-950/10 border-y border-zinc-200 dark:border-zinc-900">
+            <section id="services" class="scroll-mt-24 py-16 bg-emerald-50/30 dark:bg-emerald-950/10 border-y border-zinc-200 dark:border-zinc-900">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
                     <div class="text-center max-w-2xl mx-auto space-y-3">
-                        <span class="text-brand text-xs font-bold uppercase tracking-widest font-outfit">Citizen Welfare</span>
-                        <h2 class="text-4xl sm:text-5xl font-extrabold tracking-tight font-outfit text-zinc-950 dark:text-white">Public Municipal Services</h2>
+                        <span class="text-brand text-lg font-bold uppercase tracking-wider font-outfit">Citizen Welfare</span>
+                        <h2 class="text-5xl font-extrabold tracking-tight font-outfit text-zinc-950 dark:text-white">Public Municipal Services</h2>
                         <p class="text-zinc-500 text-sm sm:text-base leading-relaxed font-light">
                             Explore dynamic public programs structured to deliver premium governance solutions directly to Brgy. Sambog, Corella, Bohol's inhabitants.
                         </p>
@@ -338,11 +337,10 @@
                 </div>
             </section>
 
-            <!-- SECTION 5: Local Council / Officials Showcase -->
-            <section id="officials" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+            <section id="officials" class="scroll-mt-24 py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
                 <div class="text-center max-w-2xl mx-auto space-y-3">
-                    <span class="text-brand text-xs font-bold uppercase tracking-widest font-outfit">Barangay Leadership</span>
-                    <h2 class="text-4xl sm:text-5xl font-extrabold tracking-tight font-outfit text-zinc-950 dark:text-white">Local Barangay Council</h2>
+                    <span class="text-brand text-lg font-bold uppercase tracking-wider font-outfit">Barangay Leadership</span>
+                    <h2 class="text-5xl font-extrabold tracking-tight font-outfit text-zinc-950 dark:text-white">Local Barangay Council</h2>
                     <p class="text-zinc-500 text-sm leading-relaxed font-light">
                         Meet the dedicated leaders coordinating the development and administrative operations of Brgy. Sambog, Corella, Bohol.
                     </p>
@@ -391,12 +389,11 @@
                 </div>
             </section>
 
-            <!-- SECTION 6: Demographics (styled like other sections) -->
-            <section id="demographics" class="py-16 bg-emerald-50/30 dark:bg-emerald-950/10 border-y border-zinc-200 dark:border-zinc-900">
+            <section id="demographics" class="scroll-mt-24 py-16 bg-emerald-50/30 dark:bg-emerald-950/10 border-y border-zinc-200 dark:border-zinc-900">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
                     <div class="text-center max-w-2xl mx-auto space-y-3">
-                        <span class="text-brand text-xs font-bold uppercase tracking-widest font-outfit">Inhabitants</span>
-                        <h2 class="text-4xl sm:text-5xl font-extrabold tracking-tight font-outfit text-zinc-950 dark:text-white">Community Statistics</h2>
+                        <span class="text-brand text-lg font-bold uppercase tracking-wider font-outfit">Inhabitants</span>
+                        <h2 class="text-5xl font-extrabold tracking-tight font-outfit text-zinc-950 dark:text-white">Community Statistics</h2>
                         <p class="text-zinc-500 text-sm leading-relaxed font-light">A quick snapshot of our registered population, households, senior citizens, and immunization coverage — updated from our household registry.</p>
                     </div>
 
@@ -429,25 +426,25 @@
             </section>
 
             <!-- SECTION 7: Recommended Places -->
-            <section id="places" class="py-8 bg-transparent">
+            <section id="places" class="scroll-mt-24 py-8 bg-transparent">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <livewire:recommended-places />
                 </div>
             </section>
 
             <!-- SECTION 8: Premium Announcements Feed (Livewire) -->
-            <section id="announcements" class="py-16 bg-emerald-50/30 dark:bg-emerald-950/10 border-t border-zinc-200 dark:border-zinc-900">
+            <section id="announcements" class="scroll-mt-24 py-16 bg-emerald-50/30 dark:bg-emerald-950/10 border-t border-zinc-200 dark:border-zinc-900">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <livewire:announcements />
                 </div>
             </section>
 
             <!-- SECTION 9: Contact Numbers -->
-            <section id="contacts" class="py-8 bg-transparent border-t border-zinc-200 dark:border-zinc-800">
+            <section id="contacts" class="scroll-mt-24 py-8 bg-transparent border-t border-zinc-200 dark:border-zinc-800">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="text-center max-w-2xl mx-auto space-y-3 mb-6">
-                        <span class="text-brand text-xs font-bold uppercase tracking-widest font-outfit">Get In Touch</span>
-                        <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight font-outfit text-zinc-950 dark:text-white">Important Contact Numbers</h2>
+                        <span class="text-brand text-lg font-bold uppercase tracking-wider font-outfit">Get In Touch</span>
+                        <h2 class="text-5xl font-extrabold tracking-tight font-outfit text-zinc-950 dark:text-white">Important Contact Numbers</h2>
                         <p class="text-zinc-500 text-sm leading-relaxed">Phone numbers for quick access to barangay services and emergency hotlines.</p>
                     </div>
 
