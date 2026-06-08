@@ -284,11 +284,26 @@ func main() {
 func interactiveMenu(projectDir string) {
 	reader := bufio.NewReader(os.Stdin)
 	for {
+		clearScreen()
+		printBanner()
 		printMenu()
 		fmt.Printf("  %s%s❯%s Select an option: ", bold(), cyan(), reset())
 		choice, _ := reader.ReadString('\n')
 		choice = strings.TrimSpace(choice)
 		fmt.Println()
+
+		if choice == "0" || choice == "q" || choice == "Q" {
+			fmt.Printf("  %s%sGoodbye! 👋%s\n\n", bold(), cyan(), reset())
+			return
+		}
+
+		if choice == "" {
+			continue
+		}
+
+		// Clear menu and show clean action screen
+		clearScreen()
+		printBanner()
 
 		switch choice {
 		case "1":
@@ -311,18 +326,13 @@ func interactiveMenu(projectDir string) {
 			handleShowHistory()
 		case "h", "H", "?":
 			handleHelp()
-		case "0", "q", "Q":
-			fmt.Printf("  %s%sGoodbye! 👋%s\n\n", bold(), cyan(), reset())
-			return
-		case "":
-			// ignore empty input
 		default:
 			printError(fmt.Sprintf("Invalid choice: %q. Enter 0-9 or h.", choice))
 		}
 
 		fmt.Println()
-		printDivider()
-		fmt.Println()
+		fmt.Printf("  %sPress Enter to return to menu...%s", dim(), reset())
+		_, _ = reader.ReadString('\n')
 	}
 }
 
@@ -879,7 +889,7 @@ func authenticateUser(projectDir string) bool {
 	rs := reset()
 
 	fmt.Printf("  %s%s🔑 Authentication Required%s\n", b, c, rs)
-	fmt.Printf("  %s──────────────────────────────────────────────────%s\n", b, c, rs)
+	fmt.Printf("  %s%s──────────────────────────────────────────────────%s\n", b, c, rs)
 
 	for attempt := 1; attempt <= 3; attempt++ {
 		fmt.Printf("   Email: ")
@@ -887,9 +897,13 @@ func authenticateUser(projectDir string) bool {
 		email = strings.TrimSpace(email)
 
 		fmt.Printf("   Password: ")
-		password, _ := reader.ReadString('\n')
-		password = strings.TrimSpace(password)
-		fmt.Println()
+		password, err := readPassword()
+		fmt.Println() // print newline since echo was disabled
+
+		if err != nil {
+			fmt.Printf("  %sError reading password: %s%s\n\n", r, err.Error(), rs)
+			continue
+		}
 
 		if email == "" || password == "" {
 			fmt.Printf("  %sEmail and password cannot be empty. (%d/3)%s\n\n", y, attempt, rs)
@@ -900,17 +914,83 @@ func authenticateUser(projectDir string) bool {
 		sp.start()
 
 		// Run PHP artisan rbi:manage auth --email="..." --password="..."
-		_, err := runCommandCapture(projectDir, "auth", "--email="+email, "--password="+password)
+		_, err = runCommandCapture(projectDir, "auth", "--email="+email, "--password="+password)
 		sp.stop(err == nil)
 
 		if err != nil {
 			fmt.Printf("  %sInvalid credentials or unauthorized role. (%d/3)%s\n\n", r, attempt, rs)
 		} else {
 			fmt.Printf("  %sAccess Granted. Welcome back!%s\n\n", g, rs)
+			time.Sleep(600 * time.Millisecond) // short pause to let the user see the success message
+			clearScreen()
 			return true
 		}
 	}
 
 	fmt.Printf("  %sToo many failed attempts. Exiting.%s\n\n", r, rs)
 	return false
+}
+
+func readPassword() (string, error) {
+	if runtime.GOOS == "windows" {
+		msvcrt := syscall.NewLazyDLL("msvcrt.dll")
+		procGetch := msvcrt.NewProc("_getch")
+
+		var password []byte
+		for {
+			r, _, _ := procGetch.Call()
+			char := byte(r)
+
+			if char == 13 || char == 10 { // Enter key (CR or LF)
+				break
+			}
+			if char == 8 { // Backspace
+				if len(password) > 0 {
+					password = password[:len(password)-1]
+					// Erase last character on screen: backspace, space, backspace
+					fmt.Print("\b \b")
+				}
+			} else if char == 3 { // Ctrl+C
+				fmt.Println()
+				os.Exit(0)
+			} else if char >= 32 && char <= 126 { // Printable ASCII characters
+				password = append(password, char)
+				fmt.Print("*")
+			}
+		}
+		return string(password), nil
+	}
+
+	// Fallback for non-Windows (disable echo)
+	// On non-Windows, we can use stty if available
+	cmd := exec.Command("stty", "-echo")
+	cmd.Stdin = os.Stdin
+	_ = cmd.Run()
+
+	defer func() {
+		cmd := exec.Command("stty", "echo")
+		cmd.Stdin = os.Stdin
+		_ = cmd.Run()
+	}()
+
+	return readPasswordDefault()
+}
+
+func readPasswordDefault() (string, error) {
+	reader := bufio.NewReader(os.Stdin)
+	pass, err := reader.ReadString('\n')
+	if err != nil {
+		return "", err
+	}
+	return strings.TrimSpace(pass), nil
+}
+
+func clearScreen() {
+	if runtime.GOOS == "windows" {
+		cmd := exec.Command("cmd", "/c", "cls")
+		cmd.Stdout = os.Stdout
+		_ = cmd.Run()
+	} else {
+		fmt.Print("\033[H\033[2J")
+	}
 }
