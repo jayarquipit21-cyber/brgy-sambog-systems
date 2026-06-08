@@ -28,7 +28,7 @@ class Household extends Model
     {
         return $this->hasOne(Resident::class)->where(function ($query) {
             $query->where('relationship_to_head', 'HH')
-                  ->orWhere('relationship_to_head', 'Household Head');
+                ->orWhere('relationship_to_head', 'Household Head');
         });
     }
 }

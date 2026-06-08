@@ -92,6 +92,7 @@ class HolidaysService
         return collect($all)
             ->filter(function ($h) use ($start, $end) {
                 $d = Carbon::parse($h['date'])->startOfDay();
+
                 return $d->between($start, $end);
             })
             ->sortBy(function ($h) {
@@ -120,6 +121,7 @@ class HolidaysService
         $m = intdiv($a + 11 * $h + 22 * $l, 451);
         $month = intdiv($h + $l - 7 * $m + 114, 31);
         $day = (($h + $l - 7 * $m + 114) % 31) + 1;
+
         return Carbon::create($y, $month, $day)->startOfDay();
     }
 }

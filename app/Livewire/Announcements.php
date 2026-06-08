@@ -2,8 +2,8 @@
 
 namespace App\Livewire;
 
-use Livewire\Component;
 use App\Models\Announcement;
+use Livewire\Component;
 
 class Announcements extends Component
 {

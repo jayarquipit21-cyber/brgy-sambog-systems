@@ -2,11 +2,11 @@
 
 namespace App\Livewire\Admin;
 
-use App\Models\Resident;
 use App\Models\Household;
+use App\Models\Resident;
 use App\Models\User;
-use Flux\Flux;
 use Carbon\Carbon;
+use Flux\Flux;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -15,28 +15,44 @@ class ManageRbi extends Component
     use WithPagination;
 
     public string $search = '';
+
     public string $purokFilter = '';
+
     public string $voterFilter = '';
+
     public string $sortField = 'last_name';
+
     public string $sortDirection = 'asc';
 
     // Form fields for Household Head creation
     public bool $showCreateModal = false;
 
     public string $household_no = '';
+
     public string $purok_no = '';
+
     public string $address = '';
 
     public string $first_name = '';
+
     public string $middle_name = '';
+
     public string $last_name = '';
+
     public string $extension = '';
+
     public string $birthdate = '';
+
     public string $sex = '';
+
     public string $civil_status = '';
+
     public string $citizenship = 'Filipino';
+
     public string $mobile_number = '';
+
     public string $email = '';
+
     public string $password = '';
 
     protected function rules(): array
@@ -45,7 +61,7 @@ class ManageRbi extends Component
             'household_no' => 'required|string|max:255',
             'purok_no' => 'required|integer|between:1,8',
             'address' => 'required|string|max:255',
-            
+
             'first_name' => 'required|string|max:255',
             'middle_name' => 'nullable|string|max:255',
             'last_name' => 'required|string|max:255',
@@ -55,7 +71,7 @@ class ManageRbi extends Component
             'civil_status' => 'required|string|max:50',
             'citizenship' => 'required|string|max:255',
             'mobile_number' => 'nullable|string|max:20',
-            
+
             'email' => 'required|email|max:255|unique:users,email',
             'password' => 'required|string|min:8',
         ];
@@ -68,7 +84,7 @@ class ManageRbi extends Component
             'household_no', 'purok_no', 'address',
             'first_name', 'middle_name', 'last_name', 'extension',
             'birthdate', 'sex', 'civil_status', 'citizenship', 'mobile_number',
-            'email', 'password'
+            'email', 'password',
         ]);
         $this->citizenship = 'Filipino';
         $this->showCreateModal = true;
@@ -87,7 +103,7 @@ class ManageRbi extends Component
 
         // 2. Create User account
         $user = User::create([
-            'name' => trim($this->first_name . ' ' . $this->last_name),
+            'name' => trim($this->first_name.' '.$this->last_name),
             'email' => strtolower($this->email),
             'password' => bcrypt($this->password),
             'role' => 'household_head',
@@ -164,7 +180,7 @@ class ManageRbi extends Component
             // join households table for sorting by household fields
             $query = $query->leftJoin('households', 'residents.household_id', '=', 'households.id')
                 ->select('residents.*')
-                ->orderBy('households.' . $this->sortField, $this->sortDirection);
+                ->orderBy('households.'.$this->sortField, $this->sortDirection);
         } else {
             $query = $query->orderBy($this->sortField ?: 'last_name', $this->sortDirection)
                 ->orderBy('first_name', 'asc');
@@ -172,13 +188,13 @@ class ManageRbi extends Component
 
         if ($this->search) {
             $query->where(function ($q) {
-                $q->where('first_name', 'like', '%' . $this->search . '%')
-                  ->orWhere('last_name', 'like', '%' . $this->search . '%')
-                  ->orWhere('middle_name', 'like', '%' . $this->search . '%')
-                  ->orWhere('email_address', 'like', '%' . $this->search . '%')
-                  ->orWhereHas('household', function ($hq) {
-                      $hq->where('household_no', 'like', '%' . $this->search . '%');
-                  });
+                $q->where('first_name', 'like', '%'.$this->search.'%')
+                    ->orWhere('last_name', 'like', '%'.$this->search.'%')
+                    ->orWhere('middle_name', 'like', '%'.$this->search.'%')
+                    ->orWhere('email_address', 'like', '%'.$this->search.'%')
+                    ->orWhereHas('household', function ($hq) {
+                        $hq->where('household_no', 'like', '%'.$this->search.'%');
+                    });
             });
         }
 
@@ -192,14 +208,14 @@ class ManageRbi extends Component
             if ($this->voterFilter === 'registered') {
                 $query->where(function ($q) {
                     $q->where('registered_national_voter', 'Y')
-                      ->orWhere('registered_sk_voter', 'Y')
-                      ->orWhere('resident_voter', 'Y');
+                        ->orWhere('registered_sk_voter', 'Y')
+                        ->orWhere('resident_voter', 'Y');
                 });
             } elseif ($this->voterFilter === 'unregistered') {
                 $query->where(function ($q) {
                     $q->where('registered_national_voter', '!=', 'Y')
-                      ->where('registered_sk_voter', '!=', 'Y')
-                      ->where('resident_voter', '!=', 'Y');
+                        ->where('registered_sk_voter', '!=', 'Y')
+                        ->where('resident_voter', '!=', 'Y');
                 });
             }
         }

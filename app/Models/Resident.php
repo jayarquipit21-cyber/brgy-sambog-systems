@@ -30,8 +30,9 @@ class Resident extends Model
      */
     public function getFullNameAttribute(): string
     {
-        $middle = $this->middle_name ? ' ' . $this->middle_name : '';
-        $ext = $this->extension ? ' ' . $this->extension : '';
+        $middle = $this->middle_name ? ' '.$this->middle_name : '';
+        $ext = $this->extension ? ' '.$this->extension : '';
+
         return "{$this->first_name}{$middle} {$this->last_name}{$ext}";
     }
 }

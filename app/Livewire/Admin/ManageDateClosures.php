@@ -2,14 +2,15 @@
 
 namespace App\Livewire\Admin;
 
-use Livewire\Component;
 use App\Models\AppointmentDateClosure;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Component;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class ManageDateClosures extends Component
 {
     public $date = '';
+
     public $reason = '';
 
     public function mount()
@@ -25,7 +26,7 @@ class ManageDateClosures extends Component
             throw new AccessDeniedHttpException('Unauthorized');
         }
 
-        $this->validate([ 'date' => 'required|date|after_or_equal:today' ]);
+        $this->validate(['date' => 'required|date|after_or_equal:today']);
 
         AppointmentDateClosure::updateOrCreate(
             ['date' => $this->date],
@@ -51,6 +52,7 @@ class ManageDateClosures extends Component
     public function render()
     {
         $closures = AppointmentDateClosure::orderBy('date', 'asc')->get();
+
         return view('livewire.admin.manage-date-closures', ['closures' => $closures]);
     }
 }

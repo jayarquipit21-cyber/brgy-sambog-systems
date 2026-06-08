@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('household_id')->nullable()->constrained('households')->onDelete('cascade');
             $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
-            
+
             // Personal & Basic Info
             $table->string('population_no')->nullable()->index();
             $table->string('family_no')->nullable()->index();
@@ -43,7 +43,7 @@ return new class extends Migration
             $table->string('mobile_number')->nullable();
             $table->string('email_address')->nullable()->index();
             $table->string('social_media_account')->nullable();
-            
+
             // Education & Skills
             $table->text('educational_status')->nullable();
             $table->text('highest_educational_attainment')->nullable();
@@ -53,7 +53,7 @@ return new class extends Migration
             $table->string('primary_skills')->nullable();
             $table->string('secondary_skills')->nullable();
             $table->string('other_skills')->nullable();
-            
+
             // Employment & Income
             $table->text('work_status')->nullable();
             $table->string('occupation')->nullable();
@@ -62,7 +62,7 @@ return new class extends Migration
             $table->string('days_work_per_week')->nullable();
             $table->string('last_period_of_unemployment')->nullable();
             $table->string('reason_of_unemployment')->nullable();
-            
+
             // Voter Info
             $table->string('registered_sk_voter')->nullable();
             $table->string('registered_national_voter')->nullable();
@@ -71,7 +71,7 @@ return new class extends Migration
             $table->string('kk_assembly_no_reason')->nullable();
             $table->string('resident_voter')->nullable();
             $table->string('last_voted_year')->nullable();
-            
+
             // Health & Vaccinations
             $table->string('has_philhealth')->nullable();
             $table->string('philhealth_id')->nullable();
@@ -89,13 +89,13 @@ return new class extends Migration
             $table->text('nutritional_classification')->nullable();
             $table->text('vulnerable_sector')->nullable();
             $table->text('social_welfare_availed')->nullable();
-            
+
             // Water, Toilet & Waste
             $table->text('water_source')->nullable();
             $table->text('sanitary_toilet')->nullable();
             $table->text('waste_management')->nullable();
             $table->string('has_blind_drainage')->nullable();
-            
+
             $table->timestamps();
         });
     }

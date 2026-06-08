@@ -3,10 +3,10 @@
 namespace App\Livewire;
 
 use App\Models\Appointment;
-use Illuminate\Support\Facades\Auth;
-use Livewire\Component;
-use Livewire\Attributes\On;
 use Flux\Flux;
+use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\On;
+use Livewire\Component;
 
 class MyAppointments extends Component
 {
@@ -38,7 +38,7 @@ class MyAppointments extends Component
             ->get();
 
         return view('livewire.my-appointments', [
-            'appointments' => $appointments
+            'appointments' => $appointments,
         ]);
     }
 }

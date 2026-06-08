@@ -3,12 +3,13 @@
 namespace App\Livewire\Admin;
 
 use App\Models\Appointment;
-use Livewire\Component;
 use Flux\Flux;
+use Livewire\Component;
 
 class ManageAppointments extends Component
 {
     public string $search = '';
+
     public string $statusFilter = '';
 
     public function approve(int $id): void
@@ -30,7 +31,7 @@ class ManageAppointments extends Component
         $appointment = Appointment::findOrFail($id);
         $appointment->update([
             'status' => 'cancelled',
-            'admin_notes' => $notes ?: 'Cancelled by Admin.'
+            'admin_notes' => $notes ?: 'Cancelled by Admin.',
         ]);
         Flux::toast(variant: 'success', text: __('Appointment has been rejected/cancelled.'));
     }
@@ -54,13 +55,13 @@ class ManageAppointments extends Component
 
         if ($this->search) {
             $query->whereHas('user', function ($q) {
-                $q->where('name', 'like', '%' . $this->search . '%')
-                  ->orWhere('email', 'like', '%' . $this->search . '%');
+                $q->where('name', 'like', '%'.$this->search.'%')
+                    ->orWhere('email', 'like', '%'.$this->search.'%');
             });
         }
 
         return view('livewire.admin.manage-appointments', [
-            'appointments' => $query->get()
+            'appointments' => $query->get(),
         ]);
     }
 }

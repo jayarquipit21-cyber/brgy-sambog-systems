@@ -2,8 +2,8 @@
 
 namespace App\Livewire\Admin;
 
-use App\Models\Resident;
 use App\Models\Household;
+use App\Models\Resident;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -12,12 +12,19 @@ class RbiDataTable extends Component
     use WithPagination;
 
     public string $search = '';
+
     public string $purokFilter = '';
+
     public string $sexFilter = '';
+
     public string $voterFilter = '';
+
     public string $vaccineFilter = '';
+
     public string $healthFilter = '';
+
     public string $sortField = 'last_name';
+
     public string $sortDirection = 'asc';
 
     // Reset pagination when filter/search changes
@@ -78,7 +85,7 @@ class RbiDataTable extends Component
         if (in_array($this->sortField, ['household_no', 'purok_no'])) {
             $query = $query->leftJoin('households', 'residents.household_id', '=', 'households.id')
                 ->select('residents.*')
-                ->orderBy('households.' . $this->sortField, $this->sortDirection);
+                ->orderBy('households.'.$this->sortField, $this->sortDirection);
         } else {
             $query = $query->orderBy($this->sortField ?: 'last_name', $this->sortDirection)
                 ->orderBy('first_name', 'asc');
@@ -86,15 +93,15 @@ class RbiDataTable extends Component
 
         if ($this->search) {
             $query->where(function ($q) {
-                $q->where('first_name', 'like', '%' . $this->search . '%')
-                  ->orWhere('last_name', 'like', '%' . $this->search . '%')
-                  ->orWhere('middle_name', 'like', '%' . $this->search . '%')
-                  ->orWhere('email_address', 'like', '%' . $this->search . '%')
-                  ->orWhere('occupation', 'like', '%' . $this->search . '%')
-                  ->orWhereHas('household', function ($hq) {
-                      $hq->where('household_no', 'like', '%' . $this->search . '%')
-                        ->orWhere('address', 'like', '%' . $this->search . '%');
-                  });
+                $q->where('first_name', 'like', '%'.$this->search.'%')
+                    ->orWhere('last_name', 'like', '%'.$this->search.'%')
+                    ->orWhere('middle_name', 'like', '%'.$this->search.'%')
+                    ->orWhere('email_address', 'like', '%'.$this->search.'%')
+                    ->orWhere('occupation', 'like', '%'.$this->search.'%')
+                    ->orWhereHas('household', function ($hq) {
+                        $hq->where('household_no', 'like', '%'.$this->search.'%')
+                            ->orWhere('address', 'like', '%'.$this->search.'%');
+                    });
             });
         }
 
@@ -118,8 +125,8 @@ class RbiDataTable extends Component
             } elseif ($this->voterFilter === 'unregistered') {
                 $query->where(function ($q) {
                     $q->where('registered_national_voter', '!=', 'Y')
-                      ->where('registered_sk_voter', '!=', 'Y')
-                      ->where('resident_voter', '!=', 'Y');
+                        ->where('registered_sk_voter', '!=', 'Y')
+                        ->where('resident_voter', '!=', 'Y');
                 });
             }
         }
@@ -137,13 +144,13 @@ class RbiDataTable extends Component
         if ($this->healthFilter) {
             if ($this->healthFilter === 'has_condition') {
                 $query->whereNotNull('health_condition')
-                      ->where('health_condition', '!=', '')
-                      ->where('health_condition', '!=', 'None');
+                    ->where('health_condition', '!=', '')
+                    ->where('health_condition', '!=', 'None');
             } elseif ($this->healthFilter === 'none') {
                 $query->where(function ($q) {
                     $q->whereNull('health_condition')
-                      ->orWhere('health_condition', '')
-                      ->orWhere('health_condition', 'None');
+                        ->orWhere('health_condition', '')
+                        ->orWhere('health_condition', 'None');
                 });
             }
         }

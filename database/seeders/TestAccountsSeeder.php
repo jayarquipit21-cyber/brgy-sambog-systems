@@ -2,12 +2,12 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use App\Models\Household;
 use App\Models\Resident;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-use Carbon\Carbon;
 
 class TestAccountsSeeder extends Seeder
 {
@@ -25,17 +25,17 @@ class TestAccountsSeeder extends Seeder
             ['Julio', 'Ligaya'],
             ['Clara', 'Felipe'],
             ['Sisa', 'Crispin'],
-            ['Simoun', 'Isagani']
+            ['Simoun', 'Isagani'],
         ];
 
         for ($i = 0; $i < 5; $i++) {
             $num = $i + 1;
-            
+
             // 1. Create Household
             $household = Household::create([
                 'household_no' => "TEST-HH-0{$num}",
-                'purok_no' => (string)($num % 8 ?: 1),
-                'address' => "Purok " . ($num % 8 ?: 1) . ", Barangay Sambog, Corella, Bohol",
+                'purok_no' => (string) ($num % 8 ?: 1),
+                'address' => 'Purok '.($num % 8 ?: 1).', Barangay Sambog, Corella, Bohol',
             ]);
 
             // 2. Create Household Head User account

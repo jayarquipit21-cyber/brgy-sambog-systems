@@ -10,12 +10,7 @@ class PlacesService
      * Query Google Places Nearby Search and return simplified results.
      * Requires environment variable `GOOGLE_PLACES_API_KEY` to be set.
      *
-     * @param float $lat
-     * @param float $lng
-     * @param int $radius meters
-     * @param int $limit
-     * @param string|null $type
-     * @return array
+     * @param  int  $radius  meters
      */
     public function nearbyPlaces(float $lat, float $lng, int $radius = 1500, int $limit = 6, ?string $type = null): array
     {
@@ -130,7 +125,7 @@ class PlacesService
         }
 
         $params = [
-            'location' => $lat . ',' . $lng,
+            'location' => $lat.','.$lng,
             'radius' => $radius,
             'key' => $key,
         ];
@@ -150,7 +145,9 @@ class PlacesService
 
             $places = [];
             foreach ($results as $r) {
-                if (count($places) >= $limit) break;
+                if (count($places) >= $limit) {
+                    break;
+                }
                 $places[] = [
                     'name' => $r['name'] ?? null,
                     'type' => $r['types'][0] ?? null,
@@ -172,7 +169,10 @@ class PlacesService
 
     protected function buildPhotoUrl(?string $photoRef, string $key): ?string
     {
-        if (!$photoRef) return null;
-        return 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=' . urlencode($photoRef) . '&key=' . $key;
+        if (! $photoRef) {
+            return null;
+        }
+
+        return 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference='.urlencode($photoRef).'&key='.$key;
     }
 }

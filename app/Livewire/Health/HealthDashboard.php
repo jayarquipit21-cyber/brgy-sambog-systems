@@ -11,7 +11,9 @@ class HealthDashboard extends Component
     use WithPagination;
 
     public string $search = '';
+
     public string $ageGroupFilter = '';
+
     public string $healthFilter = '';
 
     // Selected columns that are related ONLY to health concerns, preventing exposure of sensitive info
@@ -33,7 +35,7 @@ class HealthDashboard extends Component
         'booster_date',
         'booster_brand',
         'nutritional_classification',
-        'vulnerable_sector'
+        'vulnerable_sector',
     ];
 
     public function updatingSearch(): void
@@ -61,9 +63,9 @@ class HealthDashboard extends Component
 
         if ($this->search) {
             $query->where(function ($q) {
-                $q->where('first_name', 'like', '%' . $this->search . '%')
-                  ->orWhere('last_name', 'like', '%' . $this->search . '%')
-                  ->orWhere('health_condition', 'like', '%' . $this->search . '%');
+                $q->where('first_name', 'like', '%'.$this->search.'%')
+                    ->orWhere('last_name', 'like', '%'.$this->search.'%')
+                    ->orWhere('health_condition', 'like', '%'.$this->search.'%');
             });
         }
 
@@ -81,7 +83,7 @@ class HealthDashboard extends Component
         }
 
         if ($this->healthFilter) {
-            $query->where('health_condition', 'like', '%' . $this->healthFilter . '%');
+            $query->where('health_condition', 'like', '%'.$this->healthFilter.'%');
         }
 
         // Generate age-dynamic aggregates for widgets
@@ -96,7 +98,7 @@ class HealthDashboard extends Component
 
         return view('livewire.health.health-dashboard', [
             'healthRecords' => $query->paginate(10),
-            'stats' => $stats
+            'stats' => $stats,
         ]);
     }
 }

@@ -2,14 +2,19 @@
 
 namespace Tests\Feature;
 
-use App\Models\User;
-use App\Models\Resident;
-use App\Models\Household;
-use App\Models\Appointment;
-use App\Livewire\BookAppointment;
 use App\Livewire\Admin\ManageAppointments;
+use App\Livewire\Admin\ManageRbi;
+use App\Livewire\Admin\RbiDataTable;
+use App\Livewire\BookAppointment;
 use App\Livewire\Health\HealthDashboard;
+use App\Livewire\MyHousehold;
+use App\Models\Appointment;
+use App\Models\Household;
+use App\Models\Resident;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Validator;
 use Livewire\Livewire;
 use Tests\TestCase;
 
@@ -69,14 +74,14 @@ class BarangayServicesTest extends TestCase
             'booster_date',
             'booster_brand',
             'nutritional_classification',
-            'vulnerable_sector'
+            'vulnerable_sector',
         ];
 
         $queriedResident = Resident::select($selectedColumns)->first();
 
         $this->assertEquals('John', $queriedResident->first_name);
         $this->assertEquals('Hypertension', $queriedResident->health_condition);
-        
+
         // Assert that private fields (income, national voter status) are not selected/accessible on the model!
         $this->assertNull($queriedResident->income);
         $this->assertNull($queriedResident->registered_national_voter);
@@ -84,45 +89,44 @@ class BarangayServicesTest extends TestCase
 
     public function test_residents_can_book_appointments(): void
     {
-        \Carbon\Carbon::setTestNow('2027-01-01'); // Pin fake "today" for after_or_equal:today
+        Carbon::setTestNow('2027-01-01'); // Pin fake "today" for after_or_equal:today
 
         $user = User::factory()->create(['role' => 'resident']);
         $this->actingAs($user);
 
         // Test the component's own validation rules directly (avoids Livewire 4 lifecycle quirks)
-        $component = new BookAppointment();
-        $validator = \Illuminate\Support\Facades\Validator::make(
+        $component = new BookAppointment;
+        $validator = Validator::make(
             [
                 'appointment_date' => '2027-03-15', // Monday, no PH holiday
                 'appointment_time' => '10:00 AM',
-                'purpose'          => 'Barangay Clearance Request',
+                'purpose' => 'Barangay Clearance Request',
             ],
             $component->rules()
         );
 
         $this->assertFalse(
             $validator->fails(),
-            'Expected no validation errors but got: ' . json_encode($validator->errors()->toArray())
+            'Expected no validation errors but got: '.json_encode($validator->errors()->toArray())
         );
 
         // Confirm an appointment can actually be persisted to the database
-        \App\Models\Appointment::create([
-            'user_id'          => $user->id,
+        Appointment::create([
+            'user_id' => $user->id,
             'appointment_date' => '2027-03-15',
             'appointment_time' => '10:00 AM',
-            'purpose'          => 'Barangay Clearance Request',
-            'status'           => 'pending',
+            'purpose' => 'Barangay Clearance Request',
+            'status' => 'pending',
         ]);
 
         $this->assertDatabaseHas('appointments', [
             'user_id' => $user->id,
             'purpose' => 'Barangay Clearance Request',
-            'status'  => 'pending',
+            'status' => 'pending',
         ]);
 
-        \Carbon\Carbon::setTestNow(); // Reset
+        Carbon::setTestNow(); // Reset
     }
-
 
     public function test_admin_can_approve_appointments(): void
     {
@@ -164,7 +168,7 @@ class BarangayServicesTest extends TestCase
         $this->get(route('rbi-data'))->assertStatus(403);
         $this->get(route('health'))->assertStatus(403);
         $this->get(route('household'))->assertStatus(403);
-        
+
         $this->get(route('dashboard'))->assertOk();
         $this->get(route('appointments'))->assertOk();
     }
@@ -210,7 +214,7 @@ class BarangayServicesTest extends TestCase
         $this->get(route('appointments'))->assertOk();
 
         // Check if the component renders successfully
-        \Livewire\Livewire::test(\App\Livewire\Admin\RbiDataTable::class)
+        Livewire::test(RbiDataTable::class)
             ->assertOk();
     }
 
@@ -219,7 +223,7 @@ class BarangayServicesTest extends TestCase
         $admin = User::factory()->create(['role' => 'admin']);
         $this->actingAs($admin);
 
-        \Livewire\Livewire::test(\App\Livewire\Admin\ManageRbi::class)
+        Livewire::test(ManageRbi::class)
             ->set('household_no', 'HH-9999')
             ->set('purok_no', '4')
             ->set('address', 'Purok 4, Sambog, Corella, Bohol')
@@ -275,7 +279,7 @@ class BarangayServicesTest extends TestCase
 
         $this->actingAs($headUser);
 
-        \Livewire\Livewire::test(\App\Livewire\MyHousehold::class)
+        Livewire::test(MyHousehold::class)
             ->set('first_name', 'Basilio')
             ->set('last_name', 'Ibarra')
             ->set('relationship_to_head', 'Son')
@@ -308,13 +312,12 @@ class BarangayServicesTest extends TestCase
         $this->actingAs($admin);
 
         // Missing fields should cause validation errors
-        \Livewire\Livewire::test(\App\Livewire\Admin\ManageRbi::class)
+        Livewire::test(ManageRbi::class)
             ->call('saveHouseholdHead')
             ->assertHasErrors([
                 'household_no', 'purok_no', 'address',
                 'first_name', 'last_name', 'birthdate', 'sex', 'civil_status',
-                'email', 'password'
+                'email', 'password',
             ]);
     }
 }
-

@@ -1,14 +1,19 @@
 <?php
 
+use App\Models\Appointment;
+use App\Models\Household;
+use App\Models\Resident;
+use App\Services\HolidaysService;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     $stats = [
-        'totalResidents' => \App\Models\Resident::count(),
-        'totalHouseholds' => \App\Models\Household::count(),
-        'seniorCitizens' => \App\Models\Resident::where('age', '>=', 60)->count(),
-        'vaccinatedCount' => \App\Models\Resident::where('fully_vaccinated', 'Y')->count(),
+        'totalResidents' => Resident::count(),
+        'totalHouseholds' => Household::count(),
+        'seniorCitizens' => Resident::where('age', '>=', 60)->count(),
+        'vaccinatedCount' => Resident::where('fully_vaccinated', 'Y')->count(),
     ];
+
     return view('welcome', $stats);
 })->name('home');
 
@@ -16,7 +21,8 @@ Route::get('/', function () {
 Route::get('holidays', function () {
     $start = now()->startOfDay();
     $end = now()->addYear()->endOfDay();
-    $holidays = \App\Services\HolidaysService::upcomingBetween($start, $end);
+    $holidays = HolidaysService::upcomingBetween($start, $end);
+
     return view('pages.holidays', ['holidays' => $holidays]);
 })->name('holidays');
 
@@ -26,23 +32,23 @@ Route::middleware(['auth', 'verified'])->group(function () {
         $data = [];
 
         if ($user->isAdmin()) {
-            $data['totalHouseholds'] = \App\Models\Household::count();
-            $data['totalResidents'] = \App\Models\Resident::count();
-            $data['pendingAppointments'] = \App\Models\Appointment::where('status', 'pending')->count();
-            $data['recentAppointments'] = \App\Models\Appointment::with('user')->latest()->take(5)->get();
+            $data['totalHouseholds'] = Household::count();
+            $data['totalResidents'] = Resident::count();
+            $data['pendingAppointments'] = Appointment::where('status', 'pending')->count();
+            $data['recentAppointments'] = Appointment::with('user')->latest()->take(5)->get();
         } elseif ($user->isHealthAdmin()) {
-            $data['totalResidents'] = \App\Models\Resident::count();
-            $data['totalVaccinated'] = \App\Models\Resident::where('fully_vaccinated', 'Y')->count();
-            $data['totalWithConditions'] = \App\Models\Resident::whereNotNull('health_condition')
+            $data['totalResidents'] = Resident::count();
+            $data['totalVaccinated'] = Resident::where('fully_vaccinated', 'Y')->count();
+            $data['totalWithConditions'] = Resident::whereNotNull('health_condition')
                 ->where('health_condition', '!=', '')
                 ->where('health_condition', '!=', 'None')
                 ->count();
-            $data['pediatricCases'] = \App\Models\Resident::where('age', '<=', 12)
+            $data['pediatricCases'] = Resident::where('age', '<=', 12)
                 ->whereNotNull('health_condition')
                 ->where('health_condition', '!=', '')
                 ->where('health_condition', '!=', 'None')
                 ->count();
-            $data['seniorCases'] = \App\Models\Resident::where('age', '>=', 60)
+            $data['seniorCases'] = Resident::where('age', '>=', 60)
                 ->whereNotNull('health_condition')
                 ->where('health_condition', '!=', '')
                 ->where('health_condition', '!=', 'None')
@@ -51,13 +57,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
             $resident = $user->resident;
             $data['household'] = $resident ? $resident->household : null;
             $data['householdMembersCount'] = $data['household'] ? $data['household']->residents()->count() : 0;
-            $data['upcomingAppointments'] = \App\Models\Appointment::where('user_id', $user->id)
+            $data['upcomingAppointments'] = Appointment::where('user_id', $user->id)
                 ->whereIn('status', ['pending', 'approved'])
                 ->orderBy('appointment_date')
                 ->take(5)
                 ->get();
         } else {
-            $data['upcomingAppointments'] = \App\Models\Appointment::where('user_id', $user->id)
+            $data['upcomingAppointments'] = Appointment::where('user_id', $user->id)
                 ->whereIn('status', ['pending', 'approved'])
                 ->orderBy('appointment_date')
                 ->take(5)
@@ -69,39 +75,44 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Admin routes
     Route::get('rbi', function () {
-        if (!auth()->user()->isAdmin()) {
+        if (! auth()->user()->isAdmin()) {
             abort(403, 'Unauthorized.');
         }
+
         return view('pages.rbi');
     })->name('rbi');
 
     Route::get('admin/announcements', function () {
-        if (!auth()->user()->isAdmin()) {
+        if (! auth()->user()->isAdmin()) {
             abort(403, 'Unauthorized.');
         }
+
         return view('admin.announcements');
     })->name('admin.announcements');
 
     Route::get('rbi-data', function () {
-        if (!auth()->user()->isAdmin()) {
+        if (! auth()->user()->isAdmin()) {
             abort(403, 'Unauthorized.');
         }
+
         return view('pages.rbi-data');
     })->name('rbi-data');
 
     // Health officer routes
     Route::get('health', function () {
-        if (!auth()->user()->isHealthAdmin() && !auth()->user()->isAdmin()) {
+        if (! auth()->user()->isHealthAdmin() && ! auth()->user()->isAdmin()) {
             abort(403, 'Unauthorized.');
         }
+
         return view('pages.health');
     })->name('health');
 
     // Household Head routes
     Route::get('household', function () {
-        if (!auth()->user()->isHouseholdHead() && !auth()->user()->isAdmin()) {
+        if (! auth()->user()->isHouseholdHead() && ! auth()->user()->isAdmin()) {
             abort(403, 'Unauthorized.');
         }
+
         return view('pages.household');
     })->name('household');
 
@@ -112,4 +123,3 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 require __DIR__.'/settings.php';
-

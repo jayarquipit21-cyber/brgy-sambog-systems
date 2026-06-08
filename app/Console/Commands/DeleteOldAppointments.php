@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Models\Appointment;
 use Carbon\Carbon;
+use Illuminate\Console\Command;
 
 class DeleteOldAppointments extends Command
 {
@@ -23,12 +23,14 @@ class DeleteOldAppointments extends Command
         $count = $query->count();
         if ($count === 0) {
             $this->info('No old appointment records to delete.');
+
             return 0;
         }
 
         $query->delete();
 
         $this->info("Deleted {$count} old appointment record(s).");
+
         return 0;
     }
 }

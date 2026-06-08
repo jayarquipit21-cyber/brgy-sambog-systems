@@ -7,15 +7,17 @@ use App\Models\Appointment;
 use App\Models\AppointmentDateClosure;
 use App\Services\HolidaysService;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\Auth;
-use Livewire\Component;
 use Flux\Flux;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Schema;
+use Livewire\Component;
 
 class BookAppointment extends Component
 {
     public string $appointment_date = '';
+
     public string $appointment_time = '';
+
     public string $purpose = '';
 
     public function rules(): array
@@ -32,8 +34,9 @@ class BookAppointment extends Component
                     if (Schema::hasTable('appointment_date_closures')) {
                         $dateClosure = AppointmentDateClosure::where('date', $value)->first();
                         if ($dateClosure) {
-                            $reason = $dateClosure->reason ? ' ' . $dateClosure->reason : '';
+                            $reason = $dateClosure->reason ? ' '.$dateClosure->reason : '';
                             $fail(__('Appointments are not available on this date. :reason', ['reason' => $reason]));
+
                             return;
                         }
                     }
@@ -41,7 +44,8 @@ class BookAppointment extends Component
                     // Check national holidays (closed by default). These are NOT stored in the manage closures table.
                     $holidayName = HolidaysService::isHoliday($value);
                     if ($holidayName) {
-                        $fail(__('Appointments are not available on this date. :reason', ['reason' => 'Holiday: ' . $holidayName]));
+                        $fail(__('Appointments are not available on this date. :reason', ['reason' => 'Holiday: '.$holidayName]));
+
                         return;
                     }
 
@@ -88,7 +92,9 @@ class BookAppointment extends Component
         }
 
         // Sort by date and return only DB-created closures to the booking UI
-        $dateClosures = $dateClosures->sortBy(function ($c) { return $c->date->toDateString(); })->values();
+        $dateClosures = $dateClosures->sortBy(function ($c) {
+            return $c->date->toDateString();
+        })->values();
 
         // Also provide upcoming holidays separately for a toggleable UI element in the booking form
         $start = now()->startOfDay();

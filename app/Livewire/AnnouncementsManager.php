@@ -2,18 +2,23 @@
 
 namespace App\Livewire;
 
-use Livewire\Component;
 use App\Models\Announcement;
-use Illuminate\Support\Facades\Auth;
 use Flux\Flux;
+use Illuminate\Support\Facades\Auth;
+use Livewire\Component;
 
 class AnnouncementsManager extends Component
 {
     public string $title = '';
+
     public string $body = '';
+
     public string $type = 'general';
+
     public bool $is_pinned = false;
+
     public bool $publish_now = true;
+
     public ?int $editingId = null;
 
     protected function rules(): array
@@ -29,7 +34,7 @@ class AnnouncementsManager extends Component
 
     public function createAnnouncement()
     {
-        if (!Auth::check() || !Auth::user()->isAdmin()) {
+        if (! Auth::check() || ! Auth::user()->isAdmin()) {
             abort(403);
         }
 
@@ -50,9 +55,13 @@ class AnnouncementsManager extends Component
 
     public function editAnnouncement(int $id)
     {
-        if (!Auth::check() || !Auth::user()->isAdmin()) abort(403);
+        if (! Auth::check() || ! Auth::user()->isAdmin()) {
+            abort(403);
+        }
         $a = Announcement::find($id);
-        if (!$a) return;
+        if (! $a) {
+            return;
+        }
         $this->editingId = $a->id;
         $this->title = $a->title;
         $this->body = $a->body;
@@ -63,11 +72,17 @@ class AnnouncementsManager extends Component
 
     public function updateAnnouncement()
     {
-        if (!Auth::check() || !Auth::user()->isAdmin()) abort(403);
-        if (!$this->editingId) return;
+        if (! Auth::check() || ! Auth::user()->isAdmin()) {
+            abort(403);
+        }
+        if (! $this->editingId) {
+            return;
+        }
         $this->validate();
         $a = Announcement::find($this->editingId);
-        if (!$a) return;
+        if (! $a) {
+            return;
+        }
         $a->update([
             'title' => $this->title,
             'body' => $this->body,
@@ -82,28 +97,30 @@ class AnnouncementsManager extends Component
     public function cancelEdit()
     {
         $this->editingId = null;
-        $this->reset(['title','body','type','is_pinned','publish_now']);
+        $this->reset(['title', 'body', 'type', 'is_pinned', 'publish_now']);
     }
 
     public function deleteAnnouncement(int $id)
     {
-        if (!Auth::check() || !Auth::user()->isAdmin()) {
+        if (! Auth::check() || ! Auth::user()->isAdmin()) {
             abort(403);
         }
 
         $a = Announcement::find($id);
-        if ($a) $a->delete();
+        if ($a) {
+            $a->delete();
+        }
         Flux::toast(variant: 'success', text: __('Announcement deleted.'));
     }
 
     public function publishAnnouncement(int $id)
     {
-        if (!Auth::check() || !Auth::user()->isAdmin()) {
+        if (! Auth::check() || ! Auth::user()->isAdmin()) {
             abort(403);
         }
 
         $a = Announcement::find($id);
-        if ($a && !$a->published_at) {
+        if ($a && ! $a->published_at) {
             $a->update(['published_at' => now()]);
             Flux::toast(variant: 'success', text: __('Announcement published.'));
         }
@@ -111,7 +128,7 @@ class AnnouncementsManager extends Component
 
     public function unpublishAnnouncement(int $id)
     {
-        if (!Auth::check() || !Auth::user()->isAdmin()) {
+        if (! Auth::check() || ! Auth::user()->isAdmin()) {
             abort(403);
         }
 
@@ -125,6 +142,7 @@ class AnnouncementsManager extends Component
     public function render()
     {
         $announcements = Announcement::orderByDesc('is_pinned')->orderByDesc('published_at')->get();
+
         return view('livewire.announcements-manager', ['announcements' => $announcements]);
     }
 }

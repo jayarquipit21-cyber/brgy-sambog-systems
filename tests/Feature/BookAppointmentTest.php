@@ -2,16 +2,16 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
 use App\Livewire\BookAppointment;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Validator;
+use Tests\TestCase;
 
 class BookAppointmentTest extends TestCase
 {
     public function test_weekend_date_is_invalid()
     {
-        $component = new BookAppointment();
+        $component = new BookAppointment;
         $rules = $component->rules();
 
         $data = [
@@ -28,7 +28,7 @@ class BookAppointmentTest extends TestCase
 
     public function test_weekday_date_is_valid()
     {
-        $component = new BookAppointment();
+        $component = new BookAppointment;
         $rules = $component->rules();
 
         $data = [
