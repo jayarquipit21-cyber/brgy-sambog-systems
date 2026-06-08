@@ -17,6 +17,8 @@ class RbiDataTable extends Component
     public string $voterFilter = '';
     public string $vaccineFilter = '';
     public string $healthFilter = '';
+    public string $sortField = 'last_name';
+    public string $sortDirection = 'asc';
 
     // Reset pagination when filter/search changes
     public function updatingSearch(): void
@@ -44,6 +46,26 @@ class RbiDataTable extends Component
         $this->resetPage();
     }
 
+    public function updatingSortField(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatingSortDirection(): void
+    {
+        $this->resetPage();
+    }
+
+    public function sortBy(string $field): void
+    {
+        if ($this->sortField === $field) {
+            $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+            $this->sortField = $field;
+            $this->sortDirection = 'asc';
+        }
+    }
+
     public function updatingHealthFilter(): void
     {
         $this->resetPage();
@@ -51,9 +73,16 @@ class RbiDataTable extends Component
 
     public function render()
     {
-        $query = Resident::with('household')
-            ->orderBy('last_name', 'asc')
-            ->orderBy('first_name', 'asc');
+        $query = Resident::with('household');
+
+        if (in_array($this->sortField, ['household_no', 'purok_no'])) {
+            $query = $query->leftJoin('households', 'residents.household_id', '=', 'households.id')
+                ->select('residents.*')
+                ->orderBy('households.' . $this->sortField, $this->sortDirection);
+        } else {
+            $query = $query->orderBy($this->sortField ?: 'last_name', $this->sortDirection)
+                ->orderBy('first_name', 'asc');
+        }
 
         if ($this->search) {
             $query->where(function ($q) {

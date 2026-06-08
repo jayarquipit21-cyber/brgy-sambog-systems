@@ -130,3 +130,46 @@ This system handles sensitive resident data protected under the **Philippine Dat
 
 - **Data Minimization**: SQL queries within the health officer dashboard strictly scope out highly private fields (e.g., `income`, `registered_national_voter`) using Eloquent selections.
 - **Local Safety**: Never commit local database files (`.sqlite`), environment files (`.env`), or actual spreadsheet records containing real inhabitant data. Use synthetic data for testing.
+
+## 🧰 RBI Manager CLI wrappers
+
+This repository includes simple executable wrappers that forward commands to the built-in Artisan command `rbi:manage` for importing CSVs and managing RBI data.
+
+- Windows batch: `rbi-manager.bat`
+- PowerShell: `rbi-manager.ps1`
+- POSIX shell: `rbi-manager` (make executable with `chmod +x rbi-manager`)
+
+Examples:
+
+```powershell
+.\rbi-manager.bat import data/rbi.csv
+.\rbi-manager.ps1 truncate --all
+```
+
+```bash
+./rbi-manager import path/to/file.csv
+./rbi-manager delete --table=residents --where="purok_no=3"
+```
+
+The wrappers assume `php` is in your PATH and will run the project's `artisan` command from the repository root. Use with caution for destructive operations and back up your database first.
+
+### Optional: native executable (Go)
+
+If you'd like a single native executable (for Windows `.exe`), there's a small Go program included at `tools/rbi-manager/main.go` that forwards arguments to `php artisan rbi:manage`.
+
+Build instructions (requires Go installed):
+
+```bash
+cd tools/rbi-manager
+go build -o rbi-manager.exe main.go
+```
+
+Place the built `rbi-manager.exe` in the project root and run:
+
+```powershell
+.\rbi-manager.exe import data/rbi.csv
+```
+
+You can also build cross-platform binaries using Go's `GOOS`/`GOARCH` environment variables. The program accepts an optional `--project-dir <path>` flag to point to the Laravel project if the executable is stored elsewhere.
+
+

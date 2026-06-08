@@ -99,13 +99,33 @@
                 <table class="w-full text-left text-sm text-zinc-700 dark:text-zinc-300">
                     <thead>
                         <tr class="border-b border-zinc-200 dark:border-zinc-800 text-zinc-500 text-xs font-semibold uppercase">
-                            <th class="py-3 px-4">Resident</th>
-                            <th class="py-3 px-4">Purok</th>
-                            <th class="py-3 px-4">Household No.</th>
+                            <th class="py-3 px-4 cursor-pointer" wire:click="sortBy('last_name')">Resident
+                                @if($sortField === 'last_name')
+                                    <span class="ml-1 text-xs">{{ $sortDirection === 'asc' ? '▲' : '▼' }}</span>
+                                @endif
+                            </th>
+                            <th class="py-3 px-4 cursor-pointer" wire:click="sortBy('purok_no')">Purok
+                                @if($sortField === 'purok_no')
+                                    <span class="ml-1 text-xs">{{ $sortDirection === 'asc' ? '▲' : '▼' }}</span>
+                                @endif
+                            </th>
+                            <th class="py-3 px-4 cursor-pointer" wire:click="sortBy('household_no')">Household No.
+                                @if($sortField === 'household_no')
+                                    <span class="ml-1 text-xs">{{ $sortDirection === 'asc' ? '▲' : '▼' }}</span>
+                                @endif
+                            </th>
                             <th class="py-3 px-4">Relationship</th>
-                            <th class="py-3 px-4 text-center">Age / Sex</th>
+                            <th class="py-3 px-4 text-center cursor-pointer" wire:click="sortBy('age')">Age / Sex
+                                @if($sortField === 'age')
+                                    <span class="ml-1 text-xs">{{ $sortDirection === 'asc' ? '▲' : '▼' }}</span>
+                                @endif
+                            </th>
                             <th class="py-3 px-4 text-center">Voter?</th>
-                            <th class="py-3 px-4">Email</th>
+                            <th class="py-3 px-4 cursor-pointer" wire:click="sortBy('email_address')">Email
+                                @if($sortField === 'email_address')
+                                    <span class="ml-1 text-xs">{{ $sortDirection === 'asc' ? '▲' : '▼' }}</span>
+                                @endif
+                            </th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">

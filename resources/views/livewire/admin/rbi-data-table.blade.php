@@ -141,14 +141,22 @@
                         <!-- Individual Columns Row -->
                         <tr class="bg-zinc-50 dark:bg-zinc-800/40 text-zinc-500 dark:text-zinc-400 font-semibold uppercase text-[9px] border-b border-zinc-200 dark:border-zinc-800">
                             <!-- Resident Name -->
-                            <th class="sticky left-0 bg-zinc-50 dark:bg-zinc-800 py-2.5 px-4 z-20 border-r border-zinc-200 dark:border-zinc-700 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">Full Name</th>
+                            <th class="sticky left-0 bg-zinc-50 dark:bg-zinc-800 py-2.5 px-4 z-20 border-r border-zinc-200 dark:border-zinc-700 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)] cursor-pointer" wire:click="sortBy('last_name')">Full Name
+                                @if($sortField === 'last_name') <span class="ml-1">{{ $sortDirection === 'asc' ? '▲' : '▼' }}</span> @endif
+                            </th>
                             
                             <!-- Basic & Family -->
-                            <th class="py-2.5 px-3">HH No.</th>
-                            <th class="py-2.5 px-3">Purok</th>
+                            <th class="py-2.5 px-3 cursor-pointer" wire:click="sortBy('household_no')">HH No.
+                                @if($sortField === 'household_no') <span class="ml-1">{{ $sortDirection === 'asc' ? '▲' : '▼' }}</span> @endif
+                            </th>
+                            <th class="py-2.5 px-3 cursor-pointer" wire:click="sortBy('purok_no')">Purok
+                                @if($sortField === 'purok_no') <span class="ml-1">{{ $sortDirection === 'asc' ? '▲' : '▼' }}</span> @endif
+                            </th>
                             <th class="py-2.5 px-3">Address</th>
                             <th class="py-2.5 px-3">Relationship to Head</th>
-                            <th class="py-2.5 px-3">Age</th>
+                            <th class="py-2.5 px-3 cursor-pointer" wire:click="sortBy('age')">Age
+                                @if($sortField === 'age') <span class="ml-1">{{ $sortDirection === 'asc' ? '▲' : '▼' }}</span> @endif
+                            </th>
                             <th class="py-2.5 px-3">Sex</th>
                             <th class="py-2.5 px-3">Birthdate</th>
                             <th class="py-2.5 px-3">Place of Birth</th>
