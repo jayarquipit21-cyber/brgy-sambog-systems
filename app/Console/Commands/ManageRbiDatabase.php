@@ -231,8 +231,8 @@ class ManageRbiDatabase extends Command
                 if (! empty($data['household_no'])) {
                     $household = Household::firstOrCreate([
                         'household_no' => $data['household_no'] ?? null,
-                    ], [
                         'purok_no' => $data['purok_no'] ?? null,
+                    ], [
                         'address' => $data['address'] ?? null,
                     ]);
                     if ($household->wasRecentlyCreated) {
@@ -243,6 +243,9 @@ class ManageRbiDatabase extends Command
                 // Handle resident
                 if (! empty($data['first_name']) && ! empty($data['last_name'])) {
                     $birthdate = $data['birthdate'] ?? null;
+                    if ($birthdate === '') {
+                        $birthdate = null;
+                    }
                     $age = null;
                     if ($birthdate) {
                         try {
@@ -252,21 +255,31 @@ class ManageRbiDatabase extends Command
                         }
                     }
 
-                    Resident::create([
+                    $residentData = [
                         'household_id' => $household?->id,
-                        'first_name' => $data['first_name'] ?? null,
-                        'middle_name' => $data['middle_name'] ?? null,
-                        'last_name' => $data['last_name'] ?? null,
-                        'extension' => $data['extension'] ?? null,
-                        'birthdate' => $birthdate,
                         'age' => $age,
-                        'sex' => $data['sex'] ?? null,
-                        'civil_status' => $data['civil_status'] ?? null,
-                        'citizenship' => $data['citizenship'] ?? null,
-                        'mobile_number' => $data['mobile_number'] ?? null,
-                        'email_address' => $data['email_address'] ?? null,
-                        'relationship_to_head' => $data['relationship_to_head'] ?? null,
-                    ]);
+                    ];
+                    $columnsToMap = [
+                        'user_id', 'created_at', 'updated_at',
+                        'population_no', 'family_no', 'relationship_to_head', 'is_house_owner', 'is_renter',
+                        'renter_months', 'last_name', 'first_name', 'middle_name', 'extension',
+                        'birthdate', 'place_of_birth', 'sex', 'gender_identity', 'civil_status',
+                        'religion', 'citizenship', 'age_classification', 'blood_type', 'height',
+                        'weight', 'complexion', 'mobile_number', 'email_address', 'social_media_account',
+                        'educational_status', 'highest_educational_attainment', 'school_attended', 'course_completed', 'eligibility',
+                        'primary_skills', 'secondary_skills', 'other_skills', 'work_status', 'occupation',
+                        'is_farmer', 'income', 'days_work_per_week', 'last_period_of_unemployment', 'reason_of_unemployment',
+                        'registered_sk_voter', 'registered_national_voter', 'attended_kk_assembly', 'kk_assembly_times', 'kk_assembly_no_reason',
+                        'resident_voter', 'last_voted_year', 'has_philhealth', 'philhealth_id', 'philhealth_membership_type',
+                        'unvaccinated', 'partially_vaccinated', 'fully_vaccinated', 'covid_dose_1_date', 'covid_dose_2_date',
+                        'covid_brand', 'has_booster', 'booster_date', 'booster_brand', 'health_condition',
+                        'nutritional_classification', 'vulnerable_sector', 'social_welfare_availed', 'water_source', 'sanitary_toilet',
+                        'waste_management', 'has_blind_drainage'
+                    ];
+                    foreach ($columnsToMap as $col) {
+                        $residentData[$col] = (isset($data[$col]) && $data[$col] !== '') ? $data[$col] : null;
+                    }
+                    Resident::create($residentData);
                 } else {
                     $skippedCount++;
                 }
@@ -501,12 +514,21 @@ class ManageRbiDatabase extends Command
 
         // Write header
         $headers = [
-            'id', 'household_no', 'purok_no', 'address',
-            'first_name', 'middle_name', 'last_name', 'extension',
-            'relationship_to_head', 'birthdate', 'age', 'sex',
-            'civil_status', 'citizenship', 'mobile_number', 'email_address',
-            'occupation', 'income', 'educational_status',
-            'registered_national_voter', 'has_philhealth',
+            'id', 'household_no', 'purok_no', 'address', 'user_id', 'created_at', 'updated_at',
+            'population_no', 'family_no', 'relationship_to_head', 'is_house_owner', 'is_renter',
+            'renter_months', 'last_name', 'first_name', 'middle_name', 'extension',
+            'birthdate', 'place_of_birth', 'sex', 'gender_identity', 'civil_status',
+            'religion', 'citizenship', 'age', 'age_classification', 'blood_type', 'height',
+            'weight', 'complexion', 'mobile_number', 'email_address', 'social_media_account',
+            'educational_status', 'highest_educational_attainment', 'school_attended', 'course_completed', 'eligibility',
+            'primary_skills', 'secondary_skills', 'other_skills', 'work_status', 'occupation',
+            'is_farmer', 'income', 'days_work_per_week', 'last_period_of_unemployment', 'reason_of_unemployment',
+            'registered_sk_voter', 'registered_national_voter', 'attended_kk_assembly', 'kk_assembly_times', 'kk_assembly_no_reason',
+            'resident_voter', 'last_voted_year', 'has_philhealth', 'philhealth_id', 'philhealth_membership_type',
+            'unvaccinated', 'partially_vaccinated', 'fully_vaccinated', 'covid_dose_1_date', 'covid_dose_2_date',
+            'covid_brand', 'has_booster', 'booster_date', 'booster_brand', 'health_condition',
+            'nutritional_classification', 'vulnerable_sector', 'social_welfare_availed', 'water_source', 'sanitary_toilet',
+            'waste_management', 'has_blind_drainage'
         ];
         fputcsv($handle, $headers);
 
@@ -518,23 +540,77 @@ class ManageRbiDatabase extends Command
                 $resident->household?->household_no,
                 $resident->household?->purok_no,
                 $resident->household?->address,
+                $resident->user_id,
+                $resident->created_at,
+                $resident->updated_at,
+                $resident->population_no,
+                $resident->family_no,
+                $resident->relationship_to_head,
+                $resident->is_house_owner,
+                $resident->is_renter,
+                $resident->renter_months,
+                $resident->last_name,
                 $resident->first_name,
                 $resident->middle_name,
-                $resident->last_name,
                 $resident->extension,
-                $resident->relationship_to_head,
                 $resident->birthdate,
-                $resident->age,
+                $resident->place_of_birth,
                 $resident->sex,
+                $resident->gender_identity,
                 $resident->civil_status,
+                $resident->religion,
                 $resident->citizenship,
+                $resident->age,
+                $resident->age_classification,
+                $resident->blood_type,
+                $resident->height,
+                $resident->weight,
+                $resident->complexion,
                 $resident->mobile_number,
                 $resident->email_address,
-                $resident->occupation,
-                $resident->income,
+                $resident->social_media_account,
                 $resident->educational_status,
+                $resident->highest_educational_attainment,
+                $resident->school_attended,
+                $resident->course_completed,
+                $resident->eligibility,
+                $resident->primary_skills,
+                $resident->secondary_skills,
+                $resident->other_skills,
+                $resident->work_status,
+                $resident->occupation,
+                $resident->is_farmer,
+                $resident->income,
+                $resident->days_work_per_week,
+                $resident->last_period_of_unemployment,
+                $resident->reason_of_unemployment,
+                $resident->registered_sk_voter,
                 $resident->registered_national_voter,
+                $resident->attended_kk_assembly,
+                $resident->kk_assembly_times,
+                $resident->kk_assembly_no_reason,
+                $resident->resident_voter,
+                $resident->last_voted_year,
                 $resident->has_philhealth,
+                $resident->philhealth_id,
+                $resident->philhealth_membership_type,
+                $resident->unvaccinated,
+                $resident->partially_vaccinated,
+                $resident->fully_vaccinated,
+                $resident->covid_dose_1_date,
+                $resident->covid_dose_2_date,
+                $resident->covid_brand,
+                $resident->has_booster,
+                $resident->booster_date,
+                $resident->booster_brand,
+                $resident->health_condition,
+                $resident->nutritional_classification,
+                $resident->vulnerable_sector,
+                $resident->social_welfare_availed,
+                $resident->water_source,
+                $resident->sanitary_toilet,
+                $resident->waste_management,
+                $resident->has_blind_drainage,
             ]);
             $bar->advance();
         }

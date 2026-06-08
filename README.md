@@ -172,4 +172,22 @@ Place the built `rbi-manager.exe` in the project root and run:
 
 You can also build cross-platform binaries using Go's `GOOS`/`GOARCH` environment variables. The program accepts an optional `--project-dir <path>` flag to point to the Laravel project if the executable is stored elsewhere.
 
+### CSV Schema (Export / Import)
+
+The `rbi:manage export` and `rbi:manage import` commands work with a CSV containing household + resident columns. The exported header includes the following fields (in this order):
+
+- id, household_no, purok_no, address, user_id, created_at, updated_at,
+- population_no, family_no, relationship_to_head, is_house_owner, is_renter, renter_months,
+- last_name, first_name, middle_name, extension, birthdate, place_of_birth, sex, gender_identity, civil_status,
+- religion, citizenship, age, age_classification, blood_type, height, weight, complexion, mobile_number, email_address, social_media_account,
+- educational_status, highest_educational_attainment, school_attended, course_completed, eligibility,
+- primary_skills, secondary_skills, other_skills, work_status, occupation, is_farmer, income, days_work_per_week, last_period_of_unemployment, reason_of_unemployment,
+- registered_sk_voter, registered_national_voter, attended_kk_assembly, kk_assembly_times, kk_assembly_no_reason,
+- resident_voter, last_voted_year, has_philhealth, philhealth_id, philhealth_membership_type,
+- unvaccinated, partially_vaccinated, fully_vaccinated, covid_dose_1_date, covid_dose_2_date, covid_brand, has_booster, booster_date, booster_brand,
+- health_condition, nutritional_classification, vulnerable_sector, social_welfare_availed,
+- water_source, sanitary_toilet, waste_management, has_blind_drainage
+
+When importing, columns that are empty will be treated as `NULL`. The importer will create households (by `household_no` + `purok_no`) as needed and associate residents with the created household. Back up your database before running destructive operations like `truncate`.
+
 
