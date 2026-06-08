@@ -89,10 +89,16 @@ class HolidaysService
             $all = $all->merge(self::forYear($y));
         }
 
-        return collect($all)->filter(function ($h) use ($start, $end) {
-            $d = Carbon::parse($h['date'])->startOfDay();
-            return $d->between($start, $end);
-        })->values()->all();
+        return collect($all)
+            ->filter(function ($h) use ($start, $end) {
+                $d = Carbon::parse($h['date'])->startOfDay();
+                return $d->between($start, $end);
+            })
+            ->sortBy(function ($h) {
+                return Carbon::parse($h['date'])->startOfDay()->timestamp;
+            })
+            ->values()
+            ->all();
     }
 
     /**
