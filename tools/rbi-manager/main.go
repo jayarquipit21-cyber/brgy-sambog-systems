@@ -9,6 +9,7 @@ import (
 	"os/signal"
 	"path/filepath"
 	"runtime"
+	"sort"
 	"strings"
 	"sync"
 	"syscall"
@@ -155,17 +156,21 @@ func (s *spinner) stop(success bool) {
 
 func printBanner() {
 	fmt.Println()
-	fmt.Printf("%s%s", bold(), cyan())
-	fmt.Println("  ╔══════════════════════════════════════════════════╗")
-	fmt.Printf("  ║%s%s   ██████  ██████  ██    ██████               %s%s║%s\n", reset(), blue(), cyan(), bold(), reset())
-	fmt.Printf("  ║%s%s   ██   █  ██   █  ██    ██   █  ┌─────────┐ %s%s║%s\n", reset(), blue(), cyan(), bold(), reset())
-	fmt.Printf("  ║%s%s   ██████  ██████  ██    ██████  │ Manager │ %s%s║%s\n", reset(), blue(), cyan(), bold(), reset())
-	fmt.Printf("  ║%s%s   ██   █  ██   █  ██    ██      └─────────┘ %s%s║%s\n", reset(), blue(), cyan(), bold(), reset())
-	fmt.Printf("  ║%s%s   ██   █  ██████  ██    ██    v%s           %s%s║%s\n", reset(), blue(), version, cyan(), bold(), reset())
-	fmt.Printf("%s%s", bold(), cyan())
-	fmt.Println("  ╠══════════════════════════════════════════════════╣")
-	fmt.Printf("  ║%s  Registry of Barangay Inhabitants Manager     %s║%s\n", dim(), bold()+cyan(), reset())
-	fmt.Printf("%s%s  ╚══════════════════════════════════════════════════╝%s\n", bold(), cyan(), reset())
+	b := bold()
+	c := cyan()
+	bl := blue()
+	d := dim()
+	rs := reset()
+
+	fmt.Printf("%s%s  ══════════════════════════════════════════════════%s\n", b, c, rs)
+	fmt.Printf("%s%s   ██████  ██████  ██    ██████%s\n", b, bl, rs)
+	fmt.Printf("%s%s   ██   █  ██   █  ██    ██   █%s\n", b, bl, rs)
+	fmt.Printf("%s%s   ██████  ██████  ██    ██████%s   [ %sManager%s ]\n", b, bl, rs, b+c, rs)
+	fmt.Printf("%s%s   ██   █  ██   █  ██    ██%s\n", b, bl, rs)
+	fmt.Printf("%s%s   ██   █  ██████  ██    ██%s       v%s\n", b, bl, rs, version)
+	fmt.Printf("%s%s  ──────────────────────────────────────────────────%s\n", b, c, rs)
+	fmt.Printf("   %sRegistry of Barangay Inhabitants Manager%s\n", d, rs)
+	fmt.Printf("%s%s  ══════════════════════════════════════════════════%s\n", b, c, rs)
 	fmt.Println()
 }
 
@@ -355,58 +360,98 @@ func displayStats(stats map[string]interface{}) {
 	d := dim()
 	rs := reset()
 
-	fmt.Println()
-	fmt.Printf("  %s%s╔══════════════════════════════════════════════╗%s\n", b, c, rs)
-	fmt.Printf("  %s%s║         📊 RBI Database Statistics           ║%s\n", b, c, rs)
-	fmt.Printf("  %s%s╠══════════════════════════════════════════════╣%s\n", b, c, rs)
-
 	// Main counts
 	totalR := getFloat(stats, "total_residents")
 	totalH := getFloat(stats, "total_households")
 	male := getFloat(stats, "male_count")
 	female := getFloat(stats, "female_count")
 
-	fmt.Printf("  %s%s║%s  %s👥 Total Residents:%s   %s%s%-8.0f%s            %s%s║%s\n", b, c, rs, d, rs, b, g, totalR, rs, b, c, rs)
-	fmt.Printf("  %s%s║%s  %s🏠 Total Households:%s  %s%s%-8.0f%s            %s%s║%s\n", b, c, rs, d, rs, b, g, totalH, rs, b, c, rs)
-	fmt.Printf("  %s%s║%s  %s♂  Male:%s              %s%-8.0f%s            %s%s║%s\n", b, c, rs, d, rs, w, male, rs, b, c, rs)
-	fmt.Printf("  %s%s║%s  %s♀  Female:%s            %s%-8.0f%s            %s%s║%s\n", b, c, rs, d, rs, w, female, rs, b, c, rs)
+	divider := "  " + b + c + strings.Repeat("─", 65) + rs
+	dividerAge := "  " + b + c + strings.Repeat("─", 78) + rs
+
+	fmt.Println()
+	fmt.Printf("  %s%s  RBI Database Statistics%s\n", b, c, rs)
+	fmt.Println(divider)
+	fmt.Printf("    %sTotal Residents:%s   %s%s%.0f%s\n", d, rs, b, g, totalR, rs)
+	fmt.Printf("    %sTotal Households:%s  %s%s%.0f%s\n", d, rs, b, g, totalH, rs)
+	fmt.Printf("    %sMale:%s              %s%.0f%s\n", d, rs, w, male, rs)
+	fmt.Printf("    %sFemale:%s            %s%.0f%s\n", d, rs, w, female, rs)
 
 	lastImport := getStr(stats, "last_import")
 	if lastImport == "" {
 		lastImport = "Never"
 	}
-	fmt.Printf("  %s%s║%s  %s📅 Last Import:%s       %s%-20s%s  %s%s║%s\n", b, c, rs, d, rs, d, lastImport, rs, b, c, rs)
+	fmt.Printf("    %sLast Import:%s       %s%s%s\n", d, rs, d, lastImport, rs)
 
 	// Purok breakdown
 	if purokData, ok := stats["residents_by_purok"].(map[string]interface{}); ok && len(purokData) > 0 {
-		fmt.Printf("  %s%s╠──────────────────────────────────────────────╣%s\n", b, c, rs)
-		fmt.Printf("  %s%s║%s  %s%sResidents by Purok:%s                        %s%s║%s\n", b, c, rs, b, y, rs, b, c, rs)
-		for purok, count := range purokData {
-			countVal := 0.0
-			if c, ok := count.(float64); ok {
-				countVal = c
+		fmt.Println()
+		fmt.Printf("  %s%s  Residents by Purok%s\n", b, y, rs)
+		fmt.Println(divider)
+
+		// Get sorted purok keys
+		purokKeys := make([]string, 0, len(purokData))
+		for k := range purokData {
+			purokKeys = append(purokKeys, k)
+		}
+		sort.Strings(purokKeys)
+
+		// Find max count to scale the bar chart
+		maxPurok := 0.0
+		for _, count := range purokData {
+			if cv, ok := count.(float64); ok && cv > maxPurok {
+				maxPurok = cv
 			}
-			bar := renderBar(countVal, totalR, 20)
-			fmt.Printf("  %s%s║%s    Purok %-4s %s %s%.0f%s %s%s║%s\n",
-				b, c, rs, purok, bar, w, countVal, rs, b, cyan(), rs)
+		}
+
+		for _, purok := range purokKeys {
+			countVal := 0.0
+			if cv, ok := purokData[purok].(float64); ok {
+				countVal = cv
+			}
+			bar := renderBar(countVal, maxPurok, 40)
+			fmt.Printf("    Purok %-4s %s %s%4.0f%s\n", purok, bar, w, countVal, rs)
 		}
 	}
 
 	// Age distribution
 	if ageData, ok := stats["age_groups"].(map[string]interface{}); ok && len(ageData) > 0 {
-		fmt.Printf("  %s%s╠──────────────────────────────────────────────╣%s\n", b, c, rs)
-		fmt.Printf("  %s%s║%s  %s%sAge Distribution:%s                          %s%s║%s\n", b, c, rs, b, y, rs, b, c, rs)
-		for group, count := range ageData {
-			countVal := 0.0
-			if c, ok := count.(float64); ok {
-				countVal = c
+		fmt.Println()
+		fmt.Printf("  %s%s  Age Distribution%s\n", b, y, rs)
+		fmt.Println(dividerAge)
+
+		// Defined order to keep age groups chronological
+		ageOrder := []string{
+			"0-5 (Infant/Toddler)",
+			"6-12 (Child)",
+			"13-17 (Teen)",
+			"18-30 (Young Adult)",
+			"31-59 (Adult)",
+			"60+ (Senior)",
+			"Unknown",
+		}
+
+		// Find max age count to scale
+		maxAge := 0.0
+		for _, count := range ageData {
+			if cv, ok := count.(float64); ok && cv > maxAge {
+				maxAge = cv
 			}
-			fmt.Printf("  %s%s║%s    %-24s %s%4.0f%s          %s%s║%s\n",
-				b, c, rs, group, w, countVal, rs, b, cyan(), rs)
+		}
+
+		for _, group := range ageOrder {
+			if count, exists := ageData[group]; exists {
+				countVal := 0.0
+				if cv, ok := count.(float64); ok {
+					countVal = cv
+				}
+				bar := renderBar(countVal, maxAge, 40)
+				fmt.Printf("    %-24s %s %s%4.0f%s\n", group, bar, w, countVal, rs)
+			}
 		}
 	}
 
-	fmt.Printf("  %s%s╚══════════════════════════════════════════════╝%s\n", b, c, rs)
+	fmt.Println(dividerAge)
 }
 
 func renderBar(value, total float64, width int) string {
@@ -697,9 +742,9 @@ func handleHelp() {
 	w := white()
 	rs := reset()
 
-	fmt.Printf("  %s%s╔══════════════════════════════════════════════════╗%s\n", b, c, rs)
-	fmt.Printf("  %s%s║              📖 RBI Manager Help                 ║%s\n", b, c, rs)
-	fmt.Printf("  %s%s╚══════════════════════════════════════════════════╝%s\n\n", b, c, rs)
+	fmt.Printf("  %s%s══════════════════════════════════════════════════%s\n", b, c, rs)
+	fmt.Printf("  %s%s  📖 RBI Manager Help%s\n", b, c, rs)
+	fmt.Printf("  %s%s══════════════════════════════════════════════════%s\n\n", b, c, rs)
 
 	fmt.Printf("  %s%s1) View Statistics%s\n", b, w, rs)
 	fmt.Printf("     %sShows a dashboard with total residents, households, gender%s\n", d, rs)
