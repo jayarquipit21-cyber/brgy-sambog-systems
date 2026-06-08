@@ -275,6 +275,9 @@ func main() {
 
 	// Interactive mode
 	printBanner()
+	if !authenticateUser(projectDir) {
+		os.Exit(1)
+	}
 	interactiveMenu(projectDir)
 }
 
@@ -864,4 +867,50 @@ func runCommandCapture(projectDir string, args ...string) (string, error) {
 		return "", err
 	}
 	return strings.TrimSpace(string(out)), nil
+}
+
+func authenticateUser(projectDir string) bool {
+	reader := bufio.NewReader(os.Stdin)
+	b := bold()
+	c := cyan()
+	y := yellow()
+	r := red()
+	g := green()
+	rs := reset()
+
+	fmt.Printf("  %s%s🔑 Authentication Required%s\n", b, c, rs)
+	fmt.Printf("  %s──────────────────────────────────────────────────%s\n", b, c, rs)
+
+	for attempt := 1; attempt <= 3; attempt++ {
+		fmt.Printf("   Email: ")
+		email, _ := reader.ReadString('\n')
+		email = strings.TrimSpace(email)
+
+		fmt.Printf("   Password: ")
+		password, _ := reader.ReadString('\n')
+		password = strings.TrimSpace(password)
+		fmt.Println()
+
+		if email == "" || password == "" {
+			fmt.Printf("  %sEmail and password cannot be empty. (%d/3)%s\n\n", y, attempt, rs)
+			continue
+		}
+
+		sp := newSpinner("Verifying credentials...")
+		sp.start()
+
+		// Run PHP artisan rbi:manage auth --email="..." --password="..."
+		_, err := runCommandCapture(projectDir, "auth", "--email="+email, "--password="+password)
+		sp.stop(err == nil)
+
+		if err != nil {
+			fmt.Printf("  %sInvalid credentials or unauthorized role. (%d/3)%s\n\n", r, attempt, rs)
+		} else {
+			fmt.Printf("  %sAccess Granted. Welcome back!%s\n\n", g, rs)
+			return true
+		}
+	}
+
+	fmt.Printf("  %sToo many failed attempts. Exiting.%s\n\n", r, rs)
+	return false
 }

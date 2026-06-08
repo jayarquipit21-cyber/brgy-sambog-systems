@@ -28,20 +28,22 @@ class ManageRbiDatabase extends Command
      * @var string
      */
     protected $signature = 'rbi:manage
-                            {action : import|truncate|delete|stats|export|search|cache-clear}
+                            {action : import|truncate|delete|stats|export|search|cache-clear|auth}
                             {file? : Path to CSV file for import/export}
                             {--all : When truncating, remove households as well}
                             {--table= : Table name for delete}
                             {--where= : Simple where clause for delete, e.g. "purok_no=3"}
                             {--query= : Search query for search action}
-                            {--format=text : Output format: text or json}';
+                            {--format=text : Output format: text or json}
+                            {--email= : User email for authentication}
+                            {--password= : User password for authentication}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Manage RBI data: import CSV, truncate tables, delete rows, view stats, export, or search';
+    protected $description = 'Manage RBI data: import CSV, truncate tables, delete rows, view stats, export, search, or authenticate';
 
     public function handle()
     {
@@ -55,6 +57,7 @@ class ManageRbiDatabase extends Command
             'export' => $this->handleExport(),
             'search' => $this->handleSearch(),
             'cache-clear' => $this->handleCacheClear(),
+            'auth' => $this->handleAuth(),
             default => $this->handleUnknown($action),
         };
     }
@@ -658,5 +661,39 @@ class ManageRbiDatabase extends Command
         } catch (\Exception $e) {
             $this->error('Failed to refresh site state: '.$e->getMessage());
         }
+    }
+
+    /**
+     * Authenticate a user by email and password, checking for admin or health_admin roles.
+     */
+    protected function handleAuth(): int
+    {
+        $email = $this->option('email');
+        $password = $this->option('password');
+
+        if (!$email || !$password) {
+            $this->error('Email and password options are required.');
+            return 1;
+        }
+
+        $user = \App\Models\User::where('email', $email)->first();
+
+        if (!$user) {
+            $this->error('User not found.');
+            return 1;
+        }
+
+        if (!\Illuminate\Support\Facades\Hash::check($password, $user->password)) {
+            $this->error('Incorrect password.');
+            return 1;
+        }
+
+        if (!$user->isAdmin() && !$user->isHealthAdmin()) {
+            $this->error('Unauthorized role.');
+            return 1;
+        }
+
+        $this->info("Authenticated successfully as {$user->name} ({$user->role})");
+        return 0;
     }
 }
