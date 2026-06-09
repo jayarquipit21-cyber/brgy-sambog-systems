@@ -4,11 +4,14 @@ namespace Database\Seeders;
 
 use App\Models\Place;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class PlaceSeeder extends Seeder
 {
     public function run(): void
     {
+        Place::query()->delete();
+
         $places = [
             [
                 'name' => 'Sambog Barangay Hall',
@@ -37,7 +40,7 @@ class PlaceSeeder extends Seeder
                 'address' => 'MWG4+72R, Sambog, Corella, Bohol',
                 'lat' => 9.675703, 
                 'lng' => 123.905203,
-                'is_featured' => false,
+                'is_featured' => true,
                 'purok_no' => 3,
             ],
             [
@@ -47,27 +50,27 @@ class PlaceSeeder extends Seeder
                 'address' => 'MWG3+24, Sambog, Corella, Bohol',
                 'lat' => 9.675106,
                 'lng' => 123.902868,
-                'is_featured' => false,
+                'is_featured' => true,
                 'purok_no' => 4,
             ],
             [
                 'name' => 'Holy Hill',
-                'type' => 'place_of_worship',
+                'type' => 'place of worship',
                 'description' => 'Sacred site for religious activities.',
                 'address' => 'MW92+PJF, Sambog, Corella, Bohol',
                 'lat' => 9.669613, 
                 'lng' => 123.900983,
-                'is_featured' => false,
+                'is_featured' => true,
                 'purok_no' => null,
             ],
             [
                 'name' => 'Bulcachong Bulalo',
                 'type' => 'store',
                 'description' => 'Local bulalo stand.',
-                'address' => 'Main Rd, Brgy. Sambog',
+                'address' => 'MWF3+WP Corella, Bohol',
                 'lat' => 9.674767, 
                 'lng' => 123.904373,
-                'is_featured' => false,
+                'is_featured' => true,
                 'purok_no' => 2,
             ],
             [
@@ -77,7 +80,7 @@ class PlaceSeeder extends Seeder
                 'address' => 'MVHW+674, Tagbilaran City-Corella-Sikatuna-Loboc Rd, Sambog, Corella, Bohol',
                 'lat' => 9.678146, 
                 'lng' => 123.895708,
-                'is_featured' => false,
+                'is_featured' => true,
                 'purok_no' => 3,
             ],
             [
@@ -87,7 +90,7 @@ class PlaceSeeder extends Seeder
                 'address' => 'MVHV+7W2, Tagbilaran City-Corella-Sikatuna-Loboc Rd, Sambog, Corella, Bohol',
                 'lat' => 9.678197, 
                 'lng' => 123.895745,
-                'is_featured' => false,
+                'is_featured' => true,
                 'purok_no' => 2,
             ],
             [
@@ -97,7 +100,7 @@ class PlaceSeeder extends Seeder
                 'address' => 'MVHV+5VG, Sambog, Corella, Bohol',
                 'lat' => 9.678005,
                 'lng' => 123.894712,
-                'is_featured' => false,
+                'is_featured' => true,
                 'purok_no' => 6,
             ],
         ];
