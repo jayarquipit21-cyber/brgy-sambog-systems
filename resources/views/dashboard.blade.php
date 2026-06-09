@@ -174,45 +174,64 @@
                         <span class="text-[10px] text-zinc-650 dark:text-zinc-400 font-semibold bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 px-2.5 py-1 rounded-lg">Real-time Sync</span>
                     </div>
 
-                    <!-- Stunning Color-Gradient SVG Chart -->
+                    <!-- Purok Demographics Chart (Chart.js) -->
                     <div class="relative pt-4 space-y-4">
-                        <div class="flex items-end justify-between gap-2 h-40 pt-4 px-2">
-                            <!-- Purok 1 Bar -->
-                            <div class="flex-1 flex flex-col items-center gap-2 group cursor-pointer">
-                                <span class="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 opacity-0 group-hover:opacity-100 transition-opacity">18%</span>
-                                <div class="w-full bg-gradient-to-t from-emerald-500 to-teal-500 rounded-t-lg group-hover:brightness-110 transition-all duration-500 shadow-sm" style="height: 60%"></div>
-                                <span class="text-[10px] text-zinc-500 dark:text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-zinc-200 font-semibold transition">P-1</span>
-                            </div>
-                            <!-- Purok 2 Bar -->
-                            <div class="flex-1 flex flex-col items-center gap-2 group cursor-pointer">
-                                <span class="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 opacity-0 group-hover:opacity-100 transition-opacity">25%</span>
-                                <div class="w-full bg-gradient-to-t from-emerald-500 to-teal-500 rounded-t-lg group-hover:brightness-110 transition-all duration-500 shadow-sm" style="height: 85%"></div>
-                                <span class="text-[10px] text-zinc-500 dark:text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-zinc-200 font-semibold transition">P-2</span>
-                            </div>
-                            <!-- Purok 3 Bar -->
-                            <div class="flex-1 flex flex-col items-center gap-2 group cursor-pointer">
-                                <span class="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 opacity-0 group-hover:opacity-100 transition-opacity">15%</span>
-                                <div class="w-full bg-gradient-to-t from-emerald-500 to-teal-500 rounded-t-lg group-hover:brightness-110 transition-all duration-500 shadow-sm" style="height: 50%"></div>
-                                <span class="text-[10px] text-zinc-500 dark:text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-zinc-200 font-semibold transition">P-3</span>
-                            </div>
-                            <!-- Purok 4 Bar -->
-                            <div class="flex-1 flex flex-col items-center gap-2 group cursor-pointer">
-                                <span class="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 opacity-0 group-hover:opacity-100 transition-opacity">30%</span>
-                                <div class="w-full bg-gradient-to-t from-emerald-500 to-teal-500 rounded-t-lg group-hover:brightness-110 transition-all duration-500 shadow-sm" style="height: 100%"></div>
-                                <span class="text-[10px] text-zinc-500 dark:text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-zinc-200 font-semibold transition">P-4</span>
-                            </div>
-                            <!-- Purok 5 Bar -->
-                            <div class="flex-1 flex flex-col items-center gap-2 group cursor-pointer">
-                                <span class="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 opacity-0 group-hover:opacity-100 transition-opacity">12%</span>
-                                <div class="w-full bg-gradient-to-t from-emerald-500 to-teal-500 rounded-t-lg group-hover:brightness-110 transition-all duration-500 shadow-sm" style="height: 40%"></div>
-                                <span class="text-[10px] text-zinc-500 dark:text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-zinc-200 font-semibold transition">P-5</span>
-                            </div>
+                        <div class="h-56 px-2">
+                            <canvas id="purokChart" class="w-full h-full"></canvas>
                         </div>
 
                         <div class="flex items-center justify-between text-[10px] text-zinc-650 dark:text-zinc-400 border-t border-zinc-150 dark:border-zinc-800/80 pt-3 font-semibold">
-                            <span>Highest density: <strong class="text-emerald-600 dark:text-emerald-400 font-black">Purok 4 (30%)</strong></span>
-                            <span>Total monitored zones: <strong class="text-zinc-900 dark:text-white font-bold">5 Puroks</strong></span>
+                            <span id="purok-highest">Highest density: <strong class="text-emerald-600 dark:text-emerald-400 font-black">—</strong></span>
+                            <span id="purok-total">Total monitored zones: <strong class="text-zinc-900 dark:text-white font-bold">—</strong></span>
                         </div>
+
+                        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                        <script>
+                            (function () {
+                                const labels = @json($purokLabels ?? []);
+                                const values = @json($purokValues ?? []);
+
+                                const ctx = document.getElementById('purokChart');
+                                if (!ctx) return;
+
+                                const chart = new Chart(ctx, {
+                                    type: 'bar',
+                                    data: {
+                                        labels: labels,
+                                        datasets: [{
+                                            label: 'Residents',
+                                            data: values,
+                                            backgroundColor: labels.map(() => 'rgba(16, 185, 129, 0.85)'),
+                                            borderColor: labels.map(() => 'rgba(6, 95, 70, 0.9)'),
+                                            borderWidth: 1,
+                                        }]
+                                    },
+                                    options: {
+                                        responsive: true,
+                                        maintainAspectRatio: false,
+                                        scales: {
+                                            y: { beginAtZero: true }
+                                        },
+                                        plugins: {
+                                            legend: { display: false }
+                                        }
+                                    }
+                                });
+
+                                // Update summary info
+                                if (labels.length && values.length) {
+                                    const totalZones = labels.length;
+                                    const maxIndex = values.indexOf(Math.max(...values));
+                                    const highestLabel = labels[maxIndex] || '—';
+                                    const highestValue = values[maxIndex] || 0;
+                                    document.getElementById('purok-highest').innerHTML = `Highest density: <strong class="text-emerald-600 dark:text-emerald-400 font-black">${highestLabel} (${highestValue})</strong>`;
+                                    document.getElementById('purok-total').innerHTML = `Total monitored zones: <strong class="text-zinc-900 dark:text-white font-bold">${totalZones} Puroks</strong>`;
+                                } else {
+                                    document.getElementById('purok-highest').innerHTML = 'No purok data available';
+                                    document.getElementById('purok-total').innerHTML = '';
+                                }
+                            })();
+                        </script>
                     </div>
                 </div>
 

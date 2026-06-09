@@ -31,12 +31,25 @@ Route::middleware(['auth', 'verified'])->group(function () {
         $user = auth()->user();
         $data = [];
 
-        if ($user->isAdmin()) {
-            $data['totalHouseholds'] = Household::count();
-            $data['totalResidents'] = Resident::count();
-            $data['pendingAppointments'] = Appointment::where('status', 'pending')->count();
-            $data['recentAppointments'] = Appointment::with('user')->latest()->take(5)->get();
-        } elseif ($user->isHealthAdmin()) {
+            if ($user->isAdmin()) {
+                $data['totalHouseholds'] = Household::count();
+                $data['totalResidents'] = Resident::count();
+                $data['pendingAppointments'] = Appointment::where('status', 'pending')->count();
+                $data['recentAppointments'] = Appointment::with('user')->latest()->take(5)->get();
+
+                // Compute residents per purok (joins households -> residents)
+                $purokCounts = \Illuminate\Support\Facades\DB::table('households')
+                    ->join('residents', 'households.id', '=', 'residents.household_id')
+                    ->select('households.purok_no', \Illuminate\Support\Facades\DB::raw('count(residents.id) as cnt'))
+                    ->groupBy('households.purok_no')
+                    ->pluck('cnt', 'purok_no')
+                    ->toArray();
+
+                // Normalize labels (sort by purok number)
+                ksort($purokCounts);
+                $data['purokLabels'] = array_map(function ($n) { return 'Purok ' . $n; }, array_keys($purokCounts));
+                $data['purokValues'] = array_values($purokCounts);
+            } elseif ($user->isHealthAdmin()) {
             $data['totalResidents'] = Resident::count();
             $data['totalVaccinated'] = Resident::where('fully_vaccinated', 'Y')->count();
             $data['totalWithConditions'] = Resident::whereNotNull('health_condition')
