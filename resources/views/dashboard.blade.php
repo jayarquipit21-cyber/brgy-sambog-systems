@@ -1,6 +1,7 @@
 <x-layouts::app :title="__('Workspace Dashboard')">
+    <!-- Load Chart.js globally for all dashboard views -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <div class="space-y-8 pb-12">
-        
         <!-- Premium Welcome Banner with High-Contrast Animated Gradients -->
         <div class="relative overflow-hidden rounded-3xl border border-emerald-300/30 dark:border-emerald-700/40 bg-gradient-to-br from-emerald-500 via-emerald-650 to-teal-600 dark:from-zinc-950 dark:via-emerald-950 dark:to-zinc-900 p-8 shadow-2xl transition-all duration-300">
             <!-- Background glow orbs -->
@@ -185,7 +186,6 @@
                             <span id="purok-total">Total monitored zones: <strong class="text-zinc-900 dark:text-white font-bold">—</strong></span>
                         </div>
 
-                        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
                         <script>
                             (function () {
                                 const labels = @json($purokLabels ?? []);
@@ -237,8 +237,200 @@
 
             </div>
 
+            <!-- Demographics Extras Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                <!-- Gender Distribution Visualization (Interactive Doughnut Chart) -->
+                <div class="bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-3xl p-6 shadow-lg space-y-4">
+                    <div class="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
+                        <div class="flex items-center gap-3">
+                            <div class="p-2 bg-indigo-500/10 text-indigo-650 dark:text-indigo-500 rounded-xl">
+                                <flux:icon name="users" class="size-5" />
+                            </div>
+                            <div>
+                                <h3 class="text-base font-bold text-zinc-900 dark:text-white font-outfit">Gender Distribution</h3>
+                                <p class="text-[11px] text-zinc-500 font-light">Population demographics by sex</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative pt-4 flex flex-col items-center gap-6">
+                        <div class="w-48 h-48 relative">
+                            <canvas id="genderChartAdmin" class="w-full h-full"></canvas>
+                        </div>
+                        <div class="w-full space-y-3">
+                            <div id="gender-legend-admin"></div>
+                        </div>
+                    </div>
+
+                    <script>
+                        (function () {
+                            const labels = @json($genderLabels ?? []);
+                            const values = @json($genderValues ?? []);
+
+                            const ctx = document.getElementById('genderChartAdmin');
+                            if (!ctx) return;
+
+                            const chart = new Chart(ctx, {
+                                type: 'doughnut',
+                                data: {
+                                    labels: labels,
+                                    datasets: [{
+                                        data: values,
+                                        backgroundColor: [
+                                            'rgba(59, 130, 246, 0.85)', // Blue
+                                            'rgba(236, 72, 153, 0.85)', // Pink
+                                            'rgba(16, 185, 129, 0.85)'  // Green
+                                        ],
+                                        borderColor: [
+                                            'rgba(29, 78, 216, 0.9)',
+                                            'rgba(190, 24, 93, 0.9)',
+                                            'rgba(6, 95, 70, 0.9)'
+                                        ],
+                                        borderWidth: 1,
+                                        hoverOffset: 4
+                                    }]
+                                },
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    cutout: '65%',
+                                    plugins: {
+                                        legend: { display: false }
+                                    }
+                                }
+                            });
+
+                            let legendHtml = '';
+                            const colors = ['bg-blue-500', 'bg-pink-500', 'bg-emerald-500'];
+                            const total = values.reduce((a, b) => a + b, 0);
+                            labels.forEach((label, index) => {
+                                const val = values[index];
+                                const pct = total > 0 ? (Math.floor((val / total) * 10000) / 100).toFixed(2) : '0.00';
+                                const colorClass = colors[index % colors.length];
+                                legendHtml += `
+                                    <div class="flex items-center justify-between p-2.5 bg-zinc-50 dark:bg-zinc-800/40 rounded-xl border border-zinc-100 dark:border-zinc-700/50">
+                                        <div class="flex items-center gap-2.5">
+                                            <span class="w-3 h-3 rounded-full ${colorClass}"></span>
+                                            <span class="text-xs font-bold text-zinc-700 dark:text-zinc-300">${label || 'Not Specified'}</span>
+                                        </div>
+                                        <div class="text-right">
+                                            <span class="text-xs font-black text-zinc-900 dark:text-white">${val.toLocaleString()}</span>
+                                            <span class="text-[10px] text-zinc-500 dark:text-zinc-400 ml-1">(${pct}%)</span>
+                                        </div>
+                                    </div>
+                                `;
+                            });
+                            document.getElementById('gender-legend-admin').innerHTML = legendHtml;
+                        })();
+                    </script>
+                </div>
+
+                <!-- Age Demographics Visualization (Interactive Bar Chart) -->
+                <div class="bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-3xl p-6 shadow-lg flex flex-col h-full font-outfit">
+                    <div class="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3 mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="p-2 bg-amber-500/10 text-amber-650 dark:text-amber-500 rounded-xl">
+                                <flux:icon name="chart-pie" class="size-5" />
+                            </div>
+                            <div>
+                                <h3 class="text-base font-bold text-zinc-900 dark:text-white font-outfit">Age Demographics</h3>
+                                <p class="text-[11px] text-zinc-500 font-light">Population breakdown by age groups</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative flex-1 w-full flex flex-col gap-6">
+                        <div class="w-full min-h-[220px] relative">
+                            <canvas id="ageChartAdmin" class="absolute inset-0 w-full h-full"></canvas>
+                        </div>
+                        <div class="w-full space-y-3">
+                            <div id="age-legend-admin" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+                        </div>
+                    </div>
+
+                    <script>
+                        (function () {
+                            const labels = @json($ageLabels ?? []);
+                            const values = @json($ageValues ?? []);
+
+                            const ctx = document.getElementById('ageChartAdmin');
+                            if (!ctx) return;
+
+                            const chart = new Chart(ctx, {
+                                type: 'bar',
+                                data: {
+                                    labels: labels,
+                                    datasets: [{
+                                        label: 'Residents',
+                                        data: values,
+                                        backgroundColor: [
+                                            'rgba(245, 158, 11, 0.85)', // Amber
+                                            'rgba(16, 185, 129, 0.85)', // Emerald
+                                            'rgba(59, 130, 246, 0.85)', // Blue
+                                            'rgba(139, 92, 246, 0.85)', // Violet
+                                            'rgba(236, 72, 153, 0.85)'  // Pink
+                                        ],
+                                        borderColor: [
+                                            'rgba(217, 119, 6, 0.9)',
+                                            'rgba(5, 150, 105, 0.9)',
+                                            'rgba(37, 99, 235, 0.9)',
+                                            'rgba(124, 58, 237, 0.9)',
+                                            'rgba(219, 39, 119, 0.9)'
+                                        ],
+                                        borderWidth: 1,
+                                    }]
+                                },
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    scales: {
+                                        y: { beginAtZero: true }
+                                    },
+                                    plugins: {
+                                        legend: { display: false },
+                                        tooltip: {
+                                            callbacks: {
+                                                label: function(context) {
+                                                    const val = context.raw || 0;
+                                                    const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                                    const pct = total > 0 ? (Math.floor((val / total) * 10000) / 100).toFixed(2) : '0.00';
+                                                    return ` ${context.dataset.label || ''}: ${val.toLocaleString()} (${pct}%)`;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+
+                            let legendHtml = '';
+                            const colors = ['bg-amber-500', 'bg-emerald-500', 'bg-blue-500', 'bg-violet-500', 'bg-pink-500'];
+                            const total = values.reduce((a, b) => a + b, 0);
+                            labels.forEach((label, index) => {
+                                const val = values[index];
+                                const pct = total > 0 ? (Math.floor((val / total) * 10000) / 100).toFixed(2) : '0.00';
+                                const colorClass = colors[index % colors.length];
+                                legendHtml += `
+                                    <div class="flex items-center justify-between p-2.5 bg-zinc-50 dark:bg-zinc-800/40 rounded-xl border border-zinc-100 dark:border-zinc-700/50">
+                                        <div class="flex items-center gap-2.5">
+                                            <span class="w-3 h-3 rounded-full ${colorClass}"></span>
+                                            <span class="text-xs font-bold text-zinc-700 dark:text-zinc-300">${label || 'Not Specified'}</span>
+                                        </div>
+                                        <div class="text-right">
+                                            <span class="text-xs font-black text-zinc-900 dark:text-white">${val.toLocaleString()}</span>
+                                            <span class="text-[10px] text-zinc-500 dark:text-zinc-400 ml-1">(${pct}%)</span>
+                                        </div>
+                                    </div>
+                                `;
+                            });
+                            document.getElementById('age-legend-admin').innerHTML = legendHtml;
+                        })();
+                    </script>
+                </div>
+            </div>
+
             <!-- Recent Activity Table -->
             <div class="bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-3xl p-6 shadow-lg">
+
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                     <div>
                         <div class="flex items-center gap-2.5">
@@ -417,127 +609,652 @@
                     </div>
                 </div>
 
+                <!-- Gender Distribution Chart (Health Dashboard) -->
+                <div class="bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-3xl p-6 shadow-lg space-y-4">
+                    <div class="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
+                        <div class="flex items-center gap-3">
+                            <div class="p-2 bg-indigo-500/10 text-indigo-650 dark:text-indigo-500 rounded-xl">
+                                <flux:icon name="users" class="size-5" />
+                            </div>
+                            <div>
+                                <h3 class="text-base font-bold text-zinc-900 dark:text-white font-outfit">Gender Distribution in Health Registry</h3>
+                                <p class="text-[11px] text-zinc-500 font-light">Demographics of tracked inhabitants</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative pt-4 flex flex-col md:flex-row items-center gap-8">
+                        <div class="w-48 h-48 relative">
+                            <canvas id="genderChartHealth" class="w-full h-full"></canvas>
+                        </div>
+                        <div class="flex-1 w-full space-y-3 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div id="gender-legend-health" class="col-span-full space-y-3"></div>
+                        </div>
+                    </div>
+
+                    <script>
+                        (function () {
+                            const labels = @json($genderLabels ?? []);
+                            const values = @json($genderValues ?? []);
+
+                            const ctx = document.getElementById('genderChartHealth');
+                            if (!ctx) return;
+
+                            const chart = new Chart(ctx, {
+                                type: 'doughnut',
+                                data: {
+                                    labels: labels,
+                                    datasets: [{
+                                        data: values,
+                                        backgroundColor: [
+                                            'rgba(59, 130, 246, 0.85)', // Blue
+                                            'rgba(236, 72, 153, 0.85)', // Pink
+                                            'rgba(16, 185, 129, 0.85)'  // Green
+                                        ],
+                                        borderColor: [
+                                            'rgba(29, 78, 216, 0.9)',
+                                            'rgba(190, 24, 93, 0.9)',
+                                            'rgba(6, 95, 70, 0.9)'
+                                        ],
+                                        borderWidth: 1,
+                                        hoverOffset: 4
+                                    }]
+                                },
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    cutout: '65%',
+                                    plugins: {
+                                        legend: { display: false }
+                                    }
+                                }
+                            });
+
+                            let legendHtml = '';
+                            const colors = ['bg-blue-500', 'bg-pink-500', 'bg-emerald-500'];
+                            const total = values.reduce((a, b) => a + b, 0);
+                            labels.forEach((label, index) => {
+                                const val = values[index];
+                                const pct = total > 0 ? (Math.floor((val / total) * 10000) / 100).toFixed(2) : '0.00';
+                                const colorClass = colors[index % colors.length];
+                                legendHtml += `
+                                    <div class="flex items-center justify-between p-3 bg-zinc-50 dark:bg-zinc-800/40 rounded-xl border border-zinc-100 dark:border-zinc-700/50">
+                                        <div class="flex items-center gap-3">
+                                            <span class="w-3.5 h-3.5 rounded-full ${colorClass}"></span>
+                                            <span class="text-sm font-bold text-zinc-700 dark:text-zinc-300">${label || 'Not Specified'}</span>
+                                        </div>
+                                        <div class="text-right">
+                                            <span class="text-sm font-black text-zinc-900 dark:text-white">${val.toLocaleString()}</span>
+                                            <span class="text-xs text-zinc-500 dark:text-zinc-400 ml-1.5">(${pct}%)</span>
+                                        </div>
+                                    </div>
+                                `;
+                            });
+                            document.getElementById('gender-legend-health').innerHTML = legendHtml;
+                        })();
+                    </script>
+                </div>
+
+                <!-- Age Demographics Chart (Health Dashboard) -->
+                <div class="bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-3xl p-6 shadow-lg flex flex-col h-full font-outfit">
+                    <div class="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3 mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="p-2 bg-amber-500/10 text-amber-650 dark:text-amber-500 rounded-xl">
+                                <flux:icon name="chart-pie" class="size-5" />
+                            </div>
+                            <div>
+                                <h3 class="text-base font-bold text-zinc-900 dark:text-white font-outfit">Age Demographics</h3>
+                                <p class="text-[11px] text-zinc-500 font-light">Population breakdown by age groups</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative flex-1 w-full flex flex-col gap-6">
+                        <div class="w-full min-h-[220px] relative">
+                            <canvas id="ageChartHealth" class="absolute inset-0 w-full h-full"></canvas>
+                        </div>
+                        <div class="w-full space-y-3">
+                            <div id="age-legend-health" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+                        </div>
+                    </div>
+
+                    <script>
+                        (function () {
+                            const labels = @json($ageLabels ?? []);
+                            const values = @json($ageValues ?? []);
+
+                            const ctx = document.getElementById('ageChartHealth');
+                            if (!ctx) return;
+
+                            const chart = new Chart(ctx, {
+                                type: 'bar',
+                                data: {
+                                    labels: labels,
+                                    datasets: [{
+                                        label: 'Residents',
+                                        data: values,
+                                        backgroundColor: [
+                                            'rgba(245, 158, 11, 0.85)', // Amber
+                                            'rgba(16, 185, 129, 0.85)', // Emerald
+                                            'rgba(59, 130, 246, 0.85)', // Blue
+                                            'rgba(139, 92, 246, 0.85)', // Violet
+                                            'rgba(236, 72, 153, 0.85)'  // Pink
+                                        ],
+                                        borderColor: [
+                                            'rgba(217, 119, 6, 0.9)',
+                                            'rgba(5, 150, 105, 0.9)',
+                                            'rgba(37, 99, 235, 0.9)',
+                                            'rgba(124, 58, 237, 0.9)',
+                                            'rgba(219, 39, 119, 0.9)'
+                                        ],
+                                        borderWidth: 1,
+                                    }]
+                                },
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    scales: {
+                                        y: { beginAtZero: true }
+                                    },
+                                    plugins: {
+                                        legend: { display: false },
+                                        tooltip: {
+                                            callbacks: {
+                                                label: function(context) {
+                                                    const val = context.raw || 0;
+                                                    const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                                    const pct = total > 0 ? (Math.floor((val / total) * 10000) / 100).toFixed(2) : '0.00';
+                                                    return ` ${context.dataset.label || ''}: ${val.toLocaleString()} (${pct}%)`;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+
+                            let legendHtml = '';
+                            const colors = ['bg-amber-500', 'bg-emerald-500', 'bg-blue-500', 'bg-violet-500', 'bg-pink-500'];
+                            const total = values.reduce((a, b) => a + b, 0);
+                            labels.forEach((label, index) => {
+                                const val = values[index];
+                                const pct = total > 0 ? (Math.floor((val / total) * 10000) / 100).toFixed(2) : '0.00';
+                                const colorClass = colors[index % colors.length];
+                                legendHtml += `
+                                    <div class="flex items-center justify-between p-2.5 bg-zinc-50 dark:bg-zinc-800/40 rounded-xl border border-zinc-100 dark:border-zinc-700/50">
+                                        <div class="flex items-center gap-2.5">
+                                            <span class="w-3 h-3 rounded-full ${colorClass}"></span>
+                                            <span class="text-xs font-bold text-zinc-700 dark:text-zinc-300">${label || 'Not Specified'}</span>
+                                        </div>
+                                        <div class="text-right">
+                                            <span class="text-xs font-black text-zinc-900 dark:text-white">${val.toLocaleString()}</span>
+                                            <span class="text-[10px] text-zinc-500 dark:text-zinc-400 ml-1">(${pct}%)</span>
+                                        </div>
+                                    </div>
+                                `;
+                            });
+                            document.getElementById('age-legend-health').innerHTML = legendHtml;
+                        })();
+                    </script>
+                </div>
             </div>
 
         <!-- 3. HOUSEHOLD HEAD DASHBOARD VIEW -->
         @elseif(auth()->user()->isHouseholdHead())
-            <!-- Household Widgets -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Members count -->
-                <div class="bg-emerald-50/70 dark:bg-zinc-900/40 border border-emerald-250 dark:border-zinc-800/80 p-6 rounded-3xl shadow-md flex items-center justify-between transition hover:-translate-y-0.5 duration-300">
-                    <div class="space-y-1">
-                        <div class="text-xs font-bold uppercase tracking-wider text-emerald-850 dark:text-emerald-400">Family Members</div>
-                        <div class="text-4xl font-black text-emerald-950 dark:text-white font-outfit">{{ $householdMembersCount }}</div>
-                        <div class="text-[11px] text-emerald-900/80 dark:text-zinc-400">Residents in your household unit</div>
-                    </div>
-                    <div class="p-4 bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 rounded-2xl shadow-sm">
-                        <flux:icon name="users" class="size-6" />
+
+            <!-- Top stats row -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                <!-- Family Members -->
+                <div class="group relative overflow-hidden bg-emerald-50/70 dark:bg-zinc-900/40 border border-emerald-200 dark:border-zinc-800/80 hover:border-emerald-400/50 p-6 rounded-3xl shadow-md transition-all duration-300 hover:-translate-y-1">
+                    <div class="absolute inset-0 bg-gradient-to-b from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="flex items-center justify-between">
+                        <div class="space-y-1">
+                            <div class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-800 dark:text-emerald-400">Family Members</div>
+                            <div class="text-4xl font-black text-emerald-950 dark:text-white font-outfit tracking-tight">{{ $householdMembersCount }}</div>
+                            <div class="text-[11px] text-emerald-900/70 dark:text-zinc-400">Residents in your unit</div>
+                        </div>
+                        <div class="p-4 bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 rounded-2xl group-hover:scale-110 transition duration-300 shadow-sm">
+                            <flux:icon name="users" class="size-6" />
+                        </div>
                     </div>
                 </div>
 
-                <!-- Household Address -->
-                <div class="bg-teal-50/70 dark:bg-zinc-900/40 border border-teal-250 dark:border-zinc-800/80 p-6 rounded-3xl shadow-md flex items-center justify-between transition hover:-translate-y-0.5 duration-300">
-                    <div class="space-y-1 flex-1">
-                        <div class="text-xs font-bold uppercase tracking-wider text-teal-850 dark:text-teal-400">Registered Address</div>
-                        <div class="text-lg font-black text-teal-950 dark:text-white truncate max-w-xs mt-1 font-outfit">
-                            {{ $household ? $household->address : 'Address not registered' }}
+                <!-- Purok -->
+                <div class="group relative overflow-hidden bg-teal-50/70 dark:bg-zinc-900/40 border border-teal-200 dark:border-zinc-800/80 hover:border-teal-400/50 p-6 rounded-3xl shadow-md transition-all duration-300 hover:-translate-y-1">
+                    <div class="absolute inset-0 bg-gradient-to-b from-teal-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="flex items-center justify-between">
+                        <div class="space-y-1">
+                            <div class="text-[10px] font-extrabold uppercase tracking-wider text-teal-800 dark:text-teal-400">Purok Zone</div>
+                            <div class="text-4xl font-black text-teal-950 dark:text-white font-outfit tracking-tight">{{ $household ? $household->purok_no : '—' }}</div>
+                            <div class="text-[11px] text-teal-900/70 dark:text-zinc-400">Registered purok number</div>
                         </div>
-                        <div class="text-[11px] text-teal-900/85 dark:text-zinc-400">
-                            Purok No: {{ $household ? $household->purok_no : 'N/A' }} | Household No: {{ $household ? $household->household_no : 'N/A' }}
+                        <div class="p-4 bg-teal-500/20 text-teal-700 dark:text-teal-400 rounded-2xl group-hover:scale-110 transition duration-300 shadow-sm">
+                            <flux:icon name="map-pin" class="size-6" />
                         </div>
                     </div>
-                    <div class="p-4 bg-teal-500/20 text-teal-700 dark:text-teal-400 rounded-2xl shadow-sm">
-                        <flux:icon name="home" class="size-6" />
+                </div>
+
+                <!-- Pending Appointments -->
+                <div class="group relative overflow-hidden bg-amber-50/70 dark:bg-zinc-900/40 border border-amber-200 dark:border-zinc-800/80 hover:border-amber-400/50 p-6 rounded-3xl shadow-md transition-all duration-300 hover:-translate-y-1">
+                    <div class="absolute inset-0 bg-gradient-to-b from-amber-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="flex items-center justify-between">
+                        <div class="space-y-1">
+                            <div class="text-[10px] font-extrabold uppercase tracking-wider text-amber-800 dark:text-amber-400">My Appointments</div>
+                            <div class="text-4xl font-black text-amber-950 dark:text-white font-outfit tracking-tight">{{ $upcomingAppointments->count() }}</div>
+                            <div class="text-[11px] text-amber-900/70 dark:text-zinc-400">Upcoming pickup slots</div>
+                        </div>
+                        <div class="p-4 bg-amber-500/20 text-amber-700 dark:text-amber-400 rounded-2xl group-hover:scale-110 transition duration-300 shadow-sm">
+                            <flux:icon name="calendar" class="size-6" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Household No -->
+                <div class="group relative overflow-hidden bg-indigo-50/70 dark:bg-zinc-900/40 border border-indigo-200 dark:border-zinc-800/80 hover:border-indigo-400/50 p-6 rounded-3xl shadow-md transition-all duration-300 hover:-translate-y-1">
+                    <div class="absolute inset-0 bg-gradient-to-b from-indigo-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="flex items-center justify-between">
+                        <div class="space-y-1">
+                            <div class="text-[10px] font-extrabold uppercase tracking-wider text-indigo-800 dark:text-indigo-400">Household No.</div>
+                            <div class="text-4xl font-black text-indigo-950 dark:text-white font-outfit tracking-tight">{{ $household ? $household->household_no : '—' }}</div>
+                            <div class="text-[11px] text-indigo-900/70 dark:text-zinc-400">Official registry number</div>
+                        </div>
+                        <div class="p-4 bg-indigo-500/20 text-indigo-700 dark:text-indigo-400 rounded-2xl group-hover:scale-110 transition duration-300 shadow-sm">
+                            <flux:icon name="home" class="size-6" />
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Household Appointments -->
-            <div class="bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-3xl p-6 shadow-lg space-y-6">
-                <div class="flex items-center justify-between border-b border-zinc-150 dark:border-zinc-800 pb-4">
-                    <div>
-                        <h3 class="text-base font-bold text-zinc-900 dark:text-white font-outfit">My Upcoming Document Pickup Slots</h3>
-                        <p class="text-xs text-zinc-500 dark:text-zinc-400">Pickup slots scheduled with the Barangay Hall.</p>
+            <!-- Main content grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+                <!-- Household Profile Card -->
+                <div class="bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-3xl p-6 shadow-lg flex flex-col">
+                    <div class="flex items-center gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-3 mb-4">
+                        <div class="p-2 bg-emerald-500/10 text-emerald-600 dark:text-emerald-500 rounded-xl">
+                            <flux:icon name="identification" class="size-5" />
+                        </div>
+                        <div>
+                            <h3 class="text-base font-bold text-zinc-900 dark:text-white font-outfit">My Profile</h3>
+                            <p class="text-[11px] text-zinc-500 font-light">Your registered resident information</p>
+                        </div>
                     </div>
-                    <a href="{{ route('appointments') }}" class="text-xs font-bold text-emerald-600 hover:underline">Book or View All</a>
+
+                    @if($residentProfile)
+                        <div class="flex-1 space-y-2.5 overflow-y-auto pr-0.5">
+                            @php
+                                $profileItems = [
+                                    ['label' => 'Full Name', 'value' => $residentProfile->fullName, 'icon' => 'user'],
+                                    ['label' => 'Age', 'value' => $residentProfile->age ? $residentProfile->age . ' years old' : null, 'icon' => 'cake'],
+                                    ['label' => 'Sex', 'value' => $residentProfile->sex, 'icon' => 'heart'],
+                                    ['label' => 'Civil Status', 'value' => $residentProfile->civil_status, 'icon' => 'sparkles'],
+                                    ['label' => 'Blood Type', 'value' => $residentProfile->blood_type, 'icon' => 'beaker'],
+                                    ['label' => 'Religion', 'value' => $residentProfile->religion, 'icon' => 'sun'],
+                                    ['label' => 'Address', 'value' => $household?->address, 'icon' => 'map-pin'],
+                                    ['label' => 'Occupation', 'value' => $residentProfile->occupation, 'icon' => 'briefcase'],
+                                    ['label' => 'Work Status', 'value' => $residentProfile->work_status, 'icon' => 'building-office'],
+                                    ['label' => 'Education', 'value' => $residentProfile->highest_educational_attainment, 'icon' => 'academic-cap'],
+                                    ['label' => 'PhilHealth', 'value' => $residentProfile->has_philhealth === 'Yes' ? 'Enrolled' : ($residentProfile->has_philhealth ? $residentProfile->has_philhealth : null), 'icon' => 'shield-check'],
+                                    ['label' => 'National Voter', 'value' => $residentProfile->registered_national_voter, 'icon' => 'check-badge'],
+                                ];
+                            @endphp
+                            @foreach($profileItems as $item)
+                                @if(!empty($item['value']))
+                                    <div class="flex items-start gap-3 p-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-100 dark:border-zinc-700/40">
+                                        <flux:icon name="{{ $item['icon'] }}" class="size-3.5 text-emerald-500 mt-0.5 shrink-0" />
+                                        <div class="min-w-0">
+                                            <div class="text-[9px] uppercase tracking-widest text-zinc-400 dark:text-zinc-500 font-bold">{{ $item['label'] }}</div>
+                                            <div class="text-xs font-bold text-zinc-800 dark:text-white truncate">{{ $item['value'] }}</div>
+                                        </div>
+                                    </div>
+                                @endif
+                            @endforeach
+                        </div>
+                    @else
+                        <div class="flex-1 flex flex-col items-center justify-center text-center py-6">
+                            <flux:icon name="user-circle" class="size-12 text-zinc-300 dark:text-zinc-600 mb-2" />
+                            <p class="text-xs text-zinc-500">No resident profile linked to your account.</p>
+                            <p class="text-[11px] text-zinc-400 mt-1">Contact the Barangay Admin to link your record.</p>
+                        </div>
+                    @endif
+
+                    <div class="pt-4 mt-4 border-t border-zinc-100 dark:border-zinc-800">
+                        <a href="{{ route('household') }}" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 hover:border-emerald-400/30 text-xs font-semibold text-zinc-700 dark:text-zinc-300 rounded-xl transition duration-300">
+                            <flux:icon name="home" class="size-3.5" />
+                            View Household Details
+                        </a>
+                    </div>
                 </div>
 
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="border-b border-zinc-155 dark:border-zinc-800 text-[10px] text-zinc-500 uppercase tracking-widest">
-                                <th class="pb-3.5 font-bold">Purpose / Document</th>
-                                <th class="pb-3.5 font-bold">Scheduled Pick up</th>
-                                <th class="pb-3.5 font-bold text-right">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800/60 text-xs text-zinc-750 dark:text-zinc-300">
+                <!-- Household Members List -->
+                <div class="bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-3xl p-6 shadow-lg flex flex-col">
+                    <div class="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3 mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="p-2 bg-teal-500/10 text-teal-600 dark:text-teal-500 rounded-xl">
+                                <flux:icon name="users" class="size-5" />
+                            </div>
+                            <div>
+                                <h3 class="text-base font-bold text-zinc-900 dark:text-white font-outfit">Household Members</h3>
+                                <p class="text-[11px] text-zinc-500 font-light">Residents registered under your household</p>
+                            </div>
+                        </div>
+                        <span class="text-[10px] font-bold text-teal-700 dark:text-teal-400 bg-teal-500/10 border border-teal-500/20 px-2 py-0.5 rounded-full">{{ $householdMembersCount }}</span>
+                    </div>
+
+                    <div class="space-y-2 flex-1 overflow-y-auto pr-1">
+                        @forelse($householdMembers as $member)
+                            <div class="flex items-center gap-3 p-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-100 dark:border-zinc-700/40">
+                                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white text-[10px] font-black shrink-0">
+                                    {{ strtoupper(substr($member->first_name ?? '?', 0, 1)) }}
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <div class="text-xs font-bold text-zinc-900 dark:text-white truncate">{{ $member->fullName }}</div>
+                                    <div class="text-[10px] text-zinc-500 dark:text-zinc-400">
+                                        {{ $member->relationship_to_head ?? 'Member' }}
+                                        @if($member->age) · {{ $member->age }} yrs @endif
+                                        @if($member->sex) · {{ $member->sex }} @endif
+                                    </div>
+                                </div>
+                                @if($member->health_condition && $member->health_condition !== 'None' && $member->health_condition !== '')
+                                    <span class="shrink-0 inline-flex items-center px-1.5 py-0.5 rounded text-[8px] font-bold bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20">Health</span>
+                                @endif
+                            </div>
+                        @empty
+                            <div class="text-center py-8">
+                                <flux:icon name="users" class="size-10 text-zinc-300 dark:text-zinc-600 mx-auto mb-2" />
+                                <p class="text-xs text-zinc-500">No household members found.</p>
+                            </div>
+                        @endforelse
+                    </div>
+                </div>
+
+                <!-- Right column: Appointments + Announcements -->
+                <div class="flex flex-col gap-6">
+
+                    <!-- Upcoming Appointments -->
+                    <div class="bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-3xl p-6 shadow-lg space-y-4">
+                        <div class="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
+                            <div class="flex items-center gap-3">
+                                <div class="p-2 bg-amber-500/10 text-amber-600 dark:text-amber-500 rounded-xl">
+                                    <flux:icon name="calendar" class="size-5" />
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-bold text-zinc-900 dark:text-white font-outfit">My Pickup Slots</h3>
+                                    <p class="text-[10px] text-zinc-500 font-light">Upcoming document requests</p>
+                                </div>
+                            </div>
+                            <a href="{{ route('appointments') }}" class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 hover:underline">View All</a>
+                        </div>
+
+                        <div class="space-y-2">
                             @forelse($upcomingAppointments as $apt)
-                                <tr>
-                                    <td class="py-3.5 font-bold text-zinc-900 dark:text-white">{{ $apt->purpose }}</td>
-                                    <td class="py-3.5 font-semibold">{{ $apt->appointment_date }} ({{ $apt->appointment_time }})</td>
-                                    <td class="py-3.5 text-right">
-                                        @if($apt->status === 'pending')
-                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[9px] font-bold bg-amber-500/10 text-amber-700 dark:text-amber-500 border border-amber-500/25">Pending</span>
-                                        @elseif($apt->status === 'approved')
-                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[9px] font-bold bg-emerald-500/10 text-emerald-700 dark:text-emerald-500 border border-emerald-500/25">Approved</span>
-                                        @else
-                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[9px] font-bold bg-zinc-100 dark:bg-zinc-800 text-zinc-650 dark:text-zinc-500 border border-zinc-200 dark:border-zinc-705">{{ ucfirst($apt->status) }}</span>
-                                        @endif
-                                    </td>
-                                </tr>
+                                <div class="flex items-start gap-3 p-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-100 dark:border-zinc-700/40">
+                                    <div class="p-1.5 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400 shrink-0">
+                                        <flux:icon name="document-text" class="size-3.5" />
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <div class="text-[11px] font-bold text-zinc-800 dark:text-white truncate">{{ $apt->purpose }}</div>
+                                        <div class="text-[10px] text-zinc-500 dark:text-zinc-400">{{ $apt->appointment_date }} @ {{ $apt->appointment_time }}</div>
+                                    </div>
+                                    @if($apt->status === 'pending')
+                                        <span class="shrink-0 text-[8px] font-bold px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20">Pending</span>
+                                    @else
+                                        <span class="shrink-0 text-[8px] font-bold px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">Approved</span>
+                                    @endif
+                                </div>
                             @empty
-                                <tr>
-                                    <td colspan="3" class="py-6 text-center text-zinc-500 text-xs font-light">No upcoming document pickup slots found.</td>
-                                </tr>
+                                <div class="text-center py-4">
+                                    <flux:icon name="calendar" class="size-8 text-zinc-300 dark:text-zinc-600 mx-auto mb-1" />
+                                    <p class="text-[11px] text-zinc-500">No upcoming pickups scheduled.</p>
+                                    <a href="{{ route('appointments') }}" class="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 hover:underline mt-1 inline-block">Book one now →</a>
+                                </div>
                             @endforelse
-                        </tbody>
-                    </table>
+                        </div>
+                    </div>
+
+                    <!-- Recent Announcements -->
+                    <div class="flex-1 flex flex-col bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-3xl p-6 shadow-lg">
+                        <div class="flex items-center gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-3">
+                            <div class="p-2 bg-indigo-500/10 text-indigo-600 dark:text-indigo-500 rounded-xl">
+                                <flux:icon name="megaphone" class="size-5" />
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-bold text-zinc-900 dark:text-white font-outfit">Barangay Announcements</h3>
+                                <p class="text-[10px] text-zinc-500 font-light">Latest from Brgy. Sambog</p>
+                            </div>
+                        </div>
+
+                        <div class="flex-1 space-y-2 mt-4">
+                            @forelse($recentAnnouncements as $ann)
+                                <div class="p-3 rounded-xl bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-100 dark:border-zinc-700/40">
+                                    <div class="flex items-start gap-2">
+                                        @if($ann->is_pinned)
+                                            <flux:icon name="bookmark" class="size-3 text-indigo-500 mt-0.5 shrink-0" />
+                                        @endif
+                                        <div class="flex-1 min-w-0">
+                                            <div class="text-[11px] font-bold text-zinc-800 dark:text-white truncate">{{ $ann->title }}</div>
+                                            <div class="text-[10px] text-zinc-500 dark:text-zinc-400 line-clamp-2 mt-0.5">{{ $ann->body }}</div>
+                                            <div class="text-[9px] text-zinc-400 mt-1">{{ $ann->published_at ? $ann->published_at->diffForHumans() : 'Draft' }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @empty
+                                <div class="text-center py-4">
+                                    <flux:icon name="megaphone" class="size-8 text-zinc-300 dark:text-zinc-600 mx-auto mb-1" />
+                                    <p class="text-[11px] text-zinc-500">No announcements posted yet.</p>
+                                </div>
+                            @endforelse
+                        </div>
+                    </div>
                 </div>
             </div>
 
         <!-- 4. RESIDENT MEMBER DASHBOARD VIEW -->
         @else
-            <div class="bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-3xl p-6 shadow-lg space-y-6">
-                <div class="flex items-center justify-between border-b border-zinc-150 dark:border-zinc-800 pb-4">
-                    <div>
-                        <h3 class="text-base font-bold text-zinc-900 dark:text-white font-outfit">My Upcoming Document Pickup Slots</h3>
-                        <p class="text-xs text-zinc-500 dark:text-zinc-400">Pickup slots scheduled with the Barangay Hall.</p>
+
+            <!-- Quick info cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                <!-- Age -->
+                <div class="group relative overflow-hidden bg-violet-50/70 dark:bg-zinc-900/40 border border-violet-200 dark:border-zinc-800/80 hover:border-violet-400/50 p-6 rounded-3xl shadow-md transition-all duration-300 hover:-translate-y-1">
+                    <div class="absolute inset-0 bg-gradient-to-b from-violet-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="flex items-center justify-between">
+                        <div class="space-y-1">
+                            <div class="text-[10px] font-extrabold uppercase tracking-wider text-violet-800 dark:text-violet-400">My Age</div>
+                            <div class="text-4xl font-black text-violet-950 dark:text-white font-outfit tracking-tight">{{ $residentProfile?->age ?? '—' }}</div>
+                            <div class="text-[11px] text-violet-900/70 dark:text-zinc-400">{{ $residentProfile?->age_classification ?? 'Age group' }}</div>
+                        </div>
+                        <div class="p-4 bg-violet-500/20 text-violet-700 dark:text-violet-400 rounded-2xl group-hover:scale-110 transition duration-300 shadow-sm">
+                            <flux:icon name="cake" class="size-6" />
+                        </div>
                     </div>
-                    <a href="{{ route('appointments') }}" class="text-xs font-bold text-emerald-600 hover:underline">Book or View All</a>
                 </div>
 
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="border-b border-zinc-155 dark:border-zinc-800 text-[10px] text-zinc-500 uppercase tracking-widest">
-                                <th class="pb-3.5 font-bold">Purpose / Document</th>
-                                <th class="pb-3.5 font-bold">Scheduled Pick up</th>
-                                <th class="pb-3.5 font-bold text-right">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800/60 text-xs text-zinc-750 dark:text-zinc-300">
-                            @forelse($upcomingAppointments as $apt)
-                                <tr>
-                                    <td class="py-3.5 font-bold text-zinc-900 dark:text-white">{{ $apt->purpose }}</td>
-                                    <td class="py-3.5 font-semibold">{{ $apt->appointment_date }} ({{ $apt->appointment_time }})</td>
-                                    <td class="py-3.5 text-right">
-                                        @if($apt->status === 'pending')
-                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[9px] font-bold bg-amber-500/10 text-amber-700 dark:text-amber-500 border border-amber-500/25">Pending</span>
-                                        @elseif($apt->status === 'approved')
-                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[9px] font-bold bg-emerald-500/10 text-emerald-700 dark:text-emerald-500 border border-emerald-500/25">Approved</span>
+                <!-- Upcoming Appointments count -->
+                <div class="group relative overflow-hidden bg-amber-50/70 dark:bg-zinc-900/40 border border-amber-200 dark:border-zinc-800/80 hover:border-amber-400/50 p-6 rounded-3xl shadow-md transition-all duration-300 hover:-translate-y-1">
+                    <div class="absolute inset-0 bg-gradient-to-b from-amber-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="flex items-center justify-between">
+                        <div class="space-y-1">
+                            <div class="text-[10px] font-extrabold uppercase tracking-wider text-amber-800 dark:text-amber-400">Pending Slots</div>
+                            <div class="text-4xl font-black text-amber-950 dark:text-white font-outfit tracking-tight">{{ $upcomingAppointments->count() }}</div>
+                            <div class="text-[11px] text-amber-900/70 dark:text-zinc-400">Document pickup requests</div>
+                        </div>
+                        <div class="p-4 bg-amber-500/20 text-amber-700 dark:text-amber-400 rounded-2xl group-hover:scale-110 transition duration-300 shadow-sm">
+                            <flux:icon name="calendar" class="size-6" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vaccination Status -->
+                <div class="group relative overflow-hidden bg-emerald-50/70 dark:bg-zinc-900/40 border border-emerald-200 dark:border-zinc-800/80 hover:border-emerald-400/50 p-6 rounded-3xl shadow-md transition-all duration-300 hover:-translate-y-1">
+                    <div class="absolute inset-0 bg-gradient-to-b from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="flex items-center justify-between">
+                        <div class="space-y-1">
+                            <div class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-800 dark:text-emerald-400">Vaccination</div>
+                            <div class="text-xl font-black text-emerald-950 dark:text-white font-outfit tracking-tight mt-1">
+                                @if($residentProfile?->fully_vaccinated === 'Y')
+                                    Fully Vaccinated
+                                @elseif($residentProfile?->partially_vaccinated === 'Y')
+                                    Partially Vaccinated
+                                @elseif($residentProfile?->unvaccinated === 'Y')
+                                    Unvaccinated
+                                @else
+                                    —
+                                @endif
+                            </div>
+                            <div class="text-[11px] text-emerald-900/70 dark:text-zinc-400">COVID-19 immunization status</div>
+                        </div>
+                        <div class="p-4 bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 rounded-2xl group-hover:scale-110 transition duration-300 shadow-sm">
+                            <flux:icon name="shield-check" class="size-6" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main content: Profile + Appointments + Announcements -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+                <!-- Resident Profile Card -->
+                <div class="bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-3xl p-6 shadow-lg flex flex-col">
+                    <div class="flex items-center gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-3 mb-4">
+                        <div class="p-2 bg-violet-500/10 text-violet-600 dark:text-violet-500 rounded-xl">
+                            <flux:icon name="identification" class="size-5" />
+                        </div>
+                        <div>
+                            <h3 class="text-base font-bold text-zinc-900 dark:text-white font-outfit">My Profile</h3>
+                            <p class="text-[11px] text-zinc-500 font-light">Your registered resident information</p>
+                        </div>
+                    </div>
+
+                    @if($residentProfile)
+                        <div class="flex-1 space-y-2.5 overflow-y-auto pr-0.5">
+                            @php
+                                $resItems = [
+                                    ['label' => 'Full Name', 'value' => $residentProfile->fullName, 'icon' => 'user'],
+                                    ['label' => 'Age', 'value' => $residentProfile->age ? $residentProfile->age . ' years old' : null, 'icon' => 'cake'],
+                                    ['label' => 'Sex', 'value' => $residentProfile->sex, 'icon' => 'heart'],
+                                    ['label' => 'Civil Status', 'value' => $residentProfile->civil_status, 'icon' => 'sparkles'],
+                                    ['label' => 'Blood Type', 'value' => $residentProfile->blood_type, 'icon' => 'beaker'],
+                                    ['label' => 'Religion', 'value' => $residentProfile->religion, 'icon' => 'sun'],
+                                    ['label' => 'Occupation', 'value' => $residentProfile->occupation, 'icon' => 'briefcase'],
+                                    ['label' => 'Work Status', 'value' => $residentProfile->work_status, 'icon' => 'building-office'],
+                                    ['label' => 'Education', 'value' => $residentProfile->highest_educational_attainment, 'icon' => 'academic-cap'],
+                                    ['label' => 'PhilHealth', 'value' => $residentProfile->has_philhealth === 'Yes' ? 'Enrolled' : ($residentProfile->has_philhealth ? $residentProfile->has_philhealth : null), 'icon' => 'shield-check'],
+                                    ['label' => 'Health Condition', 'value' => ($residentProfile->health_condition && $residentProfile->health_condition !== 'None') ? $residentProfile->health_condition : null, 'icon' => 'heart'],
+                                    ['label' => 'Vulnerable Sector', 'value' => $residentProfile->vulnerable_sector, 'icon' => 'flag'],
+                                    ['label' => 'National Voter', 'value' => $residentProfile->registered_national_voter, 'icon' => 'check-badge'],
+                                ];
+                            @endphp
+                            @foreach($resItems as $item)
+                                @if(!empty($item['value']))
+                                    <div class="flex items-start gap-3 p-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-100 dark:border-zinc-700/40">
+                                        <flux:icon name="{{ $item['icon'] }}" class="size-3.5 text-violet-500 mt-0.5 shrink-0" />
+                                        <div class="min-w-0">
+                                            <div class="text-[9px] uppercase tracking-widest text-zinc-400 dark:text-zinc-500 font-bold">{{ $item['label'] }}</div>
+                                            <div class="text-xs font-bold text-zinc-800 dark:text-white truncate">{{ $item['value'] }}</div>
+                                        </div>
+                                    </div>
+                                @endif
+                            @endforeach
+                        </div>
+                    @else
+                        <div class="flex-1 flex flex-col items-center justify-center text-center py-8">
+                            <flux:icon name="user-circle" class="size-12 text-zinc-300 dark:text-zinc-600 mb-2" />
+                            <p class="text-xs text-zinc-500">No resident profile linked to your account.</p>
+                            <p class="text-[11px] text-zinc-400 mt-1">Contact the Barangay Admin to link your record.</p>
+                        </div>
+                    @endif
+                </div>
+
+                <!-- Appointments + Announcements -->
+                <div class="lg:col-span-2 flex flex-col gap-6">
+
+                    <!-- Upcoming appointments -->
+                    <div class="bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-3xl p-6 shadow-lg space-y-4">
+                        <div class="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
+                            <div class="flex items-center gap-3">
+                                <div class="p-2 bg-amber-500/10 text-amber-600 dark:text-amber-500 rounded-xl">
+                                    <flux:icon name="calendar" class="size-5" />
+                                </div>
+                                <div>
+                                    <h3 class="text-base font-bold text-zinc-900 dark:text-white font-outfit">My Document Pickup Slots</h3>
+                                    <p class="text-[11px] text-zinc-500 font-light">Pickup slots scheduled with the Barangay Hall</p>
+                                </div>
+                            </div>
+                            <a href="{{ route('appointments') }}" class="text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:underline">Book or View All</a>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="border-b border-zinc-100 dark:border-zinc-800 text-[10px] text-zinc-500 uppercase tracking-widest">
+                                        <th class="pb-3 font-bold">Purpose / Document</th>
+                                        <th class="pb-3 font-bold">Scheduled Pick up</th>
+                                        <th class="pb-3 font-bold text-right">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800/60 text-xs text-zinc-700 dark:text-zinc-300">
+                                    @forelse($upcomingAppointments as $apt)
+                                        <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/20 transition-colors">
+                                            <td class="py-3.5 font-bold text-zinc-900 dark:text-white">{{ $apt->purpose }}</td>
+                                            <td class="py-3.5 font-semibold text-zinc-600 dark:text-zinc-400">{{ $apt->appointment_date }} <span class="text-emerald-500 mx-1">@</span> {{ $apt->appointment_time }}</td>
+                                            <td class="py-3.5 text-right">
+                                                @if($apt->status === 'pending')
+                                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[9px] font-bold bg-amber-500/10 text-amber-700 dark:text-amber-500 border border-amber-500/25">Pending</span>
+                                                @elseif($apt->status === 'approved')
+                                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[9px] font-bold bg-emerald-500/10 text-emerald-700 dark:text-emerald-500 border border-emerald-500/25">Approved</span>
+                                                @else
+                                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[9px] font-bold bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-700">{{ ucfirst($apt->status) }}</span>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="3" class="py-8 text-center">
+                                                <flux:icon name="calendar" class="size-8 text-zinc-300 dark:text-zinc-600 mx-auto mb-2" />
+                                                <p class="text-xs text-zinc-500">No upcoming pickup slots found.</p>
+                                                <a href="{{ route('appointments') }}" class="text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:underline mt-1 inline-block">Book one now →</a>
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Barangay Announcements -->
+                    <div class="flex-1 flex flex-col bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-3xl p-6 shadow-lg">
+                        <div class="flex items-center gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-3">
+                            <div class="p-2 bg-indigo-500/10 text-indigo-600 dark:text-indigo-500 rounded-xl">
+                                <flux:icon name="megaphone" class="size-5" />
+                            </div>
+                            <div>
+                                <h3 class="text-base font-bold text-zinc-900 dark:text-white font-outfit">Barangay Announcements</h3>
+                                <p class="text-[11px] text-zinc-500 font-light">Latest updates from Brgy. Sambog</p>
+                            </div>
+                        </div>
+
+                        <div class="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-3 mt-4 content-start">
+                            @forelse($recentAnnouncements as $ann)
+                                <div class="p-4 rounded-2xl bg-gradient-to-b from-zinc-50 to-white dark:from-zinc-800/40 dark:to-zinc-900/40 border border-zinc-100 dark:border-zinc-700/40 space-y-2">
+                                    <div class="flex items-center gap-2">
+                                        @if($ann->is_pinned)
+                                            <flux:icon name="bookmark" class="size-3.5 text-indigo-500 shrink-0" />
                                         @else
-                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[9px] font-bold bg-zinc-100 dark:bg-zinc-800 text-zinc-650 dark:text-zinc-500 border border-zinc-200 dark:border-zinc-705">{{ ucfirst($apt->status) }}</span>
+                                            <flux:icon name="megaphone" class="size-3.5 text-zinc-400 shrink-0" />
                                         @endif
-                                    </td>
-                                </tr>
+                                        <span class="text-[9px] uppercase tracking-widest font-bold text-indigo-600 dark:text-indigo-400">{{ $ann->type ?? 'General' }}</span>
+                                    </div>
+                                    <div class="text-xs font-bold text-zinc-800 dark:text-white line-clamp-2">{{ $ann->title }}</div>
+                                    <div class="text-[10px] text-zinc-500 dark:text-zinc-400 line-clamp-3">{{ $ann->body }}</div>
+                                    <div class="text-[9px] text-zinc-400 pt-1 border-t border-zinc-100 dark:border-zinc-700/50">{{ $ann->published_at ? $ann->published_at->diffForHumans() : 'Draft' }}</div>
+                                </div>
                             @empty
-                                <tr>
-                                    <td colspan="3" class="py-6 text-center text-zinc-550 text-xs font-light">No upcoming document pickup slots found.</td>
-                                </tr>
+                                <div class="col-span-3 text-center py-8">
+                                    <flux:icon name="megaphone" class="size-10 text-zinc-300 dark:text-zinc-600 mx-auto mb-2" />
+                                    <p class="text-xs text-zinc-500">No announcements posted yet.</p>
+                                </div>
                             @endforelse
-                        </tbody>
-                    </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         @endif

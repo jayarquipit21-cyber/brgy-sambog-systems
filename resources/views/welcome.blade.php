@@ -211,7 +211,7 @@
         </header>
 
         <!-- Main Content Area -->
-        <main class="flex-grow bg-mesh">
+        <main class="flex-grow bg-mesh overflow-x-hidden">
             
             <!-- SECTION 1: Gorgeous Municipal Hero Banner -->
             <section class="relative overflow-hidden py-16 sm:py-24 bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-500 dark:from-zinc-950 dark:via-emerald-950 dark:to-zinc-900 text-white">
