@@ -268,6 +268,41 @@ func main() {
 	}
 
 	if len(filteredArgs) > 0 {
+		// Drag-and-drop detection: if the sole argument looks like a file path
+		// (ends with a supported extension), treat it as a file import.
+		firstArg := filteredArgs[0]
+		extLower := strings.ToLower(filepath.Ext(firstArg))
+		isFileDrop := len(filteredArgs) == 1 && (extLower == ".xlsx" || extLower == ".xls" || extLower == ".csv" || extLower == ".txt")
+
+		if isFileDrop {
+			printBanner()
+			fmt.Printf("  %s📂 File dropped:%s %s\n\n", bold(), reset(), firstArg)
+
+			if !authenticateUser(projectDir) {
+				fmt.Printf("\n  %sPress Enter to close...%s", dim(), reset())
+				bufio.NewReader(os.Stdin).ReadString('\n')
+				os.Exit(1)
+			}
+
+			clearScreen()
+			printBanner()
+			printInfo("Starting import for: " + filepath.Base(firstArg))
+			fmt.Println()
+
+			err := runCommand(projectDir, true, "import", firstArg)
+
+			fmt.Println()
+			if err != nil {
+				printError("Import failed. See errors above.")
+			} else {
+				printSuccess("Import completed successfully!")
+			}
+
+			fmt.Printf("\n  %sPress Enter to close...%s", dim(), reset())
+			bufio.NewReader(os.Stdin).ReadString('\n')
+			return
+		}
+
 		// Non-interactive mode: forward to php artisan
 		runCommand(projectDir, false, filteredArgs...)
 		return
