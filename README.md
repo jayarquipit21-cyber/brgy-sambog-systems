@@ -131,46 +131,116 @@ This system handles sensitive resident data protected under the **Philippine Dat
 - **Data Minimization**: SQL queries within the health officer dashboard strictly scope out highly private fields (e.g., `income`, `registered_national_voter`) using Eloquent selections.
 - **Local Safety**: Never commit local database files (`.sqlite`), environment files (`.env`), or actual spreadsheet records containing real inhabitant data. Use synthetic data for testing.
 
-## 🧰 RBI Manager CLI wrappers
+## 🧰 RBI Manager App (CLI Tool)
 
-This repository includes simple executable wrappers that forward commands to the built-in Artisan command `rbi:manage` for importing CSVs and managing RBI data.
+The system includes a dedicated management tool called **RBI Manager**. This is a powerful, interactive terminal application built in Go (with scripting wrappers) that interfaces with the Laravel Artisan command `rbi:manage`. It allows administrators to view live statistics, search residents, import/export spreadsheets, and perform database management tasks safely.
 
-- Windows batch: `rbi-manager.bat`
-- PowerShell: `rbi-manager.ps1`
-- POSIX shell: `rbi-manager` (make executable with `chmod +x rbi-manager`)
+### 🔑 Authentication
+To prevent unauthorized access to sensitive resident data, the interactive tool requires authentication. You must log in using an account with administrative or health officer privileges:
+- **Default Admin Account**: `admin@barangay.gov` / `password`
+- **Default Health Officer**: `health@barangay.gov` / `password`
 
-Examples:
+### 💻 Launching the App
+Run the launcher scripts from the root directory to start the interactive dashboard:
 
+- **Windows Command Prompt**:
+  ```cmd
+  rbi-manager.bat
+  ```
+- **PowerShell**:
+  ```powershell
+  .\rbi-manager.ps1
+  ```
+- **Linux / macOS**:
+  ```bash
+  chmod +x rbi-manager
+  ./rbi-manager
+  ```
+
+---
+
+### 📊 Features & Menu Options
+
+When launched in **Interactive Mode**, the app provides a menu-driven interface:
+
+1. **View Statistics**: Displays a clean dashboard with total resident and household counts, gender distributions, and styled terminal bar-charts showing population breakdown by Purok zone and age demographics.
+2. **Search Residents**: Search resident records instantly by first name, last name, middle name, Purok number, or household number. Results are displayed in a formatted table (up to 50 results).
+3. **Export to CSV**: Exports the current registry to a CSV spreadsheet. By default, exports are saved to `storage/app/exports/rbi_export_[timestamp].csv` if no custom path is provided.
+4. **Import CSV / XLSX File**: Reads and imports resident data from a spreadsheet.
+   - **Default Import Option**: Press **Enter** on the file path prompt to automatically import `RBI 2025 all.xlsx` from the project root folder.
+   - **Sheet Selection**: For Excel files with multiple sheets (e.g., sheets for Purok 1 to Purok 8), the app lists all sheet names and lets you select a single sheet to import or type `all` to import all of them.
+5. **Truncate Residents**: Deletes all resident records while keeping the households table. Creates a CSV backup automatically before proceeding.
+6. **Truncate All**: Deletes all residents and households. Requires double-confirmation and creates a CSV backup automatically.
+7. **Delete Rows by Condition**: Performs targeted deletion based on a table name and a simple column condition (e.g., `purok_no=3`).
+8. **Clear Application Cache**: Runs Laravel cache flushes (config, routes, views) and restarts the queue workers so that database modifications reflect on the live website immediately.
+9. **Command History**: Shows the last 5 operations executed during the current session.
+
+---
+
+### 🚀 Non-Interactive CLI Commands
+
+You can bypass the interactive menu and trigger tasks directly by adding parameters to the launcher script or executable:
+
+#### 1. Import Spreadsheet
+Imports an Excel or CSV file. If no file path is specified, it defaults to looking for `RBI 2025 all.xlsx` in the project root:
 ```powershell
-.\rbi-manager.bat import data/rbi.csv
+# Import default updated file (RBI 2025 all.xlsx)
+.\rbi-manager.ps1 import
+
+# Import a specific file
+.\rbi-manager.ps1 import C:/Users/brgy/Downloads/rbi_updated.xlsx
+```
+
+#### 2. View Database Stats
+```powershell
+# Display formatted stats dashboard
+.\rbi-manager.ps1 stats
+
+# Get raw JSON stats
+.\rbi-manager.ps1 stats --format=json
+```
+
+#### 3. Search Residents
+```powershell
+.\rbi-manager.ps1 search --query="Dela Cruz"
+```
+
+#### 4. Export Spreadsheet
+```powershell
+# Save to default exports directory
+.\rbi-manager.ps1 export
+
+# Save to a specific file
+.\rbi-manager.ps1 export data/backup.csv
+```
+
+#### 5. Truncate Tables
+```powershell
+# Truncate residents only
+.\rbi-manager.ps1 truncate
+
+# Truncate both residents and households
 .\rbi-manager.ps1 truncate --all
 ```
 
-```bash
-./rbi-manager import path/to/file.csv
-./rbi-manager delete --table=residents --where="purok_no=3"
+#### 6. Targeted Deletion
+```powershell
+.\rbi-manager.ps1 delete --table=residents --where="purok_no=4"
 ```
 
-The wrappers assume `php` is in your PATH and will run the project's `artisan` command from the repository root. Use with caution for destructive operations and back up your database first.
+#### 7. Clear Caches
+```powershell
+.\rbi-manager.ps1 cache-clear
+```
 
-### Optional: native executable (Go)
+### 🛠️ Building the Native Executable (Optional)
 
-If you'd like a single native executable (for Windows `.exe`), there's a small Go program included at `tools/rbi-manager/main.go` that forwards arguments to `php artisan rbi:manage`.
-
-Build instructions (requires Go installed):
+A precompiled Windows executable (`tools/rbi-manager.exe`) is included. If you modify the Go source code in `tools/rbi-manager/main.go`, you can rebuild it using Go:
 
 ```bash
 cd tools/rbi-manager
-go build -o rbi-manager.exe main.go
+go build -o ../rbi-manager.exe main.go
 ```
-
-Place the built `rbi-manager.exe` in the project root and run:
-
-```powershell
-.\rbi-manager.exe import data/rbi.csv
-```
-
-You can also build cross-platform binaries using Go's `GOOS`/`GOARCH` environment variables. The program accepts an optional `--project-dir <path>` flag to point to the Laravel project if the executable is stored elsewhere.
 
 ### CSV Schema (Export / Import)
 
