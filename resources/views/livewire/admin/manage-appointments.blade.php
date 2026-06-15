@@ -16,7 +16,7 @@
                 class="rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-1.5 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand text-sm"
             >
                 <option value="">All Statuses</option>
-                <option value="pending">Pending</option>
+                <option value="approved-pending">Approved-Pending</option>
                 <option value="approved">Approved</option>
                 <option value="completed">Completed</option>
                 <option value="cancelled">Cancelled</option>
@@ -42,7 +42,7 @@
                 <thead>
                     <tr class="border-b border-zinc-200 dark:border-zinc-800 text-zinc-500 text-xs font-semibold uppercase">
                         <th class="py-3 px-4">Resident</th>
-                        <th class="py-3 px-4">Preferred Slot</th>
+                        <th class="py-3 px-4">Scheduled Slot</th>
                         <th class="py-3 px-4">Requested Document & Purpose</th>
                         <th class="py-3 px-4 text-center">Status</th>
                         <th class="py-3 px-4 text-right">Actions</th>
@@ -56,16 +56,20 @@
                                 <div class="text-xs text-zinc-500 dark:text-zinc-400">{{ $apt->user->email }}</div>
                             </td>
                             <td class="py-3 px-4">
-                                <div class="font-medium text-zinc-900 dark:text-white">{{ $apt->appointment_date->format('M d, Y') }}</div>
-                                <div class="text-xs text-zinc-500 dark:text-zinc-400">{{ $apt->appointment_time }}</div>
+                                @if($apt->appointment_date)
+                                    <div class="font-medium text-zinc-900 dark:text-white">{{ $apt->appointment_date->format('M d, Y') }}</div>
+                                    <div class="text-xs text-zinc-500 dark:text-zinc-400">{{ $apt->appointment_time }}</div>
+                                @else
+                                    <span class="text-xs text-amber-600 dark:text-amber-400 font-semibold bg-amber-50 dark:bg-amber-950/20 px-2 py-0.5 rounded">Pending Kapitan Signature</span>
+                                @endif
                             </td>
                             <td class="py-3 px-4 max-w-sm whitespace-normal break-words">
                                 {{ $apt->purpose }}
                             </td>
                             <td class="py-3 px-4 text-center">
-                                @if($apt->status === 'pending')
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-zinc-100 text-zinc-700 border border-zinc-300 dark:bg-zinc-800/60 dark:text-zinc-300 dark:border-zinc-700">
-                                        Pending
+                                @if($apt->status === 'approved-pending')
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-50 text-amber-800 border border-amber-200 dark:bg-amber-950/30 dark:text-amber-400 dark:border-amber-900/50">
+                                        Approved-Pending
                                     </span>
                                 @elseif($apt->status === 'approved')
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-50 text-emerald-800 border border-emerald-200 dark:bg-emerald-950/30 dark:text-emerald-400 dark:border-emerald-900/50">
@@ -82,12 +86,12 @@
                                 @endif
                             </td>
                             <td class="py-3 px-4 text-right space-x-2">
-                                @if($apt->status === 'pending')
+                                @if($apt->status === 'approved-pending')
                                     <button 
-                                        wire:click="approve({{ $apt->id }})"
+                                        wire:click="startApprove({{ $apt->id }})"
                                         class="text-xs text-emerald-500 hover:text-emerald-700 font-semibold cursor-pointer"
                                     >
-                                        Approve
+                                        Approve & Schedule
                                     </button>
                                     <button 
                                         wire:click="reject({{ $apt->id }})"
@@ -105,7 +109,7 @@
                                 @else
                                     <span class="text-xs text-zinc-400 dark:text-zinc-600">-</span>
                                 @endif
-                                @if($apt->status !== 'pending')
+                                @if($apt->status !== 'approved-pending')
                                     <button 
                                         wire:click="delete({{ $apt->id }})"
                                         class="text-xs text-red-500 hover:text-red-700 font-semibold ml-2"
@@ -120,4 +124,54 @@
             </table>
         </div>
     @endif
+
+    <!-- Approval & Scheduling Modal -->
+    <flux:modal name="approve-appointment-modal" class="max-w-md" wire:model="showApproveModal">
+        <form wire:submit="confirmApprove" class="space-y-6">
+            <div>
+                <flux:heading size="lg">{{ __('Schedule Document Redemption') }}</flux:heading>
+                <flux:subheading>{{ __('Set the date and time when the resident can redeem their completely signed document.') }}</flux:subheading>
+            </div>
+
+            <div class="space-y-4">
+                <div>
+                    <label for="redemptionDate" class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Redemption Date</label>
+                    <input 
+                        id="redemptionDate"
+                        type="date" 
+                        wire:model="redemptionDate"
+                        class="w-full rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-2 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand text-sm"
+                        required
+                        min="{{ date('Y-m-d') }}"
+                    />
+                    @error('redemptionDate') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                </div>
+
+                <div>
+                    <label for="redemptionTime" class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Time Slot</label>
+                    <select 
+                        id="redemptionTime"
+                        wire:model="redemptionTime"
+                        class="w-full rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-2 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand text-sm"
+                        required
+                    >
+                        <option value="09:00 AM - 10:00 AM">09:00 AM - 10:00 AM (Morning)</option>
+                        <option value="10:00 AM - 11:00 AM">10:00 AM - 11:00 AM (Morning)</option>
+                        <option value="11:00 AM - 12:00 PM">11:00 AM - 12:00 PM (Morning)</option>
+                        <option value="01:00 PM - 02:00 PM">01:00 PM - 02:00 PM (Afternoon)</option>
+                        <option value="02:00 PM - 03:00 PM">02:00 PM - 03:00 PM (Afternoon)</option>
+                        <option value="03:00 PM - 04:00 PM">03:00 PM - 04:00 PM (Afternoon)</option>
+                    </select>
+                    @error('redemptionTime') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-2 border-t border-zinc-200 dark:border-zinc-800 pt-4">
+                <flux:modal.close>
+                    <flux:button variant="filled">{{ __('Cancel') }}</flux:button>
+                </flux:modal.close>
+                <flux:button variant="primary" type="submit">{{ __('Approve & Set Date') }}</flux:button>
+            </div>
+        </form>
+    </flux:modal>
 </div>

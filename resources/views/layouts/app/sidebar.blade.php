@@ -22,7 +22,7 @@
 
                     @if(auth()->user()->isAdmin())
                         <flux:sidebar.item icon="users" :href="route('rbi')" :current="request()->routeIs('rbi')" wire:navigate>
-                            {{ __('RBI Registry') }}
+                            {{ __('Population Management') }}
                         </flux:sidebar.item>
                         <flux:sidebar.item icon="table-cells" :href="route('rbi-data')" :current="request()->routeIs('rbi-data')" wire:navigate>
                             {{ __('RBI Data Table') }}

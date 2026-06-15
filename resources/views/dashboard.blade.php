@@ -459,12 +459,18 @@
                                 <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-850/20 transition-colors">
                                     <td class="py-4 font-bold text-zinc-900 dark:text-white font-outfit">{{ $apt->user->name }}</td>
                                     <td class="py-4">{{ $apt->purpose }}</td>
-                                    <td class="py-4 text-zinc-600 dark:text-zinc-400 font-semibold">{{ $apt->appointment_date }} <span class="text-emerald-500 font-bold mx-1">@</span> {{ $apt->appointment_time }}</td>
+                                    <td class="py-4 text-zinc-600 dark:text-zinc-400 font-semibold">
+                                        @if($apt->appointment_date)
+                                            {{ $apt->appointment_date->format('M d, Y') }} <span class="text-emerald-500 font-bold mx-1">@</span> {{ $apt->appointment_time }}
+                                        @else
+                                            <span class="text-[11px] text-amber-600 dark:text-amber-400 font-semibold bg-amber-50 dark:bg-amber-950/20 px-2 py-0.5 rounded">Pending Kapitan Signature</span>
+                                        @endif
+                                    </td>
                                     <td class="py-4 text-right">
-                                        @if($apt->status === 'pending')
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[9px] font-bold bg-amber-500/10 text-amber-700 dark:text-amber-500 border border-amber-500/20">Pending review</span>
+                                        @if($apt->status === 'approved-pending')
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[9px] font-bold bg-amber-500/10 text-amber-700 dark:text-amber-500 border border-amber-500/20">Approved-Pending</span>
                                         @elseif($apt->status === 'approved')
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[9px] font-bold bg-emerald-500/10 text-emerald-700 dark:text-emerald-500 border border-emerald-500/20">Approved / Processed</span>
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[9px] font-bold bg-emerald-500/10 text-emerald-700 dark:text-emerald-500 border border-emerald-500/20">Approved / Ready</span>
                                         @elseif($apt->status === 'completed')
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[9px] font-bold bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 border border-indigo-500/20">Completed</span>
                                         @else
@@ -993,12 +999,20 @@
                                     </div>
                                     <div class="flex-1 min-w-0">
                                         <div class="text-[11px] font-bold text-zinc-800 dark:text-white truncate">{{ $apt->purpose }}</div>
-                                        <div class="text-[10px] text-zinc-500 dark:text-zinc-400">{{ $apt->appointment_date }} @ {{ $apt->appointment_time }}</div>
+                                        <div class="text-[10px] text-zinc-500 dark:text-zinc-400">
+                                            @if($apt->appointment_date)
+                                                {{ $apt->appointment_date->format('M d, Y') }} @ {{ $apt->appointment_time }}
+                                            @else
+                                                <span class="text-[9px] text-amber-600 dark:text-amber-400 font-semibold bg-amber-50 dark:bg-amber-950/20 px-2 py-0.5 rounded">Pending Signature</span>
+                                            @endif
+                                        </div>
                                     </div>
-                                    @if($apt->status === 'pending')
-                                        <span class="shrink-0 text-[8px] font-bold px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20">Pending</span>
+                                    @if($apt->status === 'approved-pending')
+                                        <span class="shrink-0 text-[8px] font-bold px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20">Approved-Pending</span>
+                                    @elseif($apt->status === 'approved')
+                                        <span class="shrink-0 text-[8px] font-bold px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">Approved (Ready)</span>
                                     @else
-                                        <span class="shrink-0 text-[8px] font-bold px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">Approved</span>
+                                        <span class="shrink-0 text-[8px] font-bold px-1.5 py-0.5 rounded bg-zinc-100 text-zinc-500 border border-zinc-200">{{ ucfirst($apt->status) }}</span>
                                     @endif
                                 </div>
                             @empty
@@ -1195,12 +1209,18 @@
                                     @forelse($upcomingAppointments as $apt)
                                         <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/20 transition-colors">
                                             <td class="py-3.5 font-bold text-zinc-900 dark:text-white">{{ $apt->purpose }}</td>
-                                            <td class="py-3.5 font-semibold text-zinc-600 dark:text-zinc-400">{{ $apt->appointment_date }} <span class="text-emerald-500 mx-1">@</span> {{ $apt->appointment_time }}</td>
+                                            <td class="py-3.5 font-semibold text-zinc-600 dark:text-zinc-400">
+                                                @if($apt->appointment_date)
+                                                    {{ $apt->appointment_date->format('M d, Y') }} <span class="text-emerald-500 mx-1">@</span> {{ $apt->appointment_time }}
+                                                @else
+                                                    <span class="text-xs text-amber-600 dark:text-amber-400 font-semibold bg-amber-50 dark:bg-amber-950/20 px-2 py-0.5 rounded">Pending Signature</span>
+                                                @endif
+                                            </td>
                                             <td class="py-3.5 text-right">
-                                                @if($apt->status === 'pending')
-                                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[9px] font-bold bg-amber-500/10 text-amber-700 dark:text-amber-500 border border-amber-500/25">Pending</span>
+                                                @if($apt->status === 'approved-pending')
+                                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[9px] font-bold bg-amber-500/10 text-amber-700 dark:text-amber-500 border border-amber-500/25">Approved-Pending</span>
                                                 @elseif($apt->status === 'approved')
-                                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[9px] font-bold bg-emerald-500/10 text-emerald-700 dark:text-emerald-500 border border-emerald-500/25">Approved</span>
+                                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[9px] font-bold bg-emerald-500/10 text-emerald-700 dark:text-emerald-500 border border-emerald-500/25">Approved (Ready)</span>
                                                 @else
                                                     <span class="inline-flex items-center px-2 py-0.5 rounded text-[9px] font-bold bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-700">{{ ucfirst($apt->status) }}</span>
                                                 @endif

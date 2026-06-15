@@ -50,51 +50,57 @@
         </div>
     </div>
 
-    <!-- RBI Registry Main Card -->
+    <!-- Population Management Dashboard Main Card -->
     <div class="bg-white dark:bg-zinc-900 shadow-md rounded-xl p-6 border border-zinc-200 dark:border-zinc-800">
+        <!-- Header & Action controls -->
         <div class="mb-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div>
-                <flux:heading size="lg" level="2" class="text-zinc-900 dark:text-white font-semibold">Registry of Barangay Inhabitants (RBI)</flux:heading>
-                <flux:text variant="subtle" class="text-xs text-zinc-500 dark:text-zinc-400">Search and filter dynamic resident registries parsed from the RBI workbook.</flux:text>
+                <flux:heading size="lg" level="2" class="text-zinc-900 dark:text-white font-semibold">Population Management Dashboard</flux:heading>
+                <flux:text variant="subtle" class="text-xs text-zinc-500 dark:text-zinc-400">Manage resident registration requests and household heads directory.</flux:text>
             </div>
-            <div class="flex flex-col sm:flex-row gap-3">
-                <flux:button variant="primary" icon="plus" wire:click="openCreateModal" class="cursor-pointer text-sm py-1.5">{{ __('Add Household Head') }}</flux:button>
+            <div class="flex flex-col sm:flex-row gap-3 items-center">
+                @if($activeTab === 'heads')
+                    <flux:button variant="primary" icon="plus" wire:click="openCreateModal" class="cursor-pointer text-sm py-1.5 w-full sm:w-auto">{{ __('Add Household Head') }}</flux:button>
+                @endif
                 <input 
                     type="text" 
                     wire:model.live="search" 
                     placeholder="Search name, email, household..."
-                    class="rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-1.5 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand text-sm"
+                    class="rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-1.5 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand text-sm w-full sm:w-auto"
                 />
                 
                 <select 
                     wire:model.live="purokFilter"
-                    class="rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-1.5 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand text-sm"
+                    class="rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-1.5 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand text-sm w-full sm:w-auto"
                 >
                     <option value="">All Puroks</option>
                     @for($i=1; $i<=8; $i++)
                         <option value="{{ $i }}">Purok {{ $i }}</option>
                     @endfor
                 </select>
-
-                <select 
-                    wire:model.live="voterFilter"
-                    class="rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-1.5 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand text-sm"
-                >
-                    <option value="">All Voters</option>
-                    <option value="registered">Registered</option>
-                    <option value="unregistered">Not Registered</option>
-                </select>
-
-                <select 
-                    wire:model.live="registrationStatusFilter"
-                    class="rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-1.5 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand text-sm"
-                >
-                    <option value="">All Statuses</option>
-                    <option value="approved">Approved</option>
-                    <option value="pending">Pending Approval</option>
-                    <option value="rejected">Rejected</option>
-                </select>
             </div>
+        </div>
+
+        <!-- Tab Controls -->
+        <div class="flex border-b border-zinc-200 dark:border-zinc-800 mb-6">
+            <button 
+                wire:click="$set('activeTab', 'pending')"
+                class="pb-3 px-4 font-medium text-sm border-b-2 transition-colors duration-150 flex items-center gap-2 {{ $activeTab === 'pending' ? 'border-brand text-brand font-semibold' : 'border-transparent text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300' }}"
+            >
+                <span>Pending Requests</span>
+                @php
+                    $pendingCount = \App\Models\Resident::where('registration_status', 'pending')->count();
+                @endphp
+                @if($pendingCount > 0)
+                    <span class="px-2 py-0.5 text-xs font-semibold rounded-full bg-brand/10 text-brand">{{ $pendingCount }}</span>
+                @endif
+            </button>
+            <button 
+                wire:click="$set('activeTab', 'heads')"
+                class="pb-3 px-4 font-medium text-sm border-b-2 transition-colors duration-150 {{ $activeTab === 'heads' ? 'border-brand text-brand font-semibold' : 'border-transparent text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300' }}"
+            >
+                Household Heads Registry
+            </button>
         </div>
 
         @if($residents->isEmpty())
@@ -107,108 +113,130 @@
         @else
             <div class="overflow-x-auto">
                 <table class="w-full text-left text-sm text-zinc-700 dark:text-zinc-300">
-                    <thead>
-                        <tr class="border-b border-zinc-200 dark:border-zinc-800 text-zinc-500 text-xs font-semibold uppercase">
-                            <th class="py-3 px-4 cursor-pointer" wire:click="sortBy('last_name')">Resident
-                                @if($sortField === 'last_name')
-                                    <span class="ml-1 text-xs">{{ $sortDirection === 'asc' ? '▲' : '▼' }}</span>
-                                @endif
-                            </th>
-                            <th class="py-3 px-4 cursor-pointer" wire:click="sortBy('purok_no')">Purok
-                                @if($sortField === 'purok_no')
-                                    <span class="ml-1 text-xs">{{ $sortDirection === 'asc' ? '▲' : '▼' }}</span>
-                                @endif
-                            </th>
-                            <th class="py-3 px-4 cursor-pointer" wire:click="sortBy('household_no')">Household No.
-                                @if($sortField === 'household_no')
-                                    <span class="ml-1 text-xs">{{ $sortDirection === 'asc' ? '▲' : '▼' }}</span>
-                                @endif
-                            </th>
-                            <th class="py-3 px-4">Relationship</th>
-                            <th class="py-3 px-4 text-center cursor-pointer" wire:click="sortBy('age')">Age / Sex
-                                @if($sortField === 'age')
-                                    <span class="ml-1 text-xs">{{ $sortDirection === 'asc' ? '▲' : '▼' }}</span>
-                                @endif
-                            </th>
-                            <th class="py-3 px-4 text-center">Voter?</th>
-                            <th class="py-3 px-4 cursor-pointer" wire:click="sortBy('email_address')">Email
-                                @if($sortField === 'email_address')
-                                    <span class="ml-1 text-xs">{{ $sortDirection === 'asc' ? '▲' : '▼' }}</span>
-                                @endif
-                             </th>
-                             <th class="py-3 px-4 text-center">Status / Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">
-                        @foreach($residents as $res)
-                            <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition">
-                                <td class="py-3 px-4">
-                                    <span class="text-zinc-900 dark:text-white font-medium">{{ $res->full_name }}</span>
-                                    <div class="text-[10px] text-zinc-500 dark:text-zinc-400">Pop. No: {{ $res->population_no ?? 'N/A' }}</div>
-                                </td>
-                                <td class="py-3 px-4 text-zinc-900 dark:text-white">
-                                    Purok {{ $res->household->purok_no ?? 'N/A' }}
-                                </td>
-                                <td class="py-3 px-4 font-mono text-xs">
-                                    {{ $res->household->household_no ?? 'N/A' }}
-                                </td>
-                                <td class="py-3 px-4 capitalize text-xs">
-                                    {{ strtolower($res->relationship_to_head ?? 'Member') }}
-                                </td>
-                                <td class="py-3 px-4 text-center">
-                                    <span class="text-zinc-900 dark:text-white font-medium">{{ $res->age ?? 'N/A' }}</span>
-                                    <span class="text-zinc-400 dark:text-zinc-600 text-xs">/ {{ $res->sex }}</span>
-                                </td>
-                                <td class="py-3 px-4 text-center">
-                                    @if(strtoupper($res->registered_national_voter ?? '') === 'Y' || strtoupper($res->resident_voter ?? '') === 'Y')
-                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 dark:bg-emerald-950/20 dark:text-emerald-400 dark:border-emerald-900/50">
-                                            Yes
-                                        </span>
-                                    @else
-                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-zinc-50 text-zinc-500 border border-zinc-200 dark:bg-zinc-800/40 dark:text-zinc-400 dark:border-zinc-700/50">
-                                            No
-                                        </span>
+                    @if($activeTab === 'pending')
+                        <thead>
+                            <tr class="border-b border-zinc-200 dark:border-zinc-800 text-zinc-500 text-xs font-semibold uppercase">
+                                <th class="py-3 px-4 cursor-pointer" wire:click="sortBy('last_name')">Resident Name
+                                    @if($sortField === 'last_name')
+                                        <span class="ml-1 text-xs">{{ $sortDirection === 'asc' ? '▲' : '▼' }}</span>
                                     @endif
-                                </td>
-                                <td class="py-3 px-4 text-xs">
-                                    {{ $res->email_address ?? 'N/A' }}
-                                </td>
-                                <td class="py-3 px-4 text-center">
-                                    @if(($res->registration_status ?? 'approved') === 'pending')
+                                </th>
+                                <th class="py-3 px-4">Relationship to Head</th>
+                                <th class="py-3 px-4 cursor-pointer" wire:click="sortBy('purok_no')">Purok
+                                    @if($sortField === 'purok_no')
+                                        <span class="ml-1 text-xs">{{ $sortDirection === 'asc' ? '▲' : '▼' }}</span>
+                                    @endif
+                                </th>
+                                <th class="py-3 px-4 cursor-pointer" wire:click="sortBy('household_no')">Household No.
+                                    @if($sortField === 'household_no')
+                                        <span class="ml-1 text-xs">{{ $sortDirection === 'asc' ? '▲' : '▼' }}</span>
+                                    @endif
+                                </th>
+                                <th class="py-3 px-4 text-center cursor-pointer" wire:click="sortBy('age')">Age / Sex
+                                    @if($sortField === 'age')
+                                        <span class="ml-1 text-xs">{{ $sortDirection === 'asc' ? '▲' : '▼' }}</span>
+                                    @endif
+                                </th>
+                                <th class="py-3 px-4">Contact Info</th>
+                                <th class="py-3 px-4 text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">
+                            @foreach($residents as $res)
+                                <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition">
+                                    <td class="py-3 px-4">
+                                        <span class="text-zinc-900 dark:text-white font-medium">{{ $res->full_name }}</span>
+                                    </td>
+                                    <td class="py-3 px-4 capitalize text-xs">
+                                        {{ strtolower($res->relationship_to_head ?? 'Member') }}
+                                    </td>
+                                    <td class="py-3 px-4 text-zinc-900 dark:text-white">
+                                        Purok {{ $res->household->purok_no ?? 'N/A' }}
+                                    </td>
+                                    <td class="py-3 px-4 font-mono text-xs">
+                                        {{ $res->household->household_no ?? 'N/A' }}
+                                    </td>
+                                    <td class="py-3 px-4 text-center">
+                                        <span class="text-zinc-900 dark:text-white font-medium">{{ $res->age ?? 'N/A' }}</span>
+                                        <span class="text-zinc-400 dark:text-zinc-600 text-xs">/ {{ $res->sex }}</span>
+                                    </td>
+                                    <td class="py-3 px-4 text-xs">
+                                        <div class="text-zinc-900 dark:text-white font-medium">{{ $res->email_address ?? 'No Email' }}</div>
+                                        <div class="text-zinc-500 dark:text-zinc-400">{{ $res->mobile_number ?? 'No Mobile' }}</div>
+                                    </td>
+                                    <td class="py-3 px-4 text-center">
                                         <div class="flex items-center justify-center gap-2">
                                             <button 
                                                 wire:click="approveResident({{ $res->id }})"
-                                                class="px-2 py-1 bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-semibold rounded cursor-pointer transition"
+                                                class="px-3 py-1 bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-semibold rounded cursor-pointer transition shadow-sm"
                                             >
                                                 Approve
                                             </button>
                                             <button 
                                                 wire:click="startReject({{ $res->id }})"
-                                                class="px-2 py-1 bg-red-500 hover:bg-red-600 text-white text-xs font-semibold rounded cursor-pointer transition"
+                                                class="px-3 py-1 bg-red-500 hover:bg-red-600 text-white text-xs font-semibold rounded cursor-pointer transition shadow-sm"
                                             >
                                                 Reject
                                             </button>
                                         </div>
-                                    @elseif($res->registration_status === 'approved')
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-50 text-emerald-800 border border-emerald-200 dark:bg-emerald-950/30 dark:text-emerald-400 dark:border-emerald-900/50">
-                                            Approved
-                                        </span>
-                                    @elseif($res->registration_status === 'rejected')
-                                        <div class="inline-flex flex-col items-center">
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-50 text-red-800 border border-red-200 dark:bg-red-950/30 dark:text-red-400 dark:border-red-900/50">
-                                                Rejected
-                                            </span>
-                                            @if($res->rejection_reason)
-                                                <span class="text-[10px] text-red-500 dark:text-red-400 mt-1 max-w-[120px] truncate" title="{{ $res->rejection_reason }}">
-                                                    Reason: {{ $res->rejection_reason }}
-                                                </span>
-                                            @endif
-                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    @else
+                        <thead>
+                            <tr class="border-b border-zinc-200 dark:border-zinc-800 text-zinc-500 text-xs font-semibold uppercase">
+                                <th class="py-3 px-4 cursor-pointer" wire:click="sortBy('last_name')">Household Head
+                                    @if($sortField === 'last_name')
+                                        <span class="ml-1 text-xs">{{ $sortDirection === 'asc' ? '▲' : '▼' }}</span>
                                     @endif
-                                </td>
+                                </th>
+                                <th class="py-3 px-4 cursor-pointer" wire:click="sortBy('household_no')">Household No.
+                                    @if($sortField === 'household_no')
+                                        <span class="ml-1 text-xs">{{ $sortDirection === 'asc' ? '▲' : '▼' }}</span>
+                                    @endif
+                                </th>
+                                <th class="py-3 px-4 cursor-pointer" wire:click="sortBy('purok_no')">Purok
+                                    @if($sortField === 'purok_no')
+                                        <span class="ml-1 text-xs">{{ $sortDirection === 'asc' ? '▲' : '▼' }}</span>
+                                    @endif
+                                </th>
+                                <th class="py-3 px-4">Address</th>
+                                <th class="py-3 px-4 text-center cursor-pointer" wire:click="sortBy('age')">Age / Sex
+                                    @if($sortField === 'age')
+                                        <span class="ml-1 text-xs">{{ $sortDirection === 'asc' ? '▲' : '▼' }}</span>
+                                    @endif
+                                </th>
+                                <th class="py-3 px-4">Contact Info</th>
                             </tr>
-                        @endforeach
-                    </tbody>
+                        </thead>
+                        <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">
+                            @foreach($residents as $res)
+                                <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition">
+                                    <td class="py-3 px-4">
+                                        <span class="text-zinc-900 dark:text-white font-medium">{{ $res->full_name }}</span>
+                                    </td>
+                                    <td class="py-3 px-4 font-mono text-xs">
+                                        {{ $res->household->household_no ?? 'N/A' }}
+                                    </td>
+                                    <td class="py-3 px-4 text-zinc-900 dark:text-white">
+                                        Purok {{ $res->household->purok_no ?? 'N/A' }}
+                                    </td>
+                                    <td class="py-3 px-4 text-xs">
+                                        {{ $res->household->address ?? 'N/A' }}
+                                    </td>
+                                    <td class="py-3 px-4 text-center">
+                                        <span class="text-zinc-900 dark:text-white font-medium">{{ $res->age ?? 'N/A' }}</span>
+                                        <span class="text-zinc-400 dark:text-zinc-600 text-xs">/ {{ $res->sex }}</span>
+                                    </td>
+                                    <td class="py-3 px-4 text-xs">
+                                        <div class="text-zinc-900 dark:text-white font-medium">{{ $res->email_address ?? 'No Email' }}</div>
+                                        <div class="text-zinc-500 dark:text-zinc-400">{{ $res->mobile_number ?? 'No Mobile' }}</div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    @endif
                 </table>
             </div>
 

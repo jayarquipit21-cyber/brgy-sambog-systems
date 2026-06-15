@@ -22,11 +22,11 @@ class MyAppointments extends Component
             ->where('user_id', Auth::id())
             ->firstOrFail();
 
-        if ($appointment->status === 'pending') {
+        if ($appointment->status === 'approved-pending') {
             $appointment->update(['status' => 'cancelled']);
-            Flux::toast(variant: 'success', text: __('Appointment has been cancelled.'));
+            Flux::toast(variant: 'success', text: __('Request has been cancelled.'));
         } else {
-            Flux::toast(variant: 'danger', text: __('Only pending appointments can be cancelled.'));
+            Flux::toast(variant: 'danger', text: __('Only pending requests can be cancelled.'));
         }
     }
 

@@ -20,7 +20,7 @@
 
                 @if(auth()->user()->isAdmin())
                     <flux:navbar.item icon="users" :href="route('rbi')" :current="request()->routeIs('rbi')" wire:navigate>
-                        {{ __('RBI Registry') }}
+                        {{ __('Population Management') }}
                     </flux:navbar.item>
                     <flux:navbar.item icon="calendar" :href="route('appointments')" :current="request()->routeIs('appointments')" wire:navigate>
                         {{ __('Manage Appointments') }}
@@ -96,7 +96,7 @@
 
                     @if(auth()->user()->isAdmin())
                         <flux:sidebar.item icon="users" :href="route('rbi')" :current="request()->routeIs('rbi')" wire:navigate>
-                            {{ __('RBI Registry') }}
+                            {{ __('Population Management') }}
                         </flux:sidebar.item>
                         <flux:sidebar.item icon="calendar" :href="route('appointments')" :current="request()->routeIs('appointments')" wire:navigate>
                             {{ __('Manage Appointments') }}

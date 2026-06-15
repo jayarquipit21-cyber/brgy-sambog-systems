@@ -18,9 +18,7 @@ class ManageRbi extends Component
 
     public string $purokFilter = '';
 
-    public string $voterFilter = '';
-
-    public string $registrationStatusFilter = 'approved';
+    public string $activeTab = 'pending';
 
     public bool $showRejectModal = false;
 
@@ -191,6 +189,11 @@ class ManageRbi extends Component
         $this->resetPage();
     }
 
+    public function updatingActiveTab(): void
+    {
+        $this->resetPage();
+    }
+
     public function updatingSortField(): void
     {
         $this->resetPage();
@@ -211,19 +214,19 @@ class ManageRbi extends Component
         }
     }
 
-    public function updatingVoterFilter(): void
-    {
-        $this->resetPage();
-    }
-
-    public function updatingRegistrationStatusFilter(): void
-    {
-        $this->resetPage();
-    }
-
     public function render()
     {
         $query = Resident::with('household');
+
+        if ($this->activeTab === 'pending') {
+            $query->where('residents.registration_status', 'pending');
+        } else {
+            $query->where('residents.registration_status', 'approved')
+                ->where(function ($q) {
+                    $q->whereRaw('lower(residents.relationship_to_head) = ?', ['household head'])
+                      ->orWhereRaw('lower(residents.relationship_to_head) = ?', ['hh']);
+                });
+        }
 
         // Apply sorting
         if (in_array($this->sortField, ['household_no', 'purok_no'])) {
@@ -232,16 +235,16 @@ class ManageRbi extends Component
                 ->select('residents.*')
                 ->orderBy('households.'.$this->sortField, $this->sortDirection);
         } else {
-            $query = $query->orderBy($this->sortField ?: 'last_name', $this->sortDirection)
-                ->orderBy('first_name', 'asc');
+            $query = $query->orderBy('residents.' . ($this->sortField ?: 'last_name'), $this->sortDirection)
+                ->orderBy('residents.first_name', 'asc');
         }
 
         if ($this->search) {
             $query->where(function ($q) {
-                $q->where('first_name', 'like', '%'.$this->search.'%')
-                    ->orWhere('last_name', 'like', '%'.$this->search.'%')
-                    ->orWhere('middle_name', 'like', '%'.$this->search.'%')
-                    ->orWhere('email_address', 'like', '%'.$this->search.'%')
+                $q->where('residents.first_name', 'like', '%'.$this->search.'%')
+                    ->orWhere('residents.last_name', 'like', '%'.$this->search.'%')
+                    ->orWhere('residents.middle_name', 'like', '%'.$this->search.'%')
+                    ->orWhere('residents.email_address', 'like', '%'.$this->search.'%')
                     ->orWhereHas('household', function ($hq) {
                         $hq->where('household_no', 'like', '%'.$this->search.'%');
                     });
@@ -252,26 +255,6 @@ class ManageRbi extends Component
             $query->whereHas('household', function ($hq) {
                 $hq->where('purok_no', $this->purokFilter);
             });
-        }
-
-        if ($this->voterFilter) {
-            if ($this->voterFilter === 'registered') {
-                $query->where(function ($q) {
-                    $q->where('registered_national_voter', 'Y')
-                        ->orWhere('registered_sk_voter', 'Y')
-                        ->orWhere('resident_voter', 'Y');
-                });
-            } elseif ($this->voterFilter === 'unregistered') {
-                $query->where(function ($q) {
-                    $q->where('registered_national_voter', '!=', 'Y')
-                        ->where('registered_sk_voter', '!=', 'Y')
-                        ->where('resident_voter', '!=', 'Y');
-                });
-            }
-        }
-
-        if ($this->registrationStatusFilter) {
-            $query->where('registration_status', $this->registrationStatusFilter);
         }
 
         // Calculate simple stats for widgets (using only approved residents)

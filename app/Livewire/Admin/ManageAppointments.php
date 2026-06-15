@@ -3,7 +3,10 @@
 namespace App\Livewire\Admin;
 
 use App\Models\Appointment;
+use App\Models\AppointmentDateClosure;
+use App\Services\HolidaysService;
 use Flux\Flux;
+use Illuminate\Support\Facades\Schema;
 use Livewire\Component;
 
 class ManageAppointments extends Component
@@ -12,11 +15,62 @@ class ManageAppointments extends Component
 
     public string $statusFilter = '';
 
-    public function approve(int $id): void
+    // Modal/Scheduling state
+    public ?int $selectedAppointmentId = null;
+    public string $redemptionDate = '';
+    public string $redemptionTime = '';
+    public bool $showApproveModal = false;
+
+    public function startApprove(int $id): void
     {
-        $appointment = Appointment::findOrFail($id);
-        $appointment->update(['status' => 'approved']);
-        Flux::toast(variant: 'success', text: __('Appointment approved successfully!'));
+        $this->selectedAppointmentId = $id;
+        $this->redemptionDate = now()->toDateString();
+        $this->redemptionTime = '09:00 AM - 10:00 AM';
+        $this->showApproveModal = true;
+    }
+
+    public function confirmApprove(): void
+    {
+        $this->validate([
+            'redemptionDate' => [
+                'required',
+                'date',
+                function ($attribute, $value, $fail) {
+                    if (Schema::hasTable('appointment_date_closures')) {
+                        $dateClosure = AppointmentDateClosure::where('date', $value)->first();
+                        if ($dateClosure) {
+                            $reason = $dateClosure->reason ? ' ('.$dateClosure->reason.')' : '';
+                            $fail(__('The office is closed on this date:reason', ['reason' => $reason]));
+                            return;
+                        }
+                    }
+
+                    $holidayName = HolidaysService::isHoliday($value);
+                    if ($holidayName) {
+                        $fail(__('This date is a national holiday: :holiday', ['holiday' => $holidayName]));
+                        return;
+                    }
+
+                    $dayOfWeek = date('N', strtotime($value));
+                    if ($dayOfWeek >= 6) {
+                        $fail(__('The office is closed on weekends.'));
+                    }
+                }
+            ],
+            'redemptionTime' => 'required|string',
+        ]);
+
+        $appointment = Appointment::findOrFail($this->selectedAppointmentId);
+        $appointment->update([
+            'status' => 'approved',
+            'appointment_date' => $this->redemptionDate,
+            'appointment_time' => $this->redemptionTime,
+        ]);
+
+        $this->showApproveModal = false;
+        $this->selectedAppointmentId = null;
+
+        Flux::toast(variant: 'success', text: __('Appointment approved and scheduled successfully!'));
     }
 
     public function complete(int $id): void
@@ -46,8 +100,8 @@ class ManageAppointments extends Component
     public function render()
     {
         $query = Appointment::with('user.resident')
-            ->orderBy('appointment_date', 'asc')
-            ->orderBy('appointment_time', 'asc');
+            ->orderByRaw("CASE WHEN status = 'approved-pending' THEN 0 ELSE 1 END")
+            ->orderBy('created_at', 'desc');
 
         if ($this->statusFilter) {
             $query->where('status', $this->statusFilter);

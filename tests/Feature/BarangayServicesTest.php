@@ -89,17 +89,12 @@ class BarangayServicesTest extends TestCase
 
     public function test_residents_can_book_appointments(): void
     {
-        Carbon::setTestNow('2027-01-01'); // Pin fake "today" for after_or_equal:today
-
         $user = User::factory()->create(['role' => 'resident']);
         $this->actingAs($user);
 
-        // Test the component's own validation rules directly (avoids Livewire 4 lifecycle quirks)
         $component = new BookAppointment;
         $validator = Validator::make(
             [
-                'appointment_date' => '2027-03-15', // Monday, no PH holiday
-                'appointment_time' => '10:00 AM',
                 'purpose' => 'Barangay Clearance Request',
             ],
             $component->rules()
@@ -110,22 +105,19 @@ class BarangayServicesTest extends TestCase
             'Expected no validation errors but got: '.json_encode($validator->errors()->toArray())
         );
 
-        // Confirm an appointment can actually be persisted to the database
-        Appointment::create([
-            'user_id' => $user->id,
-            'appointment_date' => '2027-03-15',
-            'appointment_time' => '10:00 AM',
-            'purpose' => 'Barangay Clearance Request',
-            'status' => 'pending',
-        ]);
+        // Confirm booking works through Livewire component logic
+        Livewire::test(BookAppointment::class)
+            ->set('purpose', 'Barangay Clearance Request')
+            ->call('book')
+            ->assertHasNoErrors();
 
         $this->assertDatabaseHas('appointments', [
             'user_id' => $user->id,
             'purpose' => 'Barangay Clearance Request',
-            'status' => 'pending',
+            'status' => 'approved-pending',
+            'appointment_date' => null,
+            'appointment_time' => null,
         ]);
-
-        Carbon::setTestNow(); // Reset
     }
 
     public function test_admin_can_approve_appointments(): void
@@ -135,18 +127,25 @@ class BarangayServicesTest extends TestCase
 
         $appointment = Appointment::create([
             'user_id' => $resident->id,
-            'appointment_date' => now()->addDays(2)->format('Y-m-d'),
-            'appointment_time' => '10:00 AM',
             'purpose' => 'Indigency Certificate Request',
-            'status' => 'pending',
+            'status' => 'approved-pending',
+            'appointment_date' => null,
+            'appointment_time' => null,
         ]);
 
         $this->actingAs($admin);
 
         Livewire::test(ManageAppointments::class)
-            ->call('approve', $appointment->id);
+            ->call('startApprove', $appointment->id)
+            ->set('redemptionDate', '2026-06-19')
+            ->set('redemptionTime', '10:00 AM - 11:00 AM')
+            ->call('confirmApprove')
+            ->assertHasNoErrors();
 
-        $this->assertEquals('approved', $appointment->fresh()->status);
+        $appointment = $appointment->fresh();
+        $this->assertEquals('approved', $appointment->status);
+        $this->assertEquals('2026-06-19', $appointment->appointment_date->toDateString());
+        $this->assertEquals('10:00 AM - 11:00 AM', $appointment->appointment_time);
     }
 
     public function test_guests_cannot_access_any_authenticated_routes(): void
