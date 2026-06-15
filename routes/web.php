@@ -35,7 +35,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             if ($user->isAdmin()) {
                 $data['totalHouseholds'] = Household::count();
                 $data['totalResidents'] = Resident::approved()->count();
-                $data['pendingAppointments'] = Appointment::where('status', 'approved-pending')->count();
+                $data['pendingAppointments'] = Appointment::where('status', 'pending')->count();
                 $data['recentAppointments'] = Appointment::with('user')->latest()->take(5)->get();
 
                 // Compute residents per purok (joins households -> residents)
@@ -152,7 +152,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 ? $data['household']->residents()->orderBy('relationship_to_head')->get()
                 : collect();
             $data['upcomingAppointments'] = Appointment::where('user_id', $user->id)
-                ->whereIn('status', ['approved-pending', 'approved'])
+                ->whereIn('status', ['pending', 'approved-pending', 'approved'])
                 ->orderByRaw("CASE WHEN appointment_date IS NULL THEN 0 ELSE 1 END")
                 ->orderBy('appointment_date')
                 ->take(5)
@@ -165,7 +165,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             $resident = $user->resident;
             $data['residentProfile'] = $resident;
             $data['upcomingAppointments'] = Appointment::where('user_id', $user->id)
-                ->whereIn('status', ['approved-pending', 'approved'])
+                ->whereIn('status', ['pending', 'approved-pending', 'approved'])
                 ->orderByRaw("CASE WHEN appointment_date IS NULL THEN 0 ELSE 1 END")
                 ->orderBy('appointment_date')
                 ->take(5)

@@ -16,6 +16,7 @@
                 class="rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-1.5 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand text-sm"
             >
                 <option value="">All Statuses</option>
+                <option value="pending">Pending Review</option>
                 <option value="approved-pending">Approved-Pending</option>
                 <option value="approved">Approved</option>
                 <option value="completed">Completed</option>
@@ -59,6 +60,8 @@
                                 @if($apt->appointment_date)
                                     <div class="font-medium text-zinc-900 dark:text-white">{{ $apt->appointment_date->format('M d, Y') }}</div>
                                     <div class="text-xs text-zinc-500 dark:text-zinc-400">{{ $apt->appointment_time }}</div>
+                                @elseif($apt->status === 'pending')
+                                    <span class="text-xs text-zinc-500 dark:text-zinc-450 font-semibold bg-zinc-100 dark:bg-zinc-800 px-2 py-0.5 rounded">Pending Review</span>
                                 @else
                                     <span class="text-xs text-amber-600 dark:text-amber-400 font-semibold bg-amber-50 dark:bg-amber-950/20 px-2 py-0.5 rounded">Pending Kapitan Signature</span>
                                 @endif
@@ -67,7 +70,11 @@
                                 {{ $apt->purpose }}
                             </td>
                             <td class="py-3 px-4 text-center">
-                                @if($apt->status === 'approved-pending')
+                                @if($apt->status === 'pending')
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-zinc-100 text-zinc-800 border border-zinc-200 dark:bg-zinc-850/40 dark:text-zinc-300 dark:border-zinc-700/50">
+                                        Pending Review
+                                    </span>
+                                @elseif($apt->status === 'approved-pending')
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-50 text-amber-800 border border-amber-200 dark:bg-amber-950/30 dark:text-amber-400 dark:border-amber-900/50">
                                         Approved-Pending
                                     </span>
@@ -80,13 +87,26 @@
                                         Completed
                                     </span>
                                 @else
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-zinc-100 text-zinc-800 border border-zinc-200 dark:bg-zinc-800/40 dark:text-zinc-400 dark:border-zinc-700/50">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-50 text-red-800 border border-red-200 dark:bg-red-950/30 dark:text-red-400 dark:border-red-900/50">
                                         Cancelled
                                     </span>
                                 @endif
                             </td>
-                            <td class="py-3 px-4 text-right space-x-2">
-                                @if($apt->status === 'approved-pending')
+                            <td class="py-3 px-4 text-right">
+                                @if($apt->status === 'pending')
+                                    <button 
+                                        wire:click="markApprovedPending({{ $apt->id }})"
+                                        class="text-xs text-amber-600 hover:text-amber-800 font-semibold cursor-pointer"
+                                    >
+                                        Send for Signature
+                                    </button>
+                                    <button 
+                                        wire:click="reject({{ $apt->id }})"
+                                        class="text-xs text-red-500 hover:text-red-700 font-semibold cursor-pointer ml-2"
+                                    >
+                                        Reject
+                                    </button>
+                                @elseif($apt->status === 'approved-pending')
                                     <button 
                                         wire:click="startApprove({{ $apt->id }})"
                                         class="text-xs text-emerald-500 hover:text-emerald-700 font-semibold cursor-pointer"
@@ -95,7 +115,7 @@
                                     </button>
                                     <button 
                                         wire:click="reject({{ $apt->id }})"
-                                        class="text-xs text-red-500 hover:text-red-700 font-semibold cursor-pointer"
+                                        class="text-xs text-red-500 hover:text-red-700 font-semibold cursor-pointer ml-2"
                                     >
                                         Reject
                                     </button>
@@ -109,7 +129,7 @@
                                 @else
                                     <span class="text-xs text-zinc-400 dark:text-zinc-600">-</span>
                                 @endif
-                                @if($apt->status !== 'approved-pending')
+                                @if(!in_array($apt->status, ['pending', 'approved-pending', 'approved']))
                                     <button 
                                         wire:click="delete({{ $apt->id }})"
                                         class="text-xs text-red-500 hover:text-red-700 font-semibold ml-2"

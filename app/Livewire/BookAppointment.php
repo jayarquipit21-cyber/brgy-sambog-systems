@@ -30,14 +30,14 @@ class BookAppointment extends Component
         Appointment::create([
             'user_id' => Auth::id(),
             'purpose' => $this->purpose,
-            'status' => 'approved-pending',
+            'status' => 'pending',
             'appointment_date' => null,
             'appointment_time' => null,
         ]);
 
         $this->reset(['purpose']);
 
-        Flux::toast(variant: 'success', text: __('Document request submitted successfully! Your request is pending review and Kapitan\'s signature.'));
+        Flux::toast(variant: 'success', text: __('Document request submitted successfully! Your request is pending review.'));
 
         $this->dispatch('appointment-booked');
     }

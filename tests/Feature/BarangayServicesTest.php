@@ -114,7 +114,7 @@ class BarangayServicesTest extends TestCase
         $this->assertDatabaseHas('appointments', [
             'user_id' => $user->id,
             'purpose' => 'Barangay Clearance Request',
-            'status' => 'approved-pending',
+            'status' => 'pending',
             'appointment_date' => null,
             'appointment_time' => null,
         ]);
@@ -128,13 +128,22 @@ class BarangayServicesTest extends TestCase
         $appointment = Appointment::create([
             'user_id' => $resident->id,
             'purpose' => 'Indigency Certificate Request',
-            'status' => 'approved-pending',
+            'status' => 'pending',
             'appointment_date' => null,
             'appointment_time' => null,
         ]);
 
         $this->actingAs($admin);
 
+        // Step 1: Admin transitions from pending to approved-pending
+        Livewire::test(ManageAppointments::class)
+            ->call('markApprovedPending', $appointment->id)
+            ->assertHasNoErrors();
+
+        $appointment = $appointment->fresh();
+        $this->assertEquals('approved-pending', $appointment->status);
+
+        // Step 2: Admin schedules and approves the appointment
         Livewire::test(ManageAppointments::class)
             ->call('startApprove', $appointment->id)
             ->set('redemptionDate', '2026-06-19')

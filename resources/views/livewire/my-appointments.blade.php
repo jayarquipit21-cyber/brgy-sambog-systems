@@ -31,6 +31,8 @@
                             <td class="py-3 px-4 font-medium text-zinc-900 dark:text-white">
                                 @if($apt->appointment_date)
                                     {{ $apt->appointment_date->format('F d, Y') }}
+                                @elseif($apt->status === 'pending')
+                                    <span class="text-xs text-zinc-500 dark:text-zinc-450 font-semibold bg-zinc-100 dark:bg-zinc-800 px-2 py-0.5 rounded">Pending Review</span>
                                 @else
                                     <span class="text-xs text-amber-600 dark:text-amber-400 font-semibold bg-amber-50 dark:bg-amber-950/20 px-2 py-0.5 rounded">Pending Kapitan Signature</span>
                                 @endif
@@ -42,7 +44,11 @@
                                 {{ $apt->purpose }}
                             </td>
                             <td class="py-3 px-4 text-center">
-                                @if($apt->status === 'approved-pending')
+                                @if($apt->status === 'pending')
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-zinc-100 text-zinc-800 border border-zinc-200 dark:bg-zinc-850/40 dark:text-zinc-300 dark:border-zinc-700/50">
+                                        Pending Review
+                                    </span>
+                                @elseif($apt->status === 'approved-pending')
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-50 text-amber-800 border border-amber-200 dark:bg-amber-950/30 dark:text-amber-400 dark:border-amber-900/50">
                                         Approved-Pending
                                     </span>
@@ -61,7 +67,7 @@
                                 @endif
                             </td>
                             <td class="py-3 px-4 text-right">
-                                @if($apt->status === 'approved-pending')
+                                @if(in_array($apt->status, ['pending', 'approved-pending']))
                                     <button 
                                         wire:click="cancel({{ $apt->id }})"
                                         wire:confirm="Are you sure you want to cancel this request?"

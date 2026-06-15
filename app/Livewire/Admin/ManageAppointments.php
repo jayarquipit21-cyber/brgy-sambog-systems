@@ -73,6 +73,13 @@ class ManageAppointments extends Component
         Flux::toast(variant: 'success', text: __('Appointment approved and scheduled successfully!'));
     }
 
+    public function markApprovedPending(int $id): void
+    {
+        $appointment = Appointment::findOrFail($id);
+        $appointment->update(['status' => 'approved-pending']);
+        Flux::toast(variant: 'success', text: __('Request approved for Kapitan\'s signature (Approved-Pending).'));
+    }
+
     public function complete(int $id): void
     {
         $appointment = Appointment::findOrFail($id);
@@ -100,7 +107,11 @@ class ManageAppointments extends Component
     public function render()
     {
         $query = Appointment::with('user.resident')
-            ->orderByRaw("CASE WHEN status = 'approved-pending' THEN 0 ELSE 1 END")
+            ->orderByRaw("CASE 
+                WHEN status = 'pending' THEN 0 
+                WHEN status = 'approved-pending' THEN 1 
+                ELSE 2 
+            END")
             ->orderBy('created_at', 'desc');
 
         if ($this->statusFilter) {
