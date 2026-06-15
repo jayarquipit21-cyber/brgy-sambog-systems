@@ -56,7 +56,7 @@ class HealthDashboard extends Component
     public function render()
     {
         // Enforce column selection strictly in the database query layer!
-        $query = Resident::select($this->healthRelatedColumns)
+        $query = Resident::approved()->select($this->healthRelatedColumns)
             ->whereNotNull('health_condition')
             ->where('health_condition', '!=', '')
             ->orderBy('age', 'asc');
@@ -88,12 +88,12 @@ class HealthDashboard extends Component
 
         // Generate age-dynamic aggregates for widgets
         $stats = [
-            'total_cases' => Resident::whereNotNull('health_condition')->where('health_condition', '!=', '')->count(),
-            'pediatric_cases' => Resident::where('age', '<=', 12)->whereNotNull('health_condition')->where('health_condition', '!=', '')->count(),
-            'youth_cases' => Resident::whereBetween('age', [13, 24])->whereNotNull('health_condition')->where('health_condition', '!=', '')->count(),
-            'adult_cases' => Resident::whereBetween('age', [25, 59])->whereNotNull('health_condition')->where('health_condition', '!=', '')->count(),
-            'senior_cases' => Resident::where('age', '>=', 60)->whereNotNull('health_condition')->where('health_condition', '!=', '')->count(),
-            'fully_vaccinated' => Resident::where('fully_vaccinated', 'Y')->count(),
+            'total_cases' => Resident::approved()->whereNotNull('health_condition')->where('health_condition', '!=', '')->count(),
+            'pediatric_cases' => Resident::approved()->where('age', '<=', 12)->whereNotNull('health_condition')->where('health_condition', '!=', '')->count(),
+            'youth_cases' => Resident::approved()->whereBetween('age', [13, 24])->whereNotNull('health_condition')->where('health_condition', '!=', '')->count(),
+            'adult_cases' => Resident::approved()->whereBetween('age', [25, 59])->whereNotNull('health_condition')->where('health_condition', '!=', '')->count(),
+            'senior_cases' => Resident::approved()->where('age', '>=', 60)->whereNotNull('health_condition')->where('health_condition', '!=', '')->count(),
+            'fully_vaccinated' => Resident::approved()->where('fully_vaccinated', 'Y')->count(),
         ];
 
         return view('livewire.health.health-dashboard', [

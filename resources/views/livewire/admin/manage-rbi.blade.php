@@ -84,6 +84,16 @@
                     <option value="registered">Registered</option>
                     <option value="unregistered">Not Registered</option>
                 </select>
+
+                <select 
+                    wire:model.live="registrationStatusFilter"
+                    class="rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-1.5 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand text-sm"
+                >
+                    <option value="">All Statuses</option>
+                    <option value="approved">Approved</option>
+                    <option value="pending">Pending Approval</option>
+                    <option value="rejected">Rejected</option>
+                </select>
             </div>
         </div>
 
@@ -125,7 +135,8 @@
                                 @if($sortField === 'email_address')
                                     <span class="ml-1 text-xs">{{ $sortDirection === 'asc' ? '▲' : '▼' }}</span>
                                 @endif
-                            </th>
+                             </th>
+                             <th class="py-3 px-4 text-center">Status / Actions</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">
@@ -161,6 +172,39 @@
                                 </td>
                                 <td class="py-3 px-4 text-xs">
                                     {{ $res->email_address ?? 'N/A' }}
+                                </td>
+                                <td class="py-3 px-4 text-center">
+                                    @if(($res->registration_status ?? 'approved') === 'pending')
+                                        <div class="flex items-center justify-center gap-2">
+                                            <button 
+                                                wire:click="approveResident({{ $res->id }})"
+                                                class="px-2 py-1 bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-semibold rounded cursor-pointer transition"
+                                            >
+                                                Approve
+                                            </button>
+                                            <button 
+                                                wire:click="startReject({{ $res->id }})"
+                                                class="px-2 py-1 bg-red-500 hover:bg-red-600 text-white text-xs font-semibold rounded cursor-pointer transition"
+                                            >
+                                                Reject
+                                            </button>
+                                        </div>
+                                    @elseif($res->registration_status === 'approved')
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-50 text-emerald-800 border border-emerald-200 dark:bg-emerald-950/30 dark:text-emerald-400 dark:border-emerald-900/50">
+                                            Approved
+                                        </span>
+                                    @elseif($res->registration_status === 'rejected')
+                                        <div class="inline-flex flex-col items-center">
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-50 text-red-800 border border-red-200 dark:bg-red-950/30 dark:text-red-400 dark:border-red-900/50">
+                                                Rejected
+                                            </span>
+                                            @if($res->rejection_reason)
+                                                <span class="text-[10px] text-red-500 dark:text-red-400 mt-1 max-w-[120px] truncate" title="{{ $res->rejection_reason }}">
+                                                    Reason: {{ $res->rejection_reason }}
+                                                </span>
+                                            @endif
+                                        </div>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach
@@ -244,6 +288,27 @@
                     <flux:button variant="filled">{{ __('Cancel') }}</flux:button>
                 </flux:modal.close>
                 <flux:button variant="primary" type="submit">{{ __('Save Household Head') }}</flux:button>
+            </div>
+        </form>
+    </flux:modal>
+
+    <!-- Reject Resident Modal -->
+    <flux:modal name="reject-resident" class="max-w-md" wire:model="showRejectModal">
+        <form wire:submit="saveRejection" class="space-y-6">
+            <div>
+                <flux:heading size="lg">{{ __('Reject Resident Registration') }}</flux:heading>
+                <flux:subheading>{{ __('Please state the reason for rejecting this resident\'s registration.') }}</flux:subheading>
+            </div>
+
+            <div class="space-y-4">
+                <flux:textarea wire:model="rejectionReason" label="Rejection Reason" placeholder="e.g. Incomplete details, not part of household, etc." required />
+            </div>
+
+            <div class="flex justify-end gap-2 border-t border-zinc-200 dark:border-zinc-800 pt-4">
+                <flux:modal.close>
+                    <flux:button variant="filled">{{ __('Cancel') }}</flux:button>
+                </flux:modal.close>
+                <flux:button variant="danger" type="submit">{{ __('Reject Registration') }}</flux:button>
             </div>
         </form>
     </flux:modal>

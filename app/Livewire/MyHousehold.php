@@ -142,6 +142,7 @@ class MyHousehold extends Component
 
             'educational_status' => $this->educational_status,
             'work_status' => $this->work_status,
+            'registration_status' => 'pending',
         ]);
 
         $this->showCreateModal = false;

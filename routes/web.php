@@ -9,10 +9,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     $stats = [
-        'totalResidents' => Resident::count(),
+        'totalResidents' => Resident::approved()->count(),
         'totalHouseholds' => Household::count(),
-        'seniorCitizens' => Resident::where('age', '>=', 60)->count(),
-        'vaccinatedCount' => Resident::where('fully_vaccinated', 'Y')->count(),
+        'seniorCitizens' => Resident::approved()->where('age', '>=', 60)->count(),
+        'vaccinatedCount' => Resident::approved()->where('fully_vaccinated', 'Y')->count(),
     ];
 
     return view('welcome', $stats);
@@ -34,20 +34,23 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
             if ($user->isAdmin()) {
                 $data['totalHouseholds'] = Household::count();
-                $data['totalResidents'] = Resident::count();
+                $data['totalResidents'] = Resident::approved()->count();
                 $data['pendingAppointments'] = Appointment::where('status', 'pending')->count();
                 $data['recentAppointments'] = Appointment::with('user')->latest()->take(5)->get();
 
                 // Compute residents per purok (joins households -> residents)
                 $purokCounts = \Illuminate\Support\Facades\DB::table('households')
-                    ->join('residents', 'households.id', '=', 'residents.household_id')
+                    ->join('residents', function ($join) {
+                        $join->on('households.id', '=', 'residents.household_id')
+                             ->where('residents.registration_status', '=', 'approved');
+                    })
                     ->select('households.purok_no', \Illuminate\Support\Facades\DB::raw('count(residents.id) as cnt'))
                     ->groupBy('households.purok_no')
                     ->pluck('cnt', 'purok_no')
                     ->toArray();
 
                 // Compute gender distribution
-                $rawGenderCounts = Resident::select('sex', \Illuminate\Support\Facades\DB::raw('count(id) as cnt'))
+                $rawGenderCounts = Resident::approved()->select('sex', \Illuminate\Support\Facades\DB::raw('count(id) as cnt'))
                     ->groupBy('sex')
                     ->pluck('cnt', 'sex')
                     ->toArray();
@@ -60,7 +63,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 }
 
                 // Compute age demographics
-                $ages = Resident::pluck('age')->toArray();
+                $ages = Resident::approved()->pluck('age')->toArray();
                 $ageGroups = [
                     'Children (0-12)' => 0,
                     'Teens (13-19)' => 0,
@@ -88,11 +91,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 $data['ageLabels'] = array_keys($ageGroups);
                 $data['ageValues'] = array_values($ageGroups);
             } elseif ($user->isHealthAdmin()) {
-            $data['totalResidents'] = Resident::count();
-            $data['totalVaccinated'] = Resident::where('fully_vaccinated', 'Y')->count();
+            $data['totalResidents'] = Resident::approved()->count();
+            $data['totalVaccinated'] = Resident::approved()->where('fully_vaccinated', 'Y')->count();
             
             // Compute gender distribution for Health Admin too
-            $rawGenderCounts = Resident::select('sex', \Illuminate\Support\Facades\DB::raw('count(id) as cnt'))
+            $rawGenderCounts = Resident::approved()->select('sex', \Illuminate\Support\Facades\DB::raw('count(id) as cnt'))
                 ->groupBy('sex')
                 ->pluck('cnt', 'sex')
                 ->toArray();
@@ -107,7 +110,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             $data['genderValues'] = array_values($formattedCounts);
 
             // Compute age demographics for Health Admin
-            $ages = Resident::pluck('age')->toArray();
+            $ages = Resident::approved()->pluck('age')->toArray();
             $ageGroups = [
                 'Children (0-12)' => 0,
                 'Teens (13-19)' => 0,
@@ -126,16 +129,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
             $data['ageLabels'] = array_keys($ageGroups);
             $data['ageValues'] = array_values($ageGroups);
 
-            $data['totalWithConditions'] = Resident::whereNotNull('health_condition')
+            $data['totalWithConditions'] = Resident::approved()->whereNotNull('health_condition')
                 ->where('health_condition', '!=', '')
                 ->where('health_condition', '!=', 'None')
                 ->count();
-            $data['pediatricCases'] = Resident::where('age', '<=', 12)
+            $data['pediatricCases'] = Resident::approved()->where('age', '<=', 12)
                 ->whereNotNull('health_condition')
                 ->where('health_condition', '!=', '')
                 ->where('health_condition', '!=', 'None')
                 ->count();
-            $data['seniorCases'] = Resident::where('age', '>=', 60)
+            $data['seniorCases'] = Resident::approved()->where('age', '>=', 60)
                 ->whereNotNull('health_condition')
                 ->where('health_condition', '!=', '')
                 ->where('health_condition', '!=', 'None')

@@ -44,6 +44,7 @@
                         <th class="py-3 px-4 text-center">Age</th>
                         <th class="py-3 px-4">Birthdate</th>
                         <th class="py-3 px-4">Education Status</th>
+                        <th class="py-3 px-4 text-center">Status</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">
@@ -76,6 +77,28 @@
                             </td>
                             <td class="py-3 px-4 truncate max-w-[200px]" title="{{ $member->educational_status }}">
                                 {{ $member->educational_status ?? 'N/A' }}
+                            </td>
+                            <td class="py-3 px-4 text-center">
+                                @if(($member->registration_status ?? 'approved') === 'approved')
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-50 text-emerald-800 border border-emerald-200 dark:bg-emerald-950/30 dark:text-emerald-400 dark:border-emerald-900/50">
+                                        Approved
+                                    </span>
+                                @elseif($member->registration_status === 'pending')
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-50 text-amber-800 border border-amber-200 dark:bg-amber-950/30 dark:text-amber-400 dark:border-amber-900/50">
+                                        Pending
+                                    </span>
+                                @elseif($member->registration_status === 'rejected')
+                                    <div class="inline-flex flex-col items-center">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-50 text-red-800 border border-red-200 dark:bg-red-950/30 dark:text-red-400 dark:border-red-900/50">
+                                            Rejected
+                                        </span>
+                                        @if($member->rejection_reason)
+                                            <span class="text-[10px] text-red-500 dark:text-red-400 mt-1 max-w-[150px] truncate" title="{{ $member->rejection_reason }}">
+                                                Reason: {{ $member->rejection_reason }}
+                                            </span>
+                                        @endif
+                                    </div>
+                                @endif
                             </td>
                         </tr>
                     @endforeach

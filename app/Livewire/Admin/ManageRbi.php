@@ -20,6 +20,14 @@ class ManageRbi extends Component
 
     public string $voterFilter = '';
 
+    public string $registrationStatusFilter = 'approved';
+
+    public bool $showRejectModal = false;
+
+    public ?int $rejectingResidentId = null;
+
+    public string $rejectionReason = '';
+
     public string $sortField = 'last_name';
 
     public string $sortDirection = 'asc';
@@ -128,11 +136,48 @@ class ManageRbi extends Component
             'mobile_number' => $this->mobile_number,
             'email_address' => strtolower($this->email),
             'relationship_to_head' => 'Household Head',
+            'registration_status' => 'approved',
         ]);
 
         $this->showCreateModal = false;
 
         Flux::toast(variant: 'success', text: __('Household Head and Household created successfully.'));
+    }
+
+    public function approveResident(int $id): void
+    {
+        $resident = Resident::findOrFail($id);
+        $resident->update([
+            'registration_status' => 'approved',
+            'rejection_reason' => null,
+        ]);
+        Flux::toast(variant: 'success', text: __('Resident registration approved successfully.'));
+    }
+
+    public function startReject(int $id): void
+    {
+        $this->rejectingResidentId = $id;
+        $this->rejectionReason = '';
+        $this->showRejectModal = true;
+    }
+
+    public function saveRejection(): void
+    {
+        $this->validate([
+            'rejectionReason' => 'required|string|min:3',
+        ]);
+
+        if ($this->rejectingResidentId) {
+            $resident = Resident::findOrFail($this->rejectingResidentId);
+            $resident->update([
+                'registration_status' => 'rejected',
+                'rejection_reason' => $this->rejectionReason,
+            ]);
+            $this->showRejectModal = false;
+            $this->rejectingResidentId = null;
+            $this->rejectionReason = '';
+            Flux::toast(variant: 'success', text: __('Resident registration rejected.'));
+        }
     }
 
     // Reset pagination when search or filters change
@@ -167,6 +212,11 @@ class ManageRbi extends Component
     }
 
     public function updatingVoterFilter(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatingRegistrationStatusFilter(): void
     {
         $this->resetPage();
     }
@@ -220,12 +270,18 @@ class ManageRbi extends Component
             }
         }
 
-        // Calculate simple stats for widgets
+        if ($this->registrationStatusFilter) {
+            $query->where('registration_status', $this->registrationStatusFilter);
+        }
+
+        // Calculate simple stats for widgets (using only approved residents)
         $stats = [
-            'total' => Resident::count(),
+            'total' => Resident::approved()->count(),
             'households' => Household::count(),
-            'voters' => Resident::where('registered_national_voter', 'Y')->orWhere('resident_voter', 'Y')->count(),
-            'seniors' => Resident::where('age', '>=', 60)->count(),
+            'voters' => Resident::approved()->where(function ($q) {
+                $q->where('registered_national_voter', 'Y')->orWhere('resident_voter', 'Y');
+            })->count(),
+            'seniors' => Resident::approved()->where('age', '>=', 60)->count(),
         ];
 
         return view('livewire.admin.manage-rbi', [

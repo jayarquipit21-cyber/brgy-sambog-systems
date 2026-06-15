@@ -10,6 +10,14 @@ class Resident extends Model
     protected $guarded = [];
 
     /**
+     * Scope a query to only include approved registrations.
+     */
+    public function scopeApproved($query)
+    {
+        return $query->where('registration_status', 'approved');
+    }
+
+    /**
      * Get the household this resident belongs to.
      */
     public function household(): BelongsTo

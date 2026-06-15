@@ -80,7 +80,7 @@ class RbiDataTable extends Component
 
     public function render()
     {
-        $query = Resident::with('household');
+        $query = Resident::approved()->with('household');
 
         if (in_array($this->sortField, ['household_no', 'purok_no'])) {
             $query = $query->leftJoin('households', 'residents.household_id', '=', 'households.id')
@@ -156,10 +156,12 @@ class RbiDataTable extends Component
         }
 
         $stats = [
-            'total' => Resident::count(),
+            'total' => Resident::approved()->count(),
             'households' => Household::count(),
-            'voters' => Resident::where('registered_national_voter', 'Y')->orWhere('resident_voter', 'Y')->count(),
-            'fully_vaccinated' => Resident::where('fully_vaccinated', 'Y')->count(),
+            'voters' => Resident::approved()->where(function ($q) {
+                $q->where('registered_national_voter', 'Y')->orWhere('resident_voter', 'Y');
+            })->count(),
+            'fully_vaccinated' => Resident::approved()->where('fully_vaccinated', 'Y')->count(),
         ];
 
         return view('livewire.admin.rbi-data-table', [
