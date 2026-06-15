@@ -597,13 +597,19 @@ func handleExportCSV(projectDir string, reader *bufio.Reader) {
 }
 
 func handleImportCSV(projectDir string, reader *bufio.Reader) {
-	fmt.Printf("  %s📄 Enter file path%s %s(.csv or .xlsx)%s: ", bold(), reset(), dim(), reset())
+	fmt.Printf("  %s📄 Enter file path %s(.csv or .xlsx, press Enter for default 'RBI 2025 all.xlsx'):%s ", bold(), dim(), reset())
 	file, _ := reader.ReadString('\n')
 	file = strings.TrimSpace(file)
 
 	if file == "" {
-		printWarning("No file provided, returning to menu.")
-		return
+		defaultFile := filepath.Join(projectDir, "RBI 2025 all.xlsx")
+		if _, err := os.Stat(defaultFile); err == nil {
+			file = defaultFile
+			printInfo("Using default file: " + file)
+		} else {
+			printWarning("No file provided, and default 'RBI 2025 all.xlsx' was not found in project root. Returning to menu.")
+			return
+		}
 	}
 
 	// Check if file exists

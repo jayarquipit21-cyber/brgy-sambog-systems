@@ -66,9 +66,14 @@ class ManageRbiDatabase extends Command
     {
         $file = $this->argument('file');
         if (! $file) {
-            $this->error('Please provide a path to a CSV or XLSX file.');
+            $defaultFile = base_path('RBI 2025 all.xlsx');
+            if (file_exists($defaultFile)) {
+                $file = $defaultFile;
+            } else {
+                $this->error('Please provide a path to a CSV or XLSX file. Default "RBI 2025 all.xlsx" not found in project root.');
 
-            return 1;
+                return 1;
+            }
         }
 
         if (! file_exists($file)) {
