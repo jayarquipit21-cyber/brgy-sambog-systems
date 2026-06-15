@@ -131,120 +131,49 @@ This system handles sensitive resident data protected under the **Philippine Dat
 - **Data Minimization**: SQL queries within the health officer dashboard strictly scope out highly private fields (e.g., `income`, `registered_national_voter`) using Eloquent selections.
 - **Local Safety**: Never commit local database files (`.sqlite`), environment files (`.env`), or actual spreadsheet records containing real inhabitant data. Use synthetic data for testing.
 
-## 🧰 RBI Manager App (CLI Tool)
+## 🧰 Dedicated RBI Manager App
 
-The system includes a dedicated management tool called **RBI Manager**. This is a powerful, interactive terminal application built in Go (with scripting wrappers) that interfaces with the Laravel Artisan command `rbi:manage`. It allows administrators to view live statistics, search residents, import/export spreadsheets, and perform database management tasks safely.
+Rather than running complex terminal commands, this repository includes a dedicated, interactive desktop/terminal management application called **RBI Manager** (`tools/rbi-manager.exe` or `tools/rbi-manager/main.go`). It provides a clean, menu-driven interface to completely manage the inhabitant database.
+
+### 💻 How to Open the App
+You can launch the dedicated application directly:
+
+* **Windows**: Double-click **`tools/rbi-manager.exe`** in your file manager.
+* **Linux / macOS**: Run `./rbi-manager` in the project root folder (make executable first with `chmod +x rbi-manager`).
 
 ### 🔑 Authentication
-To prevent unauthorized access to sensitive resident data, the interactive tool requires authentication. You must log in using an account with administrative or health officer privileges:
-- **Default Admin Account**: `admin@barangay.gov` / `password`
-- **Default Health Officer**: `health@barangay.gov` / `password`
-
-### 💻 Launching the App
-Run the launcher scripts from the root directory to start the interactive dashboard:
-
-- **Windows Command Prompt**:
-  ```cmd
-  rbi-manager.bat
-  ```
-- **PowerShell**:
-  ```powershell
-  .\rbi-manager.ps1
-  ```
-- **Linux / macOS**:
-  ```bash
-  chmod +x rbi-manager
-  ./rbi-manager
-  ```
+The app requires an account with administrative or health officer privileges to secure sensitive resident records:
+* **Username (Email)**: `admin@barangay.gov` (or `health@barangay.gov`)
+* **Password**: `password`
 
 ---
 
-### 📊 Features & Menu Options
-
-When launched in **Interactive Mode**, the app provides a menu-driven interface:
-
-1. **View Statistics**: Displays a clean dashboard with total resident and household counts, gender distributions, and styled terminal bar-charts showing population breakdown by Purok zone and age demographics.
-2. **Search Residents**: Search resident records instantly by first name, last name, middle name, Purok number, or household number. Results are displayed in a formatted table (up to 50 results).
-3. **Export to CSV**: Exports the current registry to a CSV spreadsheet. By default, exports are saved to `storage/app/exports/rbi_export_[timestamp].csv` if no custom path is provided.
-4. **Import CSV / XLSX File**: Reads and imports resident data from a spreadsheet.
-   - **Default Import Option**: Press **Enter** on the file path prompt to automatically import `RBI 2025 all.xlsx` from the project root folder.
-   - **Sheet Selection**: For Excel files with multiple sheets (e.g., sheets for Purok 1 to Purok 8), the app lists all sheet names and lets you select a single sheet to import or type `all` to import all of them.
-5. **Truncate Residents**: Deletes all resident records while keeping the households table. Creates a CSV backup automatically before proceeding.
-6. **Truncate All**: Deletes all residents and households. Requires double-confirmation and creates a CSV backup automatically.
-7. **Delete Rows by Condition**: Performs targeted deletion based on a table name and a simple column condition (e.g., `purok_no=3`).
-8. **Clear Application Cache**: Runs Laravel cache flushes (config, routes, views) and restarts the queue workers so that database modifications reflect on the live website immediately.
-9. **Command History**: Shows the last 5 operations executed during the current session.
+### 📥 Importing the Updated Excel Files by Default
+To import your updated Excel registry files into the system:
+1. Ensure your spreadsheet file is named `RBI 2025 all.xlsx` and is placed in the project root folder.
+2. Launch the **RBI Manager** app.
+3. Select option **`4) Import CSV / XLSX File`** from the interactive menu.
+4. Press **Enter** (leave the path empty) when prompted for a file path. The app will automatically read, parse, and import `RBI 2025 all.xlsx` by default.
+5. If the Excel file contains multiple sheets (e.g., sheets for Purok 1 to Purok 8), the app will list them and prompt you to import a single sheet by number, or type `all` to import the entire workbook.
 
 ---
 
-### 🚀 Non-Interactive CLI Commands
+### 📊 App Features
+Once logged in, the interactive menu offers the following options:
+* **1) View Statistics**: Visualizes live population statistics, household counts, gender distribution, and graphical age/Purok population distributions directly in the terminal.
+* **2) Search Residents**: Instantly lookup resident records by name, Purok, or household number.
+* **3) Export to CSV**: Downloads the live registry into a CSV spreadsheet stored at `storage/app/exports/`.
+* **4) Import CSV / XLSX File**: Reads and imports custom or default registry files.
+* **5) Truncate Residents**: Cleans out resident records safely (automatically creates a backup beforehand).
+* **6) Truncate All**: Cleans out both household and resident tables (with automatic backup).
+* **7) Delete Rows by Condition**: Deletes records selectively based on criteria (e.g., clearing a specific Purok).
+* **8) Clear Application Cache**: Flushes system caches and restarts workers to synchronize database changes with the web dashboard immediately.
 
-You can bypass the interactive menu and trigger tasks directly by adding parameters to the launcher script or executable:
-
-#### 1. Import Spreadsheet
-Imports an Excel or CSV file. If no file path is specified, it defaults to looking for `RBI 2025 all.xlsx` in the project root:
-```powershell
-# Import default updated file (RBI 2025 all.xlsx)
-.\rbi-manager.ps1 import
-
-# Import a specific file
-.\rbi-manager.ps1 import C:/Users/brgy/Downloads/rbi_updated.xlsx
-```
-
-#### 2. View Database Stats
-```powershell
-# Display formatted stats dashboard
-.\rbi-manager.ps1 stats
-
-# Get raw JSON stats
-.\rbi-manager.ps1 stats --format=json
-```
-
-#### 3. Search Residents
-```powershell
-.\rbi-manager.ps1 search --query="Dela Cruz"
-```
-
-#### 4. Export Spreadsheet
-```powershell
-# Save to default exports directory
-.\rbi-manager.ps1 export
-
-# Save to a specific file
-.\rbi-manager.ps1 export data/backup.csv
-```
-
-#### 5. Truncate Tables
-```powershell
-# Truncate residents only
-.\rbi-manager.ps1 truncate
-
-# Truncate both residents and households
-.\rbi-manager.ps1 truncate --all
-```
-
-#### 6. Targeted Deletion
-```powershell
-.\rbi-manager.ps1 delete --table=residents --where="purok_no=4"
-```
-
-#### 7. Clear Caches
-```powershell
-.\rbi-manager.ps1 cache-clear
-```
-
-### 🛠️ Building the Native Executable (Optional)
-
-A precompiled Windows executable (`tools/rbi-manager.exe`) is included. If you modify the Go source code in `tools/rbi-manager/main.go`, you can rebuild it using Go:
-
-```bash
-cd tools/rbi-manager
-go build -o ../rbi-manager.exe main.go
-```
+---
 
 ### CSV Schema (Export / Import)
 
-The `rbi:manage export` and `rbi:manage import` commands work with a CSV containing household + resident columns. The exported header includes the following fields (in this order):
+The import and export features expect or generate a spreadsheet with the following header layout (in order):
 
 - id, household_no, purok_no, address, user_id, created_at, updated_at,
 - population_no, family_no, relationship_to_head, is_house_owner, is_renter, renter_months,
@@ -258,6 +187,6 @@ The `rbi:manage export` and `rbi:manage import` commands work with a CSV contain
 - health_condition, nutritional_classification, vulnerable_sector, social_welfare_availed,
 - water_source, sanitary_toilet, waste_management, has_blind_drainage
 
-When importing, columns that are empty will be treated as `NULL`. The importer will create households (by `household_no` + `purok_no`) as needed and associate residents with the created household. Back up your database before running destructive operations like `truncate`.
+Empty columns will be treated as `NULL`. Back up your data before performing destructive operations.
 
 
