@@ -142,6 +142,8 @@ class DatabaseSeeder extends Seeder
             }
         }
 
+        $this->call(PlaceSeeder::class);
+
         $this->command->info('Seeding completed successfully!');
         $this->command->info("  - Households seeded: {$residentCount}");
         $this->command->info("  - Residents seeded: {$residentCount}");
