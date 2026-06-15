@@ -66,11 +66,23 @@ class ManageRbiDatabase extends Command
     {
         $file = $this->argument('file');
         if (! $file) {
-            $defaultFile = base_path('RBI 2025 all.xlsx');
-            if (file_exists($defaultFile)) {
-                $file = $defaultFile;
+            // Find any xlsx/xls file in the project root (excluding Excel temp files starting with ~$)
+            $files = glob(base_path('*.{xlsx,xls}'), GLOB_BRACE);
+            $targetFile = null;
+            if ($files) {
+                foreach ($files as $f) {
+                    if (! str_starts_with(basename($f), '~$')) {
+                        $targetFile = $f;
+                        break;
+                    }
+                }
+            }
+
+            if ($targetFile && file_exists($targetFile)) {
+                $file = $targetFile;
+                $this->info('No file path provided. Automatically using: ' . basename($file));
             } else {
-                $this->error('Please provide a path to a CSV or XLSX file. Default "RBI 2025 all.xlsx" not found in project root.');
+                $this->error('Please provide a path to a CSV or XLSX file. No Excel file (*.xlsx or *.xls) was found in the project root.');
 
                 return 1;
             }
@@ -187,8 +199,10 @@ class ManageRbiDatabase extends Command
 
             $result = $this->processImportRows($columns, $allRows, false);
 
-            // Accumulate totals (processImportRows returns 0 on success)
-            // We rely on the output it prints for per-sheet details
+            if ($result !== 0) {
+                $this->error("Import aborted due to validation errors in sheet: {$sheetNames[$si]}");
+                return 1;
+            }
         }
 
         $this->refreshSiteState();
@@ -206,6 +220,57 @@ class ManageRbiDatabase extends Command
      */
     protected function processImportRows(array $columns, array $rows, bool $refresh = true): int
     {
+        // ── Column Validation ──────────────────────────────────────────────────
+        // Define all known/expected columns for the RBI schema
+        $knownColumns = [
+            'id', 'household_no', 'purok_no', 'address', 'user_id', 'created_at', 'updated_at',
+            'population_no', 'family_no', 'relationship_to_head', 'is_house_owner', 'is_renter', 'renter_months',
+            'last_name', 'first_name', 'middle_name', 'extension',
+            'birthdate', 'place_of_birth', 'sex', 'gender_identity', 'civil_status',
+            'religion', 'citizenship', 'age', 'age_classification', 'blood_type', 'height',
+            'weight', 'complexion', 'mobile_number', 'email_address', 'social_media_account',
+            'educational_status', 'highest_educational_attainment', 'school_attended', 'course_completed', 'eligibility',
+            'primary_skills', 'secondary_skills', 'other_skills', 'work_status', 'occupation',
+            'is_farmer', 'income', 'days_work_per_week', 'last_period_of_unemployment', 'reason_of_unemployment',
+            'registered_sk_voter', 'registered_national_voter', 'attended_kk_assembly', 'kk_assembly_times', 'kk_assembly_no_reason',
+            'resident_voter', 'last_voted_year', 'has_philhealth', 'philhealth_id', 'philhealth_membership_type',
+            'unvaccinated', 'partially_vaccinated', 'fully_vaccinated', 'covid_dose_1_date', 'covid_dose_2_date',
+            'covid_brand', 'has_booster', 'booster_date', 'booster_brand', 'health_condition',
+            'nutritional_classification', 'vulnerable_sector', 'social_welfare_availed',
+            'water_source', 'sanitary_toilet', 'waste_management', 'has_blind_drainage',
+        ];
+
+        // Required columns that must be present for the import to be valid
+        $requiredColumns = ['last_name', 'first_name'];
+
+        $missingRequired = array_diff($requiredColumns, $columns);
+        if (! empty($missingRequired)) {
+            $this->error('❌ Import aborted: The file is missing required column(s): ' . implode(', ', $missingRequired));
+            $this->error('   These columns are essential to identify residents. Please verify your spreadsheet headers.');
+            return 1;
+        }
+
+        // Warn about any unrecognized columns (possible typos or wrong file)
+        $unrecognized = array_diff($columns, $knownColumns);
+        if (! empty($unrecognized)) {
+            $this->warn('⚠  Warning: The following column(s) in your file are NOT recognized and will be ignored:');
+            foreach ($unrecognized as $col) {
+                $this->warn("     - {$col}");
+            }
+            $this->warn('   If these are intentional aliases, please rename them to match the expected schema.');
+            $this->newLine();
+        }
+
+        // Check how many known columns are present to detect a wrong-format file
+        $recognizedCount = count(array_intersect($columns, $knownColumns));
+        if ($recognizedCount < 3) {
+            $this->error('❌ Import aborted: Only ' . $recognizedCount . ' recognized column(s) found in the file header.');
+            $this->error('   This does not look like a valid RBI spreadsheet. Please check the file and try again.');
+            $this->line('   Expected columns include: last_name, first_name, household_no, purok_no, sex, birthdate, ...');
+            return 1;
+        }
+        // ── End Column Validation ──────────────────────────────────────────────
+
         $rowCount = 0;
         $householdCount = 0;
         $skippedCount = 0;

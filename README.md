@@ -150,10 +150,10 @@ The app requires an account with administrative or health officer privileges to 
 
 ### 📥 Importing the Updated Excel Files by Default
 To import your updated Excel registry files into the system:
-1. Ensure your spreadsheet file is named `RBI 2025 all.xlsx` and is placed in the project root folder.
+1. Place your spreadsheet file (any `.xlsx` or `.xls` file) in the project root folder.
 2. Launch the **RBI Manager** app.
 3. Select option **`4) Import CSV / XLSX File`** from the interactive menu.
-4. Press **Enter** (leave the path empty) when prompted for a file path. The app will automatically read, parse, and import `RBI 2025 all.xlsx` by default.
+4. Press **Enter** (leave the path empty) when prompted for a file path. The app will automatically scan the project root, find your Excel file, and use it.
 5. If the Excel file contains multiple sheets (e.g., sheets for Purok 1 to Purok 8), the app will list them and prompt you to import a single sheet by number, or type `all` to import the entire workbook.
 
 ---

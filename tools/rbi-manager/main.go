@@ -602,12 +602,24 @@ func handleImportCSV(projectDir string, reader *bufio.Reader) {
 	file = strings.TrimSpace(file)
 
 	if file == "" {
-		defaultFile := filepath.Join(projectDir, "RBI 2025 all.xlsx")
-		if _, err := os.Stat(defaultFile); err == nil {
-			file = defaultFile
-			printInfo("Using default file: " + file)
+		// Scan projectDir for any .xlsx or .xls file (excluding temp files starting with ~$)
+		pattern := filepath.Join(projectDir, "*")
+		matches, _ := filepath.Glob(pattern)
+		var targetFile string
+		for _, m := range matches {
+			base := filepath.Base(m)
+			ext := strings.ToLower(filepath.Ext(m))
+			if !strings.HasPrefix(base, "~$") && (ext == ".xlsx" || ext == ".xls") {
+				targetFile = m
+				break
+			}
+		}
+
+		if targetFile != "" {
+			file = targetFile
+			printInfo("No file provided. Automatically using: " + filepath.Base(file))
 		} else {
-			printWarning("No file provided, and default 'RBI 2025 all.xlsx' was not found in project root. Returning to menu.")
+			printWarning("No file path provided, and no Excel (.xlsx/.xls) file was found in the project root folder. Returning to menu.")
 			return
 		}
 	}
