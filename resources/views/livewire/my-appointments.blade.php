@@ -33,12 +33,20 @@
                                     {{ $apt->appointment_date->format('F d, Y') }}
                                 @elseif($apt->status === 'pending')
                                     <span class="text-xs text-zinc-500 dark:text-zinc-450 font-semibold bg-zinc-100 dark:bg-zinc-800 px-2 py-0.5 rounded">Pending Review</span>
-                                @else
+                                @elseif($apt->status === 'approved-pending')
                                     <span class="text-xs text-amber-600 dark:text-amber-400 font-semibold bg-amber-50 dark:bg-amber-950/20 px-2 py-0.5 rounded">Pending Kapitan Signature</span>
+                                @elseif($apt->status === 'cancelled')
+                                    <span class="text-xs text-red-500 dark:text-red-400 font-semibold bg-red-50 dark:bg-red-950/20 px-2 py-0.5 rounded">Cancelled</span>
+                                @else
+                                    <span class="text-xs text-zinc-400 dark:text-zinc-500 font-semibold">&mdash;</span>
                                 @endif
                             </td>
                             <td class="py-3 px-4">
-                                {{ $apt->appointment_time ?? 'To be scheduled' }}
+                                @if($apt->status === 'cancelled')
+                                    <span class="text-xs text-zinc-400 dark:text-zinc-500 font-medium">N/A</span>
+                                @else
+                                    {{ $apt->appointment_time ?? 'To be scheduled' }}
+                                @endif
                             </td>
                             <td class="py-3 px-4 max-w-xs truncate" title="{{ $apt->purpose }}">
                                 {{ $apt->purpose }}
@@ -61,9 +69,16 @@
                                         Completed
                                     </span>
                                 @else
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-zinc-100 text-zinc-800 border border-zinc-200 dark:bg-zinc-800/40 dark:text-zinc-400 dark:border-zinc-700/50">
-                                        Cancelled
-                                    </span>
+                                    <div class="flex flex-col items-center gap-1">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-50 text-red-700 border border-red-200 dark:bg-red-950/30 dark:text-red-400 dark:border-red-900/50">
+                                            Cancelled
+                                        </span>
+                                        @if($apt->admin_notes)
+                                            <span class="text-[10px] text-zinc-500 dark:text-zinc-400 italic max-w-[160px] text-center leading-tight">
+                                                {{ $apt->admin_notes }}
+                                            </span>
+                                        @endif
+                                    </div>
                                 @endif
                             </td>
                             <td class="py-3 px-4 text-right">

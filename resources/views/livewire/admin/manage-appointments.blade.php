@@ -62,8 +62,13 @@
                                     <div class="text-xs text-zinc-500 dark:text-zinc-400">{{ $apt->appointment_time }}</div>
                                 @elseif($apt->status === 'pending')
                                     <span class="text-xs text-zinc-500 dark:text-zinc-450 font-semibold bg-zinc-100 dark:bg-zinc-800 px-2 py-0.5 rounded">Pending Review</span>
-                                @else
+                                @elseif($apt->status === 'approved-pending')
                                     <span class="text-xs text-amber-600 dark:text-amber-400 font-semibold bg-amber-50 dark:bg-amber-950/20 px-2 py-0.5 rounded">Pending Kapitan Signature</span>
+                                @elseif($apt->status === 'cancelled')
+                                    <span class="text-xs text-red-500 dark:text-red-400 font-semibold bg-red-50 dark:bg-red-950/20 px-2 py-0.5 rounded">Cancelled</span>
+                                    <div class="text-xs text-zinc-400 dark:text-zinc-500 mt-0.5">Time: N/A</div>
+                                @else
+                                    <span class="text-xs text-zinc-400 dark:text-zinc-500 font-semibold">—</span>
                                 @endif
                             </td>
                             <td class="py-3 px-4 max-w-sm whitespace-normal break-words">
@@ -101,7 +106,7 @@
                                         Send for Signature
                                     </button>
                                     <button 
-                                        wire:click="reject({{ $apt->id }})"
+                                        wire:click="startReject({{ $apt->id }})"
                                         class="text-xs text-red-500 hover:text-red-700 font-semibold cursor-pointer ml-2"
                                     >
                                         Reject
@@ -114,7 +119,7 @@
                                         Approve & Schedule
                                     </button>
                                     <button 
-                                        wire:click="reject({{ $apt->id }})"
+                                        wire:click="startReject({{ $apt->id }})"
                                         class="text-xs text-red-500 hover:text-red-700 font-semibold cursor-pointer ml-2"
                                     >
                                         Reject
@@ -191,6 +196,35 @@
                     <flux:button variant="filled">{{ __('Cancel') }}</flux:button>
                 </flux:modal.close>
                 <flux:button variant="primary" type="submit">{{ __('Approve & Set Date') }}</flux:button>
+            </div>
+        </form>
+    </flux:modal>
+
+    <!-- Reject / Cancellation Reason Modal -->
+    <flux:modal name="reject-appointment-modal" class="max-w-md" wire:model="showRejectModal">
+        <form wire:submit="confirmReject" class="space-y-6">
+            <div>
+                <flux:heading size="lg">{{ __('Reject / Cancel Request') }}</flux:heading>
+                <flux:subheading>{{ __('Provide a reason for rejecting this document request. This will be saved as a note on the appointment.') }}</flux:subheading>
+            </div>
+
+            <div>
+                <label for="rejectReason" class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Reason for Cancellation</label>
+                <textarea
+                    id="rejectReason"
+                    wire:model="rejectReason"
+                    rows="4"
+                    placeholder="e.g. Incomplete requirements, duplicate request..."
+                    class="w-full rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-2 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand text-sm resize-none"
+                ></textarea>
+                @error('rejectReason') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+            </div>
+
+            <div class="flex justify-end gap-2 border-t border-zinc-200 dark:border-zinc-800 pt-4">
+                <flux:modal.close>
+                    <flux:button variant="filled">{{ __('Go Back') }}</flux:button>
+                </flux:modal.close>
+                <flux:button variant="danger" type="submit">{{ __('Confirm Rejection') }}</flux:button>
             </div>
         </form>
     </flux:modal>

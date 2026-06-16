@@ -15,11 +15,16 @@ class ManageAppointments extends Component
 
     public string $statusFilter = '';
 
-    // Modal/Scheduling state
+    // Approve modal state
     public ?int $selectedAppointmentId = null;
     public string $redemptionDate = '';
     public string $redemptionTime = '';
     public bool $showApproveModal = false;
+
+    // Reject modal state
+    public ?int $selectedRejectId = null;
+    public string $rejectReason = '';
+    public bool $showRejectModal = false;
 
     public function startApprove(int $id): void
     {
@@ -87,11 +92,40 @@ class ManageAppointments extends Component
         Flux::toast(variant: 'success', text: __('Appointment marked as completed.'));
     }
 
+    public function startReject(int $id): void
+    {
+        $this->selectedRejectId = $id;
+        $this->rejectReason = '';
+        $this->showRejectModal = true;
+    }
+
+    public function confirmReject(): void
+    {
+        $this->validate([
+            'rejectReason' => 'required|string|min:5|max:500',
+        ], [
+            'rejectReason.required' => 'Please provide a reason for cancellation.',
+            'rejectReason.min'      => 'Reason must be at least 5 characters.',
+        ]);
+
+        $appointment = Appointment::findOrFail($this->selectedRejectId);
+        $appointment->update([
+            'status'      => 'cancelled',
+            'admin_notes' => $this->rejectReason,
+        ]);
+
+        $this->showRejectModal = false;
+        $this->selectedRejectId = null;
+        $this->rejectReason = '';
+
+        Flux::toast(variant: 'success', text: __('Appointment has been rejected/cancelled.'));
+    }
+
     public function reject(int $id, string $notes = ''): void
     {
         $appointment = Appointment::findOrFail($id);
         $appointment->update([
-            'status' => 'cancelled',
+            'status'      => 'cancelled',
             'admin_notes' => $notes ?: 'Cancelled by Admin.',
         ]);
         Flux::toast(variant: 'success', text: __('Appointment has been rejected/cancelled.'));
