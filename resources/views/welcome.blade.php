@@ -92,15 +92,51 @@
                 backdrop-filter: blur(16px);
                 -webkit-backdrop-filter: blur(16px);
             }
-            /* Subtle dot-grid mesh overlay */
+
+            /* ===== PREMIUM ANIMATED GRID BACKGROUND ===== */
             .bg-mesh {
-                background-image: radial-gradient(circle, rgba(4,120,87,0.15) 1px, transparent 1px);
-                background-size: 24px 24px;
+                position: relative;
             }
-            .dark .bg-mesh {
-                background-image: radial-gradient(circle, rgba(52,211,153,0.07) 1px, transparent 1px);
-                background-size: 24px 24px;
+            .bg-mesh::before {
+                content: '';
+                position: fixed;
+                inset: 0;
+                z-index: 0;
+                pointer-events: none;
+                background-image:
+                    linear-gradient(rgba(5, 150, 105, 0.06) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(5, 150, 105, 0.06) 1px, transparent 1px);
+                background-size: 60px 60px;
+                mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 30%, transparent 100%);
+                -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 30%, transparent 100%);
+                animation: grid-pulse 8s ease-in-out infinite;
             }
+            .dark .bg-mesh::before {
+                background-image:
+                    linear-gradient(rgba(52, 211, 153, 0.04) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(52, 211, 153, 0.04) 1px, transparent 1px);
+            }
+            @keyframes grid-pulse {
+                0%, 100% { opacity: 0.5; }
+                50% { opacity: 1; }
+            }
+
+            /* ===== FILM GRAIN / NOISE TEXTURE ===== */
+            .bg-noise::after {
+                content: '';
+                position: fixed;
+                inset: 0;
+                z-index: 1;
+                pointer-events: none;
+                opacity: 0.025;
+                background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+                background-repeat: repeat;
+                background-size: 256px 256px;
+            }
+            .dark .bg-noise::after {
+                opacity: 0.04;
+            }
+
             /* Hero gradient text — adapts to light/dark mode */
             .hero-gradient-text {
                 background: linear-gradient(135deg, #ffffff 0%, #a7f3d0 50%, #99f6e4 100%);
@@ -114,9 +150,120 @@
                 background-clip: text;
                 color: transparent;
             }
+
+            /* ===== AMBIENT BACKGROUND ANIMATIONS ===== */
+            @keyframes float-slow {
+                0%, 100% { transform: translate(0, 0) scale(1); }
+                33% { transform: translate(30px, -25px) scale(1.05); }
+                66% { transform: translate(-20px, 15px) scale(0.97); }
+            }
+            @keyframes float-reverse {
+                0%, 100% { transform: translate(0, 0) scale(1.02); }
+                33% { transform: translate(-25px, 20px) scale(1); }
+                66% { transform: translate(15px, -30px) scale(1.06); }
+            }
+            @keyframes float-diagonal {
+                0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+                25% { transform: translate(40px, -20px) rotate(2deg) scale(1.03); }
+                50% { transform: translate(20px, -40px) rotate(-1deg) scale(0.98); }
+                75% { transform: translate(-15px, -15px) rotate(1deg) scale(1.05); }
+            }
+            @keyframes float-orbit {
+                0%, 100% { transform: translate(0, 0) scale(1); }
+                25% { transform: translate(-30px, -30px) scale(1.08); }
+                50% { transform: translate(0, -50px) scale(1); }
+                75% { transform: translate(30px, -25px) scale(0.95); }
+            }
+            @keyframes shimmer-line {
+                0% { transform: translateX(-100%); }
+                100% { transform: translateX(100%); }
+            }
+            @keyframes color-shift {
+                0%, 100% { filter: hue-rotate(0deg); }
+                50% { filter: hue-rotate(20deg); }
+            }
+            .animate-float {
+                animation: float-slow 20s ease-in-out infinite;
+            }
+            .animate-float-reverse {
+                animation: float-reverse 25s ease-in-out infinite;
+            }
+            .animate-float-diagonal {
+                animation: float-diagonal 30s ease-in-out infinite;
+            }
+            .animate-float-orbit {
+                animation: float-orbit 22s ease-in-out infinite;
+            }
+            .animate-color-shift {
+                animation: color-shift 15s ease-in-out infinite;
+            }
+
+            /* ===== WAVE DIVIDER ===== */
+            .wave-divider {
+                position: relative;
+                overflow: hidden;
+            }
+            .wave-divider::after {
+                content: '';
+                position: absolute;
+                bottom: -2px;
+                left: 0;
+                right: 0;
+                height: 80px;
+                background: transparent;
+                pointer-events: none;
+            }
+            .wave-svg {
+                display: block;
+                width: 100%;
+                height: auto;
+                position: relative;
+                z-index: 5;
+                margin-top: -1px;
+            }
+
+            /* ===== AURORA STREAK ===== */
+            .aurora-streak {
+                position: absolute;
+                width: 200%;
+                height: 2px;
+                background: linear-gradient(90deg, transparent, rgba(52,211,153,0.3), rgba(45,212,191,0.2), transparent);
+                animation: shimmer-line 6s ease-in-out infinite;
+            }
+            .dark .aurora-streak {
+                background: linear-gradient(90deg, transparent, rgba(52,211,153,0.15), rgba(45,212,191,0.1), transparent);
+            }
         </style>
     </head>
-    <body class="bg-gradient-to-br from-emerald-200 via-emerald-50 to-teal-100 dark:from-zinc-950 dark:via-emerald-950 dark:to-zinc-900 text-zinc-900 dark:text-zinc-100 min-h-screen flex flex-col transition-colors duration-300">
+    <body class="bg-gradient-to-br from-emerald-100 via-white to-teal-50 dark:from-zinc-950 dark:via-zinc-900 dark:to-emerald-950 text-zinc-900 dark:text-zinc-100 min-h-screen flex flex-col transition-colors duration-300 relative overflow-x-hidden">
+        
+        <!-- ===== PREMIUM AMBIENT BACKGROUND SYSTEM ===== -->
+        <div class="fixed inset-0 overflow-hidden pointer-events-none z-0 animate-color-shift">
+
+            <!-- === LIGHT MODE: Multi-layered aurora orbs === -->
+            <!-- Primary emerald glow — top-left -->
+            <div class="absolute top-[-15%] left-[-15%] w-[70vw] h-[70vw] sm:w-[700px] sm:h-[700px] rounded-full bg-emerald-300/25 blur-[140px] dark:hidden animate-float"></div>
+            <!-- Secondary teal glow — mid-right -->
+            <div class="absolute top-[25%] right-[-8%] w-[55vw] h-[55vw] sm:w-[550px] sm:h-[550px] rounded-full bg-teal-200/30 blur-[120px] dark:hidden animate-float-reverse"></div>
+            <!-- Tertiary mint glow — bottom-left -->
+            <div class="absolute bottom-[10%] left-[-12%] w-[65vw] h-[65vw] sm:w-[600px] sm:h-[600px] rounded-full bg-emerald-100/35 blur-[150px] dark:hidden animate-float-diagonal"></div>
+            <!-- Accent cyan glow — center top -->
+            <div class="absolute top-[5%] left-[40%] w-[40vw] h-[40vw] sm:w-[400px] sm:h-[400px] rounded-full bg-cyan-100/20 blur-[100px] dark:hidden animate-float-orbit"></div>
+            <!-- Subtle warm accent — bottom-right -->
+            <div class="absolute bottom-[5%] right-[-5%] w-[45vw] h-[45vw] sm:w-[450px] sm:h-[450px] rounded-full bg-lime-100/15 blur-[110px] dark:hidden animate-float-reverse" style="animation-delay: -5s;"></div>
+
+            <!-- === DARK MODE: Deep aurora glow system === -->
+            <!-- Primary deep emerald — top-left -->
+            <div class="absolute top-[-12%] left-[-18%] w-[80vw] h-[80vw] sm:w-[750px] sm:h-[750px] rounded-full bg-emerald-900/15 blur-[160px] hidden dark:block animate-float"></div>
+            <!-- Secondary teal glow — mid-right -->
+            <div class="absolute top-[30%] right-[-12%] w-[60vw] h-[60vw] sm:w-[600px] sm:h-[600px] rounded-full bg-teal-900/12 blur-[140px] hidden dark:block animate-float-reverse"></div>
+            <!-- Tertiary emerald — bottom -->
+            <div class="absolute bottom-[8%] left-[-10%] w-[75vw] h-[75vw] sm:w-[700px] sm:h-[700px] rounded-full bg-emerald-800/8 blur-[170px] hidden dark:block animate-float-diagonal"></div>
+            <!-- Accent cyan — center -->
+            <div class="absolute top-[15%] left-[35%] w-[45vw] h-[45vw] sm:w-[500px] sm:h-[500px] rounded-full bg-cyan-900/8 blur-[130px] hidden dark:block animate-float-orbit"></div>
+            <!-- Subtle warm dark accent -->
+            <div class="absolute bottom-[15%] right-[10%] w-[35vw] h-[35vw] sm:w-[400px] sm:h-[400px] rounded-full bg-green-900/6 blur-[120px] hidden dark:block animate-float" style="animation-delay: -8s;"></div>
+        </div>
         
         <!-- Sticky Premium Header / Navigation Bar -->
         <header class="sticky top-0 z-50 glassmorphism border-b border-emerald-100 dark:border-emerald-900/40 transition-all duration-300">
@@ -230,17 +377,22 @@
         </header>
 
         <!-- Main Content Area -->
-        <main class="flex-grow bg-mesh overflow-x-hidden">
+        <main class="flex-grow bg-mesh bg-noise overflow-x-hidden relative z-10">
             
             <!-- SECTION 1: Gorgeous Municipal Hero Banner -->
-            <section class="relative overflow-hidden py-16 sm:py-24 bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-500 dark:from-zinc-950 dark:via-emerald-950 dark:to-zinc-900 text-white">
+            <section class="relative overflow-hidden py-16 sm:py-24 bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-500 dark:from-zinc-950 dark:via-emerald-950 dark:to-zinc-900 text-white wave-divider">
                 <!-- Radial overlay for depth -->
                 <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-white/10 via-transparent to-transparent dark:from-emerald-900/30 dark:via-zinc-950 dark:to-zinc-950 z-0"></div>
                 <!-- Glow orbs -->
-                <div class="absolute -right-20 -bottom-20 h-96 w-96 rounded-full bg-emerald-400/30 dark:bg-emerald-500/25 blur-3xl z-0"></div>
-                <div class="absolute -left-20 -top-20 h-96 w-96 rounded-full bg-teal-300/25 dark:bg-teal-400/20 blur-3xl z-0"></div>
+                <div class="absolute -right-20 -bottom-20 h-96 w-96 rounded-full bg-emerald-400/30 dark:bg-emerald-500/25 blur-3xl z-0 animate-float"></div>
+                <div class="absolute -left-20 -top-20 h-96 w-96 rounded-full bg-teal-300/25 dark:bg-teal-400/20 blur-3xl z-0 animate-float-reverse"></div>
+                <!-- Additional hero orbs for depth -->
+                <div class="absolute top-1/2 left-1/3 h-64 w-64 rounded-full bg-cyan-300/15 dark:bg-cyan-500/10 blur-3xl z-0 animate-float-diagonal"></div>
                 <!-- Top shimmer line -->
                 <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/40 dark:via-emerald-400/50 to-transparent z-10"></div>
+                <!-- Aurora streaks -->
+                <div class="aurora-streak top-[30%]" style="animation-delay: -2s;"></div>
+                <div class="aurora-streak top-[60%]" style="animation-delay: -4s;"></div>
 
                 <div class="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
                     <span class="inline-flex items-center gap-1.5 px-3.5 py-1 bg-white/20 border border-white/40 text-white dark:bg-emerald-500/15 dark:border-emerald-400/40 dark:text-emerald-300 rounded-full text-xs font-bold tracking-wider uppercase">
@@ -259,6 +411,14 @@
                     <!-- Hero CTAs removed; primary access available in header -->
                 </div>
             </section>
+
+            <!-- Wave SVG Divider: Hero → Content -->
+            <div class="relative z-10 -mt-1 bg-transparent">
+                <svg class="wave-svg" viewBox="0 0 1440 100" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+                    <path d="M0,40 C240,100 480,0 720,50 C960,100 1200,10 1440,60 L1440,0 L0,0 Z" class="fill-emerald-500 dark:fill-zinc-950" />
+                    <path d="M0,50 C300,90 600,10 900,55 C1100,85 1300,20 1440,45 L1440,0 L0,0 Z" class="fill-emerald-400/50 dark:fill-emerald-950/30" />
+                </svg>
+            </div>
 
             <!-- SECTION 2: About Barangay Sambog -->
             <section id="about" class="scroll-mt-24 py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -302,8 +462,15 @@
                 </div>
             </section>
 
+            <!-- Wave Divider: About → Services -->
+            <div class="relative z-10 bg-transparent">
+                <svg class="wave-svg" viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+                    <path d="M0,60 C360,10 720,80 1080,30 C1260,5 1380,40 1440,20 L1440,80 L0,80 Z" class="fill-emerald-100/60 dark:fill-emerald-900/40" />
+                </svg>
+            </div>
+
             <!-- SECTION 3: Public Municipal Services -->
-            <section id="services" class="scroll-mt-24 py-16 bg-emerald-50/30 dark:bg-emerald-950/10 border-y border-zinc-200 dark:border-zinc-900">
+            <section id="services" class="scroll-mt-24 py-16 bg-emerald-100/60 dark:bg-emerald-900/40">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
                     <div class="text-center max-w-2xl mx-auto space-y-3">
                         <span class="text-brand text-lg font-bold uppercase tracking-wider font-outfit">Citizen Welfare</span>
@@ -354,6 +521,13 @@
                     </div>
                 </div>
             </section>
+
+            <!-- Wave Divider: Services → Officials -->
+            <div class="relative z-10 bg-transparent">
+                <svg class="wave-svg" viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+                    <path d="M0,20 C200,70 500,0 800,50 C1100,80 1300,15 1440,40 L1440,0 L0,0 Z" class="fill-emerald-100/60 dark:fill-emerald-900/40" />
+                </svg>
+            </div>
 
             <!-- SECTION 4: Local Barangay Council -->
             <section id="officials" class="scroll-mt-24 py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
@@ -408,8 +582,15 @@
                 </div>
             </section>
 
+            <!-- Wave Divider: Officials → Demographics -->
+            <div class="relative z-10 bg-transparent">
+                <svg class="wave-svg" viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+                    <path d="M0,50 C180,80 420,10 720,60 C960,90 1200,20 1440,50 L1440,80 L0,80 Z" class="fill-emerald-100/60 dark:fill-emerald-900/40" />
+                </svg>
+            </div>
+
             <!-- SECTION 5: Community Statistics -->
-            <section id="demographics" class="scroll-mt-24 py-16 bg-emerald-50/30 dark:bg-emerald-950/10 border-y border-zinc-200 dark:border-zinc-900">
+            <section id="demographics" class="scroll-mt-24 py-16 bg-emerald-100/60 dark:bg-emerald-900/40">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
                     <div class="text-center max-w-2xl mx-auto space-y-3">
                         <span class="text-brand text-lg font-bold uppercase tracking-wider font-outfit">Inhabitants</span>
@@ -445,6 +626,13 @@
                 </div>
             </section>
 
+            <!-- Wave Divider: Demographics → Places -->
+            <div class="relative z-10 bg-transparent">
+                <svg class="wave-svg" viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+                    <path d="M0,30 C300,70 600,5 900,45 C1100,65 1300,10 1440,35 L1440,0 L0,0 Z" class="fill-emerald-100/60 dark:fill-emerald-900/40" />
+                </svg>
+            </div>
+
             <!-- SECTION 7: Recommended Places -->
             <section id="places" class="scroll-mt-24 py-8 bg-transparent">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -452,15 +640,29 @@
                 </div>
             </section>
 
+            <!-- Wave Divider: Places → Announcements -->
+            <div class="relative z-10 bg-transparent">
+                <svg class="wave-svg" viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+                    <path d="M0,40 C240,80 480,0 720,55 C960,85 1200,15 1440,45 L1440,80 L0,80 Z" class="fill-emerald-100/60 dark:fill-emerald-900/40" />
+                </svg>
+            </div>
+
             <!-- SECTION 8: Premium Announcements Feed (Livewire) -->
-            <section id="announcements" class="scroll-mt-24 py-16 bg-emerald-50/30 dark:bg-emerald-950/10 border-t border-zinc-200 dark:border-zinc-900">
+            <section id="announcements" class="scroll-mt-24 py-16 bg-emerald-100/60 dark:bg-emerald-900/40">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <livewire:announcements />
                 </div>
             </section>
 
+            <!-- Wave Divider: Announcements → Contacts -->
+            <div class="relative z-10 bg-transparent">
+                <svg class="wave-svg" viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+                    <path d="M0,25 C180,60 420,5 720,40 C960,70 1200,10 1440,30 L1440,0 L0,0 Z" class="fill-emerald-100/60 dark:fill-emerald-900/40" />
+                </svg>
+            </div>
+
             <!-- SECTION 8: Important Contact Numbers -->
-            <section id="contacts" class="scroll-mt-24 py-8 bg-transparent border-t border-zinc-200 dark:border-zinc-800">
+            <section id="contacts" class="scroll-mt-24 py-8 bg-transparent">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="text-center max-w-2xl mx-auto space-y-3 mb-6">
                         <span class="text-brand text-lg font-bold uppercase tracking-wider font-outfit">Get In Touch</span>
@@ -518,8 +720,9 @@
 
         </main>
 
+
         <!-- FOOTER: Standard Premium Municipal Footer Layout -->
-        <footer class="bg-zinc-100 dark:bg-zinc-950 text-zinc-500 dark:text-zinc-400 py-16 border-t border-zinc-200 dark:border-zinc-800/50 transition-colors duration-300">
+        <footer class="bg-zinc-100 dark:bg-zinc-950 text-zinc-500 dark:text-zinc-400 py-16 transition-colors duration-300">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-12 text-sm font-light">
                 
                 <!-- Brand Unit -->
