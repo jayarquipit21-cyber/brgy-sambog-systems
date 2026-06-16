@@ -23,6 +23,19 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
         
+        <!-- SEO Meta Tags & Open Graph Description -->
+        <meta name="description" content="Official website of Barangay Sambog, Corella, Bohol. Schedule secure clearance pick-ups, review community stats, and get local council updates.">
+        <meta name="keywords" content="Sambog, Corella, Bohol, Barangay Sambog, Official Website, Barangay Clearance, Household Registry">
+        <meta property="og:title" content="Barangay Sambog, Corella, Bohol - Official Municipal Website">
+        <meta property="og:description" content="Stay connected with community stats, schedule secure clearance pick-ups, and get in touch with local council updates effortlessly.">
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="{{ url()->current() }}">
+        <meta property="og:site_name" content="Barangay Sambog">
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="Barangay Sambog, Corella, Bohol">
+        <meta name="twitter:description" content="Official inhabitant demographic registry and secure pick-up scheduling workspace portal.">
+
+        
         <!-- Tailwind CSS CDN -->
         <script src="https://cdn.tailwindcss.com"></script>
         <script>
@@ -33,6 +46,12 @@
                         fontFamily: {
                             sans: ['Inter', 'sans-serif'],
                             outfit: ['Outfit', 'sans-serif'],
+                        },
+                        colors: {
+                            brand: {
+                                DEFAULT: '#059669',
+                                dark: '#047857',
+                            }
                         }
                     }
                 }
@@ -49,13 +68,13 @@
             }
             /* Premium Emerald & Mint Color Theme */
             .text-brand {
-                color: #10b981;
+                color: #059669;
             }
             .bg-brand {
-                background-color: #10b981;
+                background-color: #059669;
             }
             .hover\:bg-brand-dark:hover {
-                background-color: #059669;
+                background-color: #047857;
             }
             .premium-gradient {
                 background: linear-gradient(135deg, #34d399 0%, #2dd4bf 100%);
@@ -241,9 +260,7 @@
                 </div>
             </section>
 
-            <!-- SECTION 2: (moved) Dynamic Live Stats Grid will appear later -->
-
-            <!-- SECTION 3: About Barangay Corella -->
+            <!-- SECTION 2: About Barangay Sambog -->
             <section id="about" class="scroll-mt-24 py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                 <div class="space-y-6">
                     <span class="text-brand text-lg font-bold uppercase tracking-wider font-outfit">Local Heritage</span>
@@ -285,6 +302,7 @@
                 </div>
             </section>
 
+            <!-- SECTION 3: Public Municipal Services -->
             <section id="services" class="scroll-mt-24 py-16 bg-emerald-50/30 dark:bg-emerald-950/10 border-y border-zinc-200 dark:border-zinc-900">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
                     <div class="text-center max-w-2xl mx-auto space-y-3">
@@ -337,6 +355,7 @@
                 </div>
             </section>
 
+            <!-- SECTION 4: Local Barangay Council -->
             <section id="officials" class="scroll-mt-24 py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
                 <div class="text-center max-w-2xl mx-auto space-y-3">
                     <span class="text-brand text-lg font-bold uppercase tracking-wider font-outfit">Barangay Leadership</span>
@@ -348,8 +367,8 @@
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                     <!-- Captain -->
-                    <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md rounded-3xl border border-zinc-200 dark:border-zinc-800/80 p-6 flex flex-col items-center text-center shadow-sm">
-                        <div class="h-20 w-20 rounded-full premium-gradient flex items-center justify-center text-white text-xl font-bold font-outfit shadow-md">
+                    <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md rounded-3xl border border-zinc-200 dark:border-zinc-800/80 p-6 flex flex-col items-center text-center shadow-sm hover:shadow-lg hover:scale-[1.02] transition duration-300">
+                        <div class="h-20 w-20 rounded-full premium-gradient flex items-center justify-center text-white text-xl font-bold font-outfit shadow-md ring-4 ring-emerald-400/20">
                             RA
                         </div>
                         <h4 class="font-bold text-lg text-zinc-950 dark:text-white mt-4 font-outfit">Hon. Rey Anthony N. Rebuta</h4>
@@ -358,37 +377,38 @@
                     </div>
 
                     <!-- Councilor 1 -->
-                    <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md rounded-3xl border border-zinc-200 dark:border-zinc-800/80 p-6 flex flex-col items-center text-center shadow-sm">
-                        <div class="h-20 w-20 rounded-full bg-zinc-800 flex items-center justify-center text-zinc-300 text-xl font-bold font-outfit">
+                    <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md rounded-3xl border border-zinc-200 dark:border-zinc-800/80 p-6 flex flex-col items-center text-center shadow-sm hover:shadow-lg hover:scale-[1.02] transition duration-300">
+                        <div class="h-20 w-20 rounded-full bg-gradient-to-tr from-teal-500 to-emerald-400 flex items-center justify-center text-white text-xl font-bold font-outfit shadow-md ring-4 ring-teal-400/20">
                             AS
                         </div>
                         <h4 class="font-bold text-lg text-zinc-950 dark:text-white mt-4 font-outfit">Hon. Alice Smith</h4>
-                        <span class="text-xs text-zinc-500 uppercase font-extrabold tracking-wider mt-1">Committee on Health</span>
+                        <span class="text-xs text-brand uppercase font-extrabold tracking-wider mt-1">Committee on Health</span>
                         <p class="text-sm text-zinc-500 mt-2 font-light">Coordinating public health drives and vaccination metrics monitoring.</p>
                     </div>
 
                     <!-- Councilor 2 -->
-                    <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md rounded-3xl border border-zinc-200 dark:border-zinc-800/80 p-6 flex flex-col items-center text-center shadow-sm">
-                        <div class="h-20 w-20 rounded-full bg-zinc-800 flex items-center justify-center text-zinc-300 text-xl font-bold font-outfit">
+                    <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md rounded-3xl border border-zinc-200 dark:border-zinc-800/80 p-6 flex flex-col items-center text-center shadow-sm hover:shadow-lg hover:scale-[1.02] transition duration-300">
+                        <div class="h-20 w-20 rounded-full bg-gradient-to-tr from-sky-500 to-teal-400 flex items-center justify-center text-white text-xl font-bold font-outfit shadow-md ring-4 ring-sky-400/20">
                             AR
                         </div>
                         <h4 class="font-bold text-lg text-zinc-950 dark:text-white mt-4 font-outfit">Arnel T. Itong</h4>
-                        <span class="text-xs text-zinc-500 uppercase font-extrabold tracking-wider mt-1">Barangay Treasurer</span>
+                        <span class="text-xs text-brand uppercase font-extrabold tracking-wider mt-1">Barangay Treasurer</span>
                         <p class="text-sm text-zinc-500 mt-2 font-light">Handling budgetary resources and community development allocations.</p>
                     </div>
 
                     <!-- Secretary -->
-                    <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md rounded-3xl border border-zinc-200 dark:border-zinc-800/80 p-6 flex flex-col items-center text-center shadow-sm">
-                        <div class="h-20 w-20 rounded-full bg-zinc-800 flex items-center justify-center text-zinc-300 text-xl font-bold font-outfit">
+                    <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md rounded-3xl border border-zinc-200 dark:border-zinc-800/80 p-6 flex flex-col items-center text-center shadow-sm hover:shadow-lg hover:scale-[1.02] transition duration-300">
+                        <div class="h-20 w-20 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-400 flex items-center justify-center text-white text-xl font-bold font-outfit shadow-md ring-4 ring-indigo-400/20">
                             CE
                         </div>
                         <h4 class="font-bold text-lg text-zinc-950 dark:text-white mt-4 font-outfit">Cecilia S. Daquio</h4>
-                        <span class="text-xs text-zinc-500 uppercase font-extrabold tracking-wider mt-1">Barangay Secretary</span>
+                        <span class="text-xs text-brand uppercase font-extrabold tracking-wider mt-1">Barangay Secretary</span>
                         <p class="text-sm text-zinc-500 mt-2 font-light">Managing document issuance, clearances database, and slot scheduling.</p>
                     </div>
                 </div>
             </section>
 
+            <!-- SECTION 5: Community Statistics -->
             <section id="demographics" class="scroll-mt-24 py-16 bg-emerald-50/30 dark:bg-emerald-950/10 border-y border-zinc-200 dark:border-zinc-900">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
                     <div class="text-center max-w-2xl mx-auto space-y-3">
@@ -439,7 +459,7 @@
                 </div>
             </section>
 
-            <!-- SECTION 9: Contact Numbers -->
+            <!-- SECTION 8: Important Contact Numbers -->
             <section id="contacts" class="scroll-mt-24 py-8 bg-transparent border-t border-zinc-200 dark:border-zinc-800">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="text-center max-w-2xl mx-auto space-y-3 mb-6">
@@ -449,25 +469,45 @@
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                        <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm text-center">
+                        <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm text-center flex flex-col items-center">
+                            <div class="p-3 bg-emerald-500/10 text-brand rounded-full mb-3">
+                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                </svg>
+                            </div>
                             <div class="font-bold text-zinc-900 dark:text-white">Barangay Office</div>
                             <div class="text-brand font-mono mt-2">(038) 123-4567</div>
                             <div class="text-xs text-zinc-500 mt-1">Office Hours: 8am–5pm</div>
                         </div>
 
-                        <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm text-center">
+                        <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm text-center flex flex-col items-center">
+                            <div class="p-3 bg-emerald-500/10 text-emerald-500 rounded-full mb-3">
+                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                </svg>
+                            </div>
                             <div class="font-bold text-zinc-900 dark:text-white">Health Hotline</div>
                             <div class="text-brand font-mono mt-2">+63 917 000 1111</div>
                             <div class="text-xs text-zinc-500 mt-1">For health concerns & immunization</div>
                         </div>
 
-                        <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm text-center">
+                        <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm text-center flex flex-col items-center">
+                            <div class="p-3 bg-red-500/10 text-red-500 rounded-full mb-3">
+                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.618 5.984A11.955 11.955 0 0112 2.944a11.952 11.952 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016zM12 9v2m0 4h.01" />
+                                </svg>
+                            </div>
                             <div class="font-bold text-zinc-900 dark:text-white">Police / Emergency</div>
                             <div class="text-brand font-mono mt-2">911 / (038) 765-4321</div>
                             <div class="text-xs text-zinc-500 mt-1">Immediate assistance</div>
                         </div>
 
-                        <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm text-center">
+                        <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm text-center flex flex-col items-center">
+                            <div class="p-3 bg-amber-500/10 text-amber-500 rounded-full mb-3">
+                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.966 7.966 0 01-2.343 5.657z" />
+                                </svg>
+                            </div>
                             <div class="font-bold text-zinc-900 dark:text-white">Fire Department</div>
                             <div class="text-brand font-mono mt-2">+63 927 222 3333</div>
                             <div class="text-xs text-zinc-500 mt-1">Fire & Rescue</div>
