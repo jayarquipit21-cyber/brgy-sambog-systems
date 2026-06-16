@@ -19,6 +19,7 @@ class ManageAppointments extends Component
     public ?int $selectedAppointmentId = null;
     public string $redemptionDate = '';
     public string $redemptionTime = '';
+    public string $approvalNotes = '';
     public bool $showApproveModal = false;
 
     // Reject modal state
@@ -31,6 +32,7 @@ class ManageAppointments extends Component
         $this->selectedAppointmentId = $id;
         $this->redemptionDate = now()->toDateString();
         $this->redemptionTime = '09:00 AM - 10:00 AM';
+        $this->approvalNotes = '';
         $this->showApproveModal = true;
     }
 
@@ -67,13 +69,15 @@ class ManageAppointments extends Component
 
         $appointment = Appointment::findOrFail($this->selectedAppointmentId);
         $appointment->update([
-            'status' => 'approved',
+            'status'           => 'approved',
             'appointment_date' => $this->redemptionDate,
             'appointment_time' => $this->redemptionTime,
+            'admin_notes'      => $this->approvalNotes ?: null,
         ]);
 
         $this->showApproveModal = false;
         $this->selectedAppointmentId = null;
+        $this->approvalNotes = '';
 
         Flux::toast(variant: 'success', text: __('Appointment approved and scheduled successfully!'));
     }

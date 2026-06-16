@@ -144,6 +144,38 @@
                                 @endif
                             </td>
                         </tr>
+
+                        {{-- Sub-row: Cancellation Reason or Admin Notes --}}
+                        @if($apt->status === 'cancelled' && $apt->admin_notes)
+                            <tr class="bg-red-50/50 dark:bg-red-950/10 border-t-0">
+                                <td colspan="5" class="px-4 py-2">
+                                    <div class="flex items-start gap-2">
+                                        <span class="shrink-0 mt-0.5 inline-flex items-center justify-center w-4 h-4 rounded-full bg-red-100 dark:bg-red-900/40">
+                                            <svg class="w-2.5 h-2.5 text-red-500 dark:text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                                        </span>
+                                        <div>
+                                            <span class="text-[10px] font-bold uppercase tracking-wide text-red-600 dark:text-red-400">Reason for Cancellation</span>
+                                            <p class="text-xs text-zinc-600 dark:text-zinc-400 mt-0.5">{{ $apt->admin_notes }}</p>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        @elseif(in_array($apt->status, ['approved', 'completed']) && $apt->admin_notes)
+                            <tr class="bg-emerald-50/50 dark:bg-emerald-950/10 border-t-0">
+                                <td colspan="5" class="px-4 py-2">
+                                    <div class="flex items-start gap-2">
+                                        <span class="shrink-0 mt-0.5 inline-flex items-center justify-center w-4 h-4 rounded-full bg-emerald-100 dark:bg-emerald-900/40">
+                                            <svg class="w-2.5 h-2.5 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                        </span>
+                                        <div>
+                                            <span class="text-[10px] font-bold uppercase tracking-wide text-emerald-600 dark:text-emerald-400">Admin Notes</span>
+                                            <p class="text-xs text-zinc-600 dark:text-zinc-400 mt-0.5">{{ $apt->admin_notes }}</p>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endif
+
                     @endforeach
                 </tbody>
             </table>
@@ -188,6 +220,19 @@
                         <option value="03:00 PM - 04:00 PM">03:00 PM - 04:00 PM (Afternoon)</option>
                     </select>
                     @error('redemptionTime') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                </div>
+
+                <div>
+                    <label for="approvalNotes" class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">
+                        Notes <span class="text-zinc-400 dark:text-zinc-500 font-normal">(optional)</span>
+                    </label>
+                    <textarea
+                        id="approvalNotes"
+                        wire:model="approvalNotes"
+                        rows="3"
+                        placeholder="e.g. Bring original copies for verification..."
+                        class="w-full rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-2 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand text-sm resize-none"
+                    ></textarea>
                 </div>
             </div>
 
