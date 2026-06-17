@@ -52,6 +52,15 @@
                             {{ __('Book & Appointments') }}
                         </flux:sidebar.item>
                     @endif
+
+                    @if(auth()->user()->isResident())
+                        <flux:sidebar.item icon="identification" :href="route('profile.complete')" :current="request()->routeIs('profile.complete')" wire:navigate>
+                            {{ __('Complete My Profile') }}
+                            @if(!auth()->user()->resident?->place_of_birth)
+                                <span class="ml-auto inline-flex h-2 w-2 rounded-full bg-amber-400 animate-pulse"></span>
+                            @endif
+                        </flux:sidebar.item>
+                    @endif
                 </flux:sidebar.group>
             </flux:sidebar.nav>
 

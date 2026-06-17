@@ -236,6 +236,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('appointments', function () {
         return view('pages.appointments');
     })->name('appointments');
+
+    // Complete My Profile (resident self-service)
+    Route::livewire('profile/complete', \App\Livewire\CompleteProfile::class)->name('profile.complete');
 });
 
 require __DIR__.'/settings.php';
