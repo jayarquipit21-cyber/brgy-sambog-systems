@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Household;
 use App\Models\Resident;
+use App\Models\User;
 use Carbon\Carbon;
 use Flux\Flux;
 use Illuminate\Support\Facades\Auth;
@@ -117,8 +118,15 @@ class MyHousehold extends Component
         $birthDateCarbon = Carbon::parse($this->birthdate);
         $age = $birthDateCarbon->age;
 
+        // Try to locate an existing User account matching the email
+        $existingUser = null;
+        if ($this->email_address) {
+            $existingUser = User::where('email', strtolower($this->email_address))->first();
+        }
+
         Resident::create([
             'household_id' => $headResident->household_id,
+            'user_id' => $existingUser ? $existingUser->id : null,
             'first_name' => $this->first_name,
             'middle_name' => $this->middle_name,
             'last_name' => $this->last_name,
