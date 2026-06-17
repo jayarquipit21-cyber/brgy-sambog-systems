@@ -813,6 +813,24 @@
         <!-- 3. HOUSEHOLD HEAD DASHBOARD VIEW -->
         @elseif(auth()->user()->isHouseholdHead())
 
+            @if(auth()->user()->resident && !auth()->user()->resident->place_of_birth)
+                <!-- Complete Profile Prompt -->
+                <div class="mb-6 relative overflow-hidden bg-amber-50/70 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800/80 p-6 rounded-3xl shadow-sm">
+                    <div class="flex items-start sm:items-center gap-4">
+                        <div class="p-3 bg-amber-500/20 text-amber-700 dark:text-amber-400 rounded-2xl shrink-0">
+                            <flux:icon name="identification" class="size-6" />
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-base font-bold text-amber-900 dark:text-amber-300">Complete Your Profile</h3>
+                            <p class="text-[11px] text-amber-800/80 dark:text-amber-400/80 mt-1">Please provide your extended personal details and household information to ensure the Barangay registry is accurate.</p>
+                        </div>
+                        <a href="{{ route('profile.complete') }}" wire:navigate class="shrink-0 px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold rounded-xl shadow-sm transition">
+                            Complete Now
+                        </a>
+                    </div>
+                </div>
+            @endif
+
             <!-- Top stats row -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
                 <!-- Family Members -->

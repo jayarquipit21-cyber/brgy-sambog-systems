@@ -227,6 +227,36 @@
                 </div>
             </div>
 
+            {{-- SECTION 7: Household Level (Only for Heads) --}}
+            @if(auth()->user()->isHouseholdHead())
+                <div class="bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-3xl p-6 shadow-lg space-y-5">
+                    <div class="flex items-center gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-4">
+                        <div class="p-2 bg-teal-500/10 text-teal-600 dark:text-teal-400 rounded-xl">
+                            <flux:icon name="home" class="size-5" />
+                        </div>
+                        <div>
+                            <h2 class="text-base font-bold text-zinc-900 dark:text-white font-outfit">Household Information</h2>
+                            <p class="text-[11px] text-zinc-500">Dwelling details for the entire household unit</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                        <flux:select wire:model="is_farmer" label="Is Head a Farmer?">
+                            <option value="">Select Option</option>
+                            <option value="Y">Yes</option>
+                            <option value="N">No</option>
+                        </flux:select>
+                        <flux:input wire:model="water_source" label="Primary Water Source" placeholder="e.g. Local Water District, Deep Well" />
+                        <flux:input wire:model="sanitary_toilet" label="Sanitary Toilet Type" placeholder="e.g. Water-sealed, Flush" />
+                        <flux:input wire:model="waste_management" label="Waste Management Practice" placeholder="e.g. Collected, Burned, Composted" />
+                        <flux:select wire:model="has_blind_drainage" label="Has Blind Drainage?">
+                            <option value="">Select Option</option>
+                            <option value="Y">Yes</option>
+                            <option value="N">No</option>
+                        </flux:select>
+                    </div>
+                </div>
+            @endif
+
             {{-- Submit --}}
             <div class="flex items-center justify-end gap-3">
                 <a href="{{ route('dashboard') }}" class="px-5 py-2.5 text-sm font-semibold text-zinc-600 dark:text-zinc-300 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl hover:border-zinc-300 transition">

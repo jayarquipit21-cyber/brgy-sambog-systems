@@ -46,6 +46,13 @@ class CompleteProfile extends Component
     public string $vulnerable_sector = '';
     public string $social_welfare_availed = '';
 
+    // Household-level (For Household Heads)
+    public string $is_farmer = '';
+    public string $water_source = '';
+    public string $sanitary_toilet = '';
+    public string $waste_management = '';
+    public string $has_blind_drainage = '';
+
     public bool $profileLinked = false;
 
     public function mount(): void
@@ -79,6 +86,11 @@ class CompleteProfile extends Component
             $this->nutritional_classification     = $resident->nutritional_classification ?? '';
             $this->vulnerable_sector              = $resident->vulnerable_sector ?? '';
             $this->social_welfare_availed         = $resident->social_welfare_availed ?? '';
+            $this->is_farmer                      = $resident->is_farmer ?? '';
+            $this->water_source                   = $resident->water_source ?? '';
+            $this->sanitary_toilet                = $resident->sanitary_toilet ?? '';
+            $this->waste_management               = $resident->waste_management ?? '';
+            $this->has_blind_drainage             = $resident->has_blind_drainage ?? '';
         }
     }
 
@@ -110,6 +122,11 @@ class CompleteProfile extends Component
             'nutritional_classification'     => 'nullable|string|max:255',
             'vulnerable_sector'              => 'nullable|string|max:255',
             'social_welfare_availed'         => 'nullable|string|max:255',
+            'is_farmer'                      => 'nullable|in:Y,N',
+            'water_source'                   => 'nullable|string|max:255',
+            'sanitary_toilet'                => 'nullable|string|max:255',
+            'waste_management'               => 'nullable|string|max:255',
+            'has_blind_drainage'             => 'nullable|in:Y,N',
         ];
     }
 
@@ -150,6 +167,11 @@ class CompleteProfile extends Component
             'nutritional_classification'     => $this->nutritional_classification ?: null,
             'vulnerable_sector'              => $this->vulnerable_sector ?: null,
             'social_welfare_availed'         => $this->social_welfare_availed ?: null,
+            'is_farmer'                      => Auth::user()->isHouseholdHead() ? ($this->is_farmer ?: null) : ($resident->is_farmer ?? null),
+            'water_source'                   => Auth::user()->isHouseholdHead() ? ($this->water_source ?: null) : ($resident->water_source ?? null),
+            'sanitary_toilet'                => Auth::user()->isHouseholdHead() ? ($this->sanitary_toilet ?: null) : ($resident->sanitary_toilet ?? null),
+            'waste_management'               => Auth::user()->isHouseholdHead() ? ($this->waste_management ?: null) : ($resident->waste_management ?? null),
+            'has_blind_drainage'             => Auth::user()->isHouseholdHead() ? ($this->has_blind_drainage ?: null) : ($resident->has_blind_drainage ?? null),
         ]);
 
         Flux::toast(variant: 'success', text: __('Your profile has been updated successfully.'));

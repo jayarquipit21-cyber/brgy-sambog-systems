@@ -53,7 +53,7 @@
                         </flux:sidebar.item>
                     @endif
 
-                    @if(auth()->user()->isResident())
+                    @if(auth()->user()->isResident() || auth()->user()->isHouseholdHead())
                         <flux:sidebar.item icon="identification" :href="route('profile.complete')" :current="request()->routeIs('profile.complete')" wire:navigate>
                             {{ __('Complete My Profile') }}
                             @if(!auth()->user()->resident?->place_of_birth)
