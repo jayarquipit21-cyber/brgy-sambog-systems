@@ -488,7 +488,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                 </svg>
                             </div>
-                            <h3 class="font-bold text-xl font-outfit mb-3 text-zinc-950 dark:text-white">Barangay Clearances</h3>
+                            <h3 class="font-bold text-xl font-outfit mb-3 text-zinc-950 dark:text-white">Barangay Documents</h3>
                             <p class="text-zinc-500 text-sm leading-relaxed font-light">
                                 Schedule personal pick-up slots at the Barangay Hall to pick up processed official clearances, indigency certifications, and administrative paperworks safely.
                             </p>
@@ -764,7 +764,7 @@
                 <div class="space-y-4">
                     <h5 class="text-zinc-900 dark:text-white font-bold font-outfit text-xs uppercase tracking-wider">Contact Details</h5>
                     <ul class="space-y-2 text-xs text-zinc-500">
-                        <li>Email: <span class="text-zinc-700 dark:text-zinc-300 font-medium">support@corella.gov</span></li>
+                        <li>Email: <span class="text-zinc-700 dark:text-zinc-300 font-medium">sambogsupport@corella.gov</span></li>
                         <li>Hotline: <span class="text-zinc-700 dark:text-zinc-300 font-medium">+63 912 345 6789</span></li>
                         <li>Address: <span class="text-zinc-700 dark:text-zinc-300 font-medium">Brgy. Sambog, Corella, Bohol</span></li>
                     </ul>
