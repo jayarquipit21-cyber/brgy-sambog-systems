@@ -1048,6 +1048,53 @@
                         </div>
                     </div>
 
+                    
+                    <!-- Document Pickup History -->
+                    <div class="bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-3xl p-6 shadow-lg space-y-4">
+                        <div class="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
+                            <div class="flex items-center gap-3">
+                                <div class="p-2 bg-zinc-500/10 text-zinc-600 dark:text-zinc-500 rounded-xl">
+                                    <flux:icon name="clock" class="size-5" />
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-bold text-zinc-900 dark:text-white font-outfit">Pickup History</h3>
+                                    <p class="text-[10px] text-zinc-500 font-light">Past document requests</p>
+                                </div>
+                            </div>
+                            <a href="{{ route('appointments') }}" class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 hover:underline">View All</a>
+                        </div>
+
+                        <div class="space-y-2">
+                            @forelse($appointmentHistory as $apt)
+                                <div class="flex items-start gap-3 p-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-100 dark:border-zinc-700/40">
+                                    <div class="p-1.5 rounded-lg bg-zinc-500/10 text-zinc-600 dark:text-zinc-400 shrink-0">
+                                        <flux:icon name="document-text" class="size-3.5" />
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <div class="text-[11px] font-bold text-zinc-800 dark:text-white truncate">{{ $apt->purpose }}</div>
+                                        <div class="text-[10px] text-zinc-500 dark:text-zinc-400">
+                                            @if($apt->appointment_date)
+                                                {{ $apt->appointment_date->format('M d, Y') }} @ {{ $apt->appointment_time }}
+                                            @endif
+                                        </div>
+                                    </div>
+                                    @if($apt->status === 'completed')
+                                        <span class="shrink-0 text-[8px] font-bold px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">Completed</span>
+                                    @elseif($apt->status === 'cancelled')
+                                        <span class="shrink-0 text-[8px] font-bold px-1.5 py-0.5 rounded bg-red-500/10 text-red-700 dark:text-red-400 border border-red-500/20">Cancelled</span>
+                                    @else
+                                        <span class="shrink-0 text-[8px] font-bold px-1.5 py-0.5 rounded bg-zinc-100 text-zinc-500 border border-zinc-200">{{ ucfirst($apt->status) }}</span>
+                                    @endif
+                                </div>
+                            @empty
+                                <div class="text-center py-4">
+                                    <flux:icon name="clock" class="size-8 text-zinc-300 dark:text-zinc-600 mx-auto mb-1" />
+                                    <p class="text-[11px] text-zinc-500">No past pickups found.</p>
+                                </div>
+                            @endforelse
+                        </div>
+                    </div>
+
                     <!-- Recent Announcements -->
                     <div class="flex-1 flex flex-col bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-3xl p-6 shadow-lg">
                         <div class="flex items-center gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-3">
@@ -1272,6 +1319,65 @@
                                                 <flux:icon name="calendar" class="size-8 text-zinc-300 dark:text-zinc-600 mx-auto mb-2" />
                                                 <p class="text-xs text-zinc-500">No upcoming pickup slots found.</p>
                                                 <a href="{{ route('appointments') }}" class="text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:underline mt-1 inline-block">Book one now →</a>
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    
+                    <!-- Pickup History -->
+                    <div class="bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-3xl p-6 shadow-lg space-y-4">
+                        <div class="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
+                            <div class="flex items-center gap-3">
+                                <div class="p-2 bg-zinc-500/10 text-zinc-600 dark:text-zinc-500 rounded-xl">
+                                    <flux:icon name="clock" class="size-5" />
+                                </div>
+                                <div>
+                                    <h3 class="text-base font-bold text-zinc-900 dark:text-white font-outfit">Pickup History</h3>
+                                    <p class="text-[11px] text-zinc-500 font-light">Past document requests</p>
+                                </div>
+                            </div>
+                            <a href="{{ route('appointments') }}" class="text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:underline">View All</a>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="border-b border-zinc-100 dark:border-zinc-800 text-[10px] text-zinc-500 uppercase tracking-widest">
+                                        <th class="pb-3 font-bold">Purpose / Document</th>
+                                        <th class="pb-3 font-bold">Date Picked up</th>
+                                        <th class="pb-3 font-bold text-right">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800/60 text-xs text-zinc-700 dark:text-zinc-300">
+                                    @forelse($appointmentHistory as $apt)
+                                        <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/20 transition-colors">
+                                            <td class="py-3.5 font-bold text-zinc-900 dark:text-white">{{ $apt->purpose }}</td>
+                                            <td class="py-3.5 font-semibold text-zinc-600 dark:text-zinc-400">
+                                                @if($apt->appointment_date)
+                                                    {{ $apt->appointment_date->format('M d, Y') }} <span class="text-emerald-500 mx-1">@</span> {{ $apt->appointment_time }}
+                                                @else
+                                                    <span class="text-xs text-zinc-400">N/A</span>
+                                                @endif
+                                            </td>
+                                            <td class="py-3.5 text-right">
+                                                @if($apt->status === 'completed')
+                                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[9px] font-bold bg-emerald-500/10 text-emerald-700 dark:text-emerald-500 border border-emerald-500/25">Completed</span>
+                                                @elseif($apt->status === 'cancelled')
+                                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[9px] font-bold bg-red-500/10 text-red-700 dark:text-red-500 border border-red-500/25">Cancelled</span>
+                                                @else
+                                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[9px] font-bold bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-700">{{ ucfirst($apt->status) }}</span>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="3" class="py-8 text-center">
+                                                <flux:icon name="clock" class="size-8 text-zinc-300 dark:text-zinc-600 mx-auto mb-2" />
+                                                <p class="text-xs text-zinc-500">No past pickups found.</p>
                                             </td>
                                         </tr>
                                     @endforelse

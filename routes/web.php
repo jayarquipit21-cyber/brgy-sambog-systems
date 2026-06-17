@@ -161,6 +161,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 ->orderByDesc('published_at')
                 ->take(3)
                 ->get();
+            $data['appointmentHistory'] = Appointment::where('user_id', $user->id)
+                ->whereIn('status', ['completed', 'cancelled'])
+                ->orderBy('updated_at', 'desc')
+                ->take(5)
+                ->get();
         } else {
             $resident = $user->resident;
             $data['residentProfile'] = $resident;
@@ -173,6 +178,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
             $data['recentAnnouncements'] = Announcement::orderByDesc('is_pinned')
                 ->orderByDesc('published_at')
                 ->take(3)
+                ->get();
+            $data['appointmentHistory'] = Appointment::where('user_id', $user->id)
+                ->whereIn('status', ['completed', 'cancelled'])
+                ->orderBy('updated_at', 'desc')
+                ->take(5)
                 ->get();
         }
 
