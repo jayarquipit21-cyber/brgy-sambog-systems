@@ -45,6 +45,7 @@
                         <th class="py-3 px-4">Birthdate</th>
                         <th class="py-3 px-4">Education Status</th>
                         <th class="py-3 px-4 text-center">Status</th>
+                        <th class="py-3 px-4 text-center">Action</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">
@@ -100,6 +101,9 @@
                                     </div>
                                 @endif
                             </td>
+                            <td class="py-3 px-4 text-center">
+                                <flux:button size="sm" variant="subtle" icon="pencil-square" wire:click="editResident({{ $member->id }})" class="!px-2" />
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -107,11 +111,11 @@
         </div>
         @endif
 
-    <!-- Add Resident Modal -->
+    <!-- Add/Edit Resident Modal -->
     <flux:modal name="add-member-modal" class="max-w-3xl" wire:model="showCreateModal">
         <form wire:submit="saveResident" class="space-y-6">
             <div>
-                <flux:heading size="lg">{{ __('Add Household Member') }}</flux:heading>
+                <flux:heading size="lg">{{ $editingResidentId ? __('Edit Household Member') : __('Add Household Member') }}</flux:heading>
                 <flux:subheading>{{ __('Fill out the details of the family/household member to register them under your household unit.') }}</flux:subheading>
             </div>
 
