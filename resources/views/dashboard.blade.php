@@ -879,10 +879,23 @@
             <!-- Main content grid -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
+                @php
+                    $headIconBgClass = 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-500';
+                    $headItemIconClass = 'text-emerald-500';
+                    if ($residentProfile) {
+                        if (strtolower($residentProfile->sex) === 'male') {
+                            $headIconBgClass = 'bg-blue-500/10 text-blue-600 dark:text-blue-500';
+                            $headItemIconClass = 'text-blue-500';
+                        } elseif (strtolower($residentProfile->sex) === 'female') {
+                            $headIconBgClass = 'bg-pink-500/10 text-pink-600 dark:text-pink-500';
+                            $headItemIconClass = 'text-pink-500';
+                        }
+                    }
+                @endphp
                 <!-- Household Profile Card -->
                 <div class="bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-3xl p-6 shadow-lg flex flex-col">
                     <div class="flex items-center gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-3 mb-4">
-                        <div class="p-2 bg-emerald-500/10 text-emerald-600 dark:text-emerald-500 rounded-xl">
+                        <div class="p-2 {{ $headIconBgClass }} rounded-xl">
                             <flux:icon name="identification" class="size-5" />
                         </div>
                         <div>
@@ -912,7 +925,7 @@
                             @foreach($profileItems as $item)
                                 @if(!empty($item['value']))
                                     <div class="flex items-start gap-3 p-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-100 dark:border-zinc-700/40">
-                                        <flux:icon name="{{ $item['icon'] }}" class="size-3.5 text-emerald-500 mt-0.5 shrink-0" />
+                                        <flux:icon name="{{ $item['icon'] }}" class="size-3.5 {{ $headItemIconClass }} mt-0.5 shrink-0" />
                                         <div class="min-w-0">
                                             <div class="text-[9px] uppercase tracking-widest text-zinc-400 dark:text-zinc-500 font-bold">{{ $item['label'] }}</div>
                                             <div class="text-xs font-bold text-zinc-800 dark:text-white truncate">{{ $item['value'] }}</div>
@@ -1136,10 +1149,23 @@
             <!-- Main content: Profile + Appointments + Announcements -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
+                @php
+                    $resIconBgClass = 'bg-violet-500/10 text-violet-600 dark:text-violet-500';
+                    $resItemIconClass = 'text-violet-500';
+                    if ($residentProfile) {
+                        if (strtolower($residentProfile->sex) === 'male') {
+                            $resIconBgClass = 'bg-blue-500/10 text-blue-600 dark:text-blue-500';
+                            $resItemIconClass = 'text-blue-500';
+                        } elseif (strtolower($residentProfile->sex) === 'female') {
+                            $resIconBgClass = 'bg-pink-500/10 text-pink-600 dark:text-pink-500';
+                            $resItemIconClass = 'text-pink-500';
+                        }
+                    }
+                @endphp
                 <!-- Resident Profile Card -->
                 <div class="bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-3xl p-6 shadow-lg flex flex-col">
                     <div class="flex items-center gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-3 mb-4">
-                        <div class="p-2 bg-violet-500/10 text-violet-600 dark:text-violet-500 rounded-xl">
+                        <div class="p-2 {{ $resIconBgClass }} rounded-xl">
                             <flux:icon name="identification" class="size-5" />
                         </div>
                         <div>
@@ -1170,7 +1196,7 @@
                             @foreach($resItems as $item)
                                 @if(!empty($item['value']))
                                     <div class="flex items-start gap-3 p-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-100 dark:border-zinc-700/40">
-                                        <flux:icon name="{{ $item['icon'] }}" class="size-3.5 text-violet-500 mt-0.5 shrink-0" />
+                                        <flux:icon name="{{ $item['icon'] }}" class="size-3.5 {{ $resItemIconClass }} mt-0.5 shrink-0" />
                                         <div class="min-w-0">
                                             <div class="text-[9px] uppercase tracking-widest text-zinc-400 dark:text-zinc-500 font-bold">{{ $item['label'] }}</div>
                                             <div class="text-xs font-bold text-zinc-800 dark:text-white truncate">{{ $item['value'] }}</div>
