@@ -3,10 +3,10 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <div class="space-y-8 pb-12">
         <!-- Premium Welcome Banner with High-Contrast Animated Gradients -->
-        <div class="relative overflow-hidden rounded-3xl border border-emerald-300/30 dark:border-emerald-700/40 bg-gradient-to-br from-emerald-500 via-emerald-650 to-teal-600 dark:from-zinc-950 dark:via-emerald-950 dark:to-zinc-900 p-8 shadow-2xl transition-all duration-300">
+        <div class="relative overflow-hidden rounded-3xl border border-emerald-300/30 dark:border-emerald-700/40 bg-gradient-to-br from-emerald-500 via-emerald-650 to-emerald-600 dark:from-zinc-950 dark:via-emerald-950 dark:to-zinc-900 p-8 shadow-2xl transition-all duration-300">
             <!-- Background glow orbs -->
-            <div class="absolute -right-16 -bottom-16 h-64 w-64 rounded-full bg-gradient-to-tr from-emerald-400/40 to-teal-300/40 dark:from-emerald-500/30 dark:to-teal-400/30 blur-3xl"></div>
-            <div class="absolute -left-16 -top-16 h-64 w-64 rounded-full bg-gradient-to-br from-teal-400/30 to-emerald-300/30 dark:from-teal-500/20 dark:to-emerald-400/20 blur-3xl"></div>
+            <div class="absolute -right-16 -bottom-16 h-64 w-64 rounded-full bg-gradient-to-tr from-emerald-400/40 to-emerald-300/40 dark:from-emerald-500/30 dark:to-emerald-400/30 blur-3xl"></div>
+            <div class="absolute -left-16 -top-16 h-64 w-64 rounded-full bg-gradient-to-br from-emerald-400/30 to-emerald-300/30 dark:from-emerald-500/20 dark:to-emerald-400/20 blur-3xl"></div>
             <!-- Subtle green shimmer across top -->
             <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/40 dark:via-emerald-400/50 to-transparent"></div>
 
@@ -17,7 +17,7 @@
                         Brgy. Sambog, Corella, Bohol Workspace
                     </span>
                     <h2 class="text-3xl font-black font-outfit sm:text-4xl text-white tracking-tight leading-none drop-shadow-sm">
-                        Hello, <span class="bg-gradient-to-r from-white via-emerald-100 to-teal-50 dark:from-emerald-300 dark:via-teal-200 dark:to-cyan-300 bg-clip-text text-transparent font-black">{{ auth()->user()->name }}</span>
+                        Hello, <span class="bg-gradient-to-r from-white via-emerald-100 to-emerald-50 dark:from-emerald-300 dark:via-emerald-200 dark:to-emerald-300 bg-clip-text text-transparent font-black">{{ auth()->user()->name }}</span>
                     </h2>
                     <p class="text-white/90 dark:text-zinc-200 text-xs sm:text-sm max-w-2xl font-normal leading-relaxed">
                         Welcome to your official inhabitant management and public services center. Access filtered registries, Purok demographic matrices, and pickup slots securely.
@@ -70,18 +70,18 @@
                 </div>
 
                 <!-- Households Card -->
-                <div class="group relative overflow-hidden bg-teal-50/70 dark:bg-zinc-900/40 border border-teal-250 dark:border-zinc-800/80 hover:border-teal-500/40 p-6 rounded-3xl shadow-md transition-all duration-300 hover:-translate-y-1">
-                    <div class="absolute inset-0 bg-gradient-to-b from-teal-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="group relative overflow-hidden bg-emerald-50/70 dark:bg-zinc-900/40 border border-emerald-250 dark:border-zinc-800/80 hover:border-emerald-500/40 p-6 rounded-3xl shadow-md transition-all duration-300 hover:-translate-y-1">
+                    <div class="absolute inset-0 bg-gradient-to-b from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     <div class="flex items-center justify-between">
                         <div class="space-y-2">
-                            <span class="text-[10px] font-extrabold uppercase tracking-wider text-teal-800 dark:text-teal-400">Households Tracked</span>
-                            <div class="text-4xl font-black text-teal-950 dark:text-white font-outfit tracking-tight">{{ number_format($totalHouseholds) }}</div>
-                            <span class="inline-flex items-center text-[10px] text-teal-900 dark:text-zinc-400 font-bold bg-teal-100 dark:bg-teal-950/20 px-2 py-0.5 rounded-full">
-                                <flux:icon.home class="size-3 text-teal-600 dark:text-teal-500 mr-1" />
+                            <span class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-800 dark:text-emerald-400">Households Tracked</span>
+                            <div class="text-4xl font-black text-emerald-950 dark:text-white font-outfit tracking-tight">{{ number_format($totalHouseholds) }}</div>
+                            <span class="inline-flex items-center text-[10px] text-emerald-900 dark:text-zinc-400 font-bold bg-emerald-100 dark:bg-emerald-950/20 px-2 py-0.5 rounded-full">
+                                <flux:icon.home class="size-3 text-emerald-600 dark:text-emerald-500 mr-1" />
                                 Unique family zones
                             </span>
                         </div>
-                        <div class="p-4 bg-teal-500/20 text-teal-700 dark:text-teal-400 rounded-2xl group-hover:scale-110 transition duration-300 shadow-md">
+                        <div class="p-4 bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 rounded-2xl group-hover:scale-110 transition duration-300 shadow-md">
                             <flux:icon name="home" class="size-6" />
                         </div>
                     </div>
@@ -150,12 +150,12 @@
                             <flux:icon.arrow-right class="size-3.5 text-zinc-400 group-hover:text-emerald-600 group-hover:translate-x-1 transition" />
                         </a>
 
-                        <a href="{{ route('health') }}" class="group flex items-center justify-between p-3.5 bg-zinc-50 hover:bg-teal-50/50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 hover:border-teal-500/20 rounded-xl transition duration-300">
+                        <a href="{{ route('health') }}" class="group flex items-center justify-between p-3.5 bg-zinc-50 hover:bg-emerald-50/50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 hover:border-emerald-500/20 rounded-xl transition duration-300">
                             <div class="flex items-center gap-3">
-                                <flux:icon name="heart" class="size-4 text-teal-600 dark:text-teal-500 group-hover:scale-110 transition" />
+                                <flux:icon name="heart" class="size-4 text-emerald-600 dark:text-emerald-500 group-hover:scale-110 transition" />
                                 <span class="text-xs font-bold text-zinc-700 dark:text-zinc-300 group-hover:text-zinc-900 dark:group-hover:text-white transition">Health Concerns Desk</span>
                             </div>
-                            <flux:icon.arrow-right class="size-3.5 text-zinc-400 group-hover:text-teal-600 group-hover:translate-x-1 transition" />
+                            <flux:icon.arrow-right class="size-3.5 text-zinc-400 group-hover:text-emerald-600 group-hover:translate-x-1 transition" />
                         </a>
                     </div>
                 </div>
@@ -164,7 +164,7 @@
                 <div class="lg:col-span-2 bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-3xl p-6 shadow-lg space-y-4">
                     <div class="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
                         <div class="flex items-center gap-3">
-                            <div class="p-2 bg-teal-500/10 text-teal-650 dark:text-teal-500 rounded-xl">
+                            <div class="p-2 bg-emerald-500/10 text-emerald-650 dark:text-emerald-500 rounded-xl">
                                 <flux:icon name="chart-bar" class="size-5" />
                             </div>
                             <div>
@@ -243,7 +243,7 @@
                 <div class="bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-3xl p-6 shadow-lg space-y-4">
                     <div class="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
                         <div class="flex items-center gap-3">
-                            <div class="p-2 bg-indigo-500/10 text-indigo-650 dark:text-indigo-500 rounded-xl">
+                            <div class="p-2 bg-emerald-500/10 text-emerald-650 dark:text-emerald-500 rounded-xl">
                                 <flux:icon name="users" class="size-5" />
                             </div>
                             <div>
@@ -329,7 +329,7 @@
                 <div class="bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-3xl p-6 shadow-lg flex flex-col h-full font-outfit">
                     <div class="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3 mb-4">
                         <div class="flex items-center gap-3">
-                            <div class="p-2 bg-amber-500/10 text-amber-650 dark:text-amber-500 rounded-xl">
+                            <div class="p-2 bg-emerald-500/10 text-emerald-650 dark:text-emerald-500 rounded-xl">
                                 <flux:icon name="chart-pie" class="size-5" />
                             </div>
                             <div>
@@ -499,15 +499,15 @@
             <!-- Dynamic Health Metrics Dashboard Grid (Vibrant Colors) -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <!-- Case Records -->
-                <div class="group relative overflow-hidden bg-teal-50/70 dark:bg-zinc-900/40 border border-teal-250 dark:border-zinc-800/80 hover:border-teal-500/40 p-6 rounded-3xl shadow-md transition-all duration-300 hover:-translate-y-1">
-                    <div class="absolute inset-0 bg-gradient-to-b from-teal-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="group relative overflow-hidden bg-emerald-50/70 dark:bg-zinc-900/40 border border-emerald-250 dark:border-zinc-800/80 hover:border-emerald-500/40 p-6 rounded-3xl shadow-md transition-all duration-300 hover:-translate-y-1">
+                    <div class="absolute inset-0 bg-gradient-to-b from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     <div class="flex items-center justify-between">
                         <div class="space-y-1">
-                            <span class="text-[10px] font-extrabold uppercase tracking-wider text-teal-800 dark:text-teal-400">Case Records</span>
-                            <div class="text-4xl font-black text-teal-700 dark:text-teal-500 font-outfit tracking-tight">{{ number_format($totalWithConditions) }}</div>
+                            <span class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-800 dark:text-emerald-400">Case Records</span>
+                            <div class="text-4xl font-black text-emerald-700 dark:text-emerald-500 font-outfit tracking-tight">{{ number_format($totalWithConditions) }}</div>
                             <span class="text-[10px] text-zinc-600 dark:text-zinc-400 font-semibold">Active conditions</span>
                         </div>
-                        <div class="p-3 bg-teal-500/20 text-teal-700 dark:text-teal-400 rounded-xl group-hover:scale-110 transition duration-300 shadow-sm">
+                        <div class="p-3 bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 rounded-xl group-hover:scale-110 transition duration-300 shadow-sm">
                             <flux:icon name="heart" class="size-6" />
                         </div>
                     </div>
@@ -529,15 +529,15 @@
                 </div>
 
                 <!-- Pediatric Cases -->
-                <div class="group relative overflow-hidden bg-cyan-50/70 dark:bg-zinc-900/40 border border-cyan-250 dark:border-zinc-800/80 hover:border-cyan-500/40 p-6 rounded-3xl shadow-md transition-all duration-300 hover:-translate-y-1">
-                    <div class="absolute inset-0 bg-gradient-to-b from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="group relative overflow-hidden bg-emerald-50/70 dark:bg-zinc-900/40 border border-emerald-250 dark:border-zinc-800/80 hover:border-emerald-500/40 p-6 rounded-3xl shadow-md transition-all duration-300 hover:-translate-y-1">
+                    <div class="absolute inset-0 bg-gradient-to-b from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     <div class="flex items-center justify-between">
                         <div class="space-y-1">
-                            <span class="text-[10px] font-extrabold uppercase tracking-wider text-cyan-800 dark:text-cyan-450">Pediatric Cases</span>
-                            <div class="text-4xl font-black text-cyan-700 dark:text-cyan-500 font-outfit tracking-tight">{{ number_format($pediatricCases) }}</div>
+                            <span class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-800 dark:text-emerald-450">Pediatric Cases</span>
+                            <div class="text-4xl font-black text-emerald-700 dark:text-emerald-500 font-outfit tracking-tight">{{ number_format($pediatricCases) }}</div>
                             <span class="text-[10px] text-zinc-600 dark:text-zinc-400 font-semibold">Children (age &le; 12)</span>
                         </div>
-                        <div class="p-3 bg-cyan-500/20 text-cyan-700 dark:text-cyan-400 rounded-xl group-hover:scale-110 transition duration-300 shadow-sm">
+                        <div class="p-3 bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 rounded-xl group-hover:scale-110 transition duration-300 shadow-sm">
                             <flux:icon name="face-smile" class="size-6" />
                         </div>
                     </div>
@@ -584,7 +584,7 @@
                             <span class="text-emerald-700 dark:text-emerald-400 font-black">{{ number_format($percentage, 1) }}%</span>
                         </div>
                         <div class="w-full bg-zinc-100 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-full h-4 overflow-hidden p-0.5">
-                            <div class="bg-gradient-to-r from-emerald-500 to-teal-400 h-full rounded-full transition-all duration-500" style="width: {{ $percentage }}%"></div>
+                            <div class="bg-gradient-to-r from-emerald-500 to-emerald-400 h-full rounded-full transition-all duration-500" style="width: {{ $percentage }}%"></div>
                         </div>
                         <div class="grid grid-cols-2 gap-4 text-[10px] text-zinc-550 dark:text-zinc-550 pt-2 border-t border-zinc-100 dark:border-zinc-800/50">
                             <div>Unvaccinated: <strong class="text-zinc-800 dark:text-white font-semibold">{{ number_format($totalResidents - $totalVaccinated) }} residents</strong></div>
@@ -611,7 +611,7 @@
                     </div>
 
                     <div class="pt-6 flex flex-wrap gap-4">
-                        <a href="{{ route('health') }}" class="inline-flex items-center justify-center px-5 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-650 text-white text-xs font-bold rounded-xl transition duration-300 shadow-md shadow-emerald-500/10">
+                        <a href="{{ route('health') }}" class="inline-flex items-center justify-center px-5 py-3 bg-gradient-to-r from-emerald-500 to-emerald-500 hover:from-emerald-600 hover:to-emerald-650 text-white text-xs font-bold rounded-xl transition duration-300 shadow-md shadow-emerald-500/10">
                             <flux:icon name="heart" class="size-3.5 mr-2" />
                             Open Health Registry
                         </a>
@@ -625,7 +625,7 @@
                 <div class="bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-3xl p-6 shadow-lg space-y-4">
                     <div class="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
                         <div class="flex items-center gap-3">
-                            <div class="p-2 bg-indigo-500/10 text-indigo-650 dark:text-indigo-500 rounded-xl">
+                            <div class="p-2 bg-emerald-500/10 text-emerald-650 dark:text-emerald-500 rounded-xl">
                                 <flux:icon name="users" class="size-5" />
                             </div>
                             <div>
@@ -711,7 +711,7 @@
                 <div class="bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-3xl p-6 shadow-lg flex flex-col h-full font-outfit">
                     <div class="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3 mb-4">
                         <div class="flex items-center gap-3">
-                            <div class="p-2 bg-amber-500/10 text-amber-650 dark:text-amber-500 rounded-xl">
+                            <div class="p-2 bg-emerald-500/10 text-emerald-650 dark:text-emerald-500 rounded-xl">
                                 <flux:icon name="chart-pie" class="size-5" />
                             </div>
                             <div>
@@ -831,45 +831,45 @@
                 </div>
 
                 <!-- Purok -->
-                <div class="group relative overflow-hidden bg-teal-50/70 dark:bg-zinc-900/40 border border-teal-200 dark:border-zinc-800/80 hover:border-teal-400/50 p-6 rounded-3xl shadow-md transition-all duration-300 hover:-translate-y-1">
-                    <div class="absolute inset-0 bg-gradient-to-b from-teal-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <div class="group relative overflow-hidden bg-emerald-50/70 dark:bg-zinc-900/40 border border-emerald-200 dark:border-zinc-800/80 hover:border-emerald-400/50 p-6 rounded-3xl shadow-md transition-all duration-300 hover:-translate-y-1">
+                    <div class="absolute inset-0 bg-gradient-to-b from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                     <div class="flex items-center justify-between">
                         <div class="space-y-1">
-                            <div class="text-[10px] font-extrabold uppercase tracking-wider text-teal-800 dark:text-teal-400">Purok Zone</div>
-                            <div class="text-4xl font-black text-teal-950 dark:text-white font-outfit tracking-tight">{{ $household ? $household->purok_no : '—' }}</div>
-                            <div class="text-[11px] text-teal-900/70 dark:text-zinc-400">Registered purok number</div>
+                            <div class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-800 dark:text-emerald-400">Purok Zone</div>
+                            <div class="text-4xl font-black text-emerald-950 dark:text-white font-outfit tracking-tight">{{ $household ? $household->purok_no : '—' }}</div>
+                            <div class="text-[11px] text-emerald-900/70 dark:text-zinc-400">Registered purok number</div>
                         </div>
-                        <div class="p-4 bg-teal-500/20 text-teal-700 dark:text-teal-400 rounded-2xl group-hover:scale-110 transition duration-300 shadow-sm">
+                        <div class="p-4 bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 rounded-2xl group-hover:scale-110 transition duration-300 shadow-sm">
                             <flux:icon name="map-pin" class="size-6" />
                         </div>
                     </div>
                 </div>
 
                 <!-- Pending Appointments -->
-                <div class="group relative overflow-hidden bg-amber-50/70 dark:bg-zinc-900/40 border border-amber-200 dark:border-zinc-800/80 hover:border-amber-400/50 p-6 rounded-3xl shadow-md transition-all duration-300 hover:-translate-y-1">
-                    <div class="absolute inset-0 bg-gradient-to-b from-amber-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <div class="group relative overflow-hidden bg-emerald-50/70 dark:bg-zinc-900/40 border border-emerald-200 dark:border-zinc-800/80 hover:border-emerald-400/50 p-6 rounded-3xl shadow-md transition-all duration-300 hover:-translate-y-1">
+                    <div class="absolute inset-0 bg-gradient-to-b from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                     <div class="flex items-center justify-between">
                         <div class="space-y-1">
-                            <div class="text-[10px] font-extrabold uppercase tracking-wider text-amber-800 dark:text-amber-400">My Appointments</div>
-                            <div class="text-4xl font-black text-amber-950 dark:text-white font-outfit tracking-tight">{{ $upcomingAppointments->count() }}</div>
-                            <div class="text-[11px] text-amber-900/70 dark:text-zinc-400">Upcoming pickup slots</div>
+                            <div class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-800 dark:text-emerald-400">My Appointments</div>
+                            <div class="text-4xl font-black text-emerald-950 dark:text-white font-outfit tracking-tight">{{ $upcomingAppointments->count() }}</div>
+                            <div class="text-[11px] text-emerald-900/70 dark:text-zinc-400">Upcoming pickup slots</div>
                         </div>
-                        <div class="p-4 bg-amber-500/20 text-amber-700 dark:text-amber-400 rounded-2xl group-hover:scale-110 transition duration-300 shadow-sm">
+                        <div class="p-4 bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 rounded-2xl group-hover:scale-110 transition duration-300 shadow-sm">
                             <flux:icon name="calendar" class="size-6" />
                         </div>
                     </div>
                 </div>
 
                 <!-- Household No -->
-                <div class="group relative overflow-hidden bg-indigo-50/70 dark:bg-zinc-900/40 border border-indigo-200 dark:border-zinc-800/80 hover:border-indigo-400/50 p-6 rounded-3xl shadow-md transition-all duration-300 hover:-translate-y-1">
-                    <div class="absolute inset-0 bg-gradient-to-b from-indigo-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <div class="group relative overflow-hidden bg-emerald-50/70 dark:bg-zinc-900/40 border border-emerald-200 dark:border-zinc-800/80 hover:border-emerald-400/50 p-6 rounded-3xl shadow-md transition-all duration-300 hover:-translate-y-1">
+                    <div class="absolute inset-0 bg-gradient-to-b from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                     <div class="flex items-center justify-between">
                         <div class="space-y-1">
-                            <div class="text-[10px] font-extrabold uppercase tracking-wider text-indigo-800 dark:text-indigo-400">Household No.</div>
-                            <div class="text-4xl font-black text-indigo-950 dark:text-white font-outfit tracking-tight">{{ $household ? $household->household_no : '—' }}</div>
-                            <div class="text-[11px] text-indigo-900/70 dark:text-zinc-400">Official registry number</div>
+                            <div class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-800 dark:text-emerald-400">Household No.</div>
+                            <div class="text-4xl font-black text-emerald-950 dark:text-white font-outfit tracking-tight">{{ $household ? $household->household_no : '—' }}</div>
+                            <div class="text-[11px] text-emerald-900/70 dark:text-zinc-400">Official registry number</div>
                         </div>
-                        <div class="p-4 bg-indigo-500/20 text-indigo-700 dark:text-indigo-400 rounded-2xl group-hover:scale-110 transition duration-300 shadow-sm">
+                        <div class="p-4 bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 rounded-2xl group-hover:scale-110 transition duration-300 shadow-sm">
                             <flux:icon name="home" class="size-6" />
                         </div>
                     </div>
@@ -941,7 +941,7 @@
                 <div class="bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-3xl p-6 shadow-lg flex flex-col">
                     <div class="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3 mb-4">
                         <div class="flex items-center gap-3">
-                            <div class="p-2 bg-teal-500/10 text-teal-600 dark:text-teal-500 rounded-xl">
+                            <div class="p-2 bg-emerald-500/10 text-emerald-600 dark:text-emerald-500 rounded-xl">
                                 <flux:icon name="users" class="size-5" />
                             </div>
                             <div>
@@ -949,13 +949,13 @@
                                 <p class="text-[11px] text-zinc-500 font-light">Residents registered under your household</p>
                             </div>
                         </div>
-                        <span class="text-[10px] font-bold text-teal-700 dark:text-teal-400 bg-teal-500/10 border border-teal-500/20 px-2 py-0.5 rounded-full">{{ $householdMembersCount }}</span>
+                        <span class="text-[10px] font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full">{{ $householdMembersCount }}</span>
                     </div>
 
                     <div class="space-y-2 flex-1 overflow-y-auto pr-1">
                         @forelse($householdMembers as $member)
                             <div class="flex items-center gap-3 p-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-100 dark:border-zinc-700/40">
-                                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white text-[10px] font-black shrink-0">
+                                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-500 flex items-center justify-center text-white text-[10px] font-black shrink-0">
                                     {{ strtoupper(substr($member->first_name ?? '?', 0, 1)) }}
                                 </div>
                                 <div class="flex-1 min-w-0">
@@ -986,7 +986,7 @@
                     <div class="bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-3xl p-6 shadow-lg space-y-4">
                         <div class="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
                             <div class="flex items-center gap-3">
-                                <div class="p-2 bg-amber-500/10 text-amber-600 dark:text-amber-500 rounded-xl">
+                                <div class="p-2 bg-emerald-500/10 text-emerald-600 dark:text-emerald-500 rounded-xl">
                                     <flux:icon name="calendar" class="size-5" />
                                 </div>
                                 <div>
@@ -1000,7 +1000,7 @@
                         <div class="space-y-2">
                             @forelse($upcomingAppointments as $apt)
                                 <div class="flex items-start gap-3 p-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-100 dark:border-zinc-700/40">
-                                    <div class="p-1.5 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400 shrink-0">
+                                    <div class="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 shrink-0">
                                         <flux:icon name="document-text" class="size-3.5" />
                                     </div>
                                     <div class="flex-1 min-w-0">
@@ -1038,7 +1038,7 @@
                     <!-- Recent Announcements -->
                     <div class="flex-1 flex flex-col bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-3xl p-6 shadow-lg">
                         <div class="flex items-center gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-3">
-                            <div class="p-2 bg-indigo-500/10 text-indigo-600 dark:text-indigo-500 rounded-xl">
+                            <div class="p-2 bg-emerald-500/10 text-emerald-600 dark:text-emerald-500 rounded-xl">
                                 <flux:icon name="megaphone" class="size-5" />
                             </div>
                             <div>
@@ -1052,7 +1052,7 @@
                                 <div class="p-3 rounded-xl bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-100 dark:border-zinc-700/40">
                                     <div class="flex items-start gap-2">
                                         @if($ann->is_pinned)
-                                            <flux:icon name="bookmark" class="size-3 text-indigo-500 mt-0.5 shrink-0" />
+                                            <flux:icon name="bookmark" class="size-3 text-emerald-500 mt-0.5 shrink-0" />
                                         @endif
                                         <div class="flex-1 min-w-0">
                                             <div class="text-[11px] font-bold text-zinc-800 dark:text-white truncate">{{ $ann->title }}</div>
@@ -1078,30 +1078,30 @@
             <!-- Quick info cards -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
                 <!-- Age -->
-                <div class="group relative overflow-hidden bg-violet-50/70 dark:bg-zinc-900/40 border border-violet-200 dark:border-zinc-800/80 hover:border-violet-400/50 p-6 rounded-3xl shadow-md transition-all duration-300 hover:-translate-y-1">
-                    <div class="absolute inset-0 bg-gradient-to-b from-violet-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <div class="group relative overflow-hidden bg-emerald-50/70 dark:bg-zinc-900/40 border border-emerald-200 dark:border-zinc-800/80 hover:border-emerald-400/50 p-6 rounded-3xl shadow-md transition-all duration-300 hover:-translate-y-1">
+                    <div class="absolute inset-0 bg-gradient-to-b from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                     <div class="flex items-center justify-between">
                         <div class="space-y-1">
-                            <div class="text-[10px] font-extrabold uppercase tracking-wider text-violet-800 dark:text-violet-400">My Age</div>
-                            <div class="text-4xl font-black text-violet-950 dark:text-white font-outfit tracking-tight">{{ $residentProfile?->age ?? '—' }}</div>
-                            <div class="text-[11px] text-violet-900/70 dark:text-zinc-400">{{ $residentProfile?->age_classification ?? 'Age group' }}</div>
+                            <div class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-800 dark:text-emerald-400">My Age</div>
+                            <div class="text-4xl font-black text-emerald-950 dark:text-white font-outfit tracking-tight">{{ $residentProfile?->age ?? '—' }}</div>
+                            <div class="text-[11px] text-emerald-900/70 dark:text-zinc-400">{{ $residentProfile?->age_classification ?? 'Age group' }}</div>
                         </div>
-                        <div class="p-4 bg-violet-500/20 text-violet-700 dark:text-violet-400 rounded-2xl group-hover:scale-110 transition duration-300 shadow-sm">
+                        <div class="p-4 bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 rounded-2xl group-hover:scale-110 transition duration-300 shadow-sm">
                             <flux:icon name="cake" class="size-6" />
                         </div>
                     </div>
                 </div>
 
                 <!-- Upcoming Appointments count -->
-                <div class="group relative overflow-hidden bg-amber-50/70 dark:bg-zinc-900/40 border border-amber-200 dark:border-zinc-800/80 hover:border-amber-400/50 p-6 rounded-3xl shadow-md transition-all duration-300 hover:-translate-y-1">
-                    <div class="absolute inset-0 bg-gradient-to-b from-amber-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <div class="group relative overflow-hidden bg-emerald-50/70 dark:bg-zinc-900/40 border border-emerald-200 dark:border-zinc-800/80 hover:border-emerald-400/50 p-6 rounded-3xl shadow-md transition-all duration-300 hover:-translate-y-1">
+                    <div class="absolute inset-0 bg-gradient-to-b from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                     <div class="flex items-center justify-between">
                         <div class="space-y-1">
-                            <div class="text-[10px] font-extrabold uppercase tracking-wider text-amber-800 dark:text-amber-400">Pending Slots</div>
-                            <div class="text-4xl font-black text-amber-950 dark:text-white font-outfit tracking-tight">{{ $upcomingAppointments->count() }}</div>
-                            <div class="text-[11px] text-amber-900/70 dark:text-zinc-400">Document pickup requests</div>
+                            <div class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-800 dark:text-emerald-400">Pending Slots</div>
+                            <div class="text-4xl font-black text-emerald-950 dark:text-white font-outfit tracking-tight">{{ $upcomingAppointments->count() }}</div>
+                            <div class="text-[11px] text-emerald-900/70 dark:text-zinc-400">Document pickup requests</div>
                         </div>
-                        <div class="p-4 bg-amber-500/20 text-amber-700 dark:text-amber-400 rounded-2xl group-hover:scale-110 transition duration-300 shadow-sm">
+                        <div class="p-4 bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 rounded-2xl group-hover:scale-110 transition duration-300 shadow-sm">
                             <flux:icon name="calendar" class="size-6" />
                         </div>
                     </div>
@@ -1195,7 +1195,7 @@
                     <div class="bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-3xl p-6 shadow-lg space-y-4">
                         <div class="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
                             <div class="flex items-center gap-3">
-                                <div class="p-2 bg-amber-500/10 text-amber-600 dark:text-amber-500 rounded-xl">
+                                <div class="p-2 bg-emerald-500/10 text-emerald-600 dark:text-emerald-500 rounded-xl">
                                     <flux:icon name="calendar" class="size-5" />
                                 </div>
                                 <div>
@@ -1257,7 +1257,7 @@
                     <!-- Barangay Announcements -->
                     <div class="flex-1 flex flex-col bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-3xl p-6 shadow-lg">
                         <div class="flex items-center gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-3">
-                            <div class="p-2 bg-indigo-500/10 text-indigo-600 dark:text-indigo-500 rounded-xl">
+                            <div class="p-2 bg-emerald-500/10 text-emerald-600 dark:text-emerald-500 rounded-xl">
                                 <flux:icon name="megaphone" class="size-5" />
                             </div>
                             <div>
@@ -1271,11 +1271,11 @@
                                 <div class="p-4 rounded-2xl bg-gradient-to-b from-zinc-50 to-white dark:from-zinc-800/40 dark:to-zinc-900/40 border border-zinc-100 dark:border-zinc-700/40 space-y-2">
                                     <div class="flex items-center gap-2">
                                         @if($ann->is_pinned)
-                                            <flux:icon name="bookmark" class="size-3.5 text-indigo-500 shrink-0" />
+                                            <flux:icon name="bookmark" class="size-3.5 text-emerald-500 shrink-0" />
                                         @else
                                             <flux:icon name="megaphone" class="size-3.5 text-zinc-400 shrink-0" />
                                         @endif
-                                        <span class="text-[9px] uppercase tracking-widest font-bold text-indigo-600 dark:text-indigo-400">{{ $ann->type ?? 'General' }}</span>
+                                        <span class="text-[9px] uppercase tracking-widest font-bold text-emerald-600 dark:text-emerald-400">{{ $ann->type ?? 'General' }}</span>
                                     </div>
                                     <div class="text-xs font-bold text-zinc-800 dark:text-white line-clamp-2">{{ $ann->title }}</div>
                                     <div class="text-[10px] text-zinc-500 dark:text-zinc-400 line-clamp-3">{{ $ann->body }}</div>
