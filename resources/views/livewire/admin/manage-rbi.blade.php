@@ -295,8 +295,25 @@
                         <option value="Divorced">Divorced</option>
                     </flux:select>
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-                    <flux:input wire:model="citizenship" label="Citizenship" required />
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
+                    <flux:select wire:model="citizenship" label="Citizenship" required>
+                        <option value="">Select Citizenship</option>
+                        <option value="Filipino">Filipino</option>
+                        <option value="Dual Citizen">Dual Citizen</option>
+                        <option value="Foreign National">Foreign National</option>
+                    </flux:select>
+                    <flux:select wire:model="blood_type" label="Blood Type">
+                        <option value="">Select Blood Type</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                        <option value="Unknown">Unknown</option>
+                    </flux:select>
                     <flux:input wire:model="mobile_number" label="Mobile Number" />
                 </div>
             </div>

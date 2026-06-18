@@ -129,7 +129,27 @@
                     <flux:input wire:model="extension" label="Extension (Jr/Sr/etc)" />
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 mt-4">
-                    <flux:input wire:model="relationship_to_head" label="Relationship to Head" placeholder="e.g. Spouse, Son, Daughter" required />
+                    <flux:select wire:model="relationship_to_head" label="Relationship to Head" required>
+                        <option value="">Select Relationship</option>
+                        <option value="Spouse">Spouse</option>
+                        <option value="Son">Son</option>
+                        <option value="Daughter">Daughter</option>
+                        <option value="Father">Father</option>
+                        <option value="Mother">Mother</option>
+                        <option value="Brother">Brother</option>
+                        <option value="Sister">Sister</option>
+                        <option value="Grandfather">Grandfather</option>
+                        <option value="Grandmother">Grandmother</option>
+                        <option value="Grandchild">Grandchild</option>
+                        <option value="Uncle">Uncle</option>
+                        <option value="Aunt">Aunt</option>
+                        <option value="Nephew">Nephew</option>
+                        <option value="Niece">Niece</option>
+                        <option value="Cousin">Cousin</option>
+                        <option value="In-Law">In-Law</option>
+                        <option value="Other Relative">Other Relative</option>
+                        <option value="Non-Relative">Non-Relative</option>
+                    </flux:select>
                     <flux:input wire:model="birthdate" type="date" label="Birthdate" required />
                     <flux:select wire:model="sex" label="Sex" required>
                         <option value="">Select Sex</option>
@@ -145,9 +165,37 @@
                         <option value="Divorced">Divorced</option>
                     </flux:select>
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
-                    <flux:input wire:model="citizenship" label="Citizenship" required />
+                <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 mt-4">
+                    <flux:select wire:model="citizenship" label="Citizenship" required>
+                        <option value="">Select Citizenship</option>
+                        <option value="Filipino">Filipino</option>
+                        <option value="Dual Citizen">Dual Citizen</option>
+                        <option value="Foreign National">Foreign National</option>
+                    </flux:select>
+                    <flux:select wire:model="blood_type" label="Blood Type">
+                        <option value="">Select Blood Type</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                        <option value="Unknown">Unknown</option>
+                    </flux:select>
+                    <flux:select wire:model="religion" label="Religion">
+                        <option value="">Select Religion</option>
+                        <option value="Roman Catholic">Roman Catholic</option>
+                        <option value="Islam">Islam</option>
+                        <option value="Iglesia ni Cristo">Iglesia ni Cristo</option>
+                        <option value="Evangelical Christian">Evangelical Christian</option>
+                        <option value="Other">Other</option>
+                        <option value="None">None</option>
+                    </flux:select>
                     <flux:input wire:model="mobile_number" label="Mobile Number" />
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-1 gap-4 mt-4">
                     <flux:input wire:model="email_address" type="email" label="Email Address" />
                 </div>
             </div>

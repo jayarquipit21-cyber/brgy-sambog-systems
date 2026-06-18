@@ -61,7 +61,33 @@
                     </div>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
-                    <flux:input wire:model="place_of_birth" label="Place of Birth" placeholder="e.g. Corella, Bohol" />
+                    <flux:input wire:model="place_of_birth" label="Place of Birth" placeholder="e.g. Corella, Bohol" required />
+                    <flux:select wire:model="religion" label="Religion">
+                        <option value="">Select Religion</option>
+                        <option value="Roman Catholic">Roman Catholic</option>
+                        <option value="Islam">Islam</option>
+                        <option value="Iglesia ni Cristo">Iglesia ni Cristo</option>
+                        <option value="Evangelical Christian">Evangelical Christian</option>
+                        <option value="Other">Other</option>
+                        <option value="None">None</option>
+                    </flux:select>
+                    <flux:select wire:model="blood_type" label="Blood Type">
+                        <option value="">Select Blood Type</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                        <option value="Unknown">Unknown</option>
+                    </flux:select>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 mt-3">
+                    <flux:input wire:model="height" label="Height (cm)" placeholder="e.g. 170" />
+                    <flux:input wire:model="weight" label="Weight (kg)" placeholder="e.g. 65" />
+                    <div></div>
                 </div>
             </div>
 
@@ -112,7 +138,16 @@
                         <p class="text-[11px] text-zinc-500">Your current employment details and earnings</p>
                     </div>
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                <div class="grid grid-cols-1 sm:grid-cols-4 gap-5">
+                    <flux:select wire:model="work_status" label="Work / Employment Status">
+                        <option value="">Select Work Status</option>
+                        <option value="Employed">Employed</option>
+                        <option value="Unemployed">Unemployed</option>
+                        <option value="Underemployed">Underemployed</option>
+                        <option value="Student">Student</option>
+                        <option value="Retired">Retired</option>
+                        <option value="N/A">Not Applicable</option>
+                    </flux:select>
                     <flux:input wire:model="occupation" label="Occupation / Job Title" placeholder="e.g. Farmer, Teacher, Driver" />
                     <flux:input wire:model="income" label="Monthly Income (₱)" type="number" min="0" placeholder="e.g. 5000" />
                     <flux:input wire:model="days_work_per_week" label="Days of Work Per Week" type="number" min="0" max="7" placeholder="0–7" />
@@ -197,7 +232,8 @@
                         <p class="text-[11px] text-zinc-500">Nutritional status, vulnerable sector affiliation, and welfare programs availed</p>
                     </div>
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                <div class="grid grid-cols-1 sm:grid-cols-4 gap-5">
+                    <flux:input wire:model="health_condition" label="Chronic Health Conditions" placeholder="e.g. Hypertension, Diabetes, None" />
                     <flux:select wire:model="nutritional_classification" label="Nutritional Classification">
                         <option value="">Select Classification</option>
                         <option value="Normal">Normal</option>
@@ -240,14 +276,48 @@
                         </div>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                        <flux:select wire:model="is_house_owner" label="Is Head House Owner?">
+                            <option value="">Select Option</option>
+                            <option value="Y">Yes</option>
+                            <option value="N">No</option>
+                        </flux:select>
+                        <flux:select wire:model="is_renter" label="Is Head a Renter?">
+                            <option value="">Select Option</option>
+                            <option value="Y">Yes</option>
+                            <option value="N">No</option>
+                        </flux:select>
                         <flux:select wire:model="is_farmer" label="Is Head a Farmer?">
                             <option value="">Select Option</option>
                             <option value="Y">Yes</option>
                             <option value="N">No</option>
                         </flux:select>
-                        <flux:input wire:model="water_source" label="Primary Water Source" placeholder="e.g. Local Water District, Deep Well" />
-                        <flux:input wire:model="sanitary_toilet" label="Sanitary Toilet Type" placeholder="e.g. Water-sealed, Flush" />
-                        <flux:input wire:model="waste_management" label="Waste Management Practice" placeholder="e.g. Collected, Burned, Composted" />
+                        <flux:select wire:model="water_source" label="Primary Water Source">
+                            <option value="">Select Water Source</option>
+                            <option value="Local Water District">Local Water District</option>
+                            <option value="Deep Well">Deep Well</option>
+                            <option value="Spring / Artesian Well">Spring / Artesian Well</option>
+                            <option value="Rain Water">Rain Water</option>
+                            <option value="River / Stream">River / Stream</option>
+                            <option value="Bottled Water">Bottled Water</option>
+                            <option value="Shared/Communal">Shared / Communal</option>
+                        </flux:select>
+                        <flux:select wire:model="sanitary_toilet" label="Sanitary Toilet Type">
+                            <option value="">Select Toilet Type</option>
+                            <option value="Water-sealed">Water-sealed</option>
+                            <option value="Flush">Flush / Cistern</option>
+                            <option value="Antipolo">Antipolo Type</option>
+                            <option value="Open Pit">Open Pit</option>
+                            <option value="None">None</option>
+                        </flux:select>
+                        <flux:select wire:model="waste_management" label="Waste Management Practice">
+                            <option value="">Select Practice</option>
+                            <option value="Collected">Collected (Municipal Service)</option>
+                            <option value="Composted">Composted</option>
+                            <option value="Burned">Burned</option>
+                            <option value="Buried">Buried</option>
+                            <option value="Segregated">Segregated</option>
+                            <option value="Dumped">Dumped</option>
+                        </flux:select>
                         <flux:select wire:model="has_blind_drainage" label="Has Blind Drainage?">
                             <option value="">Select Option</option>
                             <option value="Y">Yes</option>

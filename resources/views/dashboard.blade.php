@@ -277,13 +277,13 @@
                                     datasets: [{
                                         data: values,
                                         backgroundColor: [
-                                            'rgba(59, 130, 246, 0.85)', // Blue
                                             'rgba(236, 72, 153, 0.85)', // Pink
+                                            'rgba(59, 130, 246, 0.85)', // Blue
                                             'rgba(16, 185, 129, 0.85)'  // Green
                                         ],
                                         borderColor: [
-                                            'rgba(29, 78, 216, 0.9)',
                                             'rgba(190, 24, 93, 0.9)',
+                                            'rgba(29, 78, 216, 0.9)',
                                             'rgba(6, 95, 70, 0.9)'
                                         ],
                                         borderWidth: 1,
@@ -301,7 +301,7 @@
                             });
 
                             let legendHtml = '';
-                            const colors = ['bg-blue-500', 'bg-pink-500', 'bg-emerald-500'];
+                            const colors = ['bg-pink-500', 'bg-blue-500', 'bg-emerald-500'];
                             const total = values.reduce((a, b) => a + b, 0);
                             labels.forEach((label, index) => {
                                 const val = values[index];
@@ -1127,16 +1127,23 @@
 
                         <div class="flex-1 space-y-2 mt-4">
                             @forelse($recentAnnouncements as $ann)
-                                <div class="p-3 rounded-xl bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-100 dark:border-zinc-700/40">
+                                <div
+                                    onclick="openAnnouncementModal({{ $ann->id }}, {{ Js::from($ann->title) }}, {{ Js::from($ann->body) }}, {{ Js::from($ann->published_at ? $ann->published_at->diffForHumans() : 'Draft') }}, {{ Js::from($ann->type ?? 'General') }}, {{ $ann->is_pinned ? 'true' : 'false' }})"
+                                    class="p-3 rounded-xl bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-100 dark:border-zinc-700/40 cursor-pointer hover:border-emerald-400/50 hover:bg-emerald-50/50 dark:hover:bg-emerald-900/10 transition-all duration-200 group"
+                                >
                                     <div class="flex items-start gap-2">
                                         @if($ann->is_pinned)
                                             <flux:icon name="bookmark" class="size-3 text-emerald-500 mt-0.5 shrink-0" />
                                         @endif
                                         <div class="flex-1 min-w-0">
-                                            <div class="text-[11px] font-bold text-zinc-800 dark:text-white truncate">{{ $ann->title }}</div>
+                                            <div class="text-[11px] font-bold text-zinc-800 dark:text-white truncate group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors">{{ $ann->title }}</div>
                                             <div class="text-[10px] text-zinc-500 dark:text-zinc-400 line-clamp-2 mt-0.5">{{ $ann->body }}</div>
-                                            <div class="text-[9px] text-zinc-400 mt-1">{{ $ann->published_at ? $ann->published_at->diffForHumans() : 'Draft' }}</div>
+                                            <div class="text-[9px] text-zinc-400 mt-1 flex items-center gap-1">
+                                                {{ $ann->published_at ? $ann->published_at->diffForHumans() : 'Draft' }}
+                                                <span class="text-emerald-500 font-bold">· Tap to read</span>
+                                            </div>
                                         </div>
+                                        <flux:icon name="arrow-right" class="size-3 text-zinc-300 group-hover:text-emerald-500 shrink-0 mt-0.5 transition-colors" />
                                     </div>
                                 </div>
                             @empty
@@ -1436,7 +1443,10 @@
 
                         <div class="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-3 mt-4 content-start">
                             @forelse($recentAnnouncements as $ann)
-                                <div class="p-4 rounded-2xl bg-gradient-to-b from-zinc-50 to-white dark:from-zinc-800/40 dark:to-zinc-900/40 border border-zinc-100 dark:border-zinc-700/40 space-y-2">
+                                <div
+                                    onclick="openAnnouncementModal({{ $ann->id }}, {{ Js::from($ann->title) }}, {{ Js::from($ann->body) }}, {{ Js::from($ann->published_at ? $ann->published_at->diffForHumans() : 'Draft') }}, {{ Js::from($ann->type ?? 'General') }}, {{ $ann->is_pinned ? 'true' : 'false' }})"
+                                    class="p-4 rounded-2xl bg-gradient-to-b from-zinc-50 to-white dark:from-zinc-800/40 dark:to-zinc-900/40 border border-zinc-100 dark:border-zinc-700/40 space-y-2 cursor-pointer hover:border-emerald-400/50 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 group"
+                                >
                                     <div class="flex items-center gap-2">
                                         @if($ann->is_pinned)
                                             <flux:icon name="bookmark" class="size-3.5 text-emerald-500 shrink-0" />
@@ -1445,9 +1455,12 @@
                                         @endif
                                         <span class="text-[9px] uppercase tracking-widest font-bold text-emerald-600 dark:text-emerald-400">{{ $ann->type ?? 'General' }}</span>
                                     </div>
-                                    <div class="text-xs font-bold text-zinc-800 dark:text-white line-clamp-2">{{ $ann->title }}</div>
+                                    <div class="text-xs font-bold text-zinc-800 dark:text-white line-clamp-2 group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors">{{ $ann->title }}</div>
                                     <div class="text-[10px] text-zinc-500 dark:text-zinc-400 line-clamp-3">{{ $ann->body }}</div>
-                                    <div class="text-[9px] text-zinc-400 pt-1 border-t border-zinc-100 dark:border-zinc-700/50">{{ $ann->published_at ? $ann->published_at->diffForHumans() : 'Draft' }}</div>
+                                    <div class="text-[9px] text-zinc-400 pt-1 border-t border-zinc-100 dark:border-zinc-700/50 flex items-center justify-between">
+                                        <span>{{ $ann->published_at ? $ann->published_at->diffForHumans() : 'Draft' }}</span>
+                                        <span class="text-emerald-500 font-bold">Read more →</span>
+                                    </div>
                                 </div>
                             @empty
                                 <div class="col-span-3 text-center py-8">
@@ -1461,4 +1474,89 @@
             </div>
         @endif
     </div>
+
+    {{-- Announcement Detail Modal --}}
+    <div
+        id="announcement-modal"
+        onclick="if(event.target===this)closeAnnouncementModal()"
+        class="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300"
+        style=""
+    >
+        <div class="relative w-full max-w-xl bg-white dark:bg-zinc-900 rounded-3xl shadow-2xl border border-zinc-200 dark:border-zinc-700 overflow-hidden transform scale-95 transition-all duration-300" id="announcement-modal-inner">
+            {{-- Header accent --}}
+            <div class="h-1.5 w-full bg-gradient-to-r from-emerald-400 via-emerald-500 to-emerald-600"></div>
+
+            {{-- Top bar --}}
+            <div class="flex items-start justify-between p-6 pb-4 border-b border-zinc-100 dark:border-zinc-800">
+                <div class="flex items-center gap-3">
+                    <div class="p-2.5 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-xl shrink-0">
+                        <svg class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" /></svg>
+                    </div>
+                    <div>
+                        <p id="modal-ann-type" class="text-[9px] uppercase tracking-widest font-extrabold text-emerald-600 dark:text-emerald-400 mb-0.5"></p>
+                        <h2 id="modal-ann-title" class="text-base font-black text-zinc-900 dark:text-white font-outfit leading-snug"></h2>
+                    </div>
+                </div>
+                <button
+                    onclick="closeAnnouncementModal()"
+                    class="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-700 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition shrink-0 ml-3"
+                    aria-label="Close"
+                >
+                    <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+            </div>
+
+            {{-- Body --}}
+            <div class="px-6 py-5 max-h-[60vh] overflow-y-auto">
+                <p id="modal-ann-body" class="text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed whitespace-pre-line"></p>
+            </div>
+
+            {{-- Footer --}}
+            <div class="flex items-center justify-between px-6 py-4 border-t border-zinc-100 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-800/30">
+                <div class="flex items-center gap-1.5 text-[11px] text-zinc-400">
+                    <svg class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    <span id="modal-ann-date"></span>
+                </div>
+                <div id="modal-ann-pinned" class="hidden items-center gap-1 text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
+                    <svg class="size-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M17 3a2 2 0 012 2v1l-2 9H7L5 6V5a2 2 0 012-2h10zm-5 16a2 2 0 100-4 2 2 0 000 4z"/></svg>
+                    Pinned
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openAnnouncementModal(id, title, body, date, type, isPinned) {
+            document.getElementById('modal-ann-title').textContent = title;
+            document.getElementById('modal-ann-body').textContent = body;
+            document.getElementById('modal-ann-date').textContent = date;
+            document.getElementById('modal-ann-type').textContent = type;
+            const pinnedEl = document.getElementById('modal-ann-pinned');
+            pinnedEl.classList.toggle('hidden', !isPinned);
+            pinnedEl.classList.toggle('flex', isPinned);
+
+            const overlay = document.getElementById('announcement-modal');
+            const inner = document.getElementById('announcement-modal-inner');
+            overlay.classList.remove('opacity-0', 'pointer-events-none');
+            overlay.classList.add('opacity-100');
+            inner.classList.remove('scale-95');
+            inner.classList.add('scale-100');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeAnnouncementModal() {
+            const overlay = document.getElementById('announcement-modal');
+            const inner = document.getElementById('announcement-modal-inner');
+            overlay.classList.add('opacity-0', 'pointer-events-none');
+            overlay.classList.remove('opacity-100');
+            inner.classList.add('scale-95');
+            inner.classList.remove('scale-100');
+            document.body.style.overflow = '';
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeAnnouncementModal();
+        });
+    </script>
+
 </x-layouts::app>
