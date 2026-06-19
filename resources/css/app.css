@@ -75,3 +75,17 @@ select:focus[data-flux-control] {
 /* \[:where(&)\]:size-4 {
     @apply size-4;
 } */
+
+/* Make sidebar items and their fonts bigger */
+[data-flux-sidebar-item] {
+    font-size: 1.125rem !important; /* text-lg */
+    line-height: 1.75rem !important;
+    padding-top: 0.75rem !important;
+    padding-bottom: 0.75rem !important;
+    height: auto !important;
+}
+
+[data-flux-sidebar-item] svg {
+    width: 1.5rem !important;
+    height: 1.5rem !important;
+}
