@@ -280,14 +280,14 @@
                 </a>
 
                 <!-- Navigation Links for a comprehensive website experience -->
-                <nav class="hidden md:flex flex-1 items-center justify-center gap-3 text-sm font-semibold text-zinc-600 dark:text-zinc-300">
-                    <a href="#about" class="px-2 py-2 rounded-md hover:bg-brand/10 hover:text-brand transition">About Us</a>
-                    <a href="#services" class="px-2 py-2 rounded-md hover:bg-brand/10 hover:text-brand transition">Public Services</a>
-                    <a href="#officials" class="px-2 py-2 rounded-md hover:bg-brand/10 hover:text-brand transition">Local Council</a>
-                    <a href="#demographics" class="px-2 py-2 rounded-md hover:bg-brand/10 hover:text-brand transition">Statistics</a>
-                    <a href="{{ route('home') }}#places" class="px-2 py-2 rounded-md hover:bg-brand/10 hover:text-brand transition">Places</a>
-                    <a href="{{ route('home') }}#announcements" class="px-2 py-2 rounded-md hover:bg-brand/10 hover:text-brand transition">Announcements</a>
-                    <a href="{{ route('home') }}#contacts" class="px-2 py-2 rounded-md hover:bg-brand/10 hover:text-brand transition">Contacts</a>
+                <nav class="hidden md:flex flex-1 items-center justify-center gap-4 text-lg font-semibold text-zinc-600 dark:text-zinc-300">
+                    <a href="#about" class="px-3 py-2 rounded-md hover:bg-brand/10 hover:text-brand transition">About Us</a>
+                    <a href="#services" class="px-3 py-2 rounded-md hover:bg-brand/10 hover:text-brand transition">Public Services</a>
+                    <a href="#officials" class="px-3 py-2 rounded-md hover:bg-brand/10 hover:text-brand transition">Local Council</a>
+                    <a href="#demographics" class="px-3 py-2 rounded-md hover:bg-brand/10 hover:text-brand transition">Statistics</a>
+                    <a href="{{ route('home') }}#places" class="px-3 py-2 rounded-md hover:bg-brand/10 hover:text-brand transition">Places</a>
+                    <a href="{{ route('home') }}#announcements" class="px-3 py-2 rounded-md hover:bg-brand/10 hover:text-brand transition">Announcements</a>
+                    <a href="{{ route('home') }}#contacts" class="px-3 py-2 rounded-md hover:bg-brand/10 hover:text-brand transition">Contacts</a>
                 </nav>
 
                 <!-- Authentication Portal Access -->
@@ -355,20 +355,20 @@
                         </div>
                     </div>
                     @auth
-                        <div class="flex items-center gap-3">
-                            <span class="text-xs text-zinc-500 dark:text-zinc-400 hidden lg:inline-block font-semibold">Hello, {{ Auth::user()->name }}</span>
-                            <a href="{{ route('dashboard') }}" class="inline-flex items-center justify-center px-4 py-2 text-xs font-bold text-white bg-brand hover:bg-brand-dark rounded-lg transition shadow-md shadow-emerald-500/10 font-outfit">
+                        <div class="flex items-center gap-4">
+                            <span class="text-sm text-zinc-500 dark:text-zinc-400 hidden lg:inline-block font-semibold">Hello, {{ Auth::user()->name }}</span>
+                            <a href="{{ route('dashboard') }}" class="inline-flex items-center justify-center px-5 py-2.5 text-sm font-bold text-white bg-brand hover:bg-brand-dark rounded-lg transition shadow-md shadow-emerald-500/10 font-outfit">
                                 Go to Workspace
                             </a>
                             <form method="POST" action="{{ route('logout') }}" class="inline">
                                 @csrf
-                                <button type="submit" class="text-xs font-semibold text-zinc-500 hover:text-brand transition cursor-pointer">
+                                <button type="submit" class="text-sm font-semibold text-zinc-500 hover:text-brand transition cursor-pointer">
                                     Log Out
                                 </button>
                             </form>
                         </div>
                     @else
-                        <a href="{{ route('login') }}" class="inline-flex items-center justify-center px-4 py-2 text-xs font-bold text-white bg-brand hover:bg-brand-dark rounded-lg transition shadow-md shadow-emerald-500/10 font-outfit">
+                        <a href="{{ route('login') }}" class="inline-flex items-center justify-center px-5 py-2.5 text-sm font-bold text-white bg-brand hover:bg-brand-dark rounded-lg transition shadow-md shadow-emerald-500/10 font-outfit">
                             Access Portal
                         </a>
                     @endauth
