@@ -62,6 +62,10 @@ class MyHousehold extends Component
 
     public string $religion = '';
 
+    public string $height = '';
+
+    public string $weight = '';
+
 
     protected function rules(): array
     {
@@ -90,6 +94,8 @@ class MyHousehold extends Component
             'work_status' => 'required|string|max:255',
             'blood_type' => 'nullable|string|max:10',
             'religion' => 'nullable|string|max:255',
+            'height' => 'nullable|string|max:50',
+            'weight' => 'nullable|string|max:50',
         ];
     }
 
@@ -104,6 +110,7 @@ class MyHousehold extends Component
             'registered_national_voter', 'registered_sk_voter', 'resident_voter',
             'fully_vaccinated', 'has_philhealth', 'health_condition',
             'educational_status', 'work_status', 'blood_type', 'religion',
+            'height', 'weight',
         ]);
         $this->citizenship = 'Filipino';
         $this->health_condition = 'None';
@@ -142,6 +149,8 @@ class MyHousehold extends Component
         $this->work_status = $resident->work_status ?? '';
         $this->blood_type = $resident->blood_type ?? '';
         $this->religion = $resident->religion ?? '';
+        $this->height = $resident->height ?? '';
+        $this->weight = $resident->weight ?? '';
 
         $this->showCreateModal = true;
     }
@@ -191,6 +200,8 @@ class MyHousehold extends Component
             'work_status' => $this->work_status,
             'blood_type' => $this->blood_type ?: null,
             'religion' => $this->religion ?: null,
+            'height' => $this->height ?: null,
+            'weight' => $this->weight ?: null,
         ];
 
         if ($existingUser) {

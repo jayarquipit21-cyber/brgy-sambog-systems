@@ -198,6 +198,10 @@
                 <div class="grid grid-cols-1 sm:grid-cols-1 gap-4 mt-4">
                     <flux:input wire:model="email_address" type="email" label="Email Address" />
                 </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                    <flux:input wire:model="height" label="Height (cm)" placeholder="e.g. 170" />
+                    <flux:input wire:model="weight" label="Weight (kg)" placeholder="e.g. 65" />
+                </div>
             </div>
 
             <!-- Education & Employment -->

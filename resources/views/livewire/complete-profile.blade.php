@@ -125,6 +125,11 @@
                     <flux:input wire:model="secondary_skills" label="Secondary Skills" placeholder="e.g. Driving, Gardening" />
                     <flux:input wire:model="other_skills" label="Other Skills" placeholder="e.g. Computer, Welding" />
                 </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 mt-3">
+                    <flux:input wire:model="course_completed" label="Course / Degree Completed" placeholder="e.g. BS Information Technology" />
+                    <div></div>
+                    <div></div>
+                </div>
             </div>
 
             {{-- SECTION 3: Employment & Income --}}
@@ -152,6 +157,12 @@
                     <flux:input wire:model="income" label="Monthly Income (₱)" type="number" min="0" placeholder="e.g. 5000" />
                     <flux:input wire:model="days_work_per_week" label="Days of Work Per Week" type="number" min="0" max="7" placeholder="0–7" />
                 </div>
+                @if($work_status === 'Unemployed')
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-4 p-4 bg-amber-50 dark:bg-amber-950/20 rounded-xl border border-amber-200 dark:border-amber-800/50">
+                        <flux:input wire:model="last_period_of_unemployment" label="Last Period of Unemployment" placeholder="e.g. 6 months, 1 year" />
+                        <flux:input wire:model="reason_of_unemployment" label="Reason of Unemployment" placeholder="e.g. Laid off, No available jobs" />
+                    </div>
+                @endif
             </div>
 
             {{-- SECTION 4: Voter Extended --}}
@@ -286,6 +297,9 @@
                             <option value="Y">Yes</option>
                             <option value="N">No</option>
                         </flux:select>
+                        @if($is_renter === 'Y')
+                            <flux:input wire:model="renter_months" label="How Many Months Renting?" type="number" min="0" placeholder="e.g. 12" />
+                        @endif
                         <flux:select wire:model="is_farmer" label="Is Head a Farmer?">
                             <option value="">Select Option</option>
                             <option value="Y">Yes</option>

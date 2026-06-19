@@ -314,6 +314,15 @@
                         <option value="O-">O-</option>
                         <option value="Unknown">Unknown</option>
                     </flux:select>
+                    <flux:select wire:model="religion" label="Religion">
+                        <option value="">Select Religion</option>
+                        <option value="Roman Catholic">Roman Catholic</option>
+                        <option value="Islam">Islam</option>
+                        <option value="Iglesia ni Cristo">Iglesia ni Cristo</option>
+                        <option value="Evangelical Christian">Evangelical Christian</option>
+                        <option value="Other">Other</option>
+                        <option value="None">None</option>
+                    </flux:select>
                     <flux:input wire:model="mobile_number" label="Mobile Number" />
                 </div>
             </div>

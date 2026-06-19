@@ -61,6 +61,11 @@ class CompleteProfile extends Component
     public string $sanitary_toilet = '';
     public string $waste_management = '';
     public string $has_blind_drainage = '';
+    public string $renter_months = '';
+
+    // Unemployment conditional fields
+    public string $last_period_of_unemployment = '';
+    public string $reason_of_unemployment = '';
 
     public bool $profileLinked = false;
 
@@ -109,6 +114,9 @@ class CompleteProfile extends Component
             $this->sanitary_toilet                = $resident->sanitary_toilet ?? '';
             $this->waste_management               = $resident->waste_management ?? '';
             $this->has_blind_drainage             = $resident->has_blind_drainage ?? '';
+            $this->renter_months                   = $resident->renter_months ?? '';
+            $this->last_period_of_unemployment     = $resident->last_period_of_unemployment ?? '';
+            $this->reason_of_unemployment          = $resident->reason_of_unemployment ?? '';
         }
     }
 
@@ -154,6 +162,9 @@ class CompleteProfile extends Component
             'sanitary_toilet'                => 'nullable|string|max:255',
             'waste_management'               => 'nullable|string|max:255',
             'has_blind_drainage'             => 'nullable|in:Y,N',
+            'renter_months'                  => 'nullable|integer|min:0',
+            'last_period_of_unemployment'    => 'nullable|string|max:255',
+            'reason_of_unemployment'         => 'nullable|string|max:255',
         ];
     }
 
@@ -208,6 +219,9 @@ class CompleteProfile extends Component
             'sanitary_toilet'                => Auth::user()->isHouseholdHead() ? ($this->sanitary_toilet ?: null) : ($resident->sanitary_toilet ?? null),
             'waste_management'               => Auth::user()->isHouseholdHead() ? ($this->waste_management ?: null) : ($resident->waste_management ?? null),
             'has_blind_drainage'             => Auth::user()->isHouseholdHead() ? ($this->has_blind_drainage ?: null) : ($resident->has_blind_drainage ?? null),
+            'renter_months'                  => Auth::user()->isHouseholdHead() ? ($this->renter_months ?: null) : ($resident->renter_months ?? null),
+            'last_period_of_unemployment'    => $this->last_period_of_unemployment ?: null,
+            'reason_of_unemployment'         => $this->reason_of_unemployment ?: null,
         ]);
 
         Flux::toast(variant: 'success', text: __('Your profile has been updated successfully.'));

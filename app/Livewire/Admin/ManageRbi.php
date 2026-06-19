@@ -63,6 +63,8 @@ class ManageRbi extends Component
 
     public string $blood_type = '';
 
+    public string $religion = '';
+
 
     protected function rules(): array
     {
@@ -84,6 +86,7 @@ class ManageRbi extends Component
             'email' => 'required|email|max:255|unique:users,email',
             'password' => 'required|string|min:8',
             'blood_type' => 'nullable|string|max:10',
+            'religion' => 'nullable|string|max:255',
         ];
     }
 
@@ -94,7 +97,7 @@ class ManageRbi extends Component
             'household_no', 'purok_no', 'address',
             'first_name', 'middle_name', 'last_name', 'extension',
             'birthdate', 'sex', 'civil_status', 'citizenship', 'mobile_number',
-            'email', 'password', 'blood_type',
+            'email', 'password', 'blood_type', 'religion',
         ]);
         $this->citizenship = 'Filipino';
         $this->showCreateModal = true;
@@ -136,6 +139,7 @@ class ManageRbi extends Component
             'civil_status' => $this->civil_status,
             'citizenship' => $this->citizenship,
             'blood_type' => $this->blood_type ?: null,
+            'religion' => $this->religion ?: null,
             'mobile_number' => $this->mobile_number,
             'email_address' => strtolower($this->email),
             'relationship_to_head' => 'Household Head',
