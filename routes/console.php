@@ -6,3 +6,10 @@ use Illuminate\Support\Facades\Artisan;
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
+
+use Illuminate\Support\Facades\Schedule;
+use App\Models\AppointmentDateClosure;
+
+Schedule::call(function () {
+    AppointmentDateClosure::where('date', '<', now()->startOfDay()->toDateString())->delete();
+})->daily();

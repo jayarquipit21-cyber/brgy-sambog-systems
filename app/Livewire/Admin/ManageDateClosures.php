@@ -26,7 +26,11 @@ class ManageDateClosures extends Component
             throw new AccessDeniedHttpException('Unauthorized');
         }
 
-        $this->validate(['date' => 'required|date|after_or_equal:today']);
+        $this->validate(['date' => 'required|date']);
+
+        if (\Carbon\Carbon::parse($this->date)->startOfDay()->lt(now()->startOfDay())) {
+            throw new \Exception('Cannot manage closure dates past the current date.');
+        }
 
         AppointmentDateClosure::updateOrCreate(
             ['date' => $this->date],
@@ -45,7 +49,13 @@ class ManageDateClosures extends Component
             throw new AccessDeniedHttpException('Unauthorized');
         }
 
-        AppointmentDateClosure::findOrFail($id)->delete();
+        $closure = AppointmentDateClosure::findOrFail($id);
+        
+        if ($closure->date->startOfDay()->lt(now()->startOfDay())) {
+            throw new \Exception('Cannot manage closure dates past the current date.');
+        }
+
+        $closure->delete();
         session()->flash('message', __('Date closure removed.'));
     }
 
