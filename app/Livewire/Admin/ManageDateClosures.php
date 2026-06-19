@@ -28,8 +28,15 @@ class ManageDateClosures extends Component
 
         $this->validate(['date' => 'required|date']);
 
-        if (\Carbon\Carbon::parse($this->date)->startOfDay()->lt(now()->startOfDay())) {
+        $parsedDate = \Carbon\Carbon::parse($this->date);
+
+        if ($parsedDate->startOfDay()->lt(now()->startOfDay())) {
             session()->flash('error', 'Cannot manage closure dates past the current date.');
+            return;
+        }
+
+        if ($parsedDate->isWeekend()) {
+            session()->flash('error', 'Weekends cannot be added as date closures.');
             return;
         }
 
