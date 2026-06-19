@@ -678,7 +678,7 @@
                                 </svg>
                             </div>
                             <div class="font-bold text-zinc-900 dark:text-white">Barangay Office</div>
-                            <div class="text-brand font-mono mt-2">(038) 123-4567</div>
+                            <div class="text-brand font-mono mt-2"> 417-8919</div>
                             <div class="text-xs text-zinc-500 mt-1">Office Hours: 8am–5pm</div>
                         </div>
 
@@ -700,7 +700,7 @@
                                 </svg>
                             </div>
                             <div class="font-bold text-zinc-900 dark:text-white">Police / Emergency</div>
-                            <div class="text-brand font-mono mt-2">911 / (038) 765-4321</div>
+                            <div class="text-brand font-mono mt-2">911 / 09985986413 (PNP Hotline) / 09092592953 (PCPL. DIONISIO A. BASTES JR.)</div>
                             <div class="text-xs text-zinc-500 mt-1">Immediate assistance</div>
                         </div>
 
@@ -711,7 +711,7 @@
                                 </svg>
                             </div>
                             <div class="font-bold text-zinc-900 dark:text-white">Fire Department</div>
-                            <div class="text-brand font-mono mt-2">+63 927 222 3333</div>
+                            <div class="text-brand font-mono mt-2">09184767153</div>
                             <div class="text-xs text-zinc-500 mt-1">Fire & Rescue</div>
                         </div>
                     </div>
