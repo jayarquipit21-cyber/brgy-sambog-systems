@@ -700,7 +700,11 @@
                                 </svg>
                             </div>
                             <div class="font-bold text-zinc-900 dark:text-white">Police / Emergency</div>
-                            <div class="text-brand font-mono mt-2">911 / 09985986413 (PNP Hotline) / 09092592953 (PCPL. DIONISIO A. BASTES JR.)</div>
+                            <div class="text-brand font-mono mt-2 text-sm flex flex-col gap-1">
+                                <span>911</span>
+                                <span>09985986413 <span class="text-[10px] text-zinc-500 dark:text-zinc-400 font-sans">(PNP Hotline)</span></span>
+                                <span>09092592953 <span class="text-[10px] text-zinc-500 dark:text-zinc-400 font-sans">(PCPL. DIONISIO A. BASTES JR.)</span></span>
+                            </div>
                             <div class="text-xs text-zinc-500 mt-1">Immediate assistance</div>
                         </div>
 
