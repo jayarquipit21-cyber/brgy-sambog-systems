@@ -29,7 +29,8 @@ class ManageDateClosures extends Component
         $this->validate(['date' => 'required|date']);
 
         if (\Carbon\Carbon::parse($this->date)->startOfDay()->lt(now()->startOfDay())) {
-            throw new \Exception('Cannot manage closure dates past the current date.');
+            session()->flash('error', 'Cannot manage closure dates past the current date.');
+            return;
         }
 
         AppointmentDateClosure::updateOrCreate(
@@ -51,10 +52,6 @@ class ManageDateClosures extends Component
 
         $closure = AppointmentDateClosure::findOrFail($id);
         
-        if ($closure->date->startOfDay()->lt(now()->startOfDay())) {
-            throw new \Exception('Cannot manage closure dates past the current date.');
-        }
-
         $closure->delete();
         session()->flash('message', __('Date closure removed.'));
     }

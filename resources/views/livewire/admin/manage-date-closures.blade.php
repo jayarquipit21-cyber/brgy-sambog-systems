@@ -8,6 +8,10 @@
         <div class="mb-3 text-sm text-emerald-600 dark:text-emerald-400">{{ session('message') }}</div>
     @endif
 
+    @if (session('error'))
+        <div class="mb-3 text-sm text-red-600 dark:text-red-400">{{ session('error') }}</div>
+    @endif
+
     <form wire:submit.prevent="add" class="flex gap-2 mb-4">
         <input
             type="date"
