@@ -1482,7 +1482,7 @@
         class="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300"
         style=""
     >
-        <div class="relative w-full max-w-xl bg-white dark:bg-zinc-900 rounded-3xl shadow-2xl border border-zinc-200 dark:border-zinc-700 overflow-hidden transform scale-95 transition-all duration-300" id="announcement-modal-inner">
+        <div class="relative w-full max-w-4xl bg-white dark:bg-zinc-900 rounded-3xl shadow-2xl border border-zinc-200 dark:border-zinc-700 overflow-hidden transform scale-95 transition-all duration-300" id="announcement-modal-inner">
             {{-- Header accent --}}
             <div class="h-1.5 w-full bg-gradient-to-r from-emerald-400 via-emerald-500 to-emerald-600"></div>
 
