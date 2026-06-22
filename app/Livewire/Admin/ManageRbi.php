@@ -18,7 +18,7 @@ class ManageRbi extends Component
 
     public string $purokFilter = '';
 
-    public string $activeTab = 'pending';
+    public string $activeTab = 'heads';
 
     public bool $showRejectModal = false;
 

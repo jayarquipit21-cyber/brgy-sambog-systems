@@ -54,7 +54,7 @@ class ManageAppointments extends Component
 
                     $holidayName = HolidaysService::isHoliday($value);
                     if ($holidayName) {
-                        $fail(__('This date is a national holiday: :holiday', ['holiday' => $holidayName]));
+                    $fail(__('This date is a national holiday: :holiday', ['holiday' => $holidayName]));
                         return;
                     }
 

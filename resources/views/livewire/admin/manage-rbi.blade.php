@@ -84,6 +84,12 @@
         <!-- Tab Controls -->
         <div class="flex border-b border-zinc-200 dark:border-zinc-800 mb-6">
             <button 
+                wire:click="$set('activeTab', 'heads')"
+                class="pb-3 px-4 font-medium text-sm border-b-2 transition-colors duration-150 {{ $activeTab === 'heads' ? 'border-brand text-brand font-semibold' : 'border-transparent text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300' }}"
+            >
+                Household Heads Registry
+            </button>
+            <button 
                 wire:click="$set('activeTab', 'pending')"
                 class="pb-3 px-4 font-medium text-sm border-b-2 transition-colors duration-150 flex items-center gap-2 {{ $activeTab === 'pending' ? 'border-brand text-brand font-semibold' : 'border-transparent text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300' }}"
             >
@@ -92,14 +98,12 @@
                     $pendingCount = \App\Models\Resident::where('registration_status', 'pending')->count();
                 @endphp
                 @if($pendingCount > 0)
-                    <span class="px-2 py-0.5 text-xs font-semibold rounded-full bg-brand/10 text-brand">{{ $pendingCount }}</span>
+                    <span class="relative flex h-2 w-2 mr-1">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+                    </span>
+                    <span class="px-2 py-0.5 text-xs font-semibold rounded-full bg-red-100 text-red-600 dark:bg-red-500/20 dark:text-red-400">{{ $pendingCount }}</span>
                 @endif
-            </button>
-            <button 
-                wire:click="$set('activeTab', 'heads')"
-                class="pb-3 px-4 font-medium text-sm border-b-2 transition-colors duration-150 {{ $activeTab === 'heads' ? 'border-brand text-brand font-semibold' : 'border-transparent text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300' }}"
-            >
-                Household Heads Registry
             </button>
         </div>
 
