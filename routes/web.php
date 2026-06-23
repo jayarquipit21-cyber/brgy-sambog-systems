@@ -206,6 +206,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('admin.announcements');
     })->name('admin.announcements');
 
+    Route::get('admin/blotters', function () {
+        if (! auth()->user()->isAdmin()) {
+            abort(403, 'Unauthorized.');
+        }
+
+        return view('pages.blotters');
+    })->name('admin.blotters');
+
     Route::get('rbi-data', function () {
         if (! auth()->user()->isAdmin()) {
             abort(403, 'Unauthorized.');
