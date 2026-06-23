@@ -6,11 +6,11 @@
                 <input wire:model.defer="title" type="text" placeholder="Title" class="w-full p-3 rounded border border-zinc-200 dark:border-zinc-800 bg-transparent text-sm" />
                 <textarea wire:model.defer="body" rows="4" placeholder="Message" class="w-full p-3 rounded border border-zinc-200 dark:border-zinc-800 bg-transparent text-sm"></textarea>
                 <div class="flex items-center gap-2">
-                    <select wire:model.live="type" class="p-2 rounded border border-zinc-200 dark:border-zinc-800 bg-transparent text-sm">
-                        <option value="general">General</option>
-                        <option value="health">Health</option>
-                        <option value="alert">Alert</option>
-                        <option value="event">Event</option>
+                    <select wire:model.live="type" class="p-2 rounded border border-zinc-200 dark:border-zinc-800 bg-transparent text-zinc-900 dark:text-white text-sm">
+                        <option class="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-white" value="general">General</option>
+                        <option class="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-white" value="health">Health</option>
+                        <option class="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-white" value="alert">Alert</option>
+                        <option class="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-white" value="event">Event</option>
                     </select>
                     <label class="flex items-center gap-2 text-xs"><input wire:model="is_pinned" type="checkbox" /> Pin</label>
                     <label class="flex items-center gap-2 text-xs"><input wire:model="publish_now" type="checkbox" checked /> Publish now</label>
