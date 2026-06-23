@@ -12,6 +12,7 @@ class Announcement extends Model
     protected $casts = [
         'is_pinned' => 'boolean',
         'published_at' => 'datetime',
+        'event_date' => 'datetime',
     ];
 
     public function user(): BelongsTo

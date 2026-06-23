@@ -10,11 +10,22 @@ class Announcements extends Component
     public function render()
     {
         $announcements = Announcement::whereNotNull('published_at')
+            ->where('type', '!=', 'event')
             ->orderByDesc('is_pinned')
             ->orderByDesc('published_at')
             ->take(8)
             ->get();
 
-        return view('livewire.announcements', ['announcements' => $announcements]);
+        $events = Announcement::whereNotNull('published_at')
+            ->where('type', 'event')
+            ->where('event_date', '>=', now()->startOfDay())
+            ->orderBy('event_date', 'asc')
+            ->take(5)
+            ->get();
+
+        return view('livewire.announcements', [
+            'announcements' => $announcements,
+            'events' => $events,
+        ]);
     }
 }

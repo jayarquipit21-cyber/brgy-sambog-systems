@@ -6,14 +6,28 @@
                 <input wire:model.defer="title" type="text" placeholder="Title" class="w-full p-3 rounded border border-zinc-200 dark:border-zinc-800 bg-transparent text-sm" />
                 <textarea wire:model.defer="body" rows="4" placeholder="Message" class="w-full p-3 rounded border border-zinc-200 dark:border-zinc-800 bg-transparent text-sm"></textarea>
                 <div class="flex items-center gap-2">
-                    <select wire:model.defer="type" class="p-2 rounded border border-zinc-200 dark:border-zinc-800 bg-transparent text-sm">
+                    <select wire:model.live="type" class="p-2 rounded border border-zinc-200 dark:border-zinc-800 bg-transparent text-sm">
                         <option value="general">General</option>
                         <option value="health">Health</option>
                         <option value="alert">Alert</option>
+                        <option value="event">Event</option>
                     </select>
-                    <label class="flex items-center gap-2 text-xs"><input wire:model.defer="is_pinned" type="checkbox" /> Pin</label>
-                    <label class="flex items-center gap-2 text-xs"><input wire:model.defer="publish_now" type="checkbox" checked /> Publish now</label>
+                    <label class="flex items-center gap-2 text-xs"><input wire:model="is_pinned" type="checkbox" /> Pin</label>
+                    <label class="flex items-center gap-2 text-xs"><input wire:model="publish_now" type="checkbox" checked /> Publish now</label>
                 </div>
+                
+                @if($type === 'event')
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
+                    <div>
+                        <label class="block text-xs font-bold text-zinc-500 mb-1">Event Date & Time</label>
+                        <input wire:model="event_date" type="datetime-local" class="w-full p-2 rounded border border-zinc-200 dark:border-zinc-800 bg-transparent text-sm" />
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-zinc-500 mb-1">Event Location</label>
+                        <input wire:model="event_location" type="text" placeholder="e.g. Barangay Hall" class="w-full p-2 rounded border border-zinc-200 dark:border-zinc-800 bg-transparent text-sm" />
+                    </div>
+                </div>
+                @endif
                 <div class="flex items-center gap-2">
                     @if($editingId)
                         <button wire:click="updateAnnouncement" class="px-4 py-2 bg-brand hover:bg-brand-dark text-white rounded">Update</button>
@@ -33,7 +47,10 @@
                         <div>
                             <div class="text-xs text-zinc-400">{{ ucfirst($a->type) }} @if($a->is_pinned) • <strong class="text-brand">Pinned</strong>@endif</div>
                             <div class="font-bold">{{ $a->title }}</div>
-                            <div class="text-xs text-zinc-500">{{ Str::limit($a->body, 120) }}</div>
+                            @if($a->type === 'event' && $a->event_date)
+                                <div class="text-xs text-brand mt-0.5">🗓 {{ $a->event_date->format('M d, Y h:i A') }} @if($a->event_location) • 📍 {{ $a->event_location }} @endif</div>
+                            @endif
+                            <div class="text-xs text-zinc-500 mt-1">{{ Str::limit($a->body, 120) }}</div>
                             <div class="text-[11px] text-zinc-400 mt-1">{{ $a->published_at ? $a->published_at->diffForHumans() : 'Draft' }}</div>
                         </div>
                         <div class="flex flex-col gap-2">

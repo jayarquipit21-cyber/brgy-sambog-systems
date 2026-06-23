@@ -15,6 +15,10 @@ class AnnouncementsManager extends Component
 
     public string $type = 'general';
 
+    public ?string $event_date = null;
+
+    public ?string $event_location = null;
+
     public bool $is_pinned = false;
 
     public bool $publish_now = true;
@@ -27,6 +31,8 @@ class AnnouncementsManager extends Component
             'title' => 'required|string|max:150',
             'body' => 'required|string|max:2000',
             'type' => 'nullable|string|max:50',
+            'event_date' => 'nullable|date',
+            'event_location' => 'nullable|string|max:255',
             'is_pinned' => 'boolean',
             'publish_now' => 'boolean',
         ];
@@ -45,11 +51,13 @@ class AnnouncementsManager extends Component
             'title' => $this->title,
             'body' => $this->body,
             'type' => $this->type ?? 'general',
+            'event_date' => $this->type === 'event' ? $this->event_date : null,
+            'event_location' => $this->type === 'event' ? $this->event_location : null,
             'is_pinned' => $this->is_pinned,
             'published_at' => $this->publish_now ? now() : null,
         ]);
 
-        $this->reset(['title', 'body', 'type', 'is_pinned', 'publish_now']);
+        $this->reset(['title', 'body', 'type', 'event_date', 'event_location', 'is_pinned', 'publish_now']);
         Flux::toast(variant: 'success', text: __('Announcement published.'));
     }
 
@@ -66,6 +74,8 @@ class AnnouncementsManager extends Component
         $this->title = $a->title;
         $this->body = $a->body;
         $this->type = $a->type;
+        $this->event_date = $a->event_date ? $a->event_date->format('Y-m-d\TH:i') : null;
+        $this->event_location = $a->event_location;
         $this->is_pinned = (bool) $a->is_pinned;
         $this->publish_now = (bool) $a->published_at;
     }
@@ -87,6 +97,8 @@ class AnnouncementsManager extends Component
             'title' => $this->title,
             'body' => $this->body,
             'type' => $this->type ?? 'general',
+            'event_date' => $this->type === 'event' ? $this->event_date : null,
+            'event_location' => $this->type === 'event' ? $this->event_location : null,
             'is_pinned' => $this->is_pinned,
             'published_at' => $this->publish_now ? now() : null,
         ]);
@@ -97,7 +109,7 @@ class AnnouncementsManager extends Component
     public function cancelEdit()
     {
         $this->editingId = null;
-        $this->reset(['title', 'body', 'type', 'is_pinned', 'publish_now']);
+        $this->reset(['title', 'body', 'type', 'event_date', 'event_location', 'is_pinned', 'publish_now']);
     }
 
     public function deleteAnnouncement(int $id)

@@ -626,10 +626,109 @@
                 </div>
             </section>
 
-            <!-- Wave Divider: Demographics → Places -->
+            <!-- Wave Divider: Demographics → Projects -->
             <div class="relative z-10 bg-transparent">
                 <svg class="wave-svg" viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
                     <path d="M0,30 C300,70 600,5 900,45 C1100,65 1300,10 1440,35 L1440,0 L0,0 Z" class="fill-emerald-100/60 dark:fill-emerald-900/40" />
+                </svg>
+            </div>
+
+            <!-- SECTION 6: Featured Projects -->
+            <section id="projects" class="scroll-mt-24 py-16 bg-transparent">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+                    <div class="text-center max-w-2xl mx-auto space-y-3">
+                        <span class="text-brand text-lg font-bold uppercase tracking-wider font-outfit">Community Development</span>
+                        <h2 class="text-5xl font-extrabold tracking-tight font-outfit text-zinc-950 dark:text-white">Featured Projects</h2>
+                        <p class="text-zinc-500 text-sm leading-relaxed font-light">Showcasing ongoing and completed infrastructure projects that drive progress in our barangay.</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div class="group relative rounded-3xl overflow-hidden shadow-lg border border-zinc-200 dark:border-zinc-800 cursor-pointer">
+                            <div class="h-64 bg-zinc-200 dark:bg-zinc-800 relative overflow-hidden flex items-center justify-center">
+                                <div class="absolute inset-0 bg-emerald-600/20 group-hover:bg-emerald-600/30 transition duration-300"></div>
+                                <div class="absolute inset-0 bg-gradient-to-t from-zinc-900/90 to-transparent z-10"></div>
+                                <svg class="h-20 w-20 text-emerald-100/50 absolute top-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+                                <div class="absolute bottom-6 left-6 z-20">
+                                    <div class="text-xs uppercase font-extrabold text-emerald-400 mb-1">Infrastructure</div>
+                                    <h3 class="text-2xl font-bold text-white font-outfit">Road Paving</h3>
+                                    <p class="text-zinc-300 text-sm mt-1">Purok 3</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="group relative rounded-3xl overflow-hidden shadow-lg border border-zinc-200 dark:border-zinc-800 cursor-pointer">
+                            <div class="h-64 bg-zinc-200 dark:bg-zinc-800 relative overflow-hidden flex items-center justify-center">
+                                <div class="absolute inset-0 bg-teal-600/20 group-hover:bg-teal-600/30 transition duration-300"></div>
+                                <div class="absolute inset-0 bg-gradient-to-t from-zinc-900/90 to-transparent z-10"></div>
+                                <svg class="h-20 w-20 text-teal-100/50 absolute top-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                <div class="absolute bottom-6 left-6 z-20">
+                                    <div class="text-xs uppercase font-extrabold text-emerald-400 mb-1">Recreation</div>
+                                    <h3 class="text-2xl font-bold text-white font-outfit">Covered Court Renovation</h3>
+                                    <p class="text-zinc-300 text-sm mt-1">Barangay Plaza</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="group relative rounded-3xl overflow-hidden shadow-lg border border-zinc-200 dark:border-zinc-800 cursor-pointer">
+                            <div class="h-64 bg-zinc-200 dark:bg-zinc-800 relative overflow-hidden flex items-center justify-center">
+                                <div class="absolute inset-0 bg-sky-600/20 group-hover:bg-sky-600/30 transition duration-300"></div>
+                                <div class="absolute inset-0 bg-gradient-to-t from-zinc-900/90 to-transparent z-10"></div>
+                                <svg class="h-20 w-20 text-sky-100/50 absolute top-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>
+                                <div class="absolute bottom-6 left-6 z-20">
+                                    <div class="text-xs uppercase font-extrabold text-emerald-400 mb-1">Utilities</div>
+                                    <h3 class="text-2xl font-bold text-white font-outfit">Solar Streetlights</h3>
+                                    <p class="text-zinc-300 text-sm mt-1">Main Highway</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Wave Divider: Projects → Ordinances -->
+            <div class="relative z-10 bg-transparent">
+                <svg class="wave-svg" viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+                    <path d="M0,60 C360,10 720,80 1080,30 C1260,5 1380,40 1440,20 L1440,80 L0,80 Z" class="fill-emerald-100/60 dark:fill-emerald-900/40" />
+                </svg>
+            </div>
+
+            <!-- SECTION 6b: Local Ordinances -->
+            <section id="ordinances" class="scroll-mt-24 py-16 bg-emerald-100/60 dark:bg-emerald-900/40">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+                    <div class="text-center max-w-2xl mx-auto space-y-3">
+                        <span class="text-brand text-lg font-bold uppercase tracking-wider font-outfit">Governance</span>
+                        <h2 class="text-5xl font-extrabold tracking-tight font-outfit text-zinc-950 dark:text-white">Local Ordinances</h2>
+                        <p class="text-zinc-500 text-sm leading-relaxed font-light">Key rules and policies implemented to maintain peace, order, and cleanliness in our community.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md p-6 rounded-3xl border border-zinc-200 dark:border-zinc-800 shadow-sm text-center">
+                            <div class="h-12 w-12 rounded-full bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mx-auto mb-4">
+                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            </div>
+                            <h3 class="font-bold text-xl text-zinc-900 dark:text-white mb-2 font-outfit">Curfew Hours</h3>
+                            <p class="text-zinc-500 text-sm">10:00 PM to 4:00 AM for minors to ensure safety and security.</p>
+                        </div>
+                        <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md p-6 rounded-3xl border border-zinc-200 dark:border-zinc-800 shadow-sm text-center">
+                            <div class="h-12 w-12 rounded-full bg-emerald-100 dark:bg-emerald-900/40 text-brand flex items-center justify-center mx-auto mb-4">
+                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                            </div>
+                            <h3 class="font-bold text-xl text-zinc-900 dark:text-white mb-2 font-outfit">Waste Segregation</h3>
+                            <p class="text-zinc-500 text-sm">Strict 'No Segregation, No Collection' policy. Biodegradable on Mondays, Non-bio on Thursdays.</p>
+                        </div>
+                        <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md p-6 rounded-3xl border border-zinc-200 dark:border-zinc-800 shadow-sm text-center">
+                            <div class="h-12 w-12 rounded-full bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-500 flex items-center justify-center mx-auto mb-4">
+                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" /></svg>
+                            </div>
+                            <h3 class="font-bold text-xl text-zinc-900 dark:text-white mb-2 font-outfit">Noise Control</h3>
+                            <p class="text-zinc-500 text-sm">Karaoke and loud music prohibited after 10:00 PM to respect resting hours.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Wave Divider: Ordinances → Places -->
+            <div class="relative z-10 bg-transparent">
+                <svg class="wave-svg" viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+                    <path d="M0,50 C180,80 420,10 720,60 C960,90 1200,20 1440,50 L1440,80 L0,80 Z" class="fill-transparent" />
                 </svg>
             </div>
 
@@ -654,10 +753,66 @@
                 </div>
             </section>
 
-            <!-- Wave Divider: Announcements → Contacts -->
+            <!-- Wave Divider: Announcements → FAQs -->
             <div class="relative z-10 bg-transparent">
                 <svg class="wave-svg" viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
                     <path d="M0,25 C180,60 420,5 720,40 C960,70 1200,10 1440,30 L1440,0 L0,0 Z" class="fill-emerald-100/60 dark:fill-emerald-900/40" />
+                </svg>
+            </div>
+
+            <!-- SECTION 9: FAQs -->
+            <section id="faqs" class="scroll-mt-24 py-16 bg-transparent" x-data="{ active: null }">
+                <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+                    <div class="text-center max-w-2xl mx-auto space-y-3">
+                        <span class="text-brand text-lg font-bold uppercase tracking-wider font-outfit">Information</span>
+                        <h2 class="text-5xl font-extrabold tracking-tight font-outfit text-zinc-950 dark:text-white">Frequently Asked Questions</h2>
+                        <p class="text-zinc-500 text-sm leading-relaxed font-light">Quick answers to common questions about barangay services.</p>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm overflow-hidden">
+                            <button @click="active !== 1 ? active = 1 : active = null" class="w-full text-left px-6 py-5 font-bold text-lg text-zinc-900 dark:text-white flex justify-between items-center focus:outline-none hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition">
+                                How can I request a Barangay Clearance?
+                                <svg class="h-5 w-5 text-brand transform transition-transform" :class="{ 'rotate-180': active === 1 }" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                            </button>
+                            <div x-show="active === 1" x-transition x-cloak>
+                                <div class="px-6 pb-5 text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed border-t border-zinc-100 dark:border-zinc-800 pt-4 mt-2">
+                                    You can request a Barangay Clearance by logging into your portal account, navigating to the 'Public Services' module, and scheduling a pick-up appointment. Ensure you have a valid ID when claiming it at the Barangay Hall.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm overflow-hidden">
+                            <button @click="active !== 2 ? active = 2 : active = null" class="w-full text-left px-6 py-5 font-bold text-lg text-zinc-900 dark:text-white flex justify-between items-center focus:outline-none hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition">
+                                What is the schedule for garbage collection?
+                                <svg class="h-5 w-5 text-brand transform transition-transform" :class="{ 'rotate-180': active === 2 }" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                            </button>
+                            <div x-show="active === 2" x-transition x-cloak>
+                                <div class="px-6 pb-5 text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed border-t border-zinc-100 dark:border-zinc-800 pt-4 mt-2">
+                                    Biodegradable waste is collected every Monday and Wednesday morning, while non-biodegradable and recyclable materials are collected on Thursdays. Please strictly follow the 'No Segregation, No Collection' policy.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm overflow-hidden">
+                            <button @click="active !== 3 ? active = 3 : active = null" class="w-full text-left px-6 py-5 font-bold text-lg text-zinc-900 dark:text-white flex justify-between items-center focus:outline-none hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition">
+                                How do I register my household in the RBI?
+                                <svg class="h-5 w-5 text-brand transform transition-transform" :class="{ 'rotate-180': active === 3 }" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                            </button>
+                            <div x-show="active === 3" x-transition x-cloak>
+                                <div class="px-6 pb-5 text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed border-t border-zinc-100 dark:border-zinc-800 pt-4 mt-2">
+                                    Registration for the Registry of Barangay Inhabitants (RBI) is typically done via house-to-house census by our officials. However, new residents can visit the Barangay Hall with a valid ID and proof of residence to register manually.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Wave Divider: FAQs → Contacts -->
+            <div class="relative z-10 bg-transparent">
+                <svg class="wave-svg" viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+                    <path d="M0,50 C180,80 420,10 720,60 C960,90 1200,20 1440,50 L1440,80 L0,80 Z" class="fill-transparent" />
                 </svg>
             </div>
 
