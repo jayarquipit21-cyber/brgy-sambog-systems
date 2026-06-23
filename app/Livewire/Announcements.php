@@ -10,7 +10,6 @@ class Announcements extends Component
     public function render()
     {
         $announcements = Announcement::whereNotNull('published_at')
-            ->where('type', '!=', 'event')
             ->orderByDesc('is_pinned')
             ->orderByDesc('published_at')
             ->take(8)

@@ -31,7 +31,7 @@
                             {{ __('Manage Appointments') }}
                         </flux:sidebar.item>
                         <flux:sidebar.item icon="megaphone" :href="route('admin.announcements')" :current="request()->routeIs('admin.announcements')" wire:navigate>
-                            {{ __('Manage Announcements') }}
+                            {{ __('Announcements & Events') }}
                         </flux:sidebar.item>
                         <flux:sidebar.item icon="shield-exclamation" :href="route('admin.blotters')" :current="request()->routeIs('admin.blotters')" wire:navigate>
                             {{ __('Blotter & Lupon') }}

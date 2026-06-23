@@ -26,7 +26,7 @@
                         {{ __('Manage Appointments') }}
                     </flux:navbar.item>
                     <flux:navbar.item icon="megaphone" :href="route('admin.announcements')" :current="request()->routeIs('admin.announcements')" wire:navigate>
-                        {{ __('Manage Announcements') }}
+                        {{ __('Announcements & Events') }}
                     </flux:navbar.item>
                 @endif
 
@@ -102,7 +102,7 @@
                             {{ __('Manage Appointments') }}
                         </flux:sidebar.item>
                         <flux:sidebar.item icon="megaphone" :href="route('admin.announcements')" :current="request()->routeIs('admin.announcements')" wire:navigate>
-                            {{ __('Manage Announcements') }}
+                            {{ __('Announcements & Events') }}
                         </flux:sidebar.item>
                     @endif
 
