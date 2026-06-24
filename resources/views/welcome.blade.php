@@ -280,14 +280,17 @@
                 </a>
 
                 <!-- Navigation Links for a comprehensive website experience -->
-                <nav class="hidden md:flex flex-1 items-center justify-center gap-4 text-lg font-semibold text-zinc-600 dark:text-zinc-300">
-                    <a href="#about" class="px-3 py-2 rounded-md hover:bg-brand/10 hover:text-brand transition">About Us</a>
-                    <a href="#services" class="px-3 py-2 rounded-md hover:bg-brand/10 hover:text-brand transition">Public Services</a>
-                    <a href="#officials" class="px-3 py-2 rounded-md hover:bg-brand/10 hover:text-brand transition">Local Council</a>
-                    <a href="#demographics" class="px-3 py-2 rounded-md hover:bg-brand/10 hover:text-brand transition">Statistics</a>
-                    <a href="{{ route('home') }}#places" class="px-3 py-2 rounded-md hover:bg-brand/10 hover:text-brand transition">Places</a>
-                    <a href="{{ route('home') }}#announcements" class="px-3 py-2 rounded-md hover:bg-brand/10 hover:text-brand transition">Announcements</a>
-                    <a href="{{ route('home') }}#contacts" class="px-3 py-2 rounded-md hover:bg-brand/10 hover:text-brand transition">Contacts</a>
+                <nav class="hidden xl:flex flex-1 items-center justify-center gap-1 2xl:gap-2 text-sm font-semibold text-zinc-600 dark:text-zinc-300">
+                    <a href="#about" class="px-2 py-1.5 rounded-md hover:bg-brand/10 hover:text-brand transition whitespace-nowrap">About Us</a>
+                    <a href="#services" class="px-2 py-1.5 rounded-md hover:bg-brand/10 hover:text-brand transition whitespace-nowrap">Public Services</a>
+                    <a href="#officials" class="px-2 py-1.5 rounded-md hover:bg-brand/10 hover:text-brand transition whitespace-nowrap">Local Council</a>
+                    <a href="#demographics" class="px-2 py-1.5 rounded-md hover:bg-brand/10 hover:text-brand transition whitespace-nowrap">Statistics</a>
+                    <a href="{{ route('home') }}#projects" class="px-2 py-1.5 rounded-md hover:bg-brand/10 hover:text-brand transition whitespace-nowrap">Projects</a>
+                    <a href="{{ route('home') }}#ordinances" class="px-2 py-1.5 rounded-md hover:bg-brand/10 hover:text-brand transition whitespace-nowrap">Ordinances</a>
+                    <a href="{{ route('home') }}#places" class="px-2 py-1.5 rounded-md hover:bg-brand/10 hover:text-brand transition whitespace-nowrap">Places</a>
+                    <a href="{{ route('home') }}#announcements" class="px-2 py-1.5 rounded-md hover:bg-brand/10 hover:text-brand transition whitespace-nowrap">Announcements</a>
+                    <a href="{{ route('home') }}#faqs" class="px-2 py-1.5 rounded-md hover:bg-brand/10 hover:text-brand transition whitespace-nowrap">FAQs</a>
+                    <a href="{{ route('home') }}#contacts" class="px-2 py-1.5 rounded-md hover:bg-brand/10 hover:text-brand transition whitespace-nowrap">Contacts</a>
                 </nav>
 
                 <!-- Authentication Portal Access -->
@@ -811,8 +814,8 @@
 
             <!-- Wave Divider: FAQs → Contacts -->
             <div class="relative z-10 bg-transparent">
-                <svg class="wave-svg" viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-                    <path d="M0,60 C360,10 720,80 1080,30 C1260,5 1380,40 1440,20 L1440,80 L0,80 Z" class="fill-emerald-100/60 dark:fill-emerald-900/40" />
+                <svg class="wave-svg" viewBox="0 0 1440 30" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+                    <path d="M0,15 C240,30 480,0 720,15 C960,30 1200,0 1440,15" stroke="currentColor" stroke-width="1" class="text-zinc-200 dark:text-zinc-800" fill="none" />
                 </svg>
             </div>
 
@@ -905,6 +908,9 @@
                         <li><a href="#services" class="hover:text-zinc-900 dark:hover:text-white transition">Public Services</a></li>
                         <li><a href="#demographics" class="hover:text-zinc-900 dark:hover:text-white transition">Inhabitants Statistics</a></li>
                         <li><a href="#officials" class="hover:text-zinc-900 dark:hover:text-white transition">Barangay Council</a></li>
+                        <li><a href="#projects" class="hover:text-zinc-900 dark:hover:text-white transition">Projects</a></li>
+                        <li><a href="#ordinances" class="hover:text-zinc-900 dark:hover:text-white transition">Ordinances</a></li>
+                        <li><a href="#faqs" class="hover:text-zinc-900 dark:hover:text-white transition">FAQs</a></li>
                         <li><a href="{{ route('holidays') }}" class="hover:text-zinc-900 dark:hover:text-white transition">National Holidays</a></li>
                     </ul>
                 </div>

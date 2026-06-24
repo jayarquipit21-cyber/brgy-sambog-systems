@@ -17,10 +17,14 @@
                 </div>
                 
                 @if($type === 'event')
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
                     <div>
-                        <label class="block text-xs font-bold text-zinc-500 mb-1">Event Date & Time</label>
+                        <label class="block text-xs font-bold text-zinc-500 mb-1">Start Date & Time</label>
                         <input wire:model="event_date" type="datetime-local" class="w-full p-2 rounded border border-zinc-200 dark:border-zinc-800 bg-transparent text-sm" />
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-zinc-500 mb-1">End Date & Time <span class="font-normal text-zinc-400">(optional)</span></label>
+                        <input wire:model="event_end_date" type="datetime-local" class="w-full p-2 rounded border border-zinc-200 dark:border-zinc-800 bg-transparent text-sm" />
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-zinc-500 mb-1">Event Location</label>
@@ -48,7 +52,13 @@
                             <div class="text-xs text-zinc-400">{{ ucfirst($a->type) }} @if($a->is_pinned) • <strong class="text-brand">Pinned</strong>@endif</div>
                             <div class="font-bold">{{ $a->title }}</div>
                             @if($a->type === 'event' && $a->event_date)
-                                <div class="text-xs text-brand mt-0.5">🗓 {{ $a->event_date->format('M d, Y h:i A') }} @if($a->event_location) • 📍 {{ $a->event_location }} @endif</div>
+                                <div class="text-xs text-brand mt-0.5">
+                                    🗓 {{ $a->event_date->format('M d, Y h:i A') }}
+                                    @if($a->event_end_date)
+                                        → {{ $a->event_end_date->format('M d, Y h:i A') }}
+                                    @endif
+                                    @if($a->event_location) • 📍 {{ $a->event_location }} @endif
+                                </div>
                             @endif
                             <div class="text-xs text-zinc-500 mt-1">{{ Str::limit($a->body, 120) }}</div>
                             <div class="text-[11px] text-zinc-400 mt-1">{{ $a->published_at ? $a->published_at->diffForHumans() : 'Draft' }}</div>

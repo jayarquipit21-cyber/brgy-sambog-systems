@@ -13,6 +13,7 @@ class Announcement extends Model
         'is_pinned' => 'boolean',
         'published_at' => 'datetime',
         'event_date' => 'datetime',
+        'event_end_date' => 'datetime',
     ];
 
     public function user(): BelongsTo

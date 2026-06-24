@@ -17,7 +17,10 @@ class Announcements extends Component
 
         $events = Announcement::whereNotNull('published_at')
             ->where('type', 'event')
-            ->where('event_date', '>=', now()->startOfDay())
+            ->where(function ($query) {
+                $query->where('event_date', '>=', now()->startOfDay())
+                    ->orWhere('event_end_date', '>=', now()->startOfDay());
+            })
             ->orderBy('event_date', 'asc')
             ->take(5)
             ->get();

@@ -5,10 +5,10 @@
         <p class="text-zinc-500 text-sm leading-relaxed font-light">Official statements, seasonal alerts, local assembly programs, and upcoming events.</p>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+    <div class="grid grid-cols-1 lg:grid-cols-[65fr_35fr] gap-12">
         
         <!-- Announcements Feed -->
-        <div class="lg:col-span-2 space-y-6">
+        <div class="space-y-6">
             <h3 class="text-2xl font-bold font-outfit text-zinc-900 dark:text-white flex items-center gap-2 mb-6">
                 <svg class="h-6 w-6 text-brand" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
@@ -17,26 +17,35 @@
             </h3>
             
             @forelse($announcements as $a)
-                <div class="bg-white dark:bg-zinc-900/60 p-8 rounded-3xl border border-zinc-200 dark:border-zinc-800 shadow-sm hover:shadow-md transition duration-300 relative overflow-hidden group">
-                    @if($a->is_pinned)
-                        <div class="absolute top-0 right-0 w-16 h-16 overflow-hidden">
-                            <div class="absolute transform rotate-45 bg-brand text-center text-white font-bold text-[10px] py-1 right-[-35px] top-[32px] w-[170px] shadow-sm">
-                                PINNED
-                            </div>
-                        </div>
-                    @endif
+                <div class="{{ $a->is_pinned ? 'bg-emerald-50/60 dark:bg-emerald-950/20 border-l-4 border-l-brand border-emerald-200 dark:border-emerald-800/40' : 'bg-white dark:bg-zinc-900/60 border-zinc-200 dark:border-zinc-800' }} p-8 rounded-3xl border shadow-sm hover:shadow-md transition duration-300 relative overflow-hidden group">
                     <div class="flex items-start justify-between gap-4 relative z-10">
                         <div class="flex-1">
-                            <div class="text-xs uppercase tracking-wider font-extrabold text-brand bg-brand/10 px-3 py-1 rounded-full w-fit mb-3">
-                                {{ ucfirst($a->type) }}
+                            <div class="flex items-center gap-2 mb-3 flex-wrap">
+                                <div class="text-xs uppercase tracking-wider font-extrabold text-brand bg-brand/10 px-3 py-1 rounded-full w-fit">
+                                    {{ ucfirst($a->type) }}
+                                </div>
+                                @if($a->is_pinned)
+                                    <div class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-900/40 px-3 py-1 rounded-full border border-emerald-200 dark:border-emerald-700/50">
+                                        <svg class="h-3 w-3" viewBox="0 0 24 24" fill="currentColor"><path d="M16 12V4h1V2H7v2h1v8l-2 2v2h5.2v6h1.6v-6H18v-2l-2-2z"/></svg>
+                                        Pinned
+                                    </div>
+                                @endif
                             </div>
                             <h4 class="font-extrabold text-2xl text-zinc-900 dark:text-white mt-1 group-hover:text-brand transition">{{ $a->title }}</h4>
                             
                             @if($a->type === 'event' && $a->event_date)
-                                <div class="flex items-center gap-4 mt-2 text-sm text-brand font-semibold bg-brand/5 w-fit px-3 py-1.5 rounded-lg border border-brand/10">
+                                <div class="flex items-center gap-4 mt-2 text-sm text-brand font-semibold bg-brand/5 w-fit px-3 py-1.5 rounded-lg border border-brand/10 flex-wrap">
                                     <div class="flex items-center gap-1.5">
                                         <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                                        {{ $a->event_date->format('F j, Y \a\t g:i A') }}
+                                        @if($a->event_end_date)
+                                            @if($a->event_date->isSameDay($a->event_end_date))
+                                                {{ $a->event_date->format('F j, Y \a\t g:i A') }} – {{ $a->event_end_date->format('g:i A') }}
+                                            @else
+                                                {{ $a->event_date->format('M j, Y g:i A') }} → {{ $a->event_end_date->format('M j, Y g:i A') }}
+                                            @endif
+                                        @else
+                                            {{ $a->event_date->format('F j, Y \a\t g:i A') }}
+                                        @endif
                                     </div>
                                     @if($a->event_location)
                                         <div class="flex items-center gap-1.5 border-l border-brand/20 pl-4">
@@ -70,7 +79,7 @@
         </div>
 
         <!-- Upcoming Events Sidebar -->
-        <div class="lg:col-span-1">
+        <div>
             <h3 class="text-2xl font-bold font-outfit text-zinc-900 dark:text-white flex items-center gap-2 mb-6">
                 <svg class="h-6 w-6 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -97,7 +106,15 @@
                             <h4 class="font-bold text-zinc-900 dark:text-white line-clamp-1">{{ $event->title }}</h4>
                             <div class="text-xs text-zinc-500 mt-1 flex items-center gap-1">
                                 <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                {{ $event->event_date->format('g:i A') }}
+                                @if($event->event_end_date)
+                                    @if($event->event_date->isSameDay($event->event_end_date))
+                                        {{ $event->event_date->format('g:i A') }} – {{ $event->event_end_date->format('g:i A') }}
+                                    @else
+                                        {{ $event->event_date->format('M j') }} – {{ $event->event_end_date->format('M j, Y') }}
+                                    @endif
+                                @else
+                                    {{ $event->event_date->format('g:i A') }}
+                                @endif
                             </div>
                             @if($event->event_location)
                                 <div class="text-xs text-zinc-500 mt-0.5 flex items-center gap-1">
@@ -112,22 +129,8 @@
                         No upcoming events scheduled.
                     </div>
                 @endforelse
-                
-                <div class="p-4 bg-zinc-50 dark:bg-zinc-900/80 border-t border-zinc-100 dark:border-zinc-800 text-center">
-                    <a href="#" class="text-sm font-bold text-brand hover:text-brand-dark transition">View full calendar &rarr;</a>
-                </div>
             </div>
             
-            <!-- Quick Subcribe -->
-            <div class="mt-8 bg-brand text-white p-6 rounded-3xl relative overflow-hidden shadow-lg shadow-emerald-500/20">
-                <div class="absolute -right-10 -top-10 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
-                <h4 class="font-bold text-lg font-outfit mb-2">Never miss an update</h4>
-                <p class="text-sm text-emerald-100 mb-4 leading-relaxed">Subscribe to our community newsletter for emergency alerts and event schedules.</p>
-                <div class="flex gap-2">
-                    <input type="email" placeholder="Your email address" class="w-full rounded-xl border-0 bg-white/20 text-white placeholder:text-emerald-200 px-4 py-2.5 text-sm focus:ring-2 focus:ring-white outline-none">
-                    <button class="bg-white text-brand px-4 py-2.5 rounded-xl text-sm font-bold shadow-md hover:bg-emerald-50 transition">Join</button>
-                </div>
-            </div>
 
         </div>
     </div>
