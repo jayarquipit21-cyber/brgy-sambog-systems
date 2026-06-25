@@ -264,26 +264,41 @@
 
                     <script>
                         (function () {
-                            const labels = @json($genderLabels ?? []);
-                            const values = @json($genderValues ?? []);
+                            const origLabels = @json($genderLabels ?? []);
+                            const origValues = @json($genderValues ?? []);
+                            
+                            let labels = [];
+                            let values = [];
+                            
+                            let maleIdx = origLabels.findIndex(l => l && l.toLowerCase() === 'male');
+                            if (maleIdx !== -1) { labels.push(origLabels[maleIdx]); values.push(origValues[maleIdx]); }
+                            
+                            let femaleIdx = origLabels.findIndex(l => l && l.toLowerCase() === 'female');
+                            if (femaleIdx !== -1) { labels.push(origLabels[femaleIdx]); values.push(origValues[femaleIdx]); }
+                            
+                            origLabels.forEach((l, i) => {
+                                if (!l || (l.toLowerCase() !== 'male' && l.toLowerCase() !== 'female')) {
+                                    labels.push(l); values.push(origValues[i]);
+                                }
+                            });
 
                             const ctx = document.getElementById('genderChartAdmin');
                             if (!ctx) return;
 
                             const chart = new Chart(ctx, {
-                                type: 'doughnut',
+                                type: 'pie',
                                 data: {
                                     labels: labels,
                                     datasets: [{
                                         data: values,
                                         backgroundColor: [
-                                            'rgba(236, 72, 153, 0.85)', // Pink
                                             'rgba(59, 130, 246, 0.85)', // Blue
+                                            'rgba(236, 72, 153, 0.85)', // Pink
                                             'rgba(16, 185, 129, 0.85)'  // Green
                                         ],
                                         borderColor: [
-                                            'rgba(190, 24, 93, 0.9)',
                                             'rgba(29, 78, 216, 0.9)',
+                                            'rgba(190, 24, 93, 0.9)',
                                             'rgba(6, 95, 70, 0.9)'
                                         ],
                                         borderWidth: 1,
@@ -293,7 +308,7 @@
                                 options: {
                                     responsive: true,
                                     maintainAspectRatio: false,
-                                    cutout: '65%',
+                                    rotation: 180,
                                     plugins: {
                                         legend: { display: false }
                                     }
@@ -301,7 +316,7 @@
                             });
 
                             let legendHtml = '';
-                            const colors = ['bg-pink-500', 'bg-blue-500', 'bg-emerald-500'];
+                            const colors = ['bg-blue-500', 'bg-pink-500', 'bg-emerald-500'];
                             const total = values.reduce((a, b) => a + b, 0);
                             labels.forEach((label, index) => {
                                 const val = values[index];
@@ -646,14 +661,29 @@
 
                     <script>
                         (function () {
-                            const labels = @json($genderLabels ?? []);
-                            const values = @json($genderValues ?? []);
+                            const origLabels = @json($genderLabels ?? []);
+                            const origValues = @json($genderValues ?? []);
+                            
+                            let labels = [];
+                            let values = [];
+                            
+                            let maleIdx = origLabels.findIndex(l => l && l.toLowerCase() === 'male');
+                            if (maleIdx !== -1) { labels.push(origLabels[maleIdx]); values.push(origValues[maleIdx]); }
+                            
+                            let femaleIdx = origLabels.findIndex(l => l && l.toLowerCase() === 'female');
+                            if (femaleIdx !== -1) { labels.push(origLabels[femaleIdx]); values.push(origValues[femaleIdx]); }
+                            
+                            origLabels.forEach((l, i) => {
+                                if (!l || (l.toLowerCase() !== 'male' && l.toLowerCase() !== 'female')) {
+                                    labels.push(l); values.push(origValues[i]);
+                                }
+                            });
 
                             const ctx = document.getElementById('genderChartHealth');
                             if (!ctx) return;
 
                             const chart = new Chart(ctx, {
-                                type: 'doughnut',
+                                type: 'pie',
                                 data: {
                                     labels: labels,
                                     datasets: [{
@@ -675,7 +705,7 @@
                                 options: {
                                     responsive: true,
                                     maintainAspectRatio: false,
-                                    cutout: '65%',
+                                    rotation: 180,
                                     plugins: {
                                         legend: { display: false }
                                     }
