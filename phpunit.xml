@@ -3,7 +3,6 @@
          xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
          bootstrap="vendor/autoload.php"
          colors="true"
-         php-ini-settings="opcache.enable_cli=0"
 >
     <testsuites>
         <testsuite name="Unit">
@@ -19,6 +18,7 @@
         </include>
     </source>
     <php>
+        <ini name="opcache.enable_cli" value="0"/>
         <env name="APP_ENV" value="testing"/>
         <env name="APP_MAINTENANCE_DRIVER" value="file"/>
         <env name="BCRYPT_ROUNDS" value="4"/>
