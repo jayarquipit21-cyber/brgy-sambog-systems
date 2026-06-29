@@ -159,12 +159,12 @@ class BarangayServicesTest extends TestCase
 
     public function test_guests_cannot_access_any_authenticated_routes(): void
     {
-        $this->get(route('dashboard'))->assertRedirect(route('login'));
-        $this->get(route('rbi'))->assertRedirect(route('login'));
-        $this->get(route('rbi-data'))->assertRedirect(route('login'));
-        $this->get(route('health'))->assertRedirect(route('login'));
-        $this->get(route('household'))->assertRedirect(route('login'));
-        $this->get(route('appointments'))->assertRedirect(route('login'));
+        $this->get(route('dashboard'))->assertRedirect(route('home'));
+        $this->get(route('rbi'))->assertRedirect(route('home'));
+        $this->get(route('rbi-data'))->assertRedirect(route('home'));
+        $this->get(route('health'))->assertRedirect(route('home'));
+        $this->get(route('household'))->assertRedirect(route('home'));
+        $this->get(route('appointments'))->assertRedirect(route('home'));
     }
 
     public function test_residents_cannot_access_admin_or_health_routes(): void
