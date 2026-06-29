@@ -21,6 +21,10 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->appendToGroup('web', [
             \App\Http\Middleware\PreventBackHistory::class,
         ]);
+
+        // Redirect unauthenticated users (expired/closed-browser sessions)
+        // to the public homepage instead of the default /login page.
+        $middleware->redirectGuestsTo(fn () => route('home'));
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
