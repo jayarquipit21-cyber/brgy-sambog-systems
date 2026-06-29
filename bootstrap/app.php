@@ -11,7 +11,16 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        // Prevent the browser from caching authenticated pages.
+        // Without this, hitting the back button after logout can reveal
+        // previously-visited authenticated pages from the browser's cache.
+        $middleware->alias([
+            'no.cache' => \App\Http\Middleware\PreventBackHistory::class,
+        ]);
+
+        $middleware->appendToGroup('web', [
+            \App\Http\Middleware\PreventBackHistory::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
