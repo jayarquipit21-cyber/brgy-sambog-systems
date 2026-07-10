@@ -57,11 +57,11 @@ class SystemNotification extends Notification implements ShouldBroadcastNow
      */
     public function toBroadcast(object $notifiable): BroadcastMessage
     {
-        return new BroadcastMessage([
+        return (new BroadcastMessage([
             'title' => $this->title,
             'message' => $this->message,
             'icon' => $this->icon,
             'url' => $this->url,
-        ]);
+        ]))->onConnection('sync');
     }
 }
