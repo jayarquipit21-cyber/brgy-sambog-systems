@@ -79,7 +79,12 @@
                 </flux:sidebar.item>
             </flux:sidebar.nav>
 
-            <x-desktop-user-menu class="hidden lg:block" :name="auth()->user()->name" />
+            <div class="hidden lg:flex items-center gap-2 mt-auto p-2 border-t border-zinc-200 dark:border-zinc-700/50">
+                <div class="flex-1 min-w-0">
+                    <x-desktop-user-menu :name="auth()->user()->name" />
+                </div>
+                <livewire:notifications-dropdown />
+            </div>
         </flux:sidebar>
 
         <!-- Mobile User Menu -->
@@ -88,11 +93,14 @@
 
             <flux:spacer />
 
-            <flux:dropdown position="top" align="end">
-                <flux:profile
-                    :initials="auth()->user()->initials()"
-                    icon-trailing="chevron-down"
-                />
+            <div class="flex items-center gap-1">
+                <livewire:notifications-dropdown />
+                
+                <flux:dropdown position="top" align="end">
+                    <flux:profile
+                        :initials="auth()->user()->initials()"
+                        icon-trailing="chevron-down"
+                    />
 
                 <flux:menu>
                     <flux:menu.radio.group>
@@ -135,6 +143,7 @@
                     </form>
                 </flux:menu>
             </flux:dropdown>
+            </div>
         </flux:header>
 
         {{ $slot }}
