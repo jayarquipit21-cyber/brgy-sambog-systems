@@ -3,6 +3,8 @@
 namespace App\Livewire;
 
 use App\Models\Announcement;
+use App\Models\User;
+use App\Notifications\SystemNotification;
 use Flux\Flux;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -62,6 +64,11 @@ class AnnouncementsManager extends Component
         ]);
 
         $this->reset(['title', 'body', 'type', 'event_date', 'event_end_date', 'event_location', 'is_pinned', 'publish_now']);
+
+        if ($this->publish_now) {
+            $this->notifyAllUsers($announcement);
+        }
+
         Flux::toast(variant: 'success', text: __('Announcement published.'));
     }
 
@@ -140,6 +147,9 @@ class AnnouncementsManager extends Component
         $a = Announcement::find($id);
         if ($a && ! $a->published_at) {
             $a->update(['published_at' => now()]);
+
+            $this->notifyAllUsers($a);
+
             Flux::toast(variant: 'success', text: __('Announcement published.'));
         }
     }

@@ -4,6 +4,8 @@
 import './passkeys';
 
 // Add additional app initialization below as needed.
+import Chart from 'chart.js/auto';
+window.Chart = Chart;
 
 import axios from 'axios';
 window.axios = axios;

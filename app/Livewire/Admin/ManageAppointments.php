@@ -4,6 +4,7 @@ namespace App\Livewire\Admin;
 
 use App\Models\Appointment;
 use App\Models\AppointmentDateClosure;
+use App\Notifications\SystemNotification;
 use App\Services\HolidaysService;
 use Flux\Flux;
 use Illuminate\Support\Facades\Schema;
@@ -79,6 +80,14 @@ class ManageAppointments extends Component
         $this->selectedAppointmentId = null;
         $this->approvalNotes = '';
 
+        // Notify the resident who booked
+        $appointment->user->notify(new SystemNotification(
+            'Appointment Approved',
+            "Your request for \"{$appointment->purpose}\" has been approved and scheduled for {$appointment->appointment_date->format('M d, Y')} at {$appointment->appointment_time}.",
+            'check-circle',
+            route('my-appointments')
+        ));
+
         Flux::toast(variant: 'success', text: __('Appointment approved and scheduled successfully!'));
     }
 
@@ -86,6 +95,14 @@ class ManageAppointments extends Component
     {
         $appointment = Appointment::findOrFail($id);
         $appointment->update(['status' => 'approved-pending']);
+
+        $appointment->user->notify(new SystemNotification(
+            'Document Ready for Signing',
+            "Your request for \"{$appointment->purpose}\" has been approved and is awaiting the Kapitan's signature.",
+            'clipboard-document-check',
+            route('my-appointments')
+        ));
+
         Flux::toast(variant: 'success', text: __('Request approved for Kapitan\'s signature (Approved-Pending).'));
     }
 
@@ -93,6 +110,14 @@ class ManageAppointments extends Component
     {
         $appointment = Appointment::findOrFail($id);
         $appointment->update(['status' => 'completed']);
+
+        $appointment->user->notify(new SystemNotification(
+            'Document Ready for Pickup',
+            "Your request for \"{$appointment->purpose}\" is completed. Please pick up your document at the Barangay Hall.",
+            'document-check',
+            route('my-appointments')
+        ));
+
         Flux::toast(variant: 'success', text: __('Appointment marked as completed.'));
     }
 
@@ -121,6 +146,14 @@ class ManageAppointments extends Component
         $this->showRejectModal = false;
         $this->selectedRejectId = null;
         $this->rejectReason = '';
+
+        // Notify the resident
+        $appointment->user->notify(new SystemNotification(
+            'Appointment Cancelled',
+            "Your request for \"{$appointment->purpose}\" has been cancelled. Reason: {$this->rejectReason}",
+            'x-circle',
+            route('my-appointments')
+        ));
 
         Flux::toast(variant: 'success', text: __('Appointment has been rejected/cancelled.'));
     }

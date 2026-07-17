@@ -240,10 +240,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('pages.household');
     })->name('household');
 
-    // Shared Appointments route
+    // Shared Appointments route (also aliased as 'my-appointments' for notification deep-links)
     Route::get('appointments', function () {
         return view('pages.appointments');
     })->name('appointments');
+
+    Route::get('my-appointments', function () {
+        return view('pages.appointments');
+    })->name('my-appointments');
 
     // Complete My Profile (resident self-service)
     Route::livewire('profile/complete', \App\Livewire\CompleteProfile::class)->name('profile.complete');

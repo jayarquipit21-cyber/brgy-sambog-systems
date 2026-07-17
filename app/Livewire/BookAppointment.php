@@ -5,6 +5,8 @@ namespace App\Livewire;
 use App\Models\Appointment;
 // weekday-based closures removed; using date-based closures only
 use App\Models\AppointmentDateClosure;
+use App\Models\User;
+use App\Notifications\SystemNotification;
 use App\Services\HolidaysService;
 use Carbon\Carbon;
 use Flux\Flux;
@@ -27,15 +29,28 @@ class BookAppointment extends Component
     {
         $this->validate();
 
+        $purpose = $this->purpose;
+
         Appointment::create([
             'user_id' => Auth::id(),
-            'purpose' => $this->purpose,
+            'purpose' => $purpose,
             'status' => 'pending',
             'appointment_date' => null,
             'appointment_time' => null,
         ]);
 
         $this->reset(['purpose']);
+
+        // Notify all admins about the new request
+        $admins = User::where('role', 'admin')->where('id', '!=', Auth::id())->get();
+        foreach ($admins as $admin) {
+            $admin->notify(new SystemNotification(
+                'New Document Request',
+                Auth::user()->name . ' submitted a request for: "' . $purpose . '".',
+                'document-text',
+                route('manage-appointments')
+            ));
+        }
 
         Flux::toast(variant: 'success', text: __('Document request submitted successfully! Your request is pending review.'));
 

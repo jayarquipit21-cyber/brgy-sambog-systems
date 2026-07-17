@@ -36,28 +36,7 @@
         <meta name="twitter:description" content="Official inhabitant demographic registry and secure pick-up scheduling workspace portal.">
 
         
-        <!-- Tailwind CSS CDN -->
-        <script src="https://cdn.tailwindcss.com"></script>
-        <script>
-            tailwind.config = {
-                darkMode: 'class',
-                theme: {
-                    extend: {
-                        fontFamily: {
-                            sans: ['Inter', 'sans-serif'],
-                            outfit: ['Outfit', 'sans-serif'],
-                        },
-                        colors: {
-                            brand: {
-                                DEFAULT: '#059669',
-                                dark: '#047857',
-                            }
-                        }
-                    }
-                }
-            }
-        </script>
-        
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
         @livewireStyles
         <style>
             body {
@@ -233,6 +212,18 @@
             .dark .aurora-streak {
                 background: linear-gradient(90deg, transparent, rgba(52,211,153,0.15), rgba(45,212,191,0.1), transparent);
             }
+
+            /* Reduced motion compatibility */
+            @media (prefers-reduced-motion: reduce) {
+                .animate-float, 
+                .animate-float-reverse, 
+                .animate-float-diagonal, 
+                .animate-float-orbit, 
+                .animate-color-shift,
+                .aurora-streak {
+                    animation: none !important;
+                }
+            }
         </style>
     </head>
     <body class="bg-gradient-to-br from-emerald-100 via-white to-teal-50 dark:from-zinc-950 dark:via-zinc-900 dark:to-emerald-950 text-zinc-900 dark:text-zinc-100 min-h-screen flex flex-col transition-colors duration-300 relative overflow-x-hidden">
@@ -383,43 +374,71 @@
         <main class="flex-grow bg-mesh bg-noise overflow-x-hidden relative z-10">
             
             <!-- SECTION 1: Gorgeous Municipal Hero Banner -->
-            <section class="relative overflow-hidden py-16 sm:py-24 bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-500 dark:from-zinc-950 dark:via-emerald-950 dark:to-zinc-900 text-white wave-divider">
+            <section class="relative overflow-hidden py-24 sm:py-32 bg-gradient-to-br from-[#021d15] via-[#053224] to-[#0a4835] text-white">
                 <!-- Radial overlay for depth -->
-                <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-white/10 via-transparent to-transparent dark:from-emerald-900/30 dark:via-zinc-950 dark:to-zinc-950 z-0"></div>
+                <div class="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,rgba(16,185,129,0.15),transparent_50%)] z-0"></div>
                 <!-- Glow orbs -->
-                <div class="absolute -right-20 -bottom-20 h-96 w-96 rounded-full bg-emerald-400/30 dark:bg-emerald-500/25 blur-3xl z-0 animate-float"></div>
-                <div class="absolute -left-20 -top-20 h-96 w-96 rounded-full bg-teal-300/25 dark:bg-teal-400/20 blur-3xl z-0 animate-float-reverse"></div>
-                <!-- Additional hero orbs for depth -->
-                <div class="absolute top-1/2 left-1/3 h-64 w-64 rounded-full bg-cyan-300/15 dark:bg-cyan-500/10 blur-3xl z-0 animate-float-diagonal"></div>
-                <!-- Top shimmer line -->
-                <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/40 dark:via-emerald-400/50 to-transparent z-10"></div>
-                <!-- Aurora streaks -->
-                <div class="aurora-streak top-[30%]" style="animation-delay: -2s;"></div>
-                <div class="aurora-streak top-[60%]" style="animation-delay: -4s;"></div>
+                <div class="absolute -right-20 -bottom-20 h-96 w-96 rounded-full bg-emerald-500/10 blur-3xl z-0 animate-pulse-slow"></div>
+                <div class="absolute right-1/4 top-1/4 h-80 w-80 rounded-full bg-teal-500/5 blur-3xl z-0 animate-float"></div>
 
-                <div class="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
-                    <span class="inline-flex items-center gap-1.5 px-3.5 py-1 bg-white/20 border border-white/40 text-white dark:bg-emerald-500/15 dark:border-emerald-400/40 dark:text-emerald-300 rounded-full text-xs font-bold tracking-wider uppercase">
-                        <span class="h-1.5 w-1.5 rounded-full bg-white dark:bg-emerald-400 animate-pulse"></span>
-                        Official Barangay Domain
-                    </span>
+                <div class="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    <div class="lg:col-span-7 space-y-8 text-left">
+                        <span class="inline-flex items-center gap-1.5 px-3.5 py-1 bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 rounded-full text-xs font-bold tracking-wider uppercase font-outfit">
+                            <span class="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                            Official Barangay Domain
+                        </span>
 
-                    <h1 class="text-5xl sm:text-8xl font-black font-outfit tracking-tight leading-none text-white max-w-5xl mx-auto drop-shadow-sm">
-                        Empowering Citizens, Shaping <span class="hero-gradient-text">Brgy. Sambog, Corella, Bohol</span>
-                    </h1>
+                        <h1 class="text-4xl sm:text-7xl font-black font-outfit tracking-tight leading-none text-white drop-shadow-sm">
+                            Empowering Citizens, Shaping <span class="bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent">Brgy. Sambog</span>
+                        </h1>
 
-                    <p class="text-lg sm:text-2xl text-white/85 dark:text-zinc-200 max-w-3xl mx-auto leading-relaxed font-light">
-                        Welcome to our official barangay website. Stay connected with community stats, schedule secure clearance pick-ups, and get in touch with local council updates effortlessly.
-                    </p>
+                        <p class="text-base sm:text-xl text-zinc-300 max-w-2xl leading-relaxed font-normal">
+                            Welcome to the official municipal workspace portal of Barangay Sambog, Corella, Bohol. Schedule secure clearance pick-ups, review community stats, and access local council updates.
+                        </p>
 
-                    <!-- Hero CTAs removed; primary access available in header -->
+                        <!-- Hero CTAs Restored -->
+                        <div class="flex flex-wrap gap-4 pt-2">
+                            @auth
+                                <a href="{{ route('dashboard') }}" class="inline-flex items-center justify-center px-6 py-3.5 bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm rounded-xl transition duration-300 shadow-lg shadow-emerald-500/20 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                                    Go to Workspace Dashboard
+                                </a>
+                            @else
+                                <a href="{{ route('login') }}" class="inline-flex items-center justify-center px-6 py-3.5 bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm rounded-xl transition duration-300 shadow-lg shadow-emerald-500/20 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                                    Access Inhabitant Portal
+                                </a>
+                                <a href="#about" class="inline-flex items-center justify-center px-5 py-3.5 bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 hover:text-white font-bold text-sm rounded-xl transition duration-300 focus:outline-none focus:ring-2 focus:ring-white">
+                                    Learn More ↓
+                                </a>
+                            @endauth
+                        </div>
+                    </div>
+
+                    <!-- Signature Element: Floating Civic Seal SVG -->
+                    <div class="lg:col-span-5 flex justify-center lg:justify-end">
+                        <div class="relative w-72 h-72 sm:w-80 sm:h-80 bg-zinc-950/20 dark:bg-zinc-950/40 border border-white/5 rounded-3xl p-8 flex items-center justify-center shadow-2xl card-glow-admin animate-float">
+                            <!-- Geometric background patterns -->
+                            <div class="absolute inset-0 bg-radial-gradient from-emerald-500/10 via-transparent to-transparent blur-xl"></div>
+                            
+                            <!-- Premium SVG Civic Seal Emblem -->
+                            <svg class="size-48 text-emerald-500/80" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="50" cy="50" r="45" stroke="currentColor" stroke-width="2" stroke-dasharray="4 4" />
+                                <circle cx="50" cy="50" r="40" stroke="currentColor" stroke-width="1" />
+                                <polygon points="50,18 78,35 78,65 50,82 22,65 22,35" stroke="currentColor" stroke-width="1.5" fill="currentColor" fill-opacity="0.05" />
+                                <polygon points="50,25 70,38 70,62 50,75 30,62 30,38" stroke="#f59e0b" stroke-width="1" fill="none" opacity="0.8" />
+                                <circle cx="50" cy="50" r="12" stroke="currentColor" stroke-width="2" fill="currentColor" fill-opacity="0.1" />
+                                <!-- Corella Emblem lines -->
+                                <path d="M50,38 L50,44 M50,56 L50,62 M38,50 L44,50 M56,50 L62,50" stroke="currentColor" stroke-width="1" />
+                            </svg>
+                        </div>
+                    </div>
                 </div>
             </section>
 
             <!-- Wave SVG Divider: Hero → Content -->
             <div class="relative z-10 -mt-1 bg-transparent">
                 <svg class="wave-svg" viewBox="0 0 1440 100" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-                    <path d="M0,40 C240,100 480,0 720,50 C960,100 1200,10 1440,60 L1440,0 L0,0 Z" class="fill-emerald-500 dark:fill-zinc-950" />
-                    <path d="M0,50 C300,90 600,10 900,55 C1100,85 1300,20 1440,45 L1440,0 L0,0 Z" class="fill-emerald-400/50 dark:fill-emerald-950/30" />
+                    <path d="M0,40 C240,100 480,0 720,50 C960,100 1200,10 1440,60 L1440,0 L0,0 Z" class="fill-[#0a4835] dark:fill-zinc-950" />
+                    <path d="M0,50 C300,90 600,10 900,55 C1100,85 1300,20 1440,45 L1440,0 L0,0 Z" class="fill-[#053224]/50 dark:fill-emerald-950/20" />
                 </svg>
             </div>
 
@@ -603,27 +622,27 @@
 
                     <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md border border-zinc-200 dark:border-zinc-800 rounded-3xl p-8 sm:p-10 shadow-2xl grid grid-cols-2 lg:grid-cols-4 gap-8 divide-y lg:divide-y-0 lg:divide-x divide-zinc-200 dark:divide-zinc-800">
                         <div class="flex flex-col items-center text-center p-4">
-                            <span class="text-sm uppercase font-extrabold tracking-wider text-zinc-400">Total Population</span>
-                                <span class="text-5xl sm:text-6xl font-black text-brand font-outfit mt-2">{{ number_format($totalResidents) }}</span>
-                                <span class="text-sm text-zinc-500 mt-1 font-semibold">Registered Inhabitants</span>
+                            <span class="text-sm uppercase font-extrabold tracking-wider text-sky-655 dark:text-sky-400">Total Residents</span>
+                            <span class="text-5xl sm:text-6xl font-black text-sky-500 font-outfit mt-2">{{ number_format($totalResidents) }}</span>
+                            <span class="text-sm text-zinc-500 mt-1 font-semibold">Registered Inhabitants</span>
                         </div>
 
                         <div class="flex flex-col items-center text-center p-4">
-                            <span class="text-sm uppercase font-extrabold tracking-wider text-zinc-400">Total Households</span>
-                                <span class="text-5xl sm:text-6xl font-black text-zinc-900 dark:text-white font-outfit mt-2">{{ number_format($totalHouseholds) }}</span>
-                                <span class="text-sm text-zinc-500 mt-1 font-semibold">Active Family Units</span>
+                            <span class="text-sm uppercase font-extrabold tracking-wider text-amber-600 dark:text-amber-400">Total Households</span>
+                            <span class="text-5xl sm:text-6xl font-black text-amber-500 font-outfit mt-2">{{ number_format($totalHouseholds) }}</span>
+                            <span class="text-sm text-zinc-500 mt-1 font-semibold">Active Family Units</span>
                         </div>
 
                         <div class="flex flex-col items-center text-center p-4">
-                            <span class="text-sm uppercase font-extrabold tracking-wider text-zinc-400">Senior Citizens</span>
-                                <span class="text-5xl sm:text-6xl font-black text-zinc-900 dark:text-white font-outfit mt-2">{{ number_format($seniorCitizens) }}</span>
-                                <span class="text-sm text-zinc-500 mt-1 font-semibold">Supported Seniors (60+)</span>
+                            <span class="text-sm uppercase font-extrabold tracking-wider text-violet-600 dark:text-violet-400">Senior Citizens</span>
+                            <span class="text-5xl sm:text-6xl font-black text-violet-500 font-outfit mt-2">{{ number_format($seniorCitizens) }}</span>
+                            <span class="text-sm text-zinc-500 mt-1 font-semibold">Supported Seniors (60+)</span>
                         </div>
 
                         <div class="flex flex-col items-center text-center p-4">
-                            <span class="text-sm uppercase font-extrabold tracking-wider text-zinc-400">Immunization Rate</span>
-                                <span class="text-5xl sm:text-6xl font-black text-emerald-500 font-outfit mt-2">{{ $totalResidents > 0 ? number_format(($vaccinatedCount / $totalResidents) * 100, 1) : 0 }}%</span>
-                                <span class="text-sm text-zinc-500 mt-1 font-semibold">Vaccinated Inhabitants</span>
+                            <span class="text-sm uppercase font-extrabold tracking-wider text-emerald-600 dark:text-emerald-450">Immunization Rate</span>
+                            <span class="text-5xl sm:text-6xl font-black text-emerald-500 font-outfit mt-2">{{ $totalResidents > 0 ? number_format(($vaccinatedCount / $totalResidents) * 100, 1) : 0 }}%</span>
+                            <span class="text-sm text-zinc-500 mt-1 font-semibold">Vaccinated Inhabitants</span>
                         </div>
                     </div>
                 </div>
