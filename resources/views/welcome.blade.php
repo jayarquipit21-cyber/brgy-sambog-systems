@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Brgy. Sambog, Corella, Bohol - Official Municipal Website</title>
+        <title>Brgy. Sambog, Corella, Bohol - Official Municipal Portal</title>
         <link rel="icon" href="/favicon.ico" sizes="any">
         
         <!-- Theme Initialization script to prevent flash of wrong theme -->
@@ -23,270 +23,397 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
         
-        <!-- SEO Meta Tags & Open Graph Description -->
-        <meta name="description" content="Official website of Barangay Sambog, Corella, Bohol. Schedule secure clearance pick-ups, review community stats, and get local council updates.">
-        <meta name="keywords" content="Sambog, Corella, Bohol, Barangay Sambog, Official Website, Barangay Clearance, Household Registry">
-        <meta property="og:title" content="Barangay Sambog, Corella, Bohol - Official Municipal Website">
-        <meta property="og:description" content="Stay connected with community stats, schedule secure clearance pick-ups, and get in touch with local council updates effortlessly.">
+        <!-- SEO Meta Tags & Open Graph -->
+        <meta name="description" content="Official municipal portal of Barangay Sambog, Corella, Bohol. Schedule document clearances, view inhabitant statistics, and access local council updates.">
+        <meta name="keywords" content="Sambog, Corella, Bohol, Barangay Sambog, Official Portal, Barangay Clearance, Household Registry">
+        <meta property="og:title" content="Barangay Sambog, Corella, Bohol - Official Municipal Portal">
+        <meta property="og:description" content="Official inhabitant demographic registry and secure pick-up scheduling portal.">
         <meta property="og:type" content="website">
         <meta property="og:url" content="{{ url()->current() }}">
         <meta property="og:site_name" content="Barangay Sambog">
         <meta name="twitter:card" content="summary_large_image">
-        <meta name="twitter:title" content="Barangay Sambog, Corella, Bohol">
-        <meta name="twitter:description" content="Official inhabitant demographic registry and secure pick-up scheduling workspace portal.">
 
-        
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         @livewireStyles
         <style>
-            body {
-                font-family: 'Inter', sans-serif;
-            }
-            .font-outfit {
-                font-family: 'Outfit', sans-serif;
-            }
-            /* Premium Emerald & Mint Color Theme */
-            .text-brand {
-                color: #059669;
-            }
-            .bg-brand {
-                background-color: #059669;
-            }
-            .hover\:bg-brand-dark:hover {
-                background-color: #047857;
-            }
-            .premium-gradient {
-                background: linear-gradient(135deg, #34d399 0%, #2dd4bf 100%);
-            }
-            .premium-gradient-dark {
-                background: linear-gradient(135deg, #18181b 0%, #09090b 100%);
-            }
-            .glassmorphism {
-                background: rgba(255, 255, 255, 0.88);
+            body { font-family: 'Inter', sans-serif; }
+            .font-outfit { font-family: 'Outfit', sans-serif; }
+            
+            /* Glassmorphism Surface Tokens */
+            .glass-panel {
+                background: rgba(255, 255, 255, 0.75);
                 backdrop-filter: blur(16px);
                 -webkit-backdrop-filter: blur(16px);
             }
-            .dark .glassmorphism {
-                background: rgba(9, 9, 11, 0.85);
+            .dark .glass-panel {
+                background: rgba(18, 18, 20, 0.75);
                 backdrop-filter: blur(16px);
                 -webkit-backdrop-filter: blur(16px);
             }
-
-            /* ===== PREMIUM ANIMATED GRID BACKGROUND ===== */
-            .bg-mesh {
-                position: relative;
+            
+            /* Glow and Accent Gradients */
+            .emerald-glow {
+                background: radial-gradient(circle, rgba(16, 185, 129, 0.12) 0%, transparent 70%);
             }
-            .bg-mesh::before {
-                content: '';
-                position: fixed;
-                inset: 0;
-                z-index: 0;
-                pointer-events: none;
-                background-image:
-                    linear-gradient(rgba(5, 150, 105, 0.06) 1px, transparent 1px),
-                    linear-gradient(90deg, rgba(5, 150, 105, 0.06) 1px, transparent 1px);
-                background-size: 60px 60px;
-                mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 30%, transparent 100%);
-                -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 30%, transparent 100%);
-                animation: grid-pulse 8s ease-in-out infinite;
+            .bento-card-glow {
+                transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
             }
-            .dark .bg-mesh::before {
-                background-image:
-                    linear-gradient(rgba(52, 211, 153, 0.04) 1px, transparent 1px),
-                    linear-gradient(90deg, rgba(52, 211, 153, 0.04) 1px, transparent 1px);
-            }
-            @keyframes grid-pulse {
-                0%, 100% { opacity: 0.5; }
-                50% { opacity: 1; }
+            .bento-card-glow:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 12px 30px -10px rgba(16, 185, 129, 0.15);
             }
 
-            /* ===== FILM GRAIN / NOISE TEXTURE ===== */
-            .bg-noise::after {
-                content: '';
-                position: fixed;
-                inset: 0;
-                z-index: 1;
-                pointer-events: none;
-                opacity: 0.025;
-                background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-                background-repeat: repeat;
-                background-size: 256px 256px;
-            }
-            .dark .bg-noise::after {
-                opacity: 0.04;
-            }
-
-            /* Hero gradient text — adapts to light/dark mode */
-            .hero-gradient-text {
-                background: linear-gradient(135deg, #ffffff 0%, #a7f3d0 50%, #99f6e4 100%);
-                -webkit-background-clip: text;
-                background-clip: text;
-                color: transparent;
-            }
-            .dark .hero-gradient-text {
-                background: linear-gradient(135deg, #34d399 0%, #2dd4bf 100%);
-                -webkit-background-clip: text;
-                background-clip: text;
-                color: transparent;
-            }
-
-            /* ===== AMBIENT BACKGROUND ANIMATIONS ===== */
-            @keyframes float-slow {
-                0%, 100% { transform: translate(0, 0) scale(1); }
-                33% { transform: translate(30px, -25px) scale(1.05); }
-                66% { transform: translate(-20px, 15px) scale(0.97); }
-            }
-            @keyframes float-reverse {
-                0%, 100% { transform: translate(0, 0) scale(1.02); }
-                33% { transform: translate(-25px, 20px) scale(1); }
-                66% { transform: translate(15px, -30px) scale(1.06); }
-            }
-            @keyframes float-diagonal {
-                0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
-                25% { transform: translate(40px, -20px) rotate(2deg) scale(1.03); }
-                50% { transform: translate(20px, -40px) rotate(-1deg) scale(0.98); }
-                75% { transform: translate(-15px, -15px) rotate(1deg) scale(1.05); }
-            }
-            @keyframes float-orbit {
-                0%, 100% { transform: translate(0, 0) scale(1); }
-                25% { transform: translate(-30px, -30px) scale(1.08); }
-                50% { transform: translate(0, -50px) scale(1); }
-                75% { transform: translate(30px, -25px) scale(0.95); }
-            }
-            @keyframes shimmer-line {
-                0% { transform: translateX(-100%); }
-                100% { transform: translateX(100%); }
-            }
-            @keyframes color-shift {
-                0%, 100% { filter: hue-rotate(0deg); }
-                50% { filter: hue-rotate(20deg); }
-            }
-            .animate-float {
-                animation: float-slow 20s ease-in-out infinite;
-            }
-            .animate-float-reverse {
-                animation: float-reverse 25s ease-in-out infinite;
-            }
-            .animate-float-diagonal {
-                animation: float-diagonal 30s ease-in-out infinite;
-            }
-            .animate-float-orbit {
-                animation: float-orbit 22s ease-in-out infinite;
-            }
-            .animate-color-shift {
-                animation: color-shift 15s ease-in-out infinite;
-            }
-
-            /* ===== WAVE DIVIDER ===== */
-            .wave-divider {
-                position: relative;
-                overflow: hidden;
-            }
-            .wave-divider::after {
-                content: '';
-                position: absolute;
-                bottom: -2px;
-                left: 0;
-                right: 0;
-                height: 80px;
-                background: transparent;
-                pointer-events: none;
-            }
-            .wave-svg {
-                display: block;
-                width: 100%;
-                height: auto;
-                position: relative;
-                z-index: 5;
-                margin-top: -1px;
-            }
-
-            /* ===== AURORA STREAK ===== */
-            .aurora-streak {
-                position: absolute;
-                width: 200%;
-                height: 2px;
-                background: linear-gradient(90deg, transparent, rgba(52,211,153,0.3), rgba(45,212,191,0.2), transparent);
-                animation: shimmer-line 6s ease-in-out infinite;
-            }
-            .dark .aurora-streak {
-                background: linear-gradient(90deg, transparent, rgba(52,211,153,0.15), rgba(45,212,191,0.1), transparent);
-            }
-
-            /* Reduced motion compatibility */
+            /* Reduced motion handling */
             @media (prefers-reduced-motion: reduce) {
-                .animate-float, 
-                .animate-float-reverse, 
-                .animate-float-diagonal, 
-                .animate-float-orbit, 
-                .animate-color-shift,
-                .aurora-streak {
-                    animation: none !important;
-                }
+                .bento-card-glow:hover { transform: none; }
             }
         </style>
     </head>
-    <body class="bg-gradient-to-br from-emerald-100 via-white to-teal-50 dark:from-zinc-950 dark:via-zinc-900 dark:to-emerald-950 text-zinc-900 dark:text-zinc-100 min-h-screen flex flex-col transition-colors duration-300 relative overflow-x-hidden">
+    <body class="relative bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 min-h-screen flex flex-col antialiased selection:bg-emerald-500 selection:text-white transition-colors duration-200 overflow-x-hidden">
         
-        <!-- ===== PREMIUM AMBIENT BACKGROUND SYSTEM ===== -->
-        <div class="fixed inset-0 overflow-hidden pointer-events-none z-0 animate-color-shift">
+        <!-- Star Constellation & Geometric Shape Canvas -->
+        <div class="absolute inset-0 pointer-events-none z-0 overflow-hidden min-h-full">
+            
+            <!-- Light Mode: Soft Dot Grid Overlay -->
+            <div class="absolute inset-0 bg-[radial-gradient(#059669_1.2px,transparent_1.2px)] [background-size:28px_28px] opacity-[0.14] dark:hidden"></div>
 
-            <!-- === LIGHT MODE: Multi-layered aurora orbs === -->
-            <!-- Primary emerald glow — top-left -->
-            <div class="absolute top-[-15%] left-[-15%] w-[70vw] h-[70vw] sm:w-[700px] sm:h-[700px] rounded-full bg-emerald-300/25 blur-[140px] dark:hidden animate-float"></div>
-            <!-- Secondary teal glow — mid-right -->
-            <div class="absolute top-[25%] right-[-8%] w-[55vw] h-[55vw] sm:w-[550px] sm:h-[550px] rounded-full bg-teal-200/30 blur-[120px] dark:hidden animate-float-reverse"></div>
-            <!-- Tertiary mint glow — bottom-left -->
-            <div class="absolute bottom-[10%] left-[-12%] w-[65vw] h-[65vw] sm:w-[600px] sm:h-[600px] rounded-full bg-emerald-100/35 blur-[150px] dark:hidden animate-float-diagonal"></div>
-            <!-- Accent cyan glow — center top -->
-            <div class="absolute top-[5%] left-[40%] w-[40vw] h-[40vw] sm:w-[400px] sm:h-[400px] rounded-full bg-cyan-100/20 blur-[100px] dark:hidden animate-float-orbit"></div>
-            <!-- Subtle warm accent — bottom-right -->
-            <div class="absolute bottom-[5%] right-[-5%] w-[45vw] h-[45vw] sm:w-[450px] sm:h-[450px] rounded-full bg-lime-100/15 blur-[110px] dark:hidden animate-float-reverse" style="animation-delay: -5s;"></div>
+            <!-- Dark Mode: Dense Twinkling Star Constellation Field -->
+            <div class="absolute inset-0 hidden dark:block">
+                <!-- Constellation Dust Glows -->
+                <div class="absolute top-[5%] left-[20%] w-[500px] h-[300px] bg-emerald-500/10 blur-[100px] rounded-full pointer-events-none"></div>
+                <div class="absolute top-[35%] right-[15%] w-[600px] h-[350px] bg-teal-500/10 blur-[110px] rounded-full pointer-events-none"></div>
+                <div class="absolute top-[70%] left-[25%] w-[550px] h-[300px] bg-sky-500/10 blur-[100px] rounded-full pointer-events-none"></div>
 
-            <!-- === DARK MODE: Deep aurora glow system === -->
-            <!-- Primary deep emerald — top-left -->
-            <div class="absolute top-[-12%] left-[-18%] w-[80vw] h-[80vw] sm:w-[750px] sm:h-[750px] rounded-full bg-emerald-900/15 blur-[160px] hidden dark:block animate-float"></div>
-            <!-- Secondary teal glow — mid-right -->
-            <div class="absolute top-[30%] right-[-12%] w-[60vw] h-[60vw] sm:w-[600px] sm:h-[600px] rounded-full bg-teal-900/12 blur-[140px] hidden dark:block animate-float-reverse"></div>
-            <!-- Tertiary emerald — bottom -->
-            <div class="absolute bottom-[8%] left-[-10%] w-[75vw] h-[75vw] sm:w-[700px] sm:h-[700px] rounded-full bg-emerald-800/8 blur-[170px] hidden dark:block animate-float-diagonal"></div>
-            <!-- Accent cyan — center -->
-            <div class="absolute top-[15%] left-[35%] w-[45vw] h-[45vw] sm:w-[500px] sm:h-[500px] rounded-full bg-cyan-900/8 blur-[130px] hidden dark:block animate-float-orbit"></div>
-            <!-- Subtle warm dark accent -->
-            <div class="absolute bottom-[15%] right-[10%] w-[35vw] h-[35vw] sm:w-[400px] sm:h-[400px] rounded-full bg-green-900/6 blur-[120px] hidden dark:block animate-float" style="animation-delay: -8s;"></div>
+                <!-- DENSE STAR PARTICLES (0% - 20%) -->
+                <div class="absolute top-[1%] left-[8%] w-1 h-1 bg-emerald-300 rounded-full animate-pulse shadow-[0_0_8px_#34d399]" style="animation-delay: -0.3s;"></div>
+                <div class="absolute top-[2%] left-[45%] w-1.5 h-1.5 bg-teal-200 rounded-full animate-pulse shadow-[0_0_10px_#2dd4bf]" style="animation-delay: -1.7s;"></div>
+                <div class="absolute top-[3%] left-[82%] w-2 h-2 bg-sky-300 rounded-full animate-pulse shadow-[0_0_12px_#38bdf8]" style="animation-delay: -2.9s;"></div>
+                <div class="absolute top-[5%] left-[28%] w-1 h-1 bg-emerald-200 rounded-full animate-pulse shadow-[0_0_8px_#34d399]" style="animation-delay: -4.1s;"></div>
+                <div class="absolute top-[6%] left-[64%] text-emerald-300/90 animate-pulse" style="animation-delay: -0.8s;">
+                    <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z"/></svg>
+                </div>
+                <div class="absolute top-[7%] left-[16%] w-1.5 h-1.5 bg-sky-200 rounded-full animate-pulse shadow-[0_0_10px_#38bdf8]" style="animation-delay: -3.5s;"></div>
+                <div class="absolute top-[9%] left-[92%] w-1 h-1 bg-teal-300 rounded-full animate-pulse shadow-[0_0_8px_#2dd4bf]" style="animation-delay: -1.2s;"></div>
+                <div class="absolute top-[10%] left-[53%] w-2 h-2 bg-emerald-300 rounded-full animate-pulse shadow-[0_0_12px_#34d399]" style="animation-delay: -4.8s;"></div>
+                <div class="absolute top-[12%] left-[36%] text-teal-300/80 animate-pulse" style="animation-delay: -2.3s;">
+                    <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z"/></svg>
+                </div>
+                <div class="absolute top-[14%] left-[74%] w-1.5 h-1.5 bg-emerald-200 rounded-full animate-pulse shadow-[0_0_10px_#34d399]" style="animation-delay: -0.6s;"></div>
+                <div class="absolute top-[16%] left-[22%] text-emerald-300/90 animate-pulse" style="animation-delay: -3.2s;">
+                    <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z"/></svg>
+                </div>
+                <div class="absolute top-[18%] left-[86%] w-1 h-1 bg-sky-300 rounded-full animate-pulse shadow-[0_0_8px_#38bdf8]" style="animation-delay: -1.9s;"></div>
+                <div class="absolute top-[20%] left-[41%] w-2 h-2 bg-teal-200 rounded-full animate-pulse shadow-[0_0_12px_#2dd4bf]" style="animation-delay: -4.4s;"></div>
+
+                <!-- DENSE STAR PARTICLES (20% - 40%) -->
+                <div class="absolute top-[22%] left-[10%] w-1.5 h-1.5 bg-emerald-300 rounded-full animate-pulse shadow-[0_0_10px_#34d399]" style="animation-delay: -2.7s;"></div>
+                <div class="absolute top-[23%] left-[68%] text-teal-300/80 animate-pulse" style="animation-delay: -0.4s;">
+                    <svg class="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z"/></svg>
+                </div>
+                <div class="absolute top-[25%] left-[55%] w-1 h-1 bg-sky-200 rounded-full animate-pulse shadow-[0_0_8px_#38bdf8]" style="animation-delay: -3.8s;"></div>
+                <div class="absolute top-[27%] left-[30%] w-2 h-2 bg-emerald-300 rounded-full animate-pulse shadow-[0_0_12px_#34d399]" style="animation-delay: -1.1s;"></div>
+                <div class="absolute top-[29%] left-[93%] w-1.5 h-1.5 bg-teal-300 rounded-full animate-pulse shadow-[0_0_10px_#2dd4bf]" style="animation-delay: -4.9s;"></div>
+                <div class="absolute top-[31%] left-[18%] text-emerald-300/90 animate-pulse" style="animation-delay: -2.2s;">
+                    <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z"/></svg>
+                </div>
+                <div class="absolute top-[33%] left-[79%] w-1 h-1 bg-sky-300 rounded-full animate-pulse shadow-[0_0_8px_#38bdf8]" style="animation-delay: -0.7s;"></div>
+                <div class="absolute top-[35%] left-[46%] w-2 h-2 bg-emerald-200 rounded-full animate-pulse shadow-[0_0_12px_#34d399]" style="animation-delay: -3.3s;"></div>
+                <div class="absolute top-[37%] left-[14%] text-teal-300/80 animate-pulse" style="animation-delay: -1.5s;">
+                    <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z"/></svg>
+                </div>
+                <div class="absolute top-[39%] left-[62%] w-1.5 h-1.5 bg-teal-200 rounded-full animate-pulse shadow-[0_0_10px_#2dd4bf]" style="animation-delay: -4.0s;"></div>
+
+                <!-- DENSE STAR PARTICLES (40% - 60%) -->
+                <div class="absolute top-[41%] left-[25%] w-1 h-1 bg-emerald-300 rounded-full animate-pulse shadow-[0_0_8px_#34d399]" style="animation-delay: -2.6s;"></div>
+                <div class="absolute top-[43%] left-[88%] w-2 h-2 bg-sky-300 rounded-full animate-pulse shadow-[0_0_12px_#38bdf8]" style="animation-delay: -0.1s;"></div>
+                <div class="absolute top-[45%] left-[37%] text-emerald-300/90 animate-pulse" style="animation-delay: -3.7s;">
+                    <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z"/></svg>
+                </div>
+                <div class="absolute top-[47%] left-[72%] w-1.5 h-1.5 bg-teal-300 rounded-full animate-pulse shadow-[0_0_10px_#2dd4bf]" style="animation-delay: -1.4s;"></div>
+                <div class="absolute top-[49%] left-[12%] w-1 h-1 bg-emerald-200 rounded-full animate-pulse shadow-[0_0_8px_#34d399]" style="animation-delay: -4.3s;"></div>
+                <div class="absolute top-[51%] left-[51%] text-amber-300/80 animate-pulse" style="animation-delay: -2.0s;">
+                    <svg class="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z"/></svg>
+                </div>
+                <div class="absolute top-[53%] left-[83%] w-2 h-2 bg-sky-200 rounded-full animate-pulse shadow-[0_0_12px_#38bdf8]" style="animation-delay: -0.8s;"></div>
+                <div class="absolute top-[55%] left-[29%] w-1.5 h-1.5 bg-emerald-300 rounded-full animate-pulse shadow-[0_0_10px_#34d399]" style="animation-delay: -3.0s;"></div>
+                <div class="absolute top-[57%] left-[65%] w-1 h-1 bg-teal-200 rounded-full animate-pulse shadow-[0_0_8px_#2dd4bf]" style="animation-delay: -1.6s;"></div>
+                <div class="absolute top-[59%] left-[94%] text-teal-300/90 animate-pulse" style="animation-delay: -4.6s;">
+                    <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z"/></svg>
+                </div>
+
+                <!-- DENSE STAR PARTICLES (60% - 80%) -->
+                <div class="absolute top-[61%] left-[16%] w-2 h-2 bg-sky-300 rounded-full animate-pulse shadow-[0_0_12px_#38bdf8]" style="animation-delay: -2.1s;"></div>
+                <div class="absolute top-[63%] left-[44%] w-1 h-1 bg-emerald-300 rounded-full animate-pulse shadow-[0_0_8px_#34d399]" style="animation-delay: -0.5s;"></div>
+                <div class="absolute top-[65%] left-[78%] text-emerald-300/80 animate-pulse" style="animation-delay: -3.9s;">
+                    <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z"/></svg>
+                </div>
+                <div class="absolute top-[67%] left-[32%] w-1.5 h-1.5 bg-teal-200 rounded-full animate-pulse shadow-[0_0_10px_#2dd4bf]" style="animation-delay: -1.3s;"></div>
+                <div class="absolute top-[69%] left-[89%] w-1 h-1 bg-sky-200 rounded-full animate-pulse shadow-[0_0_8px_#38bdf8]" style="animation-delay: -4.5s;"></div>
+                <div class="absolute top-[71%] left-[21%] text-teal-300/90 animate-pulse" style="animation-delay: -2.8s;">
+                    <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z"/></svg>
+                </div>
+                <div class="absolute top-[73%] left-[58%] w-2 h-2 bg-emerald-200 rounded-full animate-pulse shadow-[0_0_12px_#34d399]" style="animation-delay: -0.2s;"></div>
+                <div class="absolute top-[75%] left-[10%] w-1.5 h-1.5 bg-teal-300 rounded-full animate-pulse shadow-[0_0_10px_#2dd4bf]" style="animation-delay: -3.4s;"></div>
+                <div class="absolute top-[77%] left-[81%] w-1 h-1 bg-emerald-300 rounded-full animate-pulse shadow-[0_0_8px_#34d399]" style="animation-delay: -1.8s;"></div>
+                <div class="absolute top-[79%] left-[39%] text-sky-300/80 animate-pulse" style="animation-delay: -4.1s;">
+                    <svg class="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z"/></svg>
+                </div>
+
+                <!-- DENSE STAR PARTICLES (80% - 100%) -->
+                <div class="absolute top-[81%] left-[67%] w-1.5 h-1.5 bg-sky-300 rounded-full animate-pulse shadow-[0_0_10px_#38bdf8]" style="animation-delay: -2.5s;"></div>
+                <div class="absolute top-[83%] left-[24%] w-2 h-2 bg-emerald-300 rounded-full animate-pulse shadow-[0_0_12px_#34d399]" style="animation-delay: -0.9s;"></div>
+                <div class="absolute top-[85%] left-[91%] text-emerald-300/90 animate-pulse" style="animation-delay: -3.6s;">
+                    <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z"/></svg>
+                </div>
+                <div class="absolute top-[87%] left-[49%] w-1 h-1 bg-teal-200 rounded-full animate-pulse shadow-[0_0_8px_#2dd4bf]" style="animation-delay: -1.7s;"></div>
+                <div class="absolute top-[89%] left-[13%] w-1.5 h-1.5 bg-emerald-200 rounded-full animate-pulse shadow-[0_0_10px_#34d399]" style="animation-delay: -4.8s;"></div>
+                <div class="absolute top-[91%] left-[77%] text-teal-300/80 animate-pulse" style="animation-delay: -2.2s;">
+                    <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z"/></svg>
+                </div>
+                <div class="absolute top-[93%] left-[35%] w-2 h-2 bg-sky-300 rounded-full animate-pulse shadow-[0_0_12px_#38bdf8]" style="animation-delay: -0.6s;"></div>
+                <div class="absolute top-[95%] left-[84%] w-1 h-1 bg-emerald-300 rounded-full animate-pulse shadow-[0_0_8px_#34d399]" style="animation-delay: -3.3s;"></div>
+                <div class="absolute top-[97%] left-[56%] text-emerald-300/90 animate-pulse" style="animation-delay: -1.4s;">
+                    <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z"/></svg>
+                </div>
+                <div class="absolute top-[99%] left-[20%] w-1.5 h-1.5 bg-teal-200 rounded-full animate-pulse shadow-[0_0_10px_#2dd4bf]" style="animation-delay: -4.0s;"></div>
+            </div>
+
+            <!-- LAYER 1: HERO SECTION (0% - 15%) -->
+            <div class="absolute top-10 left-1/2 -translate-x-1/2 w-[1300px] h-[650px] bg-gradient-to-tr from-emerald-400/25 via-teal-400/20 to-transparent blur-[110px] rounded-full animate-pulse-slow"></div>
+            <!-- Glowing Hero Pills -->
+            <div class="absolute top-24 left-4 sm:left-12 w-48 h-16 rounded-full border-2 border-emerald-500/50 dark:border-emerald-400/60 bg-emerald-100/80 dark:bg-emerald-950/60 backdrop-blur-sm -rotate-12 shadow-lg shadow-emerald-500/10 dark:shadow-[0_0_25px_rgba(16,185,129,0.35)] animate-float hidden lg:flex items-center justify-center">
+                <div class="w-24 h-3 rounded-full bg-emerald-500/40 dark:bg-emerald-400/50"></div>
+            </div>
+            <div class="absolute top-44 right-6 sm:right-16 w-56 h-16 rounded-full border-2 border-teal-500/50 dark:border-teal-400/60 bg-teal-100/80 dark:bg-teal-950/60 backdrop-blur-sm rotate-6 shadow-lg shadow-teal-500/10 dark:shadow-[0_0_25px_rgba(20,184,166,0.35)] animate-float hidden lg:flex items-center justify-center" style="animation-delay: -3s;">
+                <div class="w-28 h-3 rounded-full bg-teal-500/40 dark:bg-teal-400/50"></div>
+            </div>
+            <!-- Hero Floating Glowing Diamond Nodes -->
+            <div class="absolute top-72 left-1/4 w-14 h-14 rounded-2xl border-2 border-emerald-400/60 dark:border-emerald-400/70 bg-emerald-100/70 dark:bg-emerald-950/60 rotate-45 shadow-md dark:shadow-[0_0_20px_rgba(16,185,129,0.4)] animate-float hidden md:block" style="animation-delay: -1.5s;"></div>
+            <div class="absolute top-96 right-1/3 w-16 h-16 rounded-2xl border-2 border-teal-400/60 dark:border-teal-400/70 bg-teal-100/70 dark:bg-teal-950/60 rotate-12 shadow-md dark:shadow-[0_0_20px_rgba(20,184,166,0.4)] animate-float hidden md:block" style="animation-delay: -4.5s;"></div>
+
+            <!-- Small Hero Shapes -->
+            <div class="absolute top-36 left-[18%] w-6 h-6 rounded-lg border border-emerald-400/80 bg-emerald-200/80 dark:bg-emerald-900/60 dark:border-emerald-400/80 rotate-12 shadow-sm dark:shadow-[0_0_12px_rgba(16,185,129,0.5)] animate-float hidden sm:block" style="animation-delay: -0.8s;"></div>
+            <div class="absolute top-52 right-[22%] w-8 h-8 rounded-full border border-teal-400/80 bg-teal-200/80 dark:bg-teal-900/60 dark:border-teal-400/80 shadow-sm dark:shadow-[0_0_12px_rgba(20,184,166,0.5)] animate-float hidden sm:block" style="animation-delay: -2.4s;"></div>
+            <div class="absolute top-80 right-[15%] w-5 h-5 rounded-md border border-sky-400/80 bg-sky-200/80 dark:bg-sky-900/60 dark:border-sky-400/80 rotate-45 shadow-sm dark:shadow-[0_0_10px_rgba(56,189,248,0.5)] animate-float hidden sm:block" style="animation-delay: -3.8s;"></div>
+            <div class="absolute top-[12%] left-[10%] w-7 h-7 rounded-full border border-amber-400/80 bg-amber-200/80 dark:bg-amber-900/60 dark:border-amber-400/80 shadow-sm dark:shadow-[0_0_12px_rgba(251,191,36,0.5)] animate-float hidden sm:block" style="animation-delay: -1.2s;"></div>
+
+            <!-- LAYER 2: ABOUT & SERVICES SECTION (15% - 35%) -->
+            <div class="absolute top-[16%] -left-32 w-[520px] h-[520px] rounded-[80px] border-2 border-emerald-400/50 dark:border-emerald-400/50 bg-emerald-100/60 dark:bg-emerald-950/50 rotate-45 dark:shadow-[0_0_35px_rgba(16,185,129,0.25)]"></div>
+            <div class="absolute top-[20%] -right-28 w-[440px] h-[440px] rounded-full border-2 border-teal-400/50 dark:border-teal-400/50 bg-teal-100/60 dark:bg-teal-950/50 dark:shadow-[0_0_35px_rgba(20,184,166,0.25)]"></div>
+            <div class="absolute top-[26%] left-10 w-40 h-14 rounded-full border-2 border-sky-400/60 dark:border-sky-400/60 bg-sky-100/80 dark:bg-sky-950/60 -rotate-6 shadow-md dark:shadow-[0_0_20px_rgba(56,189,248,0.3)] animate-float hidden lg:block" style="animation-delay: -2s;"></div>
+            <div class="absolute top-[30%] right-12 w-44 h-14 rounded-full border-2 border-emerald-400/60 dark:border-emerald-400/60 bg-emerald-100/80 dark:bg-emerald-950/60 rotate-12 shadow-md dark:shadow-[0_0_20px_rgba(16,185,129,0.3)] animate-float hidden lg:block" style="animation-delay: -5s;"></div>
+            <!-- Glowing Concentric Service Ring Accent -->
+            <div class="absolute top-[28%] left-1/2 -translate-x-1/2 w-[620px] h-[620px] rounded-full border-2 border-emerald-400/30 dark:border-emerald-400/45 flex items-center justify-center dark:shadow-[0_0_40px_rgba(16,185,129,0.2)]">
+                <div class="w-[440px] h-[440px] rounded-full border-2 border-teal-400/30 dark:border-teal-400/45 dark:shadow-[0_0_30px_rgba(20,184,166,0.2)]"></div>
+            </div>
+
+            <!-- Small Layer 2 Shapes -->
+            <div class="absolute top-[18%] left-[32%] w-7 h-7 rounded-xl border border-violet-400/80 bg-violet-200/80 dark:bg-violet-900/60 dark:border-violet-400/80 rotate-12 shadow-sm dark:shadow-[0_0_12px_rgba(167,139,250,0.5)] animate-float hidden sm:block" style="animation-delay: -1.7s;"></div>
+            <div class="absolute top-[22%] right-[28%] w-6 h-6 rounded-md border border-emerald-400/80 bg-emerald-200/80 dark:bg-emerald-900/60 dark:border-emerald-400/80 rotate-45 shadow-sm dark:shadow-[0_0_10px_rgba(16,185,129,0.5)] animate-float hidden sm:block" style="animation-delay: -4.1s;"></div>
+            <div class="absolute top-[25%] left-[22%] w-8 h-8 rounded-full border border-sky-400/80 bg-sky-200/80 dark:bg-sky-900/60 dark:border-sky-400/80 shadow-sm dark:shadow-[0_0_12px_rgba(56,189,248,0.5)] animate-float hidden sm:block" style="animation-delay: -0.5s;"></div>
+            <div class="absolute top-[32%] left-[45%] w-6 h-6 rounded-lg border border-teal-400/80 bg-teal-200/80 dark:bg-teal-900/60 dark:border-teal-400/80 rotate-12 shadow-sm dark:shadow-[0_0_10px_rgba(20,184,166,0.5)] animate-float hidden sm:block" style="animation-delay: -3.1s;"></div>
+            <div class="absolute top-[34%] right-[38%] w-7 h-7 rounded-full border border-amber-400/80 bg-amber-200/80 dark:bg-amber-900/60 dark:border-amber-400/80 shadow-sm dark:shadow-[0_0_12px_rgba(251,191,36,0.5)] animate-float hidden sm:block" style="animation-delay: -2.3s;"></div>
+
+            <!-- LAYER 3: POPULATION STATISTICS SECTION (35% - 55%) -->
+            <div class="absolute top-[42%] left-1/2 -translate-x-1/2 w-[850px] h-[850px] rounded-full border-2 border-emerald-400/35 dark:border-emerald-400/50 flex items-center justify-center dark:shadow-[0_0_50px_rgba(16,185,129,0.25)]">
+                <div class="w-[650px] h-[650px] rounded-full border-2 border-teal-400/35 dark:border-teal-400/50 flex items-center justify-center dark:shadow-[0_0_40px_rgba(20,184,166,0.2)]">
+                    <div class="w-[450px] h-[450px] rounded-full border-2 border-sky-400/35 dark:border-sky-400/50 flex items-center justify-center dark:shadow-[0_0_30px_rgba(56,189,248,0.2)]">
+                        <div class="w-[250px] h-[250px] rounded-full border-2 border-emerald-400/30 dark:border-emerald-400/40"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- Statistics Side Geometry -->
+            <div class="absolute top-[45%] -left-20 w-72 h-72 rounded-[50px] border-2 border-violet-400/50 dark:border-violet-400/50 bg-violet-100/60 dark:bg-violet-950/50 rotate-12 dark:shadow-[0_0_30px_rgba(167,139,250,0.25)]"></div>
+            <div class="absolute top-[48%] -right-20 w-80 h-80 rounded-[60px] border-2 border-amber-400/50 dark:border-amber-400/50 bg-amber-100/60 dark:bg-amber-950/50 -rotate-12 dark:shadow-[0_0_30px_rgba(251,191,36,0.25)]"></div>
+
+            <!-- Small Layer 3 Shapes -->
+            <div class="absolute top-[38%] left-[15%] w-8 h-8 rounded-2xl border border-indigo-400/80 bg-indigo-200/80 dark:bg-indigo-900/60 dark:border-indigo-400/80 rotate-45 shadow-sm dark:shadow-[0_0_12px_rgba(129,140,248,0.5)] animate-float hidden sm:block" style="animation-delay: -1.9s;"></div>
+            <div class="absolute top-[41%] right-[18%] w-6 h-6 rounded-md border border-emerald-400/80 bg-emerald-200/80 dark:bg-emerald-900/60 dark:border-emerald-400/80 rotate-12 shadow-sm dark:shadow-[0_0_10px_rgba(16,185,129,0.5)] animate-float hidden sm:block" style="animation-delay: -4.4s;"></div>
+            <div class="absolute top-[46%] left-[35%] w-7 h-7 rounded-full border border-teal-400/80 bg-teal-200/80 dark:bg-teal-900/60 dark:border-teal-400/80 shadow-sm dark:shadow-[0_0_12px_rgba(20,184,166,0.5)] animate-float hidden sm:block" style="animation-delay: -0.9s;"></div>
+            <div class="absolute top-[50%] right-[32%] w-7 h-7 rounded-lg border border-sky-400/80 bg-sky-200/80 dark:bg-sky-900/60 dark:border-sky-400/80 rotate-45 shadow-sm dark:shadow-[0_0_12px_rgba(56,189,248,0.5)] animate-float hidden sm:block" style="animation-delay: -2.8s;"></div>
+            <div class="absolute top-[53%] left-[24%] w-6 h-6 rounded-md border border-amber-400/80 bg-amber-200/80 dark:bg-amber-900/60 dark:border-amber-400/80 rotate-12 shadow-sm dark:shadow-[0_0_10px_rgba(251,191,36,0.5)] animate-float hidden sm:block" style="animation-delay: -3.5s;"></div>
+
+            <!-- LAYER 4: COUNCIL & PROJECTS SECTION (55% - 75%) -->
+            <div class="absolute top-[58%] -right-36 w-[550px] h-[550px] rounded-[90px] border-2 border-amber-400/40 dark:border-amber-400/45 bg-amber-100/50 dark:bg-amber-950/40 -rotate-12 dark:shadow-[0_0_35px_rgba(251,191,36,0.2)]"></div>
+            <div class="absolute top-[62%] -left-24 w-96 h-96 rounded-[70px] border-2 border-indigo-400/40 dark:border-indigo-400/45 bg-indigo-100/50 dark:bg-indigo-950/40 rotate-45 dark:shadow-[0_0_35px_rgba(129,140,248,0.2)]"></div>
+            <!-- Floating Mid Solid Glowing Pills -->
+            <div class="absolute top-[65%] left-16 w-48 h-16 rounded-full border-2 border-emerald-400/60 dark:border-emerald-400/60 bg-emerald-100/80 dark:bg-emerald-950/60 -rotate-6 shadow-md dark:shadow-[0_0_25px_rgba(16,185,129,0.3)] animate-float hidden lg:flex items-center justify-center">
+                <div class="w-24 h-3 rounded-full bg-emerald-500/40 dark:bg-emerald-400/50"></div>
+            </div>
+            <div class="absolute top-[69%] right-16 w-48 h-16 rounded-full border-2 border-teal-400/60 dark:border-teal-400/60 bg-teal-100/80 dark:bg-teal-950/60 rotate-12 shadow-md dark:shadow-[0_0_25px_rgba(20,184,166,0.3)] animate-float hidden lg:flex items-center justify-center" style="animation-delay: -3.5s;">
+                <div class="w-24 h-3 rounded-full bg-teal-500/40 dark:bg-teal-400/50"></div>
+            </div>
+
+            <!-- Small Layer 4 Shapes -->
+            <div class="absolute top-[56%] right-[25%] w-8 h-8 rounded-full border border-violet-400/80 bg-violet-200/80 dark:bg-violet-900/60 dark:border-violet-400/80 shadow-sm dark:shadow-[0_0_12px_rgba(167,139,250,0.5)] animate-float hidden sm:block" style="animation-delay: -1.1s;"></div>
+            <div class="absolute top-[60%] left-[28%] w-6 h-6 rounded-md border border-emerald-400/80 bg-emerald-200/80 dark:bg-emerald-900/60 dark:border-emerald-400/80 rotate-12 shadow-sm dark:shadow-[0_0_10px_rgba(16,185,129,0.5)] animate-float hidden sm:block" style="animation-delay: -4.7s;"></div>
+            <div class="absolute top-[64%] right-[42%] w-7 h-7 rounded-xl border border-sky-400/80 bg-sky-200/80 dark:bg-sky-900/60 dark:border-sky-400/80 rotate-45 shadow-sm dark:shadow-[0_0_12px_rgba(56,189,248,0.5)] animate-float hidden sm:block" style="animation-delay: -2.1s;"></div>
+            <div class="absolute top-[68%] left-[40%] w-6 h-6 rounded-full border border-teal-400/80 bg-teal-200/80 dark:bg-teal-900/60 dark:border-teal-400/80 shadow-sm dark:shadow-[0_0_10px_rgba(20,184,166,0.5)] animate-float hidden sm:block" style="animation-delay: -0.3s;"></div>
+            <div class="absolute top-[72%] right-[20%] w-8 h-8 rounded-2xl border border-amber-400/80 bg-amber-200/80 dark:bg-amber-900/60 dark:border-amber-400/80 rotate-12 shadow-sm dark:shadow-[0_0_12px_rgba(251,191,36,0.5)] animate-float hidden sm:block" style="animation-delay: -3.9s;"></div>
+
+            <!-- LAYER 5: ORDINANCES & PLACES SECTION (75% - 88%) -->
+            <div class="absolute top-[75%] left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-gradient-to-r from-emerald-400/20 via-teal-400/18 to-emerald-500/15 blur-[120px] rounded-full"></div>
+            <div class="absolute top-[78%] left-8 w-52 h-16 rounded-full border-2 border-sky-400/60 dark:border-sky-400/60 bg-sky-100/80 dark:bg-sky-950/60 rotate-12 shadow-md dark:shadow-[0_0_25px_rgba(56,189,248,0.3)] animate-float hidden lg:block" style="animation-delay: -2.5s;"></div>
+            <div class="absolute top-[82%] right-10 w-48 h-16 rounded-full border-2 border-emerald-400/60 dark:border-emerald-400/60 bg-emerald-100/80 dark:bg-emerald-950/60 -rotate-12 shadow-md dark:shadow-[0_0_25px_rgba(16,185,129,0.3)] animate-float hidden lg:block" style="animation-delay: -4s;"></div>
+            <!-- Rotated Solid Diamond Pattern Grid -->
+            <div class="absolute top-[80%] left-1/3 w-20 h-20 rounded-2xl border-2 border-teal-400/60 dark:border-teal-400/60 bg-teal-100/70 dark:bg-teal-950/60 rotate-45 shadow-sm dark:shadow-[0_0_20px_rgba(20,184,166,0.35)]"></div>
+            <div class="absolute top-[84%] right-1/3 w-24 h-24 rounded-3xl border-2 border-emerald-400/60 dark:border-emerald-400/60 bg-emerald-100/70 dark:bg-emerald-950/60 -rotate-12 shadow-sm dark:shadow-[0_0_20px_rgba(16,185,129,0.35)]"></div>
+
+            <!-- Small Layer 5 Shapes -->
+            <div class="absolute top-[76%] left-[20%] w-7 h-7 rounded-lg border border-emerald-400/80 bg-emerald-200/80 dark:bg-emerald-900/60 dark:border-emerald-400/80 rotate-12 shadow-sm dark:shadow-[0_0_12px_rgba(16,185,129,0.5)] animate-float hidden sm:block" style="animation-delay: -1.6s;"></div>
+            <div class="absolute top-[79%] right-[22%] w-6 h-6 rounded-full border border-sky-400/80 bg-sky-200/80 dark:bg-sky-900/60 dark:border-sky-400/80 shadow-sm dark:shadow-[0_0_10px_rgba(56,189,248,0.5)] animate-float hidden sm:block" style="animation-delay: -3.3s;"></div>
+            <div class="absolute top-[83%] left-[42%] w-8 h-8 rounded-2xl border border-teal-400/80 bg-teal-200/80 dark:bg-teal-900/60 dark:border-teal-400/80 rotate-45 shadow-sm dark:shadow-[0_0_12px_rgba(20,184,166,0.5)] animate-float hidden sm:block" style="animation-delay: -0.7s;"></div>
+            <div class="absolute top-[86%] right-[38%] w-6 h-6 rounded-md border border-indigo-400/80 bg-indigo-200/80 dark:bg-indigo-900/60 dark:border-indigo-400/80 rotate-12 shadow-sm dark:shadow-[0_0_10px_rgba(129,140,248,0.5)] animate-float hidden sm:block" style="animation-delay: -4.2s;"></div>
+
+            <!-- LAYER 6: FAQS & CONTACT FOOTER SECTION (88% - 100%) -->
+            <div class="absolute top-[89%] -left-44 w-[650px] h-[650px] rounded-full border-2 border-emerald-400/40 dark:border-emerald-400/50 bg-emerald-100/40 dark:bg-emerald-950/40 dark:shadow-[0_0_40px_rgba(16,185,129,0.25)]"></div>
+            <div class="absolute top-[92%] -right-28 w-[550px] h-[550px] rounded-full border-2 border-teal-400/40 dark:border-teal-400/50 bg-teal-100/40 dark:bg-teal-950/40 dark:shadow-[0_0_40px_rgba(20,184,166,0.25)]"></div>
+            <div class="absolute top-[94%] right-1/2 translate-x-1/2 w-[1100px] h-[500px] bg-gradient-to-tr from-emerald-500/20 via-teal-500/15 to-zinc-900/5 blur-[130px] rounded-full"></div>
+
+            <!-- Small Layer 6 Shapes -->
+            <div class="absolute top-[90%] left-[25%] w-7 h-7 rounded-full border border-emerald-400/80 bg-emerald-200/80 dark:bg-emerald-900/60 dark:border-emerald-400/80 shadow-sm dark:shadow-[0_0_12px_rgba(16,185,129,0.5)] animate-float hidden sm:block" style="animation-delay: -2.0s;"></div>
+            <div class="absolute top-[93%] right-[25%] w-6 h-6 rounded-lg border border-teal-400/80 bg-teal-200/80 dark:bg-teal-900/60 dark:border-teal-400/80 rotate-45 shadow-sm dark:shadow-[0_0_10px_rgba(20,184,166,0.5)] animate-float hidden sm:block" style="animation-delay: -3.7s;"></div>
+            <div class="absolute top-[96%] left-[38%] w-8 h-8 rounded-2xl border border-sky-400/80 bg-sky-200/80 dark:bg-sky-900/60 dark:border-sky-400/80 rotate-12 shadow-sm dark:shadow-[0_0_12px_rgba(56,189,248,0.5)] animate-float hidden sm:block" style="animation-delay: -1.3s;"></div>
         </div>
-        
-        <!-- Sticky Premium Header / Navigation Bar -->
-        <header class="sticky top-0 z-50 glassmorphism border-b border-emerald-100 dark:border-emerald-900/40 transition-all duration-300">
-                <div class="max-w-8xl mx-auto px-2 sm:px-4 lg:px-6 h-20 flex items-center justify-between">
-                <!-- Municipal Branding -->
-                <a href="#" class="flex items-center gap-3 group flex-shrink-0">
-                    <div class="h-10 w-10 rounded-xl premium-gradient flex items-center justify-center text-white font-black text-lg shadow-md font-outfit transform group-hover:scale-105 transition duration-300">
-                        BC
+
+        <!-- Header / Navigation Bar -->
+        <header class="sticky top-0 z-50 glass-panel border-b border-zinc-200/80 dark:border-zinc-800/80">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+                
+                <!-- Municipal Brand Logo -->
+                <a href="#" class="flex items-center gap-3.5 group flex-shrink-0">
+                    <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white font-black text-base shadow-md font-outfit group-hover:scale-105 transition duration-200">
+                        BS
                     </div>
                     <div class="min-w-0">
-                        <span class="text-lg sm:text-xl font-black tracking-tight text-zinc-950 dark:text-white font-outfit max-w-[220px] truncate block">Brgy. Sambog, Corella, Bohol</span>
-                        <div class="text-[9px] text-zinc-500 dark:text-zinc-400 font-bold uppercase tracking-widest mt-0.5">Official Inhabitant Portal</div>
+                        <span class="text-lg font-black tracking-tight text-zinc-950 dark:text-white font-outfit truncate block">Brgy. Sambog</span>
+                        <span class="text-[10px] text-zinc-500 dark:text-zinc-400 font-bold uppercase tracking-widest block -mt-0.5">Corella, Bohol</span>
                     </div>
                 </a>
 
-                <!-- Navigation Links for a comprehensive website experience -->
-                <nav class="hidden xl:flex flex-1 items-center justify-center gap-1 2xl:gap-2 text-sm font-semibold text-zinc-600 dark:text-zinc-300">
-                    <a href="#about" class="px-2 py-1.5 rounded-md hover:bg-brand/10 hover:text-brand transition whitespace-nowrap">About Us</a>
-                    <a href="#services" class="px-2 py-1.5 rounded-md hover:bg-brand/10 hover:text-brand transition whitespace-nowrap">Public Services</a>
-                    <a href="#officials" class="px-2 py-1.5 rounded-md hover:bg-brand/10 hover:text-brand transition whitespace-nowrap">Local Council</a>
-                    <a href="#demographics" class="px-2 py-1.5 rounded-md hover:bg-brand/10 hover:text-brand transition whitespace-nowrap">Statistics</a>
-                    <a href="{{ route('home') }}#projects" class="px-2 py-1.5 rounded-md hover:bg-brand/10 hover:text-brand transition whitespace-nowrap">Projects</a>
-                    <a href="{{ route('home') }}#ordinances" class="px-2 py-1.5 rounded-md hover:bg-brand/10 hover:text-brand transition whitespace-nowrap">Ordinances</a>
-                    <a href="{{ route('home') }}#places" class="px-2 py-1.5 rounded-md hover:bg-brand/10 hover:text-brand transition whitespace-nowrap">Places</a>
-                    <a href="{{ route('home') }}#announcements" class="px-2 py-1.5 rounded-md hover:bg-brand/10 hover:text-brand transition whitespace-nowrap">Announcements</a>
-                    <a href="{{ route('home') }}#faqs" class="px-2 py-1.5 rounded-md hover:bg-brand/10 hover:text-brand transition whitespace-nowrap">FAQs</a>
-                    <a href="{{ route('home') }}#contacts" class="px-2 py-1.5 rounded-md hover:bg-brand/10 hover:text-brand transition whitespace-nowrap">Contacts</a>
+                <!-- Live Civic Status Indicator -->
+                <div class="hidden md:flex items-center gap-2 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-xs font-semibold text-emerald-700 dark:text-emerald-400">
+                    <span class="relative flex h-2 w-2">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                    </span>
+                    <span>Hall Open • Mon-Fri 8 AM - 5 PM</span>
+                </div>
+
+                <!-- Navigation Links -->
+                <nav class="hidden md:flex items-center gap-6 text-xs font-semibold text-zinc-600 dark:text-zinc-300 font-outfit">
+                    <a href="#about" class="hover:text-emerald-600 dark:hover:text-emerald-400 transition flex items-center gap-1.5">
+                        About
+                    </a>
+                    <a href="#services" class="hover:text-emerald-600 dark:hover:text-emerald-400 transition flex items-center gap-1.5">
+                        Services
+                    </a>
+                    <a href="#announcements" class="hover:text-emerald-600 dark:hover:text-emerald-400 transition flex items-center gap-1.5">
+                        Bulletins
+                    </a>
+
+                    <!-- Explore Dropdown Menu -->
+                    <div x-data="{ open: false }" class="relative">
+                        <button
+                            @click="open = !open"
+                            @keydown.escape="open = false"
+                            :aria-expanded="open"
+                            aria-haspopup="true"
+                            class="hover:text-emerald-600 dark:hover:text-emerald-400 transition flex items-center gap-1 cursor-pointer focus:outline-none py-2"
+                        >
+                            <span>Explore</span>
+                            <svg class="h-3.5 w-3.5 transition-transform duration-200" :class="{ 'rotate-180': open }" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+
+                        <div
+                            x-show="open"
+                            x-transition:enter="transition ease-out duration-200"
+                            x-transition:enter-start="opacity-0 scale-95 -translate-y-1"
+                            x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                            x-transition:leave="transition ease-in duration-150"
+                            x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+                            x-transition:leave-end="opacity-0 scale-95 -translate-y-1"
+                            @click.away="open = false"
+                            x-cloak
+                            class="absolute left-1/2 -translate-x-1/2 top-full mt-1 w-72 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 shadow-2xl p-2 z-50 divide-y divide-zinc-100 dark:divide-zinc-800/60"
+                        >
+                            <div class="py-1 space-y-0.5">
+                                <a @click="open = false" href="#demographics" class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800/70 transition group">
+                                    <div class="p-2 rounded-lg bg-sky-500/10 text-sky-600 dark:text-sky-400 group-hover:scale-110 transition">
+                                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs font-bold text-zinc-900 dark:text-white font-outfit">Community Statistics</div>
+                                        <div class="text-[10px] text-zinc-400">Live inhabitant population metrics</div>
+                                    </div>
+                                </a>
+
+                                <a @click="open = false" href="#officials" class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800/70 transition group">
+                                    <div class="p-2 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition">
+                                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs font-bold text-zinc-900 dark:text-white font-outfit">Barangay Council</div>
+                                        <div class="text-[10px] text-zinc-400">Local municipal leadership</div>
+                                    </div>
+                                </a>
+
+                                <a @click="open = false" href="#projects" class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800/70 transition group">
+                                    <div class="p-2 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400 group-hover:scale-110 transition">
+                                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m3 0h1m-1 0v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs font-bold text-zinc-900 dark:text-white font-outfit">Community Projects</div>
+                                        <div class="text-[10px] text-zinc-400">Roads, lights & facility upgrades</div>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <div class="py-1 space-y-0.5">
+                                <a @click="open = false" href="#ordinances" class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800/70 transition group">
+                                    <div class="p-2 rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition">
+                                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs font-bold text-zinc-900 dark:text-white font-outfit">Local Ordinances</div>
+                                        <div class="text-[10px] text-zinc-400">Curfew, waste & noise policies</div>
+                                    </div>
+                                </a>
+
+                                <a @click="open = false" href="#places" class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800/70 transition group">
+                                    <div class="p-2 rounded-lg bg-teal-500/10 text-teal-600 dark:text-teal-400 group-hover:scale-110 transition">
+                                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs font-bold text-zinc-900 dark:text-white font-outfit">Places & Landmarks</div>
+                                        <div class="text-[10px] text-zinc-400">Local spots & destination guide</div>
+                                    </div>
+                                </a>
+
+                                <a @click="open = false" href="#faqs" class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800/70 transition group">
+                                    <div class="p-2 rounded-lg bg-violet-500/10 text-violet-600 dark:text-violet-400 group-hover:scale-110 transition">
+                                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs font-bold text-zinc-900 dark:text-white font-outfit">Help Center & FAQs</div>
+                                        <div class="text-[10px] text-zinc-400">Clearances & inhabitant answers</div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a href="#contact" class="hover:text-emerald-600 dark:hover:text-emerald-400 transition flex items-center gap-1.5">
+                        Contact
+                    </a>
                 </nav>
 
-                <!-- Authentication Portal Access -->
-                <div class="flex items-center gap-4">
-                    <!-- Theme Switcher -->
+                <!-- Actions & Theme Toggle -->
+                <div class="flex items-center gap-3">
+                    
+                    <!-- Theme Selector Dropdown -->
                     <div x-data="{
                         theme: localStorage.getItem('flux.appearance') || localStorage.getItem('theme') || 'system',
                         open: false,
@@ -309,7 +436,7 @@
                     "
                     class="relative"
                     >
-                        <button @click="open = !open" type="button" class="flex items-center justify-center p-2 rounded-lg bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-900/50 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 transition cursor-pointer">
+                        <button @click="open = !open" type="button" aria-label="Toggle theme menu" class="p-2 rounded-xl bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-900 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 transition cursor-pointer">
                             <span x-show="theme === 'light'">
                                 <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
@@ -327,42 +454,25 @@
                             </span>
                         </button>
 
-                        <div x-show="open" @click.away="open = false" x-cloak class="absolute right-0 mt-2 w-32 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-lg py-1 z-50 text-xs">
-                            <button @click="theme = 'light'; open = false" class="w-full text-left px-3 py-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 flex items-center gap-2 text-zinc-700 dark:text-zinc-300">
-                                <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
-                                </svg>
+                        <div x-show="open" @click.away="open = false" x-cloak class="absolute right-0 mt-2 w-32 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-xl py-1 z-50 text-xs">
+                            <button @click="theme = 'light'; open = false" class="w-full text-left px-3 py-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 flex items-center gap-2 text-zinc-700 dark:text-zinc-300 font-medium">
                                 Light
                             </button>
-                            <button @click="theme = 'dark'; open = false" class="w-full text-left px-3 py-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 flex items-center gap-2 text-zinc-700 dark:text-zinc-300">
-                                <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                                </svg>
+                            <button @click="theme = 'dark'; open = false" class="w-full text-left px-3 py-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 flex items-center gap-2 text-zinc-700 dark:text-zinc-300 font-medium">
                                 Dark
                             </button>
-                            <button @click="theme = 'system'; open = false" class="w-full text-left px-3 py-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 flex items-center gap-2 text-zinc-700 dark:text-zinc-300">
-                                <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                </svg>
+                            <button @click="theme = 'system'; open = false" class="w-full text-left px-3 py-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 flex items-center gap-2 text-zinc-700 dark:text-zinc-300 font-medium">
                                 System
                             </button>
                         </div>
                     </div>
+
                     @auth
-                        <div class="flex items-center gap-4">
-                            <span class="text-sm text-zinc-500 dark:text-zinc-400 hidden lg:inline-block font-semibold">Hello, {{ Auth::user()->name }}</span>
-                            <a href="{{ route('dashboard') }}" class="inline-flex items-center justify-center px-5 py-2.5 text-sm font-bold text-white bg-brand hover:bg-brand-dark rounded-lg transition shadow-md shadow-emerald-500/10 font-outfit">
-                                Go to Workspace
-                            </a>
-                            <form method="POST" action="{{ route('logout') }}" class="inline">
-                                @csrf
-                                <button type="submit" class="text-sm font-semibold text-zinc-500 hover:text-brand transition cursor-pointer">
-                                    Log Out
-                                </button>
-                            </form>
-                        </div>
+                        <a href="{{ route('dashboard') }}" class="inline-flex items-center justify-center px-4 py-2 text-sm font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl transition shadow-md shadow-emerald-600/10 font-outfit">
+                            Go to Workspace
+                        </a>
                     @else
-                        <a href="{{ route('login') }}" class="inline-flex items-center justify-center px-5 py-2.5 text-sm font-bold text-white bg-brand hover:bg-brand-dark rounded-lg transition shadow-md shadow-emerald-500/10 font-outfit">
+                        <a href="{{ route('login') }}" class="inline-flex items-center justify-center px-4 py-2 text-sm font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl transition shadow-md shadow-emerald-600/10 font-outfit">
                             Access Portal
                         </a>
                     @endauth
@@ -370,601 +480,540 @@
             </div>
         </header>
 
-        <!-- Main Content Area -->
-        <main class="flex-grow bg-mesh bg-noise overflow-x-hidden relative z-10">
-            
-            <!-- SECTION 1: Gorgeous Municipal Hero Banner -->
-            <section class="relative overflow-hidden py-24 sm:py-32 bg-gradient-to-br from-[#021d15] via-[#053224] to-[#0a4835] text-white">
-                <!-- Radial overlay for depth -->
-                <div class="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,rgba(16,185,129,0.15),transparent_50%)] z-0"></div>
-                <!-- Glow orbs -->
-                <div class="absolute -right-20 -bottom-20 h-96 w-96 rounded-full bg-emerald-500/10 blur-3xl z-0 animate-pulse-slow"></div>
-                <div class="absolute right-1/4 top-1/4 h-80 w-80 rounded-full bg-teal-500/5 blur-3xl z-0 animate-float"></div>
+        <!-- Main Content -->
+        <main class="flex-grow z-10 space-y-24 py-12">
 
-                <div class="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-                    <div class="lg:col-span-7 space-y-8 text-left">
-                        <span class="inline-flex items-center gap-1.5 px-3.5 py-1 bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 rounded-full text-xs font-bold tracking-wider uppercase font-outfit">
-                            <span class="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                            Official Barangay Domain
-                        </span>
+            <!-- HERO SECTION: Bento Grid Hero -->
+            <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+                    
+                    <!-- Left Hero Content (7 cols) -->
+                    <div class="lg:col-span-7 flex flex-col justify-center space-y-6">
+                        <div class="inline-flex items-center gap-2 w-fit px-3.5 py-1 bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-400 rounded-full text-xs font-bold uppercase tracking-wider font-outfit">
+                            <span>Official Municipal Workspace</span>
+                        </div>
 
-                        <h1 class="text-4xl sm:text-7xl font-black font-outfit tracking-tight leading-none text-white drop-shadow-sm">
-                            Empowering Citizens, Shaping <span class="bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent">Brgy. Sambog</span>
+                        <h1 class="text-4xl sm:text-6xl font-black tracking-tight font-outfit text-zinc-950 dark:text-white leading-[1.1]">
+                            Digital Governance for <span class="bg-gradient-to-r from-emerald-600 via-teal-500 to-emerald-400 bg-clip-text text-transparent">Brgy. Sambog</span>
                         </h1>
 
-                        <p class="text-base sm:text-xl text-zinc-300 max-w-2xl leading-relaxed font-normal">
-                            Welcome to the official municipal workspace portal of Barangay Sambog, Corella, Bohol. Schedule secure clearance pick-ups, review community stats, and access local council updates.
+                        <p class="text-base sm:text-lg text-zinc-600 dark:text-zinc-400 leading-relaxed max-w-2xl font-normal">
+                            Welcome to the official inhabitant portal of Barangay Sambog, Corella, Bohol. Schedule document clearances, view live community statistics, and access local municipal services seamlessly.
                         </p>
 
-                        <!-- Hero CTAs Restored -->
-                        <div class="flex flex-wrap gap-4 pt-2">
+                        <div class="flex flex-wrap items-center gap-4 pt-2">
                             @auth
-                                <a href="{{ route('dashboard') }}" class="inline-flex items-center justify-center px-6 py-3.5 bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm rounded-xl transition duration-300 shadow-lg shadow-emerald-500/20 focus:outline-none focus:ring-2 focus:ring-emerald-500">
-                                    Go to Workspace Dashboard
+                                <a href="{{ route('dashboard') }}" class="inline-flex items-center justify-center px-6 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl transition duration-200 shadow-lg shadow-emerald-600/20 font-outfit">
+                                    Open Workspace Dashboard
                                 </a>
                             @else
-                                <a href="{{ route('login') }}" class="inline-flex items-center justify-center px-6 py-3.5 bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm rounded-xl transition duration-300 shadow-lg shadow-emerald-500/20 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                                <a href="{{ route('login') }}" class="inline-flex items-center justify-center px-6 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl transition duration-200 shadow-lg shadow-emerald-600/20 font-outfit">
                                     Access Inhabitant Portal
                                 </a>
-                                <a href="#about" class="inline-flex items-center justify-center px-5 py-3.5 bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 hover:text-white font-bold text-sm rounded-xl transition duration-300 focus:outline-none focus:ring-2 focus:ring-white">
-                                    Learn More ↓
+                                <a href="#services" class="inline-flex items-center justify-center px-5 py-3.5 bg-zinc-100 dark:bg-zinc-900 hover:bg-zinc-200 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 font-semibold text-sm rounded-xl transition duration-200 font-outfit">
+                                    Explore Public Services ↓
                                 </a>
                             @endauth
                         </div>
                     </div>
 
-                    <!-- Signature Element: Floating Civic Seal SVG -->
-                    <div class="lg:col-span-5 flex justify-center lg:justify-end">
-                        <div class="relative w-72 h-72 sm:w-80 sm:h-80 bg-zinc-950/20 dark:bg-zinc-950/40 border border-white/5 rounded-3xl p-8 flex items-center justify-center shadow-2xl card-glow-admin animate-float">
-                            <!-- Geometric background patterns -->
-                            <div class="absolute inset-0 bg-radial-gradient from-emerald-500/10 via-transparent to-transparent blur-xl"></div>
-                            
-                            <!-- Premium SVG Civic Seal Emblem -->
-                            <svg class="size-48 text-emerald-500/80" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="50" cy="50" r="45" stroke="currentColor" stroke-width="2" stroke-dasharray="4 4" />
-                                <circle cx="50" cy="50" r="40" stroke="currentColor" stroke-width="1" />
-                                <polygon points="50,18 78,35 78,65 50,82 22,65 22,35" stroke="currentColor" stroke-width="1.5" fill="currentColor" fill-opacity="0.05" />
-                                <polygon points="50,25 70,38 70,62 50,75 30,62 30,38" stroke="#f59e0b" stroke-width="1" fill="none" opacity="0.8" />
-                                <circle cx="50" cy="50" r="12" stroke="currentColor" stroke-width="2" fill="currentColor" fill-opacity="0.1" />
-                                <!-- Corella Emblem lines -->
-                                <path d="M50,38 L50,44 M50,56 L50,62 M38,50 L44,50 M56,50 L62,50" stroke="currentColor" stroke-width="1" />
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Wave SVG Divider: Hero → Content -->
-            <div class="relative z-10 -mt-1 bg-transparent">
-                <svg class="wave-svg" viewBox="0 0 1440 100" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-                    <path d="M0,40 C240,100 480,0 720,50 C960,100 1200,10 1440,60 L1440,0 L0,0 Z" class="fill-[#0a4835] dark:fill-zinc-950" />
-                    <path d="M0,50 C300,90 600,10 900,55 C1100,85 1300,20 1440,45 L1440,0 L0,0 Z" class="fill-[#053224]/50 dark:fill-emerald-950/20" />
-                </svg>
-            </div>
-
-            <!-- SECTION 2: About Barangay Sambog -->
-            <section id="about" class="scroll-mt-24 py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                <div class="space-y-6">
-                    <span class="text-brand text-lg font-bold uppercase tracking-wider font-outfit">Local Heritage</span>
-                    <h2 class="text-5xl font-extrabold tracking-tight font-outfit text-zinc-950 dark:text-white">
-                        Serving Our Community with Innovation & Transparency
-                    </h2>
-                    <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed font-light text-base sm:text-lg">
-                        Brgy. Sambog, Corella, Bohol is dedicated to implementing progressive municipal policies that empower every household unit. By structuring our official registries dynamically, we ensure absolute transparency, quick clearances scheduling, and high-security standards for local health datasets.
-                    </p>
-                    <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed font-light text-base sm:text-lg">
-                        Our neighborhood consists of dynamic Purok zones, each monitored closely to provide equal support to vulnerable sectors, pediatric nutritional coverages, and senior citizen wellness programs.
-                    </p>
-                </div>
-                <div class="relative overflow-hidden rounded-3xl bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md border border-emerald-100 dark:border-zinc-800/80 p-8 shadow-xl space-y-6 transition duration-300">
-                    <div class="absolute -right-10 -bottom-10 h-32 w-32 rounded-full bg-brand/5 blur-xl"></div>
-                    <h4 class="text-lg font-bold text-zinc-950 dark:text-white font-outfit">Brgy. Sambog Local Dev Sandbox</h4>
-                    <p class="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
-                        Testing role authorization, RBAC parameters, or database layer query limits? Access these pre-seeded sandbox accounts using password: <code class="text-brand font-mono font-bold bg-brand/10 px-1.5 py-0.5 rounded">password</code>
-                    </p>
-                    
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-                        <div class="bg-white dark:bg-zinc-950/80 p-3.5 rounded-xl border border-emerald-200 dark:border-zinc-800/80 shadow-sm hover:shadow-md transition-shadow">
-                            <div class="font-bold text-zinc-900 dark:text-white">Barangay Admin</div>
-                            <div class="font-mono text-zinc-600 dark:text-zinc-400 mt-1 select-all">admin@barangay.gov</div>
-                        </div>
-                        <div class="bg-white dark:bg-zinc-950/80 p-3.5 rounded-xl border border-emerald-200 dark:border-zinc-800/80 shadow-sm hover:shadow-md transition-shadow">
-                            <div class="font-bold text-zinc-900 dark:text-white">Health Admin</div>
-                            <div class="font-mono text-zinc-600 dark:text-zinc-400 mt-1 select-all">health@barangay.gov</div>
-                        </div>
-                        <div class="bg-white dark:bg-zinc-950/80 p-3.5 rounded-xl border border-emerald-200 dark:border-zinc-800/80 shadow-sm hover:shadow-md transition-shadow">
-                            <div class="font-bold text-zinc-900 dark:text-white">Household Head</div>
-                            <div class="font-mono text-zinc-600 dark:text-zinc-400 mt-1 select-all">head@barangay.gov</div>
-                        </div>
-                        <div class="bg-white dark:bg-zinc-950/80 p-3.5 rounded-xl border border-emerald-200 dark:border-zinc-800/80 shadow-sm hover:shadow-md transition-shadow">
-                            <div class="font-bold text-zinc-900 dark:text-white">Resident Member</div>
-                            <div class="font-mono text-zinc-600 dark:text-zinc-400 mt-1 select-all">resident@barangay.gov</div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Wave Divider: About → Services -->
-            <div class="relative z-10 bg-transparent">
-                <svg class="wave-svg" viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-                    <path d="M0,60 C360,10 720,80 1080,30 C1260,5 1380,40 1440,20 L1440,80 L0,80 Z" class="fill-emerald-100/60 dark:fill-emerald-900/40" />
-                </svg>
-            </div>
-
-            <!-- SECTION 3: Public Municipal Services -->
-            <section id="services" class="scroll-mt-24 py-16 bg-emerald-100/60 dark:bg-emerald-900/40">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-                    <div class="text-center max-w-2xl mx-auto space-y-3">
-                        <span class="text-brand text-lg font-bold uppercase tracking-wider font-outfit">Citizen Welfare</span>
-                        <h2 class="text-5xl font-extrabold tracking-tight font-outfit text-zinc-950 dark:text-white">Public Municipal Services</h2>
-                        <p class="text-zinc-500 text-sm sm:text-base leading-relaxed font-light">
-                            Explore dynamic public programs structured to deliver premium governance solutions directly to Brgy. Sambog, Corella, Bohol's inhabitants.
-                        </p>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Right Hero Bento Spotlight (5 cols) -->
+                    <div class="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
                         
-                        <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md p-8 rounded-3xl shadow-sm border border-zinc-200/50 dark:border-zinc-800/80 hover:shadow-md transition duration-300">
-                            <div class="p-3 bg-emerald-500/10 text-brand rounded-2xl w-fit mb-6">
-                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                </svg>
+                        <!-- Bento Spotlight 1: Quick Stats Snippet -->
+                        <div class="glass-panel p-6 rounded-3xl border border-zinc-200/80 dark:border-zinc-800/80 bento-card-glow flex items-center justify-between">
+                            <div>
+                                <span class="text-xs uppercase font-extrabold tracking-wider text-emerald-600 dark:text-emerald-400 font-outfit">Registered Inhabitants</span>
+                                <div class="text-3xl font-black font-outfit text-zinc-950 dark:text-white mt-1 tabular-nums">{{ number_format($totalResidents) }}</div>
+                                <span class="text-xs text-zinc-500">Across {{ number_format($totalHouseholds) }} Active Family Units</span>
                             </div>
-                            <h3 class="font-bold text-xl font-outfit mb-3 text-zinc-950 dark:text-white">Barangay Documents</h3>
-                            <p class="text-zinc-500 text-sm leading-relaxed font-light">
-                                Schedule personal pick-up slots at the Barangay Hall to pick up processed official clearances, indigency certifications, and administrative paperworks safely.
-                            </p>
-                        </div>
-
-                        <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md p-8 rounded-3xl shadow-sm border border-zinc-200/50 dark:border-zinc-800/80 hover:shadow-md transition duration-300">
-                            <div class="p-3 bg-emerald-500/10 text-emerald-500 rounded-2xl w-fit mb-6">
-                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <div class="p-3 bg-emerald-500/10 text-emerald-600 rounded-2xl">
+                                <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                                 </svg>
                             </div>
-                            <h3 class="font-bold text-xl font-outfit mb-3 text-zinc-950 dark:text-white">Household Registry</h3>
-                            <p class="text-zinc-500 text-sm leading-relaxed font-light">
-                                Verified household heads can instantly review registered residents inside their family units, directly sync demographic statuses, and manage appointment requests.
-                            </p>
                         </div>
 
-                        <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md p-8 rounded-3xl shadow-sm border border-zinc-200/50 dark:border-zinc-800/80 hover:shadow-md transition duration-300">
-                            <div class="p-3 bg-blue-500/10 text-blue-500 rounded-2xl w-fit mb-6">
-                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                </svg>
+                        <!-- Bento Spotlight 2: Document Appointment Shortcut -->
+                        <div class="glass-panel p-6 rounded-3xl border border-zinc-200/80 dark:border-zinc-800/80 bento-card-glow flex flex-col justify-between space-y-4">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs uppercase font-extrabold tracking-wider text-teal-600 dark:text-teal-400 font-outfit">Barangay Documents</span>
+                                <span class="px-2 py-0.5 bg-emerald-500/10 text-emerald-600 rounded text-[10px] font-bold">Fast-Track</span>
                             </div>
-                            <h3 class="font-bold text-xl font-outfit mb-3 text-zinc-950 dark:text-white">Vulnerable Health Support</h3>
-                            <p class="text-zinc-500 text-sm leading-relaxed font-light">
-                                Directing health administration officers with age-dynamic indicators to filter chronic adult conditions or track stunting metrics for pediatric age brackets.
-                            </p>
+                            <div>
+                                <h3 class="text-base font-bold text-zinc-950 dark:text-white font-outfit">Clearance & Certificate Pickup</h3>
+                                <p class="text-xs text-zinc-500 mt-1">Book scheduled document pick-ups without waiting in long queues at the Barangay Hall.</p>
+                            </div>
+                            <a href="{{ route('login') }}" class="inline-flex items-center gap-2 text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:underline">
+                                Request Document Clearance &rarr;
+                            </a>
                         </div>
 
                     </div>
                 </div>
             </section>
 
-            <!-- Wave Divider: Services → Officials -->
-            <div class="relative z-10 bg-transparent">
-                <svg class="wave-svg" viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-                    <path d="M0,20 C200,70 500,0 800,50 C1100,80 1300,15 1440,40 L1440,0 L0,0 Z" class="fill-emerald-100/60 dark:fill-emerald-900/40" />
-                </svg>
-            </div>
+            <!-- SECTION: About Barangay Sambog -->
+            <section id="about" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-24">
+                <div class="glass-panel p-8 sm:p-12 rounded-3xl border border-zinc-200/80 dark:border-zinc-800/80 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bento-card-glow">
+                    <div class="lg:col-span-7 space-y-4">
+                        <span class="text-xs uppercase font-extrabold tracking-wider text-emerald-600 dark:text-emerald-400 font-outfit">Local Heritage & Governance</span>
+                        <h2 class="text-3xl font-extrabold tracking-tight font-outfit text-zinc-950 dark:text-white">
+                            Serving Corella with Innovation & Transparency
+                        </h2>
+                        <p class="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                            Barangay Sambog, located in the historic municipality of Corella, Bohol, is dedicated to progressive civic governance. Through our digital inhabitant registry and fast-track appointment system, we empower residents, support vulnerable sectors, and maintain transparent municipal operations across all Purok zones.
+                        </p>
+                    </div>
+                    <div class="lg:col-span-5 grid grid-cols-2 gap-4 text-center">
+                        <div class="p-4 bg-zinc-100/80 dark:bg-zinc-900/80 rounded-2xl border border-zinc-200/60 dark:border-zinc-800/60">
+                            <div class="text-2xl font-black font-outfit text-emerald-600 dark:text-emerald-400">Purok 1–7</div>
+                            <div class="text-xs text-zinc-500 mt-1 font-medium">Community Zones</div>
+                        </div>
+                        <div class="p-4 bg-zinc-100/80 dark:bg-zinc-900/80 rounded-2xl border border-zinc-200/60 dark:border-zinc-800/60">
+                            <div class="text-2xl font-black font-outfit text-emerald-600 dark:text-emerald-400">24/7</div>
+                            <div class="text-xs text-zinc-500 mt-1 font-medium">Digital Desk Access</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-            <!-- SECTION 4: Local Barangay Council -->
-            <section id="officials" class="scroll-mt-24 py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-                <div class="text-center max-w-2xl mx-auto space-y-3">
-                    <span class="text-brand text-lg font-bold uppercase tracking-wider font-outfit">Barangay Leadership</span>
-                    <h2 class="text-5xl font-extrabold tracking-tight font-outfit text-zinc-950 dark:text-white">Local Barangay Council</h2>
-                    <p class="text-zinc-500 text-sm leading-relaxed font-light">
-                        Meet the dedicated leaders coordinating the development and administrative operations of Brgy. Sambog, Corella, Bohol.
-                    </p>
+            <!-- DEV SANDBOX COLLAPSIBLE DRAWER -->
+            <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div x-data="{ showSandbox: false }" class="glass-panel rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 overflow-hidden">
+                    <button @click="showSandbox = !showSandbox" class="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-zinc-100/50 dark:hover:bg-zinc-900/50 transition">
+                        <div class="flex items-center gap-3">
+                            <span class="px-2.5 py-0.5 bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 text-xs font-bold rounded-md font-mono">DEV</span>
+                            <span class="text-sm font-bold text-zinc-800 dark:text-zinc-200 font-outfit">Developer Sandbox Test Accounts</span>
+                        </div>
+                        <span class="text-xs text-zinc-500 font-medium" x-text="showSandbox ? 'Hide Accounts ▲' : 'Show Accounts ▼'"></span>
+                    </button>
+                    
+                    <div x-show="showSandbox" x-cloak class="px-6 pb-6 pt-2 border-t border-zinc-200/60 dark:border-zinc-800/60">
+                        <p class="text-xs text-zinc-500 mb-4">Password for all test roles: <code class="bg-emerald-500/10 text-emerald-600 px-1.5 py-0.5 rounded font-mono font-bold">password</code></p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs font-mono">
+                            <div class="p-3 bg-zinc-100 dark:bg-zinc-900/80 rounded-xl border border-zinc-200 dark:border-zinc-800">
+                                <div class="font-bold font-sans text-zinc-900 dark:text-white">Admin</div>
+                                <div class="text-zinc-500 mt-0.5 select-all">admin@barangay.gov</div>
+                            </div>
+                            <div class="p-3 bg-zinc-100 dark:bg-zinc-900/80 rounded-xl border border-zinc-200 dark:border-zinc-800">
+                                <div class="font-bold font-sans text-zinc-900 dark:text-white">Health Admin</div>
+                                <div class="text-zinc-500 mt-0.5 select-all">health@barangay.gov</div>
+                            </div>
+                            <div class="p-3 bg-zinc-100 dark:bg-zinc-900/80 rounded-xl border border-zinc-200 dark:border-zinc-800">
+                                <div class="font-bold font-sans text-zinc-900 dark:text-white">Household Head</div>
+                                <div class="text-zinc-500 mt-0.5 select-all">head@barangay.gov</div>
+                            </div>
+                            <div class="p-3 bg-zinc-100 dark:bg-zinc-900/80 rounded-xl border border-zinc-200 dark:border-zinc-800">
+                                <div class="font-bold font-sans text-zinc-900 dark:text-white">Resident Member</div>
+                                <div class="text-zinc-500 mt-0.5 select-all">resident@barangay.gov</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION: Public Municipal Services Bento -->
+            <section id="services" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-24 space-y-8">
+                <div class="text-center max-w-2xl mx-auto space-y-2">
+                    <span class="text-xs uppercase font-extrabold tracking-wider text-emerald-600 dark:text-emerald-400 font-outfit">Citizen Welfare</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight font-outfit text-zinc-950 dark:text-white">Public Municipal Services</h2>
+                    <p class="text-zinc-500 text-sm">Efficient municipal tools designed to serve every family unit in Brgy. Sambog.</p>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                    <!-- Captain -->
-                    <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md rounded-3xl border border-zinc-200 dark:border-zinc-800/80 p-6 flex flex-col items-center text-center shadow-sm hover:shadow-lg hover:scale-[1.02] transition duration-300">
-                        <div class="h-20 w-20 rounded-full premium-gradient flex items-center justify-center text-white text-xl font-bold font-outfit shadow-md ring-4 ring-emerald-400/20">
-                            RA
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    
+                    <div class="glass-panel p-8 rounded-3xl border border-zinc-200/80 dark:border-zinc-800/80 bento-card-glow space-y-4">
+                        <div class="p-3 bg-emerald-500/10 text-emerald-600 rounded-2xl w-fit">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
                         </div>
-                        <h4 class="font-bold text-lg text-zinc-950 dark:text-white mt-4 font-outfit">Hon. Rey Anthony N. Rebuta</h4>
-                        <span class="text-xs text-brand uppercase font-extrabold tracking-wider mt-1">Barangay Captain</span>
-                        <p class="text-sm text-zinc-500 mt-2 font-light">Overseeing overall community administration and development.</p>
+                        <h3 class="text-xl font-bold font-outfit text-zinc-950 dark:text-white">Barangay Clearances</h3>
+                        <p class="text-sm text-zinc-500 leading-relaxed">
+                            Schedule pick-up dates for official clearances, certificates of indigency, and business permits directly online.
+                        </p>
                     </div>
 
-                    <!-- Councilor 1 -->
-                    <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md rounded-3xl border border-zinc-200 dark:border-zinc-800/80 p-6 flex flex-col items-center text-center shadow-sm hover:shadow-lg hover:scale-[1.02] transition duration-300">
-                        <div class="h-20 w-20 rounded-full bg-gradient-to-tr from-teal-500 to-emerald-400 flex items-center justify-center text-white text-xl font-bold font-outfit shadow-md ring-4 ring-teal-400/20">
+                    <div class="glass-panel p-8 rounded-3xl border border-zinc-200/80 dark:border-zinc-800/80 bento-card-glow space-y-4">
+                        <div class="p-3 bg-teal-500/10 text-teal-600 rounded-2xl w-fit">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m3 0h1m-1 0v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold font-outfit text-zinc-950 dark:text-white">Household Registry</h3>
+                        <p class="text-sm text-zinc-500 leading-relaxed">
+                            Verified family heads can review household composition, sync demographic records, and update voter parameters.
+                        </p>
+                    </div>
+
+                    <div class="glass-panel p-8 rounded-3xl border border-zinc-200/80 dark:border-zinc-800/80 bento-card-glow space-y-4">
+                        <div class="p-3 bg-sky-500/10 text-sky-600 rounded-2xl w-fit">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold font-outfit text-zinc-950 dark:text-white">Vulnerable Sector Support</h3>
+                        <p class="text-sm text-zinc-500 leading-relaxed">
+                            Dedicated monitoring for senior citizens, pediatric nutrition coverages, and local immunization programs.
+                        </p>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- SECTION: Inhabitant Demographics & Statistics -->
+            <section id="demographics" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-24 space-y-8">
+                <div class="text-center max-w-2xl mx-auto space-y-2">
+                    <span class="text-xs uppercase font-extrabold tracking-wider text-emerald-600 dark:text-emerald-400 font-outfit">Live Population Metrics</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight font-outfit text-zinc-950 dark:text-white">Community Statistics</h2>
+                    <p class="text-zinc-500 text-sm">Real-time statistics sourced from the official inhabitant registry.</p>
+                </div>
+
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                    
+                    <div class="glass-panel p-6 rounded-3xl border border-zinc-200/80 dark:border-zinc-800/80 text-center bento-card-glow space-y-1">
+                        <span class="text-xs font-bold uppercase tracking-wider text-sky-600 dark:text-sky-400">Total Residents</span>
+                        <div class="text-4xl sm:text-5xl font-black font-outfit text-sky-500 tabular-nums">{{ number_format($totalResidents) }}</div>
+                        <span class="text-xs text-zinc-500 font-medium">Registered Citizens</span>
+                    </div>
+
+                    <div class="glass-panel p-6 rounded-3xl border border-zinc-200/80 dark:border-zinc-800/80 text-center bento-card-glow space-y-1">
+                        <span class="text-xs font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">Total Households</span>
+                        <div class="text-4xl sm:text-5xl font-black font-outfit text-amber-500 tabular-nums">{{ number_format($totalHouseholds) }}</div>
+                        <span class="text-xs text-zinc-500 font-medium">Active Family Units</span>
+                    </div>
+
+                    <div class="glass-panel p-6 rounded-3xl border border-zinc-200/80 dark:border-zinc-800/80 text-center bento-card-glow space-y-1">
+                        <span class="text-xs font-bold uppercase tracking-wider text-violet-600 dark:text-violet-400">Senior Citizens</span>
+                        <div class="text-4xl sm:text-5xl font-black font-outfit text-violet-500 tabular-nums">{{ number_format($seniorCitizens) }}</div>
+                        <span class="text-xs text-zinc-500 font-medium">Supported Seniors (60+)</span>
+                    </div>
+
+                    <div class="glass-panel p-6 rounded-3xl border border-zinc-200/80 dark:border-zinc-800/80 text-center bento-card-glow space-y-1">
+                        <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Immunization Rate</span>
+                        <div class="text-4xl sm:text-5xl font-black font-outfit text-emerald-500 tabular-nums">{{ $totalResidents > 0 ? number_format(($vaccinatedCount / $totalResidents) * 100, 1) : 0 }}%</div>
+                        <span class="text-xs text-zinc-500 font-medium">Vaccinated Inhabitants</span>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- SECTION: Local Barangay Council -->
+            <section id="officials" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-24 space-y-8">
+                <div class="text-center max-w-2xl mx-auto space-y-2">
+                    <span class="text-xs uppercase font-extrabold tracking-wider text-emerald-600 dark:text-emerald-400 font-outfit">Barangay Leadership</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight font-outfit text-zinc-950 dark:text-white">Local Barangay Council</h2>
+                    <p class="text-zinc-500 text-sm">Dedicated public officials serving the community of Brgy. Sambog.</p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    
+                    <div class="glass-panel p-6 rounded-3xl border border-zinc-200/80 dark:border-zinc-800/80 text-center bento-card-glow space-y-3">
+                        <div class="h-16 w-16 mx-auto rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white font-black text-xl font-outfit shadow-md">
+                            RR
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-base text-zinc-950 dark:text-white font-outfit">Hon. Rey Anthony N. Rebuta</h4>
+                            <span class="text-xs text-emerald-600 dark:text-emerald-400 font-bold uppercase tracking-wider block mt-0.5">Barangay Captain</span>
+                        </div>
+                        <p class="text-xs text-zinc-500">Leading community governance and municipal administration.</p>
+                    </div>
+
+                    <div class="glass-panel p-6 rounded-3xl border border-zinc-200/80 dark:border-zinc-800/80 text-center bento-card-glow space-y-3">
+                        <div class="h-16 w-16 mx-auto rounded-full bg-gradient-to-br from-teal-500 to-sky-600 flex items-center justify-center text-white font-black text-xl font-outfit shadow-md">
                             AS
                         </div>
-                        <h4 class="font-bold text-lg text-zinc-950 dark:text-white mt-4 font-outfit">Hon. Alice Smith</h4>
-                        <span class="text-xs text-brand uppercase font-extrabold tracking-wider mt-1">Committee on Health</span>
-                        <p class="text-sm text-zinc-500 mt-2 font-light">Coordinating public health drives and vaccination metrics monitoring.</p>
+                        <div>
+                            <h4 class="font-bold text-base text-zinc-950 dark:text-white font-outfit">Hon. Alice Smith</h4>
+                            <span class="text-xs text-emerald-600 dark:text-emerald-400 font-bold uppercase tracking-wider block mt-0.5">Committee on Health</span>
+                        </div>
+                        <p class="text-xs text-zinc-500">Coordinating community healthcare and immunization programs.</p>
                     </div>
 
-                    <!-- Councilor 2 -->
-                    <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md rounded-3xl border border-zinc-200 dark:border-zinc-800/80 p-6 flex flex-col items-center text-center shadow-sm hover:shadow-lg hover:scale-[1.02] transition duration-300">
-                        <div class="h-20 w-20 rounded-full bg-gradient-to-tr from-sky-500 to-teal-400 flex items-center justify-center text-white text-xl font-bold font-outfit shadow-md ring-4 ring-sky-400/20">
-                            AR
+                    <div class="glass-panel p-6 rounded-3xl border border-zinc-200/80 dark:border-zinc-800/80 text-center bento-card-glow space-y-3">
+                        <div class="h-16 w-16 mx-auto rounded-full bg-gradient-to-br from-sky-500 to-indigo-600 flex items-center justify-center text-white font-black text-xl font-outfit shadow-md">
+                            AI
                         </div>
-                        <h4 class="font-bold text-lg text-zinc-950 dark:text-white mt-4 font-outfit">Arnel T. Itong</h4>
-                        <span class="text-xs text-brand uppercase font-extrabold tracking-wider mt-1">Barangay Treasurer</span>
-                        <p class="text-sm text-zinc-500 mt-2 font-light">Handling budgetary resources and community development allocations.</p>
+                        <div>
+                            <h4 class="font-bold text-base text-zinc-950 dark:text-white font-outfit">Arnel T. Itong</h4>
+                            <span class="text-xs text-emerald-600 dark:text-emerald-400 font-bold uppercase tracking-wider block mt-0.5">Barangay Treasurer</span>
+                        </div>
+                        <p class="text-xs text-zinc-500">Managing fiscal resources and development budgets.</p>
                     </div>
 
-                    <!-- Secretary -->
-                    <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md rounded-3xl border border-zinc-200 dark:border-zinc-800/80 p-6 flex flex-col items-center text-center shadow-sm hover:shadow-lg hover:scale-[1.02] transition duration-300">
-                        <div class="h-20 w-20 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-400 flex items-center justify-center text-white text-xl font-bold font-outfit shadow-md ring-4 ring-indigo-400/20">
-                            CE
+                    <div class="glass-panel p-6 rounded-3xl border border-zinc-200/80 dark:border-zinc-800/80 text-center bento-card-glow space-y-3">
+                        <div class="h-16 w-16 mx-auto rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-black text-xl font-outfit shadow-md">
+                            CD
                         </div>
-                        <h4 class="font-bold text-lg text-zinc-950 dark:text-white mt-4 font-outfit">Cecilia S. Daquio</h4>
-                        <span class="text-xs text-brand uppercase font-extrabold tracking-wider mt-1">Barangay Secretary</span>
-                        <p class="text-sm text-zinc-500 mt-2 font-light">Managing document issuance, clearances database, and slot scheduling.</p>
+                        <div>
+                            <h4 class="font-bold text-base text-zinc-950 dark:text-white font-outfit">Cecilia S. Daquio</h4>
+                            <span class="text-xs text-emerald-600 dark:text-emerald-400 font-bold uppercase tracking-wider block mt-0.5">Barangay Secretary</span>
+                        </div>
+                        <p class="text-xs text-zinc-500">Handling document processing, records, and appointments.</p>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- SECTION: Community Projects -->
+            <section id="projects" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-24 space-y-8">
+                <div class="text-center max-w-2xl mx-auto space-y-2">
+                    <span class="text-xs uppercase font-extrabold tracking-wider text-emerald-600 dark:text-emerald-400 font-outfit">Infrastructure & Development</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight font-outfit text-zinc-950 dark:text-white">Community Projects</h2>
+                    <p class="text-zinc-500 text-sm">Ongoing and completed development initiatives in Brgy. Sambog.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="glass-panel p-6 rounded-3xl border border-zinc-200/80 dark:border-zinc-800/80 bento-card-glow space-y-3">
+                        <span class="px-2 py-0.5 bg-emerald-500/10 text-emerald-600 rounded text-[10px] font-bold uppercase font-outfit">Infrastructure</span>
+                        <h3 class="text-xl font-bold font-outfit text-zinc-950 dark:text-white">Purok 3 Road Paving</h3>
+                        <p class="text-xs text-zinc-500 leading-relaxed">Paving and drainage upgrades connecting interior purok zones to the municipal highway.</p>
+                    </div>
+                    <div class="glass-panel p-6 rounded-3xl border border-zinc-200/80 dark:border-zinc-800/80 bento-card-glow space-y-3">
+                        <span class="px-2 py-0.5 bg-teal-500/10 text-teal-600 rounded text-[10px] font-bold uppercase font-outfit">Recreation</span>
+                        <h3 class="text-xl font-bold font-outfit text-zinc-950 dark:text-white">Covered Court Renovation</h3>
+                        <p class="text-xs text-zinc-500 leading-relaxed">Facility improvements and lighting upgrades for community assemblies and sports leagues.</p>
+                    </div>
+                    <div class="glass-panel p-6 rounded-3xl border border-zinc-200/80 dark:border-zinc-800/80 bento-card-glow space-y-3">
+                        <span class="px-2 py-0.5 bg-sky-500/10 text-sky-600 rounded text-[10px] font-bold uppercase font-outfit">Public Safety</span>
+                        <h3 class="text-xl font-bold font-outfit text-zinc-950 dark:text-white">Solar Streetlighting</h3>
+                        <p class="text-xs text-zinc-500 leading-relaxed">Installation of eco-friendly solar streetlights along main thoroughfares and dark walkways.</p>
                     </div>
                 </div>
             </section>
 
-            <!-- Wave Divider: Officials → Demographics -->
-            <div class="relative z-10 bg-transparent">
-                <svg class="wave-svg" viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-                    <path d="M0,50 C180,80 420,10 720,60 C960,90 1200,20 1440,50 L1440,80 L0,80 Z" class="fill-emerald-100/60 dark:fill-emerald-900/40" />
-                </svg>
-            </div>
+            <!-- SECTION: Local Ordinances -->
+            <section id="ordinances" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-24 space-y-8">
+                <div class="text-center max-w-2xl mx-auto space-y-2">
+                    <span class="text-xs uppercase font-extrabold tracking-wider text-emerald-600 dark:text-emerald-400 font-outfit">Community Regulations</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight font-outfit text-zinc-950 dark:text-white">Local Ordinances</h2>
+                    <p class="text-zinc-500 text-sm">Key policies enforced to maintain peace, order, and sanitation.</p>
+                </div>
 
-            <!-- SECTION 5: Community Statistics -->
-            <section id="demographics" class="scroll-mt-24 py-16 bg-emerald-100/60 dark:bg-emerald-900/40">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-                    <div class="text-center max-w-2xl mx-auto space-y-3">
-                        <span class="text-brand text-lg font-bold uppercase tracking-wider font-outfit">Inhabitants</span>
-                        <h2 class="text-5xl font-extrabold tracking-tight font-outfit text-zinc-950 dark:text-white">Community Statistics</h2>
-                        <p class="text-zinc-500 text-sm leading-relaxed font-light">A quick snapshot of our registered population, households, senior citizens, and immunization coverage — updated from our household registry.</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="glass-panel p-6 rounded-3xl border border-zinc-200/80 dark:border-zinc-800/80 bento-card-glow space-y-3">
+                        <div class="p-3 bg-indigo-500/10 text-indigo-600 rounded-2xl w-fit">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        </div>
+                        <h3 class="text-xl font-bold font-outfit text-zinc-950 dark:text-white">Curfew Hours</h3>
+                        <p class="text-xs text-zinc-500 leading-relaxed">10:00 PM to 4:00 AM for minors to maintain safety and security across all Purok zones.</p>
                     </div>
-
-                    <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md border border-zinc-200 dark:border-zinc-800 rounded-3xl p-8 sm:p-10 shadow-2xl grid grid-cols-2 lg:grid-cols-4 gap-8 divide-y lg:divide-y-0 lg:divide-x divide-zinc-200 dark:divide-zinc-800">
-                        <div class="flex flex-col items-center text-center p-4">
-                            <span class="text-sm uppercase font-extrabold tracking-wider text-sky-655 dark:text-sky-400">Total Residents</span>
-                            <span class="text-5xl sm:text-6xl font-black text-sky-500 font-outfit mt-2">{{ number_format($totalResidents) }}</span>
-                            <span class="text-sm text-zinc-500 mt-1 font-semibold">Registered Inhabitants</span>
+                    <div class="glass-panel p-6 rounded-3xl border border-zinc-200/80 dark:border-zinc-800/80 bento-card-glow space-y-3">
+                        <div class="p-3 bg-emerald-500/10 text-emerald-600 rounded-2xl w-fit">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                         </div>
-
-                        <div class="flex flex-col items-center text-center p-4">
-                            <span class="text-sm uppercase font-extrabold tracking-wider text-amber-600 dark:text-amber-400">Total Households</span>
-                            <span class="text-5xl sm:text-6xl font-black text-amber-500 font-outfit mt-2">{{ number_format($totalHouseholds) }}</span>
-                            <span class="text-sm text-zinc-500 mt-1 font-semibold">Active Family Units</span>
+                        <h3 class="text-xl font-bold font-outfit text-zinc-950 dark:text-white">Waste Segregation</h3>
+                        <p class="text-xs text-zinc-500 leading-relaxed">Strict 'No Segregation, No Collection' policy. Biodegradable on Mondays, Non-bio on Thursdays.</p>
+                    </div>
+                    <div class="glass-panel p-6 rounded-3xl border border-zinc-200/80 dark:border-zinc-800/80 bento-card-glow space-y-3">
+                        <div class="p-3 bg-amber-500/10 text-amber-600 rounded-2xl w-fit">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" /></svg>
                         </div>
-
-                        <div class="flex flex-col items-center text-center p-4">
-                            <span class="text-sm uppercase font-extrabold tracking-wider text-violet-600 dark:text-violet-400">Senior Citizens</span>
-                            <span class="text-5xl sm:text-6xl font-black text-violet-500 font-outfit mt-2">{{ number_format($seniorCitizens) }}</span>
-                            <span class="text-sm text-zinc-500 mt-1 font-semibold">Supported Seniors (60+)</span>
-                        </div>
-
-                        <div class="flex flex-col items-center text-center p-4">
-                            <span class="text-sm uppercase font-extrabold tracking-wider text-emerald-600 dark:text-emerald-450">Immunization Rate</span>
-                            <span class="text-5xl sm:text-6xl font-black text-emerald-500 font-outfit mt-2">{{ $totalResidents > 0 ? number_format(($vaccinatedCount / $totalResidents) * 100, 1) : 0 }}%</span>
-                            <span class="text-sm text-zinc-500 mt-1 font-semibold">Vaccinated Inhabitants</span>
-                        </div>
+                        <h3 class="text-xl font-bold font-outfit text-zinc-950 dark:text-white">Noise Control</h3>
+                        <p class="text-xs text-zinc-500 leading-relaxed">Loud audio equipment and karaoke prohibited past 10:00 PM to respect residential quiet hours.</p>
                     </div>
                 </div>
             </section>
 
-            <!-- Wave Divider: Demographics → Projects -->
-            <div class="relative z-10 bg-transparent">
-                <svg class="wave-svg" viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-                    <path d="M0,30 C300,70 600,5 900,45 C1100,65 1300,10 1440,35 L1440,0 L0,0 Z" class="fill-emerald-100/60 dark:fill-emerald-900/40" />
-                </svg>
-            </div>
+            <!-- SECTION: Recommended Places & Landmarks (Livewire) -->
+            <section id="places" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-24 space-y-8">
+                <div class="text-center max-w-2xl mx-auto space-y-2">
+                    <span class="text-xs uppercase font-extrabold tracking-wider text-emerald-600 dark:text-emerald-400 font-outfit">Local Destinations</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight font-outfit text-zinc-950 dark:text-white">Places & Landmarks</h2>
+                    <p class="text-zinc-500 text-sm">Discover recommended spots and municipal landmarks around Corella, Bohol.</p>
+                </div>
 
-            <!-- SECTION 6: Featured Projects -->
-            <section id="projects" class="scroll-mt-24 py-16 bg-transparent">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-                    <div class="text-center max-w-2xl mx-auto space-y-3">
-                        <span class="text-brand text-lg font-bold uppercase tracking-wider font-outfit">Community Development</span>
-                        <h2 class="text-5xl font-extrabold tracking-tight font-outfit text-zinc-950 dark:text-white">Featured Projects</h2>
-                        <p class="text-zinc-500 text-sm leading-relaxed font-light">Showcasing ongoing and completed infrastructure projects that drive progress in our barangay.</p>
+                <livewire:recommended-places />
+            </section>
+
+            <!-- SECTION: Community Announcements (Livewire) -->
+            <section id="announcements" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-24 space-y-8">
+                <div class="text-center max-w-2xl mx-auto space-y-2">
+                    <span class="text-xs uppercase font-extrabold tracking-wider text-emerald-600 dark:text-emerald-400 font-outfit">Public Bulletins</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight font-outfit text-zinc-950 dark:text-white">Barangay Announcements</h2>
+                    <p class="text-zinc-500 text-sm">Official announcements and updates issued by the Barangay Council.</p>
+                </div>
+
+                <livewire:announcements />
+            </section>
+
+            <!-- SECTION: FAQs & Help Center -->
+            <section id="faqs" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-24 space-y-12">
+                <div class="space-y-6">
+                    <div class="text-center max-w-2xl mx-auto space-y-2">
+                        <span class="text-xs uppercase font-extrabold tracking-wider text-emerald-600 dark:text-emerald-400 font-outfit">Inhabitant Help Center</span>
+                        <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight font-outfit text-zinc-950 dark:text-white">Frequently Asked Questions</h2>
+                        <p class="text-zinc-500 text-sm">Find quick answers to common questions about barangay document requests, household registration, and public services.</p>
                     </div>
+
+                    <!-- Alpine.js Accordion Container -->
+                    <div x-data="{ active: 1 }" class="max-w-4xl mx-auto space-y-3">
+                        
+                        <!-- Question 1 -->
+                        <div class="glass-panel rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 overflow-hidden transition">
+                            <button @click="active = (active === 1 ? null : 1)" class="w-full px-6 py-4 flex items-center justify-between text-left focus:outline-none focus:ring-2 focus:ring-emerald-500/50 cursor-pointer">
+                                <span class="font-bold text-sm sm:text-base text-zinc-950 dark:text-white font-outfit">How do I request an official Barangay Clearance or Certificate?</span>
+                                <svg class="h-5 w-5 text-emerald-600 dark:text-emerald-400 transition-transform duration-200 flex-shrink-0" :class="{ 'rotate-180': active === 1 }" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+                            <div x-show="active === 1" x-collapse x-cloak class="px-6 pb-5 pt-1 text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed border-t border-zinc-200/40 dark:border-zinc-800/40">
+                                Log in with your registered inhabitant account, navigate to the <strong>Appointments</strong> section, select your required document purpose (such as Clearance, Indigency, or Business Permit), and choose an available pickup schedule. You will receive live status notifications when your request is processed.
+                            </div>
+                        </div>
+
+                        <!-- Question 2 -->
+                        <div class="glass-panel rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 overflow-hidden transition">
+                            <button @click="active = (active === 2 ? null : 2)" class="w-full px-6 py-4 flex items-center justify-between text-left focus:outline-none focus:ring-2 focus:ring-emerald-500/50 cursor-pointer">
+                                <span class="font-bold text-sm sm:text-base text-zinc-950 dark:text-white font-outfit">Who is authorized to update family profiles in the Household Registry?</span>
+                                <svg class="h-5 w-5 text-emerald-600 dark:text-emerald-400 transition-transform duration-200 flex-shrink-0" :class="{ 'rotate-180': active === 2 }" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+                            <div x-show="active === 2" x-collapse x-cloak class="px-6 pb-5 pt-1 text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed border-t border-zinc-200/40 dark:border-zinc-800/40">
+                                Only designated <strong>Household Heads</strong> registered in the Registry of Barangay Inhabitants (RBI) have authorization to register dependents or modify family details. Household heads can add new family members, sync demographic parameters, and manage voter records.
+                            </div>
+                        </div>
+
+                        <!-- Question 3 -->
+                        <div class="glass-panel rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 overflow-hidden transition">
+                            <button @click="active = (active === 3 ? null : 3)" class="w-full px-6 py-4 flex items-center justify-between text-left focus:outline-none focus:ring-2 focus:ring-emerald-500/50 cursor-pointer">
+                                <span class="font-bold text-sm sm:text-base text-zinc-950 dark:text-white font-outfit">What are the requirements when claiming documents at the Barangay Hall?</span>
+                                <svg class="h-5 w-5 text-emerald-600 dark:text-emerald-400 transition-transform duration-200 flex-shrink-0" :class="{ 'rotate-180': active === 3 }" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+                            <div x-show="active === 3" x-collapse x-cloak class="px-6 pb-5 pt-1 text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed border-t border-zinc-200/40 dark:border-zinc-800/40">
+                                Please bring one valid government-issued ID (or Student ID for minors) along with your appointment confirmation reference. If sending an authorized representative, ensure they present an authorization letter and copies of both valid IDs.
+                            </div>
+                        </div>
+
+                        <!-- Question 4 -->
+                        <div class="glass-panel rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 overflow-hidden transition">
+                            <button @click="active = (active === 4 ? null : 4)" class="w-full px-6 py-4 flex items-center justify-between text-left focus:outline-none focus:ring-2 focus:ring-emerald-500/50 cursor-pointer">
+                                <span class="font-bold text-sm sm:text-base text-zinc-950 dark:text-white font-outfit">How do senior citizens and vulnerable sectors access healthcare support?</span>
+                                <svg class="h-5 w-5 text-emerald-600 dark:text-emerald-400 transition-transform duration-200 flex-shrink-0" :class="{ 'rotate-180': active === 4 }" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+                            <div x-show="active === 4" x-collapse x-cloak class="px-6 pb-5 pt-1 text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed border-t border-zinc-200/40 dark:border-zinc-800/40">
+                                Our Barangay Health Administration tracks senior wellness metrics, pediatric nutritional coverage, and immunization programs. Qualified senior citizens and vulnerable inhabitants receive direct announcements for free health check-ups and medical assistance.
+                            </div>
+                        </div>
+
+                        <!-- Question 5 -->
+                        <div class="glass-panel rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 overflow-hidden transition">
+                            <button @click="active = (active === 5 ? null : 5)" class="w-full px-6 py-4 flex items-center justify-between text-left focus:outline-none focus:ring-2 focus:ring-emerald-500/50 cursor-pointer">
+                                <span class="font-bold text-sm sm:text-base text-zinc-950 dark:text-white font-outfit">What are the Barangay Hall operating hours?</span>
+                                <svg class="h-5 w-5 text-emerald-600 dark:text-emerald-400 transition-transform duration-200 flex-shrink-0" :class="{ 'rotate-180': active === 5 }" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+                            <div x-show="active === 5" x-collapse x-cloak class="px-6 pb-5 pt-1 text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed border-t border-zinc-200/40 dark:border-zinc-800/40">
+                                The Barangay Hall is open Monday through Friday from 8:00 AM to 5:00 PM (closed on Philippine public holidays). Our online portal for document appointment scheduling and community announcements remains accessible 24/7.
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION: Contact Us & Emergency Hotlines -->
+            <section id="contact" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-24 space-y-8">
+                <span id="contacts"></span>
+                
+                <div class="text-center max-w-2xl mx-auto space-y-2">
+                    <span class="text-xs uppercase font-extrabold tracking-wider text-emerald-600 dark:text-emerald-400 font-outfit">Get In Touch</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight font-outfit text-zinc-950 dark:text-white">Contact & Location</h2>
+                    <p class="text-zinc-500 text-sm">Reach out to the Barangay Secretary desk or visit our hall during operating hours.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        <div class="group relative rounded-3xl overflow-hidden shadow-lg border border-zinc-200 dark:border-zinc-800 cursor-pointer">
-                            <div class="h-64 bg-zinc-200 dark:bg-zinc-800 relative overflow-hidden flex items-center justify-center">
-                                <div class="absolute inset-0 bg-emerald-600/20 group-hover:bg-emerald-600/30 transition duration-300"></div>
-                                <div class="absolute inset-0 bg-gradient-to-t from-zinc-900/90 to-transparent z-10"></div>
-                                <svg class="h-20 w-20 text-emerald-100/50 absolute top-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
-                                <div class="absolute bottom-6 left-6 z-20">
-                                    <div class="text-xs uppercase font-extrabold text-emerald-400 mb-1">Infrastructure</div>
-                                    <h3 class="text-2xl font-bold text-white font-outfit">Road Paving</h3>
-                                    <p class="text-zinc-300 text-sm mt-1">Purok 3</p>
-                                </div>
-                            </div>
+                    <!-- Card 1: Official Desk -->
+                    <div class="glass-panel p-6 rounded-3xl border border-zinc-200/80 dark:border-zinc-800/80 bento-card-glow space-y-3">
+                        <div class="p-3 bg-emerald-500/10 text-emerald-600 rounded-2xl w-fit">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m3 0h1m-1 0v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                            </svg>
                         </div>
-                        <div class="group relative rounded-3xl overflow-hidden shadow-lg border border-zinc-200 dark:border-zinc-800 cursor-pointer">
-                            <div class="h-64 bg-zinc-200 dark:bg-zinc-800 relative overflow-hidden flex items-center justify-center">
-                                <div class="absolute inset-0 bg-teal-600/20 group-hover:bg-teal-600/30 transition duration-300"></div>
-                                <div class="absolute inset-0 bg-gradient-to-t from-zinc-900/90 to-transparent z-10"></div>
-                                <svg class="h-20 w-20 text-teal-100/50 absolute top-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                <div class="absolute bottom-6 left-6 z-20">
-                                    <div class="text-xs uppercase font-extrabold text-emerald-400 mb-1">Recreation</div>
-                                    <h3 class="text-2xl font-bold text-white font-outfit">Covered Court Renovation</h3>
-                                    <p class="text-zinc-300 text-sm mt-1">Barangay Plaza</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="group relative rounded-3xl overflow-hidden shadow-lg border border-zinc-200 dark:border-zinc-800 cursor-pointer">
-                            <div class="h-64 bg-zinc-200 dark:bg-zinc-800 relative overflow-hidden flex items-center justify-center">
-                                <div class="absolute inset-0 bg-sky-600/20 group-hover:bg-sky-600/30 transition duration-300"></div>
-                                <div class="absolute inset-0 bg-gradient-to-t from-zinc-900/90 to-transparent z-10"></div>
-                                <svg class="h-20 w-20 text-sky-100/50 absolute top-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>
-                                <div class="absolute bottom-6 left-6 z-20">
-                                    <div class="text-xs uppercase font-extrabold text-emerald-400 mb-1">Utilities</div>
-                                    <h3 class="text-2xl font-bold text-white font-outfit">Solar Streetlights</h3>
-                                    <p class="text-zinc-300 text-sm mt-1">Main Highway</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Wave Divider: Projects → Ordinances -->
-            <div class="relative z-10 bg-transparent">
-                <svg class="wave-svg" viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-                    <path d="M0,60 C360,10 720,80 1080,30 C1260,5 1380,40 1440,20 L1440,80 L0,80 Z" class="fill-emerald-100/60 dark:fill-emerald-900/40" />
-                </svg>
-            </div>
-
-            <!-- SECTION 6b: Local Ordinances -->
-            <section id="ordinances" class="scroll-mt-24 py-16 bg-emerald-100/60 dark:bg-emerald-900/40">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-                    <div class="text-center max-w-2xl mx-auto space-y-3">
-                        <span class="text-brand text-lg font-bold uppercase tracking-wider font-outfit">Governance</span>
-                        <h2 class="text-5xl font-extrabold tracking-tight font-outfit text-zinc-950 dark:text-white">Local Ordinances</h2>
-                        <p class="text-zinc-500 text-sm leading-relaxed font-light">Key rules and policies implemented to maintain peace, order, and cleanliness in our community.</p>
+                        <h4 class="font-bold text-lg text-zinc-950 dark:text-white font-outfit">Barangay Hall</h4>
+                        <p class="text-xs text-zinc-500 leading-relaxed">Barangay Hall, Sambog<br>Corella, Bohol 6337, Philippines</p>
+                        <span class="text-xs text-emerald-600 dark:text-emerald-400 font-bold block pt-1">Mon – Fri: 8:00 AM – 5:00 PM</span>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md p-6 rounded-3xl border border-zinc-200 dark:border-zinc-800 shadow-sm text-center">
-                            <div class="h-12 w-12 rounded-full bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mx-auto mb-4">
-                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                            </div>
-                            <h3 class="font-bold text-xl text-zinc-900 dark:text-white mb-2 font-outfit">Curfew Hours</h3>
-                            <p class="text-zinc-500 text-sm">10:00 PM to 4:00 AM for minors to ensure safety and security.</p>
+                    <!-- Card 2: Phone & Email -->
+                    <div class="glass-panel p-6 rounded-3xl border border-zinc-200/80 dark:border-zinc-800/80 bento-card-glow space-y-3">
+                        <div class="p-3 bg-teal-500/10 text-teal-600 rounded-2xl w-fit">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                            </svg>
                         </div>
-                        <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md p-6 rounded-3xl border border-zinc-200 dark:border-zinc-800 shadow-sm text-center">
-                            <div class="h-12 w-12 rounded-full bg-emerald-100 dark:bg-emerald-900/40 text-brand flex items-center justify-center mx-auto mb-4">
-                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                            </div>
-                            <h3 class="font-bold text-xl text-zinc-900 dark:text-white mb-2 font-outfit">Waste Segregation</h3>
-                            <p class="text-zinc-500 text-sm">Strict 'No Segregation, No Collection' policy. Biodegradable on Mondays, Non-bio on Thursdays.</p>
-                        </div>
-                        <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md p-6 rounded-3xl border border-zinc-200 dark:border-zinc-800 shadow-sm text-center">
-                            <div class="h-12 w-12 rounded-full bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-500 flex items-center justify-center mx-auto mb-4">
-                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" /></svg>
-                            </div>
-                            <h3 class="font-bold text-xl text-zinc-900 dark:text-white mb-2 font-outfit">Noise Control</h3>
-                            <p class="text-zinc-500 text-sm">Karaoke and loud music prohibited after 10:00 PM to respect resting hours.</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Wave Divider: Ordinances → Places -->
-            <div class="relative z-10 bg-transparent">
-                <svg class="wave-svg" viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-                    <path d="M0,25 C180,60 420,5 720,40 C960,70 1200,10 1440,30 L1440,0 L0,0 Z" class="fill-emerald-100/60 dark:fill-emerald-900/40" />
-                </svg>
-            </div>
-
-            <!-- SECTION 7: Recommended Places -->
-            <section id="places" class="scroll-mt-24 py-8 bg-transparent">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <livewire:recommended-places />
-                </div>
-            </section>
-
-            <!-- Wave Divider: Places → Announcements -->
-            <div class="relative z-10 bg-transparent">
-                <svg class="wave-svg" viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-                    <path d="M0,40 C240,80 480,0 720,55 C960,85 1200,15 1440,45 L1440,80 L0,80 Z" class="fill-emerald-100/60 dark:fill-emerald-900/40" />
-                </svg>
-            </div>
-
-            <!-- SECTION 8: Premium Announcements Feed (Livewire) -->
-            <section id="announcements" class="scroll-mt-24 py-16 bg-emerald-100/60 dark:bg-emerald-900/40">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <livewire:announcements />
-                </div>
-            </section>
-
-            <!-- Wave Divider: Announcements → FAQs -->
-            <div class="relative z-10 bg-transparent">
-                <svg class="wave-svg" viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-                    <path d="M0,25 C180,60 420,5 720,40 C960,70 1200,10 1440,30 L1440,0 L0,0 Z" class="fill-emerald-100/60 dark:fill-emerald-900/40" />
-                </svg>
-            </div>
-
-            <!-- SECTION 9: FAQs -->
-            <section id="faqs" class="scroll-mt-24 py-16 bg-transparent" x-data="{ active: null }">
-                <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-                    <div class="text-center max-w-2xl mx-auto space-y-3">
-                        <span class="text-brand text-lg font-bold uppercase tracking-wider font-outfit">Information</span>
-                        <h2 class="text-5xl font-extrabold tracking-tight font-outfit text-zinc-950 dark:text-white">Frequently Asked Questions</h2>
-                        <p class="text-zinc-500 text-sm leading-relaxed font-light">Quick answers to common questions about barangay services.</p>
+                        <h4 class="font-bold text-lg text-zinc-950 dark:text-white font-outfit">Official Communications</h4>
+                        <p class="text-xs text-zinc-500 leading-relaxed">
+                            Phone: <a href="tel:09123456789" class="text-zinc-800 dark:text-zinc-200 font-medium hover:underline">(0912) 345-6789</a><br>
+                            Email: <a href="mailto:info@barangaysambog.gov.ph" class="text-zinc-800 dark:text-zinc-200 font-medium hover:underline">info@barangaysambog.gov.ph</a>
+                        </p>
+                        <span class="text-xs text-teal-600 dark:text-teal-400 font-bold block pt-1">Secretary Office Desk</span>
                     </div>
 
-                    <div class="space-y-4">
-                        <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm overflow-hidden">
-                            <button @click="active !== 1 ? active = 1 : active = null" class="w-full text-left px-6 py-5 font-bold text-lg text-zinc-900 dark:text-white flex justify-between items-center focus:outline-none hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition">
-                                How can I request a Barangay Clearance?
-                                <svg class="h-5 w-5 text-brand transform transition-transform" :class="{ 'rotate-180': active === 1 }" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
-                            </button>
-                            <div x-show="active === 1" x-transition x-cloak>
-                                <div class="px-6 pb-5 text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed border-t border-zinc-100 dark:border-zinc-800 pt-4 mt-2">
-                                    You can request a Barangay Clearance by logging into your portal account, navigating to the 'Public Services' module, and scheduling a pick-up appointment. Ensure you have a valid ID when claiming it at the Barangay Hall.
-                                </div>
-                            </div>
+                    <!-- Card 3: 24/7 Hotline -->
+                    <div class="p-6 rounded-3xl bg-gradient-to-br from-emerald-900 via-teal-900 to-zinc-900 text-white space-y-3 bento-card-glow flex flex-col justify-between">
+                        <div class="space-y-2">
+                            <span class="px-2.5 py-0.5 bg-red-500/20 text-red-300 border border-red-500/30 rounded text-[10px] font-bold uppercase tracking-wider font-outfit">24/7 Hotline</span>
+                            <h4 class="font-bold text-lg text-white font-outfit">Emergency Response</h4>
+                            <p class="text-xs text-zinc-300 leading-relaxed">For immediate peace, order, or safety emergencies in any Purok zone.</p>
                         </div>
-
-                        <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm overflow-hidden">
-                            <button @click="active !== 2 ? active = 2 : active = null" class="w-full text-left px-6 py-5 font-bold text-lg text-zinc-900 dark:text-white flex justify-between items-center focus:outline-none hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition">
-                                What is the schedule for garbage collection?
-                                <svg class="h-5 w-5 text-brand transform transition-transform" :class="{ 'rotate-180': active === 2 }" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
-                            </button>
-                            <div x-show="active === 2" x-transition x-cloak>
-                                <div class="px-6 pb-5 text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed border-t border-zinc-100 dark:border-zinc-800 pt-4 mt-2">
-                                    Biodegradable waste is collected every Monday and Wednesday morning, while non-biodegradable and recyclable materials are collected on Thursdays. Please strictly follow the 'No Segregation, No Collection' policy.
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm overflow-hidden">
-                            <button @click="active !== 3 ? active = 3 : active = null" class="w-full text-left px-6 py-5 font-bold text-lg text-zinc-900 dark:text-white flex justify-between items-center focus:outline-none hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition">
-                                How do I register my household in the RBI?
-                                <svg class="h-5 w-5 text-brand transform transition-transform" :class="{ 'rotate-180': active === 3 }" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
-                            </button>
-                            <div x-show="active === 3" x-transition x-cloak>
-                                <div class="px-6 pb-5 text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed border-t border-zinc-100 dark:border-zinc-800 pt-4 mt-2">
-                                    Registration for the Registry of Barangay Inhabitants (RBI) is typically done via house-to-house census by our officials. However, new residents can visit the Barangay Hall with a valid ID and proof of residence to register manually.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Wave Divider: FAQs → Contacts -->
-            <div class="relative z-10 bg-transparent">
-                <svg class="wave-svg" viewBox="0 0 1440 30" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-                    <path d="M0,15 C240,30 480,0 720,15 C960,30 1200,0 1440,15" stroke="currentColor" stroke-width="1" class="text-zinc-200 dark:text-zinc-800" fill="none" />
-                </svg>
-            </div>
-
-            <!-- SECTION 8: Important Contact Numbers -->
-            <section id="contacts" class="scroll-mt-24 py-8 bg-transparent">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="text-center max-w-2xl mx-auto space-y-3 mb-6">
-                        <span class="text-brand text-lg font-bold uppercase tracking-wider font-outfit">Get In Touch</span>
-                        <h2 class="text-5xl font-extrabold tracking-tight font-outfit text-zinc-950 dark:text-white">Important Contact Numbers</h2>
-                        <p class="text-zinc-500 text-sm leading-relaxed">Phone numbers for quick access to barangay services and emergency hotlines.</p>
+                        <a href="tel:09123456789" class="inline-flex items-center justify-center px-4 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs rounded-xl transition font-outfit">
+                            📞 Dial Emergency Hotline
+                        </a>
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                        <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm text-center flex flex-col items-center">
-                            <div class="p-3 bg-emerald-500/10 text-brand rounded-full mb-3">
-                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                                </svg>
-                            </div>
-                            <div class="font-bold text-zinc-900 dark:text-white">Barangay Office</div>
-                            <div class="text-brand font-mono mt-2"> 417-8919</div>
-                            <div class="text-xs text-zinc-500 mt-1">Office Hours: 8am–5pm</div>
-                        </div>
-
-                        <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm text-center flex flex-col items-center">
-                            <div class="p-3 bg-emerald-500/10 text-emerald-500 rounded-full mb-3">
-                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                </svg>
-                            </div>
-                            <div class="font-bold text-zinc-900 dark:text-white">Health Hotline</div>
-                            <div class="text-brand font-mono mt-2">+63 917 000 1111</div>
-                            <div class="text-xs text-zinc-500 mt-1">For health concerns & immunization</div>
-                        </div>
-
-                        <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm text-center flex flex-col items-center">
-                            <div class="p-3 bg-red-500/10 text-red-500 rounded-full mb-3">
-                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.618 5.984A11.955 11.955 0 0112 2.944a11.952 11.952 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016zM12 9v2m0 4h.01" />
-                                </svg>
-                            </div>
-                            <div class="font-bold text-zinc-900 dark:text-white">Police / Emergency</div>
-                            <div class="text-brand font-mono mt-2 text-sm flex flex-col gap-1">
-                                <span>911</span>
-                                <span>09985986413 <span class="text-[10px] text-zinc-500 dark:text-zinc-400 font-sans">(PNP Hotline)</span></span>
-                                <span>09092592953 <span class="text-[10px] text-zinc-500 dark:text-zinc-400 font-sans">(PCPL. DIONISIO A. BASTES JR.)</span></span>
-                            </div>
-                            <div class="text-xs text-zinc-500 mt-1">Immediate assistance</div>
-                        </div>
-
-                        <div class="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm text-center flex flex-col items-center">
-                            <div class="p-3 bg-amber-500/10 text-amber-500 rounded-full mb-3">
-                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.966 7.966 0 01-2.343 5.657z" />
-                                </svg>
-                            </div>
-                            <div class="font-bold text-zinc-900 dark:text-white">Fire Department</div>
-                            <div class="text-brand font-mono mt-2">09184767153</div>
-                            <div class="text-xs text-zinc-500 mt-1">Fire & Rescue</div>
-                        </div>
-                    </div>
                 </div>
             </section>
 
         </main>
 
-
-        <!-- FOOTER: Standard Premium Municipal Footer Layout -->
-        <footer class="bg-zinc-100 dark:bg-zinc-950 text-zinc-500 dark:text-zinc-400 py-16 transition-colors duration-300">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-12 text-sm font-light">
-                
-                <!-- Brand Unit -->
-                <div class="space-y-4">
-                    <div class="flex items-center gap-3">
-                        <div class="h-9 w-9 rounded-lg premium-gradient flex items-center justify-center text-white font-black text-lg font-outfit">
-                            BC
-                        </div>
-                        <span class="text-lg font-bold tracking-tight text-zinc-900 dark:text-white font-outfit">Brgy. Sambog, Corella, Bohol</span>
+        <!-- Footer -->
+        <footer class="border-t border-zinc-200/80 dark:border-zinc-800/80 bg-zinc-100/50 dark:bg-zinc-900/50 py-12 text-zinc-600 dark:text-zinc-400 text-xs">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="space-y-3">
+                    <div class="flex items-center gap-2 font-bold text-zinc-950 dark:text-white font-outfit text-base">
+                        <div class="h-6 w-6 rounded-lg bg-emerald-600 text-white flex items-center justify-center text-xs font-black">BS</div>
+                        <span>Brgy. Sambog</span>
                     </div>
-                    <p class="text-xs text-zinc-500 dark:text-zinc-500 leading-relaxed font-light">
-                        Official inhabitant demographic registry and secure pick-up scheduling workspace portal domain.
-                    </p>
+                    <p class="text-zinc-500 leading-relaxed">Official Municipal Inhabitant Portal of Barangay Sambog, Municipality of Corella, Province of Bohol.</p>
                 </div>
-
-                <!-- Quick Navigation Links -->
-                <div class="space-y-4">
-                    <h5 class="text-zinc-900 dark:text-white font-bold font-outfit text-xs uppercase tracking-wider">Site Map</h5>
-                    <ul class="space-y-2 text-xs">
-                        <li><a href="#about" class="hover:text-zinc-900 dark:hover:text-white transition">About Us</a></li>
-                        <li><a href="#services" class="hover:text-zinc-900 dark:hover:text-white transition">Public Services</a></li>
-                        <li><a href="#demographics" class="hover:text-zinc-900 dark:hover:text-white transition">Inhabitants Statistics</a></li>
-                        <li><a href="#officials" class="hover:text-zinc-900 dark:hover:text-white transition">Barangay Council</a></li>
-                        <li><a href="#projects" class="hover:text-zinc-900 dark:hover:text-white transition">Projects</a></li>
-                        <li><a href="#ordinances" class="hover:text-zinc-900 dark:hover:text-white transition">Ordinances</a></li>
-                        <li><a href="#faqs" class="hover:text-zinc-900 dark:hover:text-white transition">FAQs</a></li>
-                        <li><a href="{{ route('holidays') }}" class="hover:text-zinc-900 dark:hover:text-white transition">National Holidays</a></li>
+                
+                <div>
+                    <h5 class="font-bold text-zinc-950 dark:text-white font-outfit mb-3">Quick Navigation</h5>
+                    <ul class="space-y-2">
+                        <li><a href="#about" class="hover:text-emerald-600 transition">About Us</a></li>
+                        <li><a href="#services" class="hover:text-emerald-600 transition">Public Services</a></li>
+                        <li><a href="#demographics" class="hover:text-emerald-600 transition">Inhabitant Statistics</a></li>
+                        <li><a href="#officials" class="hover:text-emerald-600 transition">Local Council</a></li>
+                        <li><a href="#projects" class="hover:text-emerald-600 transition">Projects</a></li>
+                        <li><a href="#ordinances" class="hover:text-emerald-600 transition">Ordinances</a></li>
+                        <li><a href="#places" class="hover:text-emerald-600 transition">Places</a></li>
+                        <li><a href="#announcements" class="hover:text-emerald-600 transition">Announcements</a></li>
                     </ul>
                 </div>
 
-                <!-- Operating Hours -->
-                <div class="space-y-4">
-                    <h5 class="text-zinc-900 dark:text-white font-bold font-outfit text-xs uppercase tracking-wider">Barangay Office Hours</h5>
-                    <ul class="space-y-2 text-xs text-zinc-500">
-                        <li>Monday - Friday: <span class="text-zinc-700 dark:text-zinc-300 font-medium">8:00 AM - 5:00 PM</span></li>
-                        <li>Saturday - Sunday: <span class="text-zinc-700 dark:text-zinc-300 font-medium">Closed</span></li>
-                        <li>National Holidays: <span class="text-zinc-700 dark:text-zinc-300 font-medium">Closed</span></li>
-                    </ul>
+                <div>
+                    <h5 class="font-bold text-zinc-950 dark:text-white font-outfit mb-3">Operating Hours</h5>
+                    <p class="text-zinc-500 leading-relaxed">Monday – Friday<br>8:00 AM – 5:00 PM<br>(Closed on Public Holidays)</p>
                 </div>
 
-                <!-- Contacts -->
-                <div class="space-y-4">
-                    <h5 class="text-zinc-900 dark:text-white font-bold font-outfit text-xs uppercase tracking-wider">Contact Details</h5>
-                    <ul class="space-y-2 text-xs text-zinc-500">
-                        <li>Email: <span class="text-zinc-700 dark:text-zinc-300 font-medium">sambogsupport@corella.gov</span></li>
-                        <li>Hotline: <span class="text-zinc-700 dark:text-zinc-300 font-medium">+63 912 345 6789</span></li>
-                        <li>Address: <span class="text-zinc-700 dark:text-zinc-300 font-medium">Brgy. Sambog, Corella, Bohol</span></li>
-                    </ul>
+                <div>
+                    <h5 class="font-bold text-zinc-950 dark:text-white font-outfit mb-3">Location</h5>
+                    <p class="text-zinc-500 leading-relaxed">Barangay Hall, Sambog, Corella, Bohol 6337, Philippines</p>
                 </div>
-
             </div>
 
-            <!-- Legals -->
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-zinc-200 dark:border-zinc-900 mt-12 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-400 dark:text-zinc-600">
-                <div>
-                    &copy; {{ date('Y') }} Brgy. Sambog, Corella, Bohol Municipal Government. All rights reserved.
-                </div>
-                <div class="flex gap-6">
-                    <a href="#" class="hover:text-zinc-700 dark:hover:text-zinc-400 transition">Privacy Policy</a>
-                    <a href="#" class="hover:text-zinc-700 dark:hover:text-zinc-400 transition">Terms of Governance</a>
-                </div>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pt-6 border-t border-zinc-200/60 dark:border-zinc-800/60 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <p>&copy; {{ date('Y') }} Barangay Sambog, Corella, Bohol. All rights reserved.</p>
+                <p class="text-zinc-400">Powered by Modern Civic Systems</p>
             </div>
         </footer>
 
