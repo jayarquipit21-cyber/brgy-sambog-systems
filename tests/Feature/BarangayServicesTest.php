@@ -368,4 +368,15 @@ class BarangayServicesTest extends TestCase
             ->call('book')
             ->assertHasErrors(['rental_date' => 'after_or_equal']);
     }
+
+    public function test_rental_date_picker_is_rendered_for_rental_category(): void
+    {
+        $user = User::factory()->create(['role' => 'resident']);
+        $this->actingAs($user);
+
+        Livewire::test(BookAppointment::class)
+            ->set('appointment_category', 'rental')
+            ->assertSee('Preferred Rental / Event Date')
+            ->assertSeeHtml('id="rental_date"');
+    }
 }

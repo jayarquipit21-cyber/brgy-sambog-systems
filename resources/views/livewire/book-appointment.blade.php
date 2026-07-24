@@ -90,11 +90,28 @@
             @endif
         </div>
 
+        <!-- Preferred Rental / Event Date Picker (Rental Category Only) -->
+        @if($appointment_category === 'rental')
+            <div>
+                <label for="rental_date" class="block text-xs font-bold uppercase tracking-wider text-zinc-700 dark:text-zinc-300 mb-1.5">
+                    Preferred Rental / Event Date <span class="text-zinc-400 font-normal lowercase">(optional)</span>
+                </label>
+                <input 
+                    type="date" 
+                    id="rental_date" 
+                    wire:model="rental_date"
+                    min="{{ date('Y-m-d') }}"
+                    class="w-full rounded-xl border border-zinc-200 dark:border-zinc-700/80 bg-white dark:bg-zinc-800/90 px-3.5 py-2.5 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 transition shadow-sm focus:border-amber-500 focus:ring-amber-500/20 cursor-pointer"
+                />
+                @error('rental_date') <p class="text-red-500 text-[11px] mt-1 font-medium">{{ $message }}</p> @enderror
+            </div>
+        @endif
+
         <!-- Additional Remarks & Event / Purpose Details -->
         <div>
             <label for="purpose_details" class="block text-xs font-bold uppercase tracking-wider text-zinc-700 dark:text-zinc-300 mb-1.5">
                 @if($appointment_category === 'rental')
-                    Event Date, Quantity & Rental Remarks @if(str_contains($document_type, 'Other')) <span class="text-amber-500">*</span> @else <span class="text-zinc-400 font-normal lowercase">(optional)</span> @endif
+                    Quantity & Rental Remarks @if(str_contains($document_type, 'Other')) <span class="text-amber-500">*</span> @else <span class="text-zinc-400 font-normal lowercase">(optional)</span> @endif
                 @else
                     Purpose & Additional Remarks @if(str_contains($document_type, 'Other')) <span class="text-emerald-500">*</span> @else <span class="text-zinc-400 font-normal lowercase">(optional)</span> @endif
                 @endif
