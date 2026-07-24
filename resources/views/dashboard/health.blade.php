@@ -137,7 +137,7 @@
             </div>
         </div>
 
-        <div class="relative pt-4 flex flex-col md:flex-row items-center gap-8">
+        <div class="relative pt-4 flex flex-col md:flex-row items-center gap-8" data-chart-init="initGenderChartHealth">
             <div class="w-48 h-48 relative">
                 <canvas id="genderChartHealth" class="w-full h-full" aria-label="Pie chart showing Gender Distribution in Health Registry" role="img"></canvas>
             </div>
@@ -169,7 +169,7 @@
         </div>
 
         <script>
-            (function () {
+            window.initGenderChartHealth = function () {
                 const origLabels = @json($genderLabels ?? []);
                 const origValues = @json($genderValues ?? []);
                 
@@ -188,61 +188,62 @@
                     }
                 });
 
-                const ctx = document.getElementById('genderChartHealth');
-                if (!ctx) return;
+                window.renderChartWhenReady('genderChartHealth', function () {
+                    let legendHtml = '';
+                    const colors = ['bg-blue-500', 'bg-pink-500', 'bg-emerald-500'];
+                    const total = values.reduce((a, b) => a + b, 0);
+                    labels.forEach((label, index) => {
+                        const val = values[index];
+                        const pct = total > 0 ? (Math.floor((val / total) * 10000) / 100).toFixed(2) : '0.00';
+                        const colorClass = colors[index % colors.length];
+                        legendHtml += `
+                            <div class="flex items-center justify-between p-3 bg-zinc-50 dark:bg-zinc-800/40 rounded-xl border border-zinc-100 dark:border-zinc-700/50">
+                                <div class="flex items-center gap-3">
+                                    <span class="w-3.5 h-3.5 rounded-full ${colorClass}"></span>
+                                    <span class="text-sm font-bold text-zinc-700 dark:text-zinc-300">${label || 'Not Specified'}</span>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-sm font-black text-zinc-900 dark:text-white">${val.toLocaleString()}</span>
+                                    <span class="text-xs text-zinc-550 dark:text-zinc-400 ml-1.5">(${pct}%)</span>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    const legendEl = document.getElementById('gender-legend-health');
+                    if (legendEl) legendEl.innerHTML = legendHtml;
 
-                const chart = new Chart(ctx, {
-                    type: 'pie',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            data: values,
-                            backgroundColor: [
-                                'rgba(59, 130, 246, 0.85)', // Blue
-                                'rgba(236, 72, 153, 0.85)', // Pink
-                                'rgba(16, 185, 129, 0.85)'  // Green
-                            ],
-                            borderColor: [
-                                'rgba(29, 78, 216, 0.9)',
-                                'rgba(190, 24, 93, 0.9)',
-                                'rgba(6, 95, 70, 0.9)'
-                            ],
-                            borderWidth: 1,
-                            hoverOffset: 4
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        rotation: 180,
-                        plugins: {
-                            legend: { display: false }
+                    return {
+                        type: 'pie',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                data: values,
+                                backgroundColor: [
+                                    'rgba(59, 130, 246, 0.85)', // Blue
+                                    'rgba(236, 72, 153, 0.85)', // Pink
+                                    'rgba(16, 185, 129, 0.85)'  // Green
+                                ],
+                                borderColor: [
+                                    'rgba(29, 78, 216, 0.9)',
+                                    'rgba(190, 24, 93, 0.9)',
+                                    'rgba(6, 95, 70, 0.9)'
+                                ],
+                                borderWidth: 1,
+                                hoverOffset: 4
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            rotation: 180,
+                            plugins: {
+                                legend: { display: false }
+                            }
                         }
-                    }
+                    };
                 });
-
-                let legendHtml = '';
-                const colors = ['bg-blue-500', 'bg-pink-500', 'bg-emerald-500'];
-                const total = values.reduce((a, b) => a + b, 0);
-                labels.forEach((label, index) => {
-                    const val = values[index];
-                    const pct = total > 0 ? (Math.floor((val / total) * 10000) / 100).toFixed(2) : '0.00';
-                    const colorClass = colors[index % colors.length];
-                    legendHtml += `
-                        <div class="flex items-center justify-between p-3 bg-zinc-50 dark:bg-zinc-800/40 rounded-xl border border-zinc-100 dark:border-zinc-700/50">
-                            <div class="flex items-center gap-3">
-                                <span class="w-3.5 h-3.5 rounded-full ${colorClass}"></span>
-                                <span class="text-sm font-bold text-zinc-700 dark:text-zinc-300">${label || 'Not Specified'}</span>
-                            </div>
-                            <div class="text-right">
-                                <span class="text-sm font-black text-zinc-900 dark:text-white">${val.toLocaleString()}</span>
-                                <span class="text-xs text-zinc-550 dark:text-zinc-400 ml-1.5">(${pct}%)</span>
-                            </div>
-                        </div>
-                    `;
-                });
-                document.getElementById('gender-legend-health').innerHTML = legendHtml;
-            })();
+            };
+            window.initGenderChartHealth();
         </script>
     </div>
 
@@ -260,7 +261,7 @@
             </div>
         </div>
 
-        <div class="relative flex-1 w-full flex flex-col gap-6">
+        <div class="relative flex-1 w-full flex flex-col gap-6" data-chart-init="initAgeChartHealth">
             <div class="w-full min-h-[220px] relative">
                 <canvas id="ageChartHealth" class="absolute inset-0 w-full h-full" aria-label="Bar chart showing Age Demographics" role="img"></canvas>
             </div>
@@ -292,94 +293,95 @@
         </div>
 
         <script>
-            (function () {
+            window.initAgeChartHealth = function () {
                 const labels = @json($ageLabels ?? []);
                 const values = @json($ageValues ?? []);
 
-                const ctx = document.getElementById('ageChartHealth');
-                if (!ctx) return;
+                window.renderChartWhenReady('ageChartHealth', function () {
+                    const isDark = document.documentElement.classList.contains('dark');
+                    const labelColor = isDark ? '#a1a1aa' : '#71717a';
+                    const gridColor = isDark ? 'rgba(63, 63, 70, 0.4)' : 'rgba(228, 228, 231, 0.6)';
 
-                const isDark = document.documentElement.classList.contains('dark');
-                const labelColor = isDark ? '#a1a1aa' : '#71717a';
-                const gridColor = isDark ? 'rgba(63, 63, 70, 0.4)' : 'rgba(228, 228, 231, 0.6)';
+                    let legendHtml = '';
+                    const colors = ['bg-amber-500', 'bg-emerald-500', 'bg-blue-500', 'bg-violet-500', 'bg-pink-500'];
+                    const total = values.reduce((a, b) => a + b, 0);
+                    labels.forEach((label, index) => {
+                        const val = values[index];
+                        const pct = total > 0 ? (Math.floor((val / total) * 10000) / 100).toFixed(2) : '0.00';
+                        const colorClass = colors[index % colors.length];
+                        legendHtml += `
+                            <div class="flex items-center justify-between p-2.5 bg-zinc-50 dark:bg-zinc-800/40 rounded-xl border border-zinc-100 dark:border-zinc-700/50">
+                                <div class="flex items-center gap-2.5">
+                                    <span class="w-3 h-3 rounded-full ${colorClass}"></span>
+                                    <span class="text-xs font-bold text-zinc-700 dark:text-zinc-300">${label || 'Not Specified'}</span>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-xs font-black text-zinc-900 dark:text-white">${val.toLocaleString()}</span>
+                                    <span class="text-[10px] text-zinc-550 dark:text-zinc-400 ml-1">(${pct}%)</span>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    const legendEl = document.getElementById('age-legend-health');
+                    if (legendEl) legendEl.innerHTML = legendHtml;
 
-                const chart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: 'Residents',
-                            data: values,
-                            backgroundColor: [
-                                'rgba(245, 158, 11, 0.85)', // Amber
-                                'rgba(16, 185, 129, 0.85)', // Emerald
-                                'rgba(59, 130, 246, 0.85)', // Blue
-                                'rgba(139, 92, 246, 0.85)', // Violet
-                                'rgba(236, 72, 153, 0.85)'  // Pink
-                            ],
-                            borderColor: [
-                                'rgba(217, 119, 6, 0.9)',
-                                'rgba(5, 150, 105, 0.9)',
-                                'rgba(37, 99, 235, 0.9)',
-                                'rgba(124, 58, 237, 0.9)',
-                                'rgba(219, 39, 119, 0.9)'
-                            ],
-                            borderWidth: 1,
-                            borderRadius: 6,
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                            y: { 
-                                beginAtZero: true,
-                                grid: { color: gridColor },
-                                ticks: { color: labelColor, font: { family: 'Instrument Sans' } }
-                            },
-                            x: {
-                                grid: { display: false },
-                                ticks: { color: labelColor, font: { family: 'Instrument Sans' } }
-                            }
+                    return {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Residents',
+                                data: values,
+                                backgroundColor: [
+                                    'rgba(245, 158, 11, 0.85)', // Amber
+                                    'rgba(16, 185, 129, 0.85)', // Emerald
+                                    'rgba(59, 130, 246, 0.85)', // Blue
+                                    'rgba(139, 92, 246, 0.85)', // Violet
+                                    'rgba(236, 72, 153, 0.85)'  // Pink
+                                ],
+                                borderColor: [
+                                    'rgba(217, 119, 6, 0.9)',
+                                    'rgba(5, 150, 105, 0.9)',
+                                    'rgba(37, 99, 235, 0.9)',
+                                    'rgba(124, 58, 237, 0.9)',
+                                    'rgba(219, 39, 119, 0.9)'
+                                ],
+                                borderWidth: 1,
+                                borderRadius: 6,
+                            }]
                         },
-                        plugins: {
-                            legend: { display: false },
-                            tooltip: {
-                                callbacks: {
-                                    label: function(context) {
-                                        const val = context.raw || 0;
-                                        const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
-                                        const pct = total > 0 ? (Math.floor((val / total) * 10000) / 100).toFixed(2) : '0.00';
-                                        return ` ${context.dataset.label || ''}: ${val.toLocaleString()} (${pct}%)`;
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                y: { 
+                                    beginAtZero: true,
+                                    grid: { color: gridColor },
+                                    ticks: { color: labelColor, font: { family: 'Instrument Sans' } }
+                                },
+                                x: {
+                                    grid: { display: false },
+                                    ticks: { color: labelColor, font: { family: 'Instrument Sans' } }
+                                }
+                            },
+                            plugins: {
+                                legend: { display: false },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            const val = context.raw || 0;
+                                            const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                            const pct = total > 0 ? (Math.floor((val / total) * 10000) / 100).toFixed(2) : '0.00';
+                                            return ` ${context.dataset.label || ''}: ${val.toLocaleString()} (${pct}%)`;
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
+                    };
                 });
-
-                let legendHtml = '';
-                const colors = ['bg-amber-500', 'bg-emerald-500', 'bg-blue-500', 'bg-violet-500', 'bg-pink-500'];
-                const total = values.reduce((a, b) => a + b, 0);
-                labels.forEach((label, index) => {
-                    const val = values[index];
-                    const pct = total > 0 ? (Math.floor((val / total) * 10000) / 100).toFixed(2) : '0.00';
-                    const colorClass = colors[index % colors.length];
-                    legendHtml += `
-                        <div class="flex items-center justify-between p-2.5 bg-zinc-50 dark:bg-zinc-800/40 rounded-xl border border-zinc-100 dark:border-zinc-700/50">
-                            <div class="flex items-center gap-2.5">
-                                <span class="w-3 h-3 rounded-full ${colorClass}"></span>
-                                <span class="text-xs font-bold text-zinc-700 dark:text-zinc-300">${label || 'Not Specified'}</span>
-                            </div>
-                            <div class="text-right">
-                                <span class="text-xs font-black text-zinc-900 dark:text-white">${val.toLocaleString()}</span>
-                                <span class="text-[10px] text-zinc-550 dark:text-zinc-400 ml-1">(${pct}%)</span>
-                            </div>
-                        </div>
-                    `;
-                });
-                document.getElementById('age-legend-health').innerHTML = legendHtml;
-            })();
+            };
+            window.initAgeChartHealth();
         </script>
     </div>
 </div>
