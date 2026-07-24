@@ -95,7 +95,9 @@ class BarangayServicesTest extends TestCase
         $component = new BookAppointment;
         $validator = Validator::make(
             [
-                'purpose' => 'Barangay Clearance Request',
+                'appointment_category' => 'document',
+                'document_type' => 'Barangay Clearance',
+                'purpose_details' => 'For job application',
             ],
             $component->rules()
         );
@@ -107,16 +109,17 @@ class BarangayServicesTest extends TestCase
 
         // Confirm booking works through Livewire component logic
         Livewire::test(BookAppointment::class)
-            ->set('purpose', 'Barangay Clearance Request')
+            ->set('appointment_category', 'document')
+            ->set('document_type', 'Barangay Clearance')
+            ->set('purpose_details', 'For job application')
             ->call('book')
             ->assertHasNoErrors();
 
         $this->assertDatabaseHas('appointments', [
             'user_id' => $user->id,
-            'purpose' => 'Barangay Clearance Request',
+            'purpose' => 'Barangay Clearance — For job application',
             'status' => 'pending',
             'appointment_date' => null,
-            'appointment_time' => null,
         ]);
     }
 
@@ -327,5 +330,42 @@ class BarangayServicesTest extends TestCase
                 'first_name', 'last_name', 'birthdate', 'sex', 'civil_status',
                 'email', 'password',
             ]);
+    }
+
+    public function test_residents_can_book_rental_with_optional_date(): void
+    {
+        $user = User::factory()->create(['role' => 'resident']);
+        $this->actingAs($user);
+
+        $rentalDate = now()->addDays(5)->toDateString();
+
+        Livewire::test(BookAppointment::class)
+            ->set('appointment_category', 'rental')
+            ->set('document_type', 'Plastic Monoblock Chairs Rental')
+            ->set('purpose_details', 'Need 30 chairs for birthday party')
+            ->set('rental_date', $rentalDate)
+            ->call('book')
+            ->assertHasNoErrors();
+
+        $appointment = Appointment::where('user_id', $user->id)->first();
+        $this->assertNotNull($appointment);
+        $this->assertEquals('[Rental Service] Plastic Monoblock Chairs Rental — Need 30 chairs for birthday party', $appointment->purpose);
+        $this->assertEquals('pending', $appointment->status);
+        $this->assertEquals($rentalDate, $appointment->appointment_date->toDateString());
+    }
+
+    public function test_rental_date_validation_prevents_past_dates(): void
+    {
+        $user = User::factory()->create(['role' => 'resident']);
+        $this->actingAs($user);
+
+        $pastDate = now()->subDays(2)->toDateString();
+
+        Livewire::test(BookAppointment::class)
+            ->set('appointment_category', 'rental')
+            ->set('document_type', 'Plastic Monoblock Chairs Rental')
+            ->set('rental_date', $pastDate)
+            ->call('book')
+            ->assertHasErrors(['rental_date' => 'after_or_equal']);
     }
 }

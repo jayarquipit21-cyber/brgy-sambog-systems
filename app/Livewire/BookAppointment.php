@@ -20,6 +20,7 @@ class BookAppointment extends Component
     public string $document_type = '';
     public string $purpose_details = '';
     public string $purpose = '';
+    public ?string $rental_date = null;
 
     public static array $availableDocuments = [
         'Barangay Clearance' => 'Official clearance for employment, IDs, or legal requirements',
@@ -49,12 +50,14 @@ class BookAppointment extends Component
             'appointment_category' => 'required|in:document,rental',
             'document_type' => 'required|string',
             'purpose_details' => 'nullable|string|max:500',
+            'rental_date' => 'nullable|date|after_or_equal:today',
         ];
     }
 
     public function updatedAppointmentCategory(): void
     {
         $this->document_type = '';
+        $this->rental_date = null;
     }
 
     public function book(): void
@@ -80,11 +83,11 @@ class BookAppointment extends Component
             'user_id' => Auth::id(),
             'purpose' => $finalPurpose,
             'status' => 'pending',
-            'appointment_date' => null,
+            'appointment_date' => ($isRental && !empty($this->rental_date)) ? $this->rental_date : null,
             'appointment_time' => null,
         ]);
 
-        $this->reset(['document_type', 'purpose_details', 'purpose']);
+        $this->reset(['document_type', 'purpose_details', 'purpose', 'rental_date']);
 
         // Notify all admins about the new request
         $admins = User::where('role', 'admin')->where('id', '!=', Auth::id())->get();
