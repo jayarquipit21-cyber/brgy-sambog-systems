@@ -1,29 +1,133 @@
-<div class="bg-white dark:bg-zinc-900 shadow-md rounded-xl p-6 border border-zinc-200 dark:border-zinc-800">
-    <div class="mb-4">
-        <flux:heading size="lg" level="2" class="text-zinc-900 dark:text-white font-semibold">Request Document Redemption</flux:heading>
-        <flux:text variant="subtle" class="text-xs text-zinc-500 dark:text-zinc-400">Specify the documents you need. Once reviewed and fully signed by the Kapitan, you will be scheduled a set date for pickup.</flux:text>
+<div class="bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-2xl p-6 shadow-lg space-y-4 font-outfit">
+    <div class="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
+        <div class="flex items-center gap-3">
+            <div class="p-2.5 @if($appointment_category === 'rental') bg-amber-500/10 text-amber-600 dark:text-amber-400 @else bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 @endif rounded-xl transition-colors duration-200" aria-hidden="true">
+                @if($appointment_category === 'rental')
+                    <flux:icon name="building-office" class="size-5" />
+                @else
+                    <flux:icon name="document-text" class="size-5" />
+                @endif
+            </div>
+            <div>
+                <h3 class="text-base font-bold text-zinc-900 dark:text-white font-outfit">Barangay Public Services Request</h3>
+                <p class="text-[11px] text-zinc-500 font-light">Appoint official documents or reserve barangay rental facilities & equipment</p>
+            </div>
+        </div>
     </div>
 
     <form wire:submit="book" class="space-y-4">
-        <!-- Purpose / Document Details -->
+
+        <!-- Category Dropdown / Segmented Toggle -->
         <div>
-            <label for="purpose" class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Required Document(s) & Purpose</label>
-            <textarea 
-                 id="purpose"
-                 wire:model="purpose"
-                 rows="4"
-                 placeholder="e.g. Requesting 1 copy of Barangay Clearance and 1 copy of Certificate of Indigency for job application purposes."
-                 class="w-full rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-2 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand text-sm"
-                 required
-            ></textarea>
-            @error('purpose') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+            <label for="appointment_category" class="block text-xs font-bold uppercase tracking-wider text-zinc-700 dark:text-zinc-300 mb-1.5">
+                Service Type / Category <span class="text-emerald-500">*</span>
+            </label>
+            <div class="grid grid-cols-2 gap-2.5 p-1 bg-zinc-100 dark:bg-zinc-800/80 rounded-xl border border-zinc-200/60 dark:border-zinc-700/60">
+                <button 
+                    type="button"
+                    wire:click="$set('appointment_category', 'document')"
+                    class="flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-bold transition-all duration-200 @if($appointment_category === 'document') bg-white dark:bg-zinc-900 text-emerald-600 dark:text-emerald-400 shadow-sm border border-zinc-200/80 dark:border-zinc-700 @else text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white @endif"
+                >
+                    <flux:icon name="document-text" class="size-3.5" />
+                    <span>Official Documents</span>
+                </button>
+
+                <button 
+                    type="button"
+                    wire:click="$set('appointment_category', 'rental')"
+                    class="flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-bold transition-all duration-200 @if($appointment_category === 'rental') bg-white dark:bg-zinc-900 text-amber-600 dark:text-amber-400 shadow-sm border border-zinc-200/80 dark:border-zinc-700 @else text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white @endif"
+                >
+                    <flux:icon name="building-office" class="size-3.5" />
+                    <span>Rental Services & Facilities</span>
+                </button>
+            </div>
         </div>
 
-        <!-- Submit -->
-        <div class="flex justify-end pt-2">
-            <flux:button id="book_submit" variant="primary" type="submit" class="bg-brand hover:bg-brand-dark text-white py-2 px-4 rounded-lg font-medium text-sm transition shadow-sm">
-                Submit Request
+        <!-- Item Dropdown Select (Documents vs Rentals) -->
+        <div>
+            <label for="document_type" class="block text-xs font-bold uppercase tracking-wider text-zinc-700 dark:text-zinc-300 mb-1.5">
+                @if($appointment_category === 'rental')
+                    Select Rental Service / Facility <span class="text-amber-500">*</span>
+                @else
+                    Select Barangay Document <span class="text-emerald-500">*</span>
+                @endif
+            </label>
+            <div class="relative">
+                <select 
+                    id="document_type" 
+                    wire:model.live="document_type"
+                    class="w-full rounded-xl border border-zinc-200 dark:border-zinc-700/80 bg-white dark:bg-zinc-800/90 px-3.5 py-2.5 text-xs font-bold text-zinc-900 dark:text-white focus:outline-none focus:ring-2 transition shadow-sm cursor-pointer @if($appointment_category === 'rental') focus:border-amber-500 focus:ring-amber-500/20 @else focus:border-emerald-500 focus:ring-emerald-500/20 @endif"
+                    required
+                >
+                    @if($appointment_category === 'rental')
+                        <option value="" disabled selected>-- Choose Rental Equipment or Facility --</option>
+                        @foreach(\App\Livewire\BookAppointment::$availableRentals as $rental => $desc)
+                            <option value="{{ $rental }}" class="py-1">{{ $rental }}</option>
+                        @endforeach
+                    @else
+                        <option value="" disabled selected>-- Choose Barangay Document --</option>
+                        @foreach(\App\Livewire\BookAppointment::$availableDocuments as $doc => $desc)
+                            <option value="{{ $doc }}" class="py-1">{{ $doc }}</option>
+                        @endforeach
+                    @endif
+                </select>
+            </div>
+            @error('document_type') <p class="text-red-500 text-[11px] mt-1 font-medium">{{ $message }}</p> @enderror
+
+            <!-- Selected Item Description Helper Badge -->
+            @php
+                $itemDict = ($appointment_category === 'rental') 
+                    ? \App\Livewire\BookAppointment::$availableRentals 
+                    : \App\Livewire\BookAppointment::$availableDocuments;
+            @endphp
+            @if($document_type && isset($itemDict[$document_type]))
+                <div class="mt-2.5 p-2.5 rounded-xl flex items-start gap-2.5 animate-fadeIn border @if($appointment_category === 'rental') bg-amber-50/70 dark:bg-amber-950/20 border-amber-200/60 dark:border-amber-800/40 @else bg-emerald-50/70 dark:bg-emerald-950/20 border-emerald-200/60 dark:border-emerald-800/40 @endif">
+                    <flux:icon name="information-circle" class="size-4 shrink-0 mt-0.5 @if($appointment_category === 'rental') text-amber-600 dark:text-amber-400 @else text-emerald-600 dark:text-emerald-400 @endif" aria-hidden="true" />
+                    <div class="text-[11px] @if($appointment_category === 'rental') text-amber-900/80 dark:text-amber-300 @else text-emerald-900/80 dark:text-emerald-300 @endif">
+                        <strong class="font-bold">{{ $document_type }}:</strong> {{ $itemDict[$document_type] }}
+                    </div>
+                </div>
+            @endif
+        </div>
+
+        <!-- Additional Remarks & Event / Purpose Details -->
+        <div>
+            <label for="purpose_details" class="block text-xs font-bold uppercase tracking-wider text-zinc-700 dark:text-zinc-300 mb-1.5">
+                @if($appointment_category === 'rental')
+                    Event Date, Quantity & Rental Remarks @if(str_contains($document_type, 'Other')) <span class="text-amber-500">*</span> @else <span class="text-zinc-400 font-normal lowercase">(optional)</span> @endif
+                @else
+                    Purpose & Additional Remarks @if(str_contains($document_type, 'Other')) <span class="text-emerald-500">*</span> @else <span class="text-zinc-400 font-normal lowercase">(optional)</span> @endif
+                @endif
+            </label>
+            <textarea 
+                 id="purpose_details"
+                 wire:model="purpose_details"
+                 rows="3"
+                 placeholder="@if($appointment_category === 'rental') e.g. Requesting 50 monoblock chairs and 2 tents for a family event at Purok 2 on Saturday, Aug 15. @else e.g. For employment application at ABC Company, or medical financial assistance at Bohol Doctors Hospital. @endif"
+                 class="w-full rounded-xl border border-zinc-200 dark:border-zinc-700/80 bg-white dark:bg-zinc-800/90 px-3.5 py-2.5 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 transition shadow-sm @if($appointment_category === 'rental') focus:border-amber-500 focus:ring-amber-500/20 @else focus:border-emerald-500 focus:ring-emerald-500/20 @endif"
+                 @if(str_contains($document_type, 'Other')) required @endif
+            ></textarea>
+            @error('purpose_details') <p class="text-red-500 text-[11px] mt-1 font-medium">{{ $message }}</p> @enderror
+        </div>
+
+        <!-- Submit Button -->
+        <div class="flex items-center justify-between pt-2 border-t border-zinc-100 dark:border-zinc-800/80">
+            <span class="text-[10px] text-zinc-400">
+                @if($appointment_category === 'rental')
+                    Barangay Sambog facility & equipment booking
+                @else
+                    Official document request for Barangay Sambog
+                @endif
+            </span>
+            <flux:button id="book_submit" variant="primary" type="submit" class="font-bold py-2 px-4 rounded-xl text-xs shadow-md transition-all duration-200 hover:-translate-y-0.5 text-white @if($appointment_category === 'rental') bg-amber-600 hover:bg-amber-700 @else bg-emerald-600 hover:bg-emerald-700 @endif">
+                @if($appointment_category === 'rental')
+                    Submit Rental Request
+                @else
+                    Submit Document Request
+                @endif
             </flux:button>
         </div>
     </form>
 </div>
+
+

@@ -212,6 +212,9 @@
     <!-- Right Column: Appointments + Document History + Announcements -->
     <div class="flex flex-col gap-6">
 
+        <!-- Document Request Component with Dropdown Selection -->
+        <livewire:book-appointment />
+
         <!-- Upcoming Pickup Slots -->
         <div class="bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-2xl p-6 shadow-lg space-y-4 card-glow-household">
             <div class="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
