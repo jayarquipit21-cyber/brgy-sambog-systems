@@ -9,20 +9,30 @@ use Livewire\Component;
 class ManageBlotters extends Component
 {
     public string $search = '';
+
     public string $statusFilter = '';
 
     // Create / Edit modal state
     public bool $showFormModal = false;
+
     public ?int $editingId = null;
 
     public string $complainant_name = '';
+
     public string $respondent_name = '';
+
     public string $incident_type = '';
+
     public string $incident_date = '';
+
     public string $incident_location = '';
+
     public string $narrative = '';
+
     public string $status = 'Pending';
+
     public string $hearing_date = '';
+
     public string $hearing_time = '09:00 AM';
 
     public function create()
@@ -65,7 +75,7 @@ class ManageBlotters extends Component
 
         $hearingDateTime = null;
         if ($this->hearing_date) {
-            $hearingDateTime = date('Y-m-d H:i:s', strtotime($this->hearing_date . ' ' . $this->hearing_time));
+            $hearingDateTime = date('Y-m-d H:i:s', strtotime($this->hearing_date.' '.$this->hearing_time));
         }
 
         Blotter::updateOrCreate(
@@ -101,9 +111,9 @@ class ManageBlotters extends Component
         }
 
         if ($this->search) {
-            $query->where(function($q) {
+            $query->where(function ($q) {
                 $q->where('complainant_name', 'like', '%'.$this->search.'%')
-                  ->orWhere('respondent_name', 'like', '%'.$this->search.'%');
+                    ->orWhere('respondent_name', 'like', '%'.$this->search.'%');
             });
         }
 

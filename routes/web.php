@@ -1,10 +1,12 @@
 <?php
 
+use App\Livewire\CompleteProfile;
 use App\Models\Announcement;
 use App\Models\Appointment;
 use App\Models\Household;
 use App\Models\Resident;
 use App\Services\HolidaysService;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -32,70 +34,25 @@ Route::middleware(['auth', 'verified'])->group(function () {
         $user = auth()->user();
         $data = [];
 
-            if ($user->isAdmin()) {
-                $data['totalHouseholds'] = Household::count();
-                $data['totalResidents'] = Resident::approved()->count();
-                $data['pendingAppointments'] = Appointment::where('status', 'pending')->count();
-                $data['recentAppointments'] = Appointment::with('user')->latest()->take(5)->get();
-
-                // Compute residents per purok (joins households -> residents)
-                $purokCounts = \Illuminate\Support\Facades\DB::table('households')
-                    ->join('residents', function ($join) {
-                        $join->on('households.id', '=', 'residents.household_id')
-                             ->where('residents.registration_status', '=', 'approved');
-                    })
-                    ->select('households.purok_no', \Illuminate\Support\Facades\DB::raw('count(residents.id) as cnt'))
-                    ->groupBy('households.purok_no')
-                    ->pluck('cnt', 'purok_no')
-                    ->toArray();
-
-                // Compute gender distribution
-                $rawGenderCounts = Resident::approved()->select('sex', \Illuminate\Support\Facades\DB::raw('count(id) as cnt'))
-                    ->groupBy('sex')
-                    ->pluck('cnt', 'sex')
-                    ->toArray();
-
-                $formattedCounts = [];
-                foreach ($rawGenderCounts as $key => $count) {
-                    $label = ucfirst(strtolower(trim($key ?? '')));
-                    if (empty($label)) $label = 'Not Specified';
-                    $formattedCounts[$label] = ($formattedCounts[$label] ?? 0) + $count;
-                }
-
-                // Compute age demographics
-                $ages = Resident::approved()->pluck('age')->toArray();
-                $ageGroups = [
-                    'Children (0-12)' => 0,
-                    'Teens (13-19)' => 0,
-                    'Young Adults (20-35)' => 0,
-                    'Adults (36-59)' => 0,
-                    'Seniors (60+)' => 0,
-                ];
-                foreach ($ages as $age) {
-                    if ($age === null) continue;
-                    if ($age <= 12) $ageGroups['Children (0-12)']++;
-                    elseif ($age <= 19) $ageGroups['Teens (13-19)']++;
-                    elseif ($age <= 35) $ageGroups['Young Adults (20-35)']++;
-                    elseif ($age <= 59) $ageGroups['Adults (36-59)']++;
-                    else $ageGroups['Seniors (60+)']++;
-                }
-
-                // Normalize labels (sort by purok number)
-                ksort($purokCounts);
-                $data['purokLabels'] = array_map(function ($n) { return 'Purok ' . $n; }, array_keys($purokCounts));
-                $data['purokValues'] = array_values($purokCounts);
-                
-                $data['genderLabels'] = array_keys($formattedCounts);
-                $data['genderValues'] = array_values($formattedCounts);
-
-                $data['ageLabels'] = array_keys($ageGroups);
-                $data['ageValues'] = array_values($ageGroups);
-            } elseif ($user->isHealthAdmin()) {
+        if ($user->isAdmin()) {
+            $data['totalHouseholds'] = Household::count();
             $data['totalResidents'] = Resident::approved()->count();
-            $data['totalVaccinated'] = Resident::approved()->where('fully_vaccinated', 'Y')->count();
-            
-            // Compute gender distribution for Health Admin too
-            $rawGenderCounts = Resident::approved()->select('sex', \Illuminate\Support\Facades\DB::raw('count(id) as cnt'))
+            $data['pendingAppointments'] = Appointment::where('status', 'pending')->count();
+            $data['recentAppointments'] = Appointment::with('user')->latest()->take(5)->get();
+
+            // Compute residents per purok (joins households -> residents)
+            $purokCounts = DB::table('households')
+                ->join('residents', function ($join) {
+                    $join->on('households.id', '=', 'residents.household_id')
+                        ->where('residents.registration_status', '=', 'approved');
+                })
+                ->select('households.purok_no', DB::raw('count(residents.id) as cnt'))
+                ->groupBy('households.purok_no')
+                ->pluck('cnt', 'purok_no')
+                ->toArray();
+
+            // Compute gender distribution
+            $rawGenderCounts = Resident::approved()->select('sex', DB::raw('count(id) as cnt'))
                 ->groupBy('sex')
                 ->pluck('cnt', 'sex')
                 ->toArray();
@@ -103,7 +60,66 @@ Route::middleware(['auth', 'verified'])->group(function () {
             $formattedCounts = [];
             foreach ($rawGenderCounts as $key => $count) {
                 $label = ucfirst(strtolower(trim($key ?? '')));
-                if (empty($label)) $label = 'Not Specified';
+                if (empty($label)) {
+                    $label = 'Not Specified';
+                }
+                $formattedCounts[$label] = ($formattedCounts[$label] ?? 0) + $count;
+            }
+
+            // Compute age demographics
+            $ages = Resident::approved()->pluck('age')->toArray();
+            $ageGroups = [
+                'Children (0-12)' => 0,
+                'Teens (13-19)' => 0,
+                'Young Adults (20-35)' => 0,
+                'Adults (36-59)' => 0,
+                'Seniors (60+)' => 0,
+            ];
+            foreach ($ages as $age) {
+                if ($age === null) {
+                    continue;
+                }
+                if ($age <= 12) {
+                    $ageGroups['Children (0-12)']++;
+                } elseif ($age <= 19) {
+                    $ageGroups['Teens (13-19)']++;
+                } elseif ($age <= 35) {
+                    $ageGroups['Young Adults (20-35)']++;
+                } elseif ($age <= 59) {
+                    $ageGroups['Adults (36-59)']++;
+                } else {
+                    $ageGroups['Seniors (60+)']++;
+                }
+            }
+
+            // Normalize labels (sort by purok number)
+            ksort($purokCounts);
+            $data['purokLabels'] = array_map(function ($n) {
+                return 'Purok '.$n;
+            }, array_keys($purokCounts));
+            $data['purokValues'] = array_values($purokCounts);
+
+            $data['genderLabels'] = array_keys($formattedCounts);
+            $data['genderValues'] = array_values($formattedCounts);
+
+            $data['ageLabels'] = array_keys($ageGroups);
+            $data['ageValues'] = array_values($ageGroups);
+        } elseif ($user->isHealthAdmin()) {
+            $data['totalResidents'] = Resident::approved()->count();
+            $data['totalVaccinated'] = Resident::approved()->where('fully_vaccinated', 'Y')->count();
+
+            // Compute gender distribution for Health Admin too
+            $rawGenderCounts = Resident::approved()->select('sex', DB::raw('count(id) as cnt'))
+                ->groupBy('sex')
+                ->pluck('cnt', 'sex')
+                ->toArray();
+
+            $formattedCounts = [];
+            foreach ($rawGenderCounts as $key => $count) {
+                $label = ucfirst(strtolower(trim($key ?? '')));
+                if (empty($label)) {
+                    $label = 'Not Specified';
+                }
                 $formattedCounts[$label] = ($formattedCounts[$label] ?? 0) + $count;
             }
             $data['genderLabels'] = array_keys($formattedCounts);
@@ -119,12 +135,20 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 'Seniors (60+)' => 0,
             ];
             foreach ($ages as $age) {
-                if ($age === null) continue;
-                if ($age <= 12) $ageGroups['Children (0-12)']++;
-                elseif ($age <= 19) $ageGroups['Teens (13-19)']++;
-                elseif ($age <= 35) $ageGroups['Young Adults (20-35)']++;
-                elseif ($age <= 59) $ageGroups['Adults (36-59)']++;
-                else $ageGroups['Seniors (60+)']++;
+                if ($age === null) {
+                    continue;
+                }
+                if ($age <= 12) {
+                    $ageGroups['Children (0-12)']++;
+                } elseif ($age <= 19) {
+                    $ageGroups['Teens (13-19)']++;
+                } elseif ($age <= 35) {
+                    $ageGroups['Young Adults (20-35)']++;
+                } elseif ($age <= 59) {
+                    $ageGroups['Adults (36-59)']++;
+                } else {
+                    $ageGroups['Seniors (60+)']++;
+                }
             }
             $data['ageLabels'] = array_keys($ageGroups);
             $data['ageValues'] = array_values($ageGroups);
@@ -153,7 +177,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 : collect();
             $data['upcomingAppointments'] = Appointment::where('user_id', $user->id)
                 ->whereIn('status', ['pending', 'approved-pending', 'approved'])
-                ->orderByRaw("CASE WHEN appointment_date IS NULL THEN 0 ELSE 1 END")
+                ->orderByRaw('CASE WHEN appointment_date IS NULL THEN 0 ELSE 1 END')
                 ->orderBy('appointment_date')
                 ->take(5)
                 ->get();
@@ -171,7 +195,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             $data['residentProfile'] = $resident;
             $data['upcomingAppointments'] = Appointment::where('user_id', $user->id)
                 ->whereIn('status', ['pending', 'approved-pending', 'approved'])
-                ->orderByRaw("CASE WHEN appointment_date IS NULL THEN 0 ELSE 1 END")
+                ->orderByRaw('CASE WHEN appointment_date IS NULL THEN 0 ELSE 1 END')
                 ->orderBy('appointment_date')
                 ->take(5)
                 ->get();
@@ -250,7 +274,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('my-appointments');
 
     // Complete My Profile (resident self-service)
-    Route::livewire('profile/complete', \App\Livewire\CompleteProfile::class)->name('profile.complete');
+    Route::livewire('profile/complete', CompleteProfile::class)->name('profile.complete');
 });
 
 require __DIR__.'/settings.php';

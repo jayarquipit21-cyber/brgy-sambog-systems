@@ -14,6 +14,7 @@ class MyHousehold extends Component
 {
     // Modal state
     public bool $showCreateModal = false;
+
     public ?int $editingResidentId = null;
 
     // Form fields
@@ -65,7 +66,6 @@ class MyHousehold extends Component
     public string $height = '';
 
     public string $weight = '';
-
 
     protected function rules(): array
     {
@@ -121,9 +121,10 @@ class MyHousehold extends Component
     {
         $this->resetErrorBag();
         $resident = Resident::find($residentId);
-        
-        if (!$resident || $resident->household_id !== Auth::user()->resident->household_id) {
+
+        if (! $resident || $resident->household_id !== Auth::user()->resident->household_id) {
             Flux::toast(variant: 'danger', text: __('Resident not found or unauthorized.'));
+
             return;
         }
 
@@ -164,6 +165,7 @@ class MyHousehold extends Component
 
         if (! $headResident || ! $headResident->household_id) {
             Flux::toast(variant: 'danger', text: __('You must be linked to a Household to add members.'));
+
             return;
         }
 
@@ -213,10 +215,10 @@ class MyHousehold extends Component
             if ($resident && $resident->household_id === $headResident->household_id) {
                 // Only overwrite user_id if we found one, otherwise keep existing
                 // (Unless email is cleared out, but usually we just want to link)
-                if (!$existingUser && !$this->email_address) {
+                if (! $existingUser && ! $this->email_address) {
                     $data['user_id'] = null; // Unlink if email is empty
                 }
-                
+
                 $resident->update($data);
                 Flux::toast(variant: 'success', text: __('Household member updated successfully.'));
             }

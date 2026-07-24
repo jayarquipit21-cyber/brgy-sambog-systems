@@ -3,13 +3,14 @@
 namespace App\Livewire;
 
 use Illuminate\Support\Facades\Auth;
-use Livewire\Attributes\On;
 use Livewire\Component;
 
 class NotificationsDropdown extends Component
 {
     public $notifications = [];
+
     public $userId;
+
     public $unreadCount = 0;
 
     public function mount()

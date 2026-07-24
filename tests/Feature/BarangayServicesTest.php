@@ -12,7 +12,6 @@ use App\Models\Appointment;
 use App\Models\Household;
 use App\Models\Resident;
 use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Validator;
 use Livewire\Livewire;

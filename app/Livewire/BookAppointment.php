@@ -17,9 +17,13 @@ use Livewire\Component;
 class BookAppointment extends Component
 {
     public string $appointment_category = 'document'; // 'document' or 'rental'
+
     public string $document_type = '';
+
     public string $purpose_details = '';
+
     public string $purpose = '';
+
     public ?string $rental_date = null;
 
     public static array $availableDocuments = [
@@ -71,19 +75,20 @@ class BookAppointment extends Component
         if ($selectedItem === 'Other / Custom Barangay Document' || $selectedItem === 'Other Facility / Equipment Rental') {
             if (empty($details)) {
                 $this->addError('purpose_details', $isRental ? 'Please describe your equipment or facility rental request.' : 'Please describe your required document or custom request.');
+
                 return;
             }
             $finalPurpose = $isRental ? "[Rental Service] {$details}" : $details;
         } else {
             $prefix = $isRental ? "[Rental Service] {$selectedItem}" : $selectedItem;
-            $finalPurpose = !empty($details) ? "{$prefix} — {$details}" : $prefix;
+            $finalPurpose = ! empty($details) ? "{$prefix} — {$details}" : $prefix;
         }
 
         Appointment::create([
             'user_id' => Auth::id(),
             'purpose' => $finalPurpose,
             'status' => 'pending',
-            'appointment_date' => ($isRental && !empty($this->rental_date)) ? $this->rental_date : null,
+            'appointment_date' => ($isRental && ! empty($this->rental_date)) ? $this->rental_date : null,
             'appointment_time' => null,
         ]);
 
@@ -95,7 +100,7 @@ class BookAppointment extends Component
         foreach ($admins as $admin) {
             $admin->notify(new SystemNotification(
                 $notifTitle,
-                Auth::user()->name . ' submitted a request for: "' . $finalPurpose . '".',
+                Auth::user()->name.' submitted a request for: "'.$finalPurpose.'".',
                 $isRental ? 'building-office' : 'document-text',
                 route('appointments')
             ));

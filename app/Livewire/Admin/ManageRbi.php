@@ -65,7 +65,6 @@ class ManageRbi extends Component
 
     public string $religion = '';
 
-
     protected function rules(): array
     {
         return [
@@ -233,7 +232,7 @@ class ManageRbi extends Component
             $query->where('residents.registration_status', 'approved')
                 ->where(function ($q) {
                     $q->whereRaw('lower(residents.relationship_to_head) = ?', ['household head'])
-                      ->orWhereRaw('lower(residents.relationship_to_head) = ?', ['hh']);
+                        ->orWhereRaw('lower(residents.relationship_to_head) = ?', ['hh']);
                 });
         }
 
@@ -244,7 +243,7 @@ class ManageRbi extends Component
                 ->select('residents.*')
                 ->orderBy('households.'.$this->sortField, $this->sortDirection);
         } else {
-            $query = $query->orderBy('residents.' . ($this->sortField ?: 'last_name'), $this->sortDirection)
+            $query = $query->orderBy('residents.'.($this->sortField ?: 'last_name'), $this->sortDirection)
                 ->orderBy('residents.first_name', 'asc');
         }
 

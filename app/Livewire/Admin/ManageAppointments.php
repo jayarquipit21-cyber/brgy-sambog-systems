@@ -20,14 +20,20 @@ class ManageAppointments extends Component
 
     // Approve modal state
     public ?int $selectedAppointmentId = null;
+
     public string $redemptionDate = '';
+
     public string $redemptionTime = '';
+
     public string $approvalNotes = '';
+
     public bool $showApproveModal = false;
 
     // Reject modal state
     public ?int $selectedRejectId = null;
+
     public string $rejectReason = '';
+
     public bool $showRejectModal = false;
 
     public function startApprove(int $id): void
@@ -51,13 +57,15 @@ class ManageAppointments extends Component
                         if ($dateClosure) {
                             $reason = $dateClosure->reason ? ' ('.$dateClosure->reason.')' : '';
                             $fail(__('The office is closed on this date:reason', ['reason' => $reason]));
+
                             return;
                         }
                     }
 
                     $holidayName = HolidaysService::isHoliday($value);
                     if ($holidayName) {
-                    $fail(__('This date is a national holiday: :holiday', ['holiday' => $holidayName]));
+                        $fail(__('This date is a national holiday: :holiday', ['holiday' => $holidayName]));
+
                         return;
                     }
 
@@ -65,17 +73,17 @@ class ManageAppointments extends Component
                     if ($dayOfWeek >= 6) {
                         $fail(__('The office is closed on weekends.'));
                     }
-                }
+                },
             ],
             'redemptionTime' => 'required|string',
         ]);
 
         $appointment = Appointment::findOrFail($this->selectedAppointmentId);
         $appointment->update([
-            'status'           => 'approved',
+            'status' => 'approved',
             'appointment_date' => $this->redemptionDate,
             'appointment_time' => $this->redemptionTime,
-            'admin_notes'      => $this->approvalNotes ?: null,
+            'admin_notes' => $this->approvalNotes ?: null,
         ]);
 
         $this->showApproveModal = false;
@@ -145,12 +153,12 @@ class ManageAppointments extends Component
             'rejectReason' => 'required|string|min:5|max:500',
         ], [
             'rejectReason.required' => 'Please provide a reason for cancellation.',
-            'rejectReason.min'      => 'Reason must be at least 5 characters.',
+            'rejectReason.min' => 'Reason must be at least 5 characters.',
         ]);
 
         $appointment = Appointment::findOrFail($this->selectedRejectId);
         $appointment->update([
-            'status'      => 'cancelled',
+            'status' => 'cancelled',
             'admin_notes' => $this->rejectReason,
         ]);
 
@@ -173,7 +181,7 @@ class ManageAppointments extends Component
     {
         $appointment = Appointment::findOrFail($id);
         $appointment->update([
-            'status'      => 'cancelled',
+            'status' => 'cancelled',
             'admin_notes' => $notes ?: 'Cancelled by Admin.',
         ]);
         Flux::toast(variant: 'success', text: __('Appointment has been rejected/cancelled.'));

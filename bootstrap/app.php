@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\PreventBackHistory;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -16,11 +17,11 @@ return Application::configure(basePath: dirname(__DIR__))
         // Without this, hitting the back button after logout can reveal
         // previously-visited authenticated pages from the browser's cache.
         $middleware->alias([
-            'no.cache' => \App\Http\Middleware\PreventBackHistory::class,
+            'no.cache' => PreventBackHistory::class,
         ]);
 
         $middleware->appendToGroup('web', [
-            \App\Http\Middleware\PreventBackHistory::class,
+            PreventBackHistory::class,
         ]);
 
         // Redirect unauthenticated users (expired/closed-browser sessions)

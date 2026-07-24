@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin;
 
 use App\Models\AppointmentDateClosure;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -28,15 +29,17 @@ class ManageDateClosures extends Component
 
         $this->validate(['date' => 'required|date']);
 
-        $parsedDate = \Carbon\Carbon::parse($this->date);
+        $parsedDate = Carbon::parse($this->date);
 
         if ($parsedDate->startOfDay()->lt(now()->startOfDay())) {
             session()->flash('error', 'Cannot manage closure dates past the current date.');
+
             return;
         }
 
         if ($parsedDate->isWeekend()) {
             session()->flash('error', 'Weekends cannot be added as date closures.');
+
             return;
         }
 
@@ -58,7 +61,7 @@ class ManageDateClosures extends Component
         }
 
         $closure = AppointmentDateClosure::findOrFail($id);
-        
+
         $closure->delete();
         session()->flash('message', __('Date closure removed.'));
     }

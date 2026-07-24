@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Place;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class PlaceSeeder extends Seeder
 {
@@ -18,7 +17,7 @@ class PlaceSeeder extends Seeder
                 'type' => 'government',
                 'description' => 'Barangay administrative office and public services counter.',
                 'address' => 'MWG3+JH3, Barangay Rd, Sambog, Corella, Bohol',
-                'lat' => 9.676627, 
+                'lat' => 9.676627,
                 'lng' => 123.904066,
                 'is_featured' => true,
                 'purok_no' => 1,
@@ -38,7 +37,7 @@ class PlaceSeeder extends Seeder
                 'type' => 'education',
                 'description' => 'Day care center providing early childhood education and care.',
                 'address' => 'MWG4+72R, Sambog, Corella, Bohol',
-                'lat' => 9.675703, 
+                'lat' => 9.675703,
                 'lng' => 123.905203,
                 'is_featured' => true,
                 'purok_no' => 3,
@@ -58,7 +57,7 @@ class PlaceSeeder extends Seeder
                 'type' => 'place of worship',
                 'description' => 'Sacred site for religious activities.',
                 'address' => 'MW92+PJF, Sambog, Corella, Bohol',
-                'lat' => 9.669613, 
+                'lat' => 9.669613,
                 'lng' => 123.900983,
                 'is_featured' => true,
                 'purok_no' => null,
@@ -68,7 +67,7 @@ class PlaceSeeder extends Seeder
                 'type' => 'store',
                 'description' => 'Local bulalo stand.',
                 'address' => 'MWF3+WP Corella, Bohol',
-                'lat' => 9.674767, 
+                'lat' => 9.674767,
                 'lng' => 123.904373,
                 'is_featured' => true,
                 'purok_no' => 2,
@@ -78,7 +77,7 @@ class PlaceSeeder extends Seeder
                 'type' => 'bakery',
                 'description' => 'Local bakery offering bread and local pastries.',
                 'address' => 'MVHW+674, Tagbilaran City-Corella-Sikatuna-Loboc Rd, Sambog, Corella, Bohol',
-                'lat' => 9.678146, 
+                'lat' => 9.678146,
                 'lng' => 123.895708,
                 'is_featured' => true,
                 'purok_no' => 3,
@@ -88,7 +87,7 @@ class PlaceSeeder extends Seeder
                 'type' => 'hardware',
                 'description' => 'Community hardware and tools supplier.',
                 'address' => 'MVHV+7W2, Tagbilaran City-Corella-Sikatuna-Loboc Rd, Sambog, Corella, Bohol',
-                'lat' => 9.678197, 
+                'lat' => 9.678197,
                 'lng' => 123.895745,
                 'is_featured' => true,
                 'purok_no' => 2,

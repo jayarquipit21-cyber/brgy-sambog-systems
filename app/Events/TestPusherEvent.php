@@ -2,7 +2,6 @@
 
 namespace App\Events;
 
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
@@ -17,7 +16,7 @@ class TestPusherEvent implements ShouldBroadcastNow
 
     public function __construct()
     {
-        $this->message = "Hello from Reverb!";
+        $this->message = 'Hello from Reverb!';
     }
 
     public function broadcastOn(): array

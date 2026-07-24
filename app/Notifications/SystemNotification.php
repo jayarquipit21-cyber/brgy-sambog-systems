@@ -12,8 +12,11 @@ class SystemNotification extends Notification implements ShouldBroadcastNow
     use Queueable;
 
     public $title;
+
     public $message;
+
     public $icon;
+
     public $url;
 
     /**

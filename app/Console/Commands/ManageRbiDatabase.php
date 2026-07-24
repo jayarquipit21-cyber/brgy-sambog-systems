@@ -4,10 +4,12 @@ namespace App\Console\Commands;
 
 use App\Models\Household;
 use App\Models\Resident;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Shuchkin\SimpleXLSX;
 
@@ -80,7 +82,7 @@ class ManageRbiDatabase extends Command
 
             if ($targetFile && file_exists($targetFile)) {
                 $file = $targetFile;
-                $this->info('No file path provided. Automatically using: ' . basename($file));
+                $this->info('No file path provided. Automatically using: '.basename($file));
             } else {
                 $this->error('Please provide a path to a CSV or XLSX file. No Excel file (*.xlsx or *.xls) was found in the project root.');
 
@@ -201,6 +203,7 @@ class ManageRbiDatabase extends Command
 
             if ($result !== 0) {
                 $this->error("Import aborted due to validation errors in sheet: {$sheetNames[$si]}");
+
                 return 1;
             }
         }
@@ -245,8 +248,9 @@ class ManageRbiDatabase extends Command
 
         $missingRequired = array_diff($requiredColumns, $columns);
         if (! empty($missingRequired)) {
-            $this->error('❌ Import aborted: The file is missing required column(s): ' . implode(', ', $missingRequired));
+            $this->error('❌ Import aborted: The file is missing required column(s): '.implode(', ', $missingRequired));
             $this->error('   These columns are essential to identify residents. Please verify your spreadsheet headers.');
+
             return 1;
         }
 
@@ -264,9 +268,10 @@ class ManageRbiDatabase extends Command
         // Check how many known columns are present to detect a wrong-format file
         $recognizedCount = count(array_intersect($columns, $knownColumns));
         if ($recognizedCount < 3) {
-            $this->error('❌ Import aborted: Only ' . $recognizedCount . ' recognized column(s) found in the file header.');
+            $this->error('❌ Import aborted: Only '.$recognizedCount.' recognized column(s) found in the file header.');
             $this->error('   This does not look like a valid RBI spreadsheet. Please check the file and try again.');
             $this->line('   Expected columns include: last_name, first_name, household_no, purok_no, sex, birthdate, ...');
+
             return 1;
         }
         // ── End Column Validation ──────────────────────────────────────────────
@@ -344,7 +349,7 @@ class ManageRbiDatabase extends Command
                         'unvaccinated', 'partially_vaccinated', 'fully_vaccinated', 'covid_dose_1_date', 'covid_dose_2_date',
                         'covid_brand', 'has_booster', 'booster_date', 'booster_brand', 'health_condition',
                         'nutritional_classification', 'vulnerable_sector', 'social_welfare_availed', 'water_source', 'sanitary_toilet',
-                        'waste_management', 'has_blind_drainage'
+                        'waste_management', 'has_blind_drainage',
                     ];
                     foreach ($columnsToMap as $col) {
                         $residentData[$col] = (isset($data[$col]) && $data[$col] !== '') ? $data[$col] : null;
@@ -598,7 +603,7 @@ class ManageRbiDatabase extends Command
             'unvaccinated', 'partially_vaccinated', 'fully_vaccinated', 'covid_dose_1_date', 'covid_dose_2_date',
             'covid_brand', 'has_booster', 'booster_date', 'booster_brand', 'health_condition',
             'nutritional_classification', 'vulnerable_sector', 'social_welfare_availed', 'water_source', 'sanitary_toilet',
-            'waste_management', 'has_blind_drainage'
+            'waste_management', 'has_blind_drainage',
         ];
         fputcsv($handle, $headers);
 
@@ -817,29 +822,34 @@ class ManageRbiDatabase extends Command
         $email = $this->option('email');
         $password = $this->option('password');
 
-        if (!$email || !$password) {
+        if (! $email || ! $password) {
             $this->error('Email and password options are required.');
+
             return 1;
         }
 
-        $user = \App\Models\User::where('email', $email)->first();
+        $user = User::where('email', $email)->first();
 
-        if (!$user) {
+        if (! $user) {
             $this->error('User not found.');
+
             return 1;
         }
 
-        if (!\Illuminate\Support\Facades\Hash::check($password, $user->password)) {
+        if (! Hash::check($password, $user->password)) {
             $this->error('Incorrect password.');
+
             return 1;
         }
 
-        if (!$user->isAdmin() && !$user->isHealthAdmin()) {
+        if (! $user->isAdmin() && ! $user->isHealthAdmin()) {
             $this->error('Unauthorized role.');
+
             return 1;
         }
 
         $this->info("Authenticated successfully as {$user->name} ({$user->role})");
+
         return 0;
     }
 }

@@ -170,8 +170,3 @@ class RbiDataTable extends Component
         ]);
     }
 }
-
-
-
-
-
