@@ -143,17 +143,17 @@ class ManageAppointments extends Component
             'admin_notes' => $this->rejectReason,
         ]);
 
-        $this->showRejectModal = false;
-        $this->selectedRejectId = null;
-        $this->rejectReason = '';
-
-        // Notify the resident
+        // Notify the resident (must happen before resetting rejectReason)
         $appointment->user->notify(new SystemNotification(
             'Appointment Cancelled',
             "Your request for \"{$appointment->purpose}\" has been cancelled. Reason: {$this->rejectReason}",
             'x-circle',
             route('my-appointments')
         ));
+
+        $this->showRejectModal = false;
+        $this->selectedRejectId = null;
+        $this->rejectReason = '';
 
         Flux::toast(variant: 'success', text: __('Appointment has been rejected/cancelled.'));
     }

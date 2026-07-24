@@ -51,7 +51,7 @@ class AnnouncementsManager extends Component
 
         $this->validate();
 
-        Announcement::create([
+        $announcement = Announcement::create([
             'user_id' => Auth::id(),
             'title' => $this->title,
             'body' => $this->body,
@@ -63,11 +63,12 @@ class AnnouncementsManager extends Component
             'published_at' => $this->publish_now ? now() : null,
         ]);
 
-        $this->reset(['title', 'body', 'type', 'event_date', 'event_end_date', 'event_location', 'is_pinned', 'publish_now']);
-
+        // Notify before reset so $this->publish_now still holds the user's input
         if ($this->publish_now) {
             $this->notifyAllUsers($announcement);
         }
+
+        $this->reset(['title', 'body', 'type', 'event_date', 'event_end_date', 'event_location', 'is_pinned', 'publish_now']);
 
         Flux::toast(variant: 'success', text: __('Announcement published.'));
     }
@@ -164,6 +165,22 @@ class AnnouncementsManager extends Component
         if ($a && $a->published_at) {
             $a->update(['published_at' => null]);
             Flux::toast(variant: 'success', text: __('Announcement unpublished.'));
+        }
+    }
+
+    /**
+     * Send a notification to all users about a published announcement.
+     */
+    private function notifyAllUsers(Announcement $announcement): void
+    {
+        $users = User::where('id', '!=', Auth::id())->get();
+        foreach ($users as $user) {
+            $user->notify(new SystemNotification(
+                'New Announcement',
+                $announcement->title,
+                'megaphone',
+                route('dashboard')
+            ));
         }
     }
 

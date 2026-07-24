@@ -48,7 +48,7 @@ class BookAppointment extends Component
                 'New Document Request',
                 Auth::user()->name . ' submitted a request for: "' . $purpose . '".',
                 'document-text',
-                route('manage-appointments')
+                route('appointments')
             ));
         }
 
