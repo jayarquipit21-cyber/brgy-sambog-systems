@@ -43,7 +43,7 @@
                         {{ __('Population') }}
                     </flux:navbar.item>
                     <flux:navbar.item icon="calendar" :href="route('appointments')" :current="request()->routeIs('appointments')" wire:navigate class="{{ request()->routeIs('appointments') ? $activeNavbarGlow : '' }}">
-                        {{ __('Appointments') }}
+                        {{ __('Appointments & Rentals') }}
                     </flux:navbar.item>
                     <flux:navbar.item icon="megaphone" :href="route('admin.announcements')" :current="request()->routeIs('admin.announcements')" wire:navigate class="{{ request()->routeIs('admin.announcements') ? $activeNavbarGlow : '' }}">
                         {{ __('Announcements') }}
@@ -64,7 +64,7 @@
 
                 @if(auth()->user()->isHouseholdHead() || auth()->user()->isResident())
                     <flux:navbar.item icon="calendar" :href="route('appointments')" :current="request()->routeIs('appointments')" wire:navigate class="{{ request()->routeIs('appointments') ? $activeNavbarGlow : '' }}">
-                        {{ __('Bookings') }}
+                        {{ __('Bookings & Rentals') }}
                     </flux:navbar.item>
                 @endif
             </flux:navbar>
@@ -120,7 +120,7 @@
                             {{ __('Population Management') }}
                         </flux:sidebar.item>
                         <flux:sidebar.item icon="calendar" :href="route('appointments')" :current="request()->routeIs('appointments')" wire:navigate class="{{ request()->routeIs('appointments') ? $mobileActiveGlow : '' }}">
-                            {{ __('Manage Appointments') }}
+                            {{ __('Appointments & Rentals') }}
                         </flux:sidebar.item>
                         <flux:sidebar.item icon="megaphone" :href="route('admin.announcements')" :current="request()->routeIs('admin.announcements')" wire:navigate class="{{ request()->routeIs('admin.announcements') ? $mobileActiveGlow : '' }}">
                             {{ __('Announcements & Events') }}
@@ -141,7 +141,7 @@
 
                     @if(auth()->user()->isHouseholdHead() || auth()->user()->isResident())
                         <flux:sidebar.item icon="calendar" :href="route('appointments')" :current="request()->routeIs('appointments')" wire:navigate class="{{ request()->routeIs('appointments') ? $mobileActiveGlow : '' }}">
-                            {{ __('Book & Appointments') }}
+                            {{ __('Bookings & Rentals') }}
                         </flux:sidebar.item>
                     @endif
                 </flux:sidebar.group>

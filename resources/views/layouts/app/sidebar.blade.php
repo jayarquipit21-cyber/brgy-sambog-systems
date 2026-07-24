@@ -52,7 +52,7 @@
                             {{ __('RBI Data Table') }}
                         </flux:sidebar.item>
                         <flux:sidebar.item icon="calendar" :href="route('appointments')" :current="request()->routeIs('appointments')" wire:navigate class="{{ request()->routeIs('appointments') ? $activeGlow : '' }}">
-                            {{ __('Manage Appointments') }}
+                            {{ __('Appointments & Rentals') }}
                         </flux:sidebar.item>
                         <flux:sidebar.item icon="megaphone" :href="route('admin.announcements')" :current="request()->routeIs('admin.announcements')" wire:navigate class="{{ request()->routeIs('admin.announcements') ? $activeGlow : '' }}">
                             {{ __('Announcements & Events') }}
@@ -76,7 +76,7 @@
 
                     @if(auth()->user()->isHouseholdHead() || auth()->user()->isResident())
                         <flux:sidebar.item icon="calendar" :href="route('appointments')" :current="request()->routeIs('appointments')" wire:navigate class="{{ request()->routeIs('appointments') ? $activeGlow : '' }}">
-                            {{ __('Book & Appointments') }}
+                            {{ __('Bookings & Rentals') }}
                         </flux:sidebar.item>
                     @endif
 

@@ -1,8 +1,8 @@
 <div class="bg-white dark:bg-zinc-900 shadow-md rounded-xl p-6 border border-zinc-200 dark:border-zinc-800">
     <div class="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-            <flux:heading size="lg" level="2" class="text-zinc-900 dark:text-white font-semibold">Document Pickup Registry</flux:heading>
-            <flux:text variant="subtle" class="text-xs text-zinc-500 dark:text-zinc-400">Review and manage resident appointments for physical document pickups.</flux:text>
+            <flux:heading size="lg" level="2" class="text-zinc-900 dark:text-white font-semibold">Appointments & Rentals Registry</flux:heading>
+            <flux:text variant="subtle" class="text-xs text-zinc-500 dark:text-zinc-400">Review and manage all resident document requests and rental service bookings.</flux:text>
         </div>
         <div class="flex flex-col sm:flex-row gap-3">
             <input 
@@ -11,6 +11,14 @@
                 placeholder="Search resident name..."
                 class="rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-1.5 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand text-sm"
             />
+            <select 
+                wire:model.live="typeFilter"
+                class="rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-1.5 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand text-sm"
+            >
+                <option value="">All Types</option>
+                <option value="document">📄 Documents Only</option>
+                <option value="rental">🏢 Rentals Only</option>
+            </select>
             <select 
                 wire:model.live="statusFilter"
                 class="rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-1.5 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand text-sm"
@@ -34,7 +42,7 @@
             <svg class="mx-auto text-zinc-350 dark:text-zinc-700 mb-4" width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
             </svg>
-            <p class="text-sm font-semibold text-zinc-700 dark:text-zinc-300">No pickup appointments found matching the filters.</p>
+            <p class="text-sm font-semibold text-zinc-700 dark:text-zinc-300">No appointments or rental bookings found matching the filters.</p>
             <p class="text-xs text-zinc-400 dark:text-zinc-500 mt-1">Check back later or try adjusting the filters.</p>
         </div>
     @else
@@ -44,13 +52,18 @@
                     <tr class="border-b border-zinc-200 dark:border-zinc-800 text-zinc-500 text-xs font-semibold uppercase">
                         <th class="py-3 px-4">Resident</th>
                         <th class="py-3 px-4">Scheduled Slot</th>
-                        <th class="py-3 px-4">Requested Document & Purpose</th>
+                        <th class="py-3 px-4">Type</th>
+                        <th class="py-3 px-4">Requested Service / Document</th>
                         <th class="py-3 px-4 text-center">Status</th>
                         <th class="py-3 px-4 text-right">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">
                     @foreach($appointments as $apt)
+                        @php
+                            $isRental = str_starts_with($apt->purpose, '[Rental Service]');
+                            $displayPurpose = $isRental ? str_replace('[Rental Service] ', '', $apt->purpose) : $apt->purpose;
+                        @endphp
                         <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition">
                             <td class="py-3 px-4 text-zinc-900 dark:text-white font-medium">
                                 {{ $apt->user->name }}
@@ -71,8 +84,21 @@
                                     <span class="text-xs text-zinc-400 dark:text-zinc-500 font-semibold">—</span>
                                 @endif
                             </td>
+                            <td class="py-3 px-4">
+                                @if($isRental)
+                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200 dark:bg-amber-950/30 dark:text-amber-400 dark:border-amber-800/50">
+                                        <flux:icon name="building-office" class="size-3" />
+                                        Rental
+                                    </span>
+                                @else
+                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950/30 dark:text-emerald-400 dark:border-emerald-800/50">
+                                        <flux:icon name="document-text" class="size-3" />
+                                        Document
+                                    </span>
+                                @endif
+                            </td>
                             <td class="py-3 px-4 max-w-sm whitespace-normal break-words">
-                                {{ $apt->purpose }}
+                                {{ $displayPurpose }}
                             </td>
                             <td class="py-3 px-4 text-center">
                                 @if($apt->status === 'pending')
@@ -148,7 +174,7 @@
                         {{-- Sub-row: Cancellation Reason or Admin Notes --}}
                         @if($apt->status === 'cancelled' && $apt->admin_notes)
                             <tr class="bg-red-50/50 dark:bg-red-950/10 border-t-0">
-                                <td colspan="5" class="px-4 py-2">
+                                <td colspan="6" class="px-4 py-2">
                                     <div class="flex items-start gap-2">
                                         <span class="shrink-0 mt-0.5 inline-flex items-center justify-center w-4 h-4 rounded-full bg-red-100 dark:bg-red-900/40">
                                             <svg class="w-2.5 h-2.5 text-red-500 dark:text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
@@ -162,7 +188,7 @@
                             </tr>
                         @elseif(in_array($apt->status, ['approved', 'completed']) && $apt->admin_notes)
                             <tr class="bg-emerald-50/50 dark:bg-emerald-950/10 border-t-0">
-                                <td colspan="5" class="px-4 py-2">
+                                <td colspan="6" class="px-4 py-2">
                                     <div class="flex items-start gap-2">
                                         <span class="shrink-0 mt-0.5 inline-flex items-center justify-center w-4 h-4 rounded-full bg-emerald-100 dark:bg-emerald-900/40">
                                             <svg class="w-2.5 h-2.5 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -186,8 +212,8 @@
     <flux:modal name="approve-appointment-modal" class="max-w-md" wire:model="showApproveModal">
         <form wire:submit="confirmApprove" class="space-y-6">
             <div>
-                <flux:heading size="lg">{{ __('Schedule Document Redemption') }}</flux:heading>
-                <flux:subheading>{{ __('Set the date and time when the resident can redeem their completely signed document.') }}</flux:subheading>
+                <flux:heading size="lg">{{ __('Schedule Redemption / Pickup') }}</flux:heading>
+                <flux:subheading>{{ __('Set the date and time when the resident can redeem their document or rental equipment.') }}</flux:subheading>
             </div>
 
             <div class="space-y-4">
@@ -230,7 +256,7 @@
                         id="approvalNotes"
                         wire:model="approvalNotes"
                         rows="3"
-                        placeholder="e.g. Bring original copies for verification..."
+                        placeholder="e.g. Bring original copies for verification, or rental item quantity confirmed..."
                         class="w-full rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-2 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand text-sm resize-none"
                     ></textarea>
                 </div>
@@ -250,7 +276,7 @@
         <form wire:submit="confirmReject" class="space-y-6">
             <div>
                 <flux:heading size="lg">{{ __('Reject / Cancel Request') }}</flux:heading>
-                <flux:subheading>{{ __('Provide a reason for rejecting this document request. This will be saved as a note on the appointment.') }}</flux:subheading>
+                <flux:subheading>{{ __('Provide a reason for rejecting this request. This will be saved as a note on the appointment.') }}</flux:subheading>
             </div>
 
             <div>
@@ -259,7 +285,7 @@
                     id="rejectReason"
                     wire:model="rejectReason"
                     rows="4"
-                    placeholder="e.g. Incomplete requirements, duplicate request..."
+                    placeholder="e.g. Incomplete requirements, duplicate request, rental equipment unavailable..."
                     class="w-full rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-2 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand text-sm resize-none"
                 ></textarea>
                 @error('rejectReason') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
@@ -273,4 +299,6 @@
             </div>
         </form>
     </flux:modal>
+
 </div>
+

@@ -16,6 +16,8 @@ class ManageAppointments extends Component
 
     public string $statusFilter = '';
 
+    public string $typeFilter = ''; // 'document', 'rental', or '' for all
+
     // Approve modal state
     public ?int $selectedAppointmentId = null;
     public string $redemptionDate = '';
@@ -80,9 +82,12 @@ class ManageAppointments extends Component
         $this->selectedAppointmentId = null;
         $this->approvalNotes = '';
 
+        $isRental = str_starts_with($appointment->purpose, '[Rental Service]');
+        $notifTitle = $isRental ? 'Rental Booking Approved' : 'Appointment Approved';
+
         // Notify the resident who booked
         $appointment->user->notify(new SystemNotification(
-            'Appointment Approved',
+            $notifTitle,
             "Your request for \"{$appointment->purpose}\" has been approved and scheduled for {$appointment->appointment_date->format('M d, Y')} at {$appointment->appointment_time}.",
             'check-circle',
             route('my-appointments')
@@ -96,8 +101,10 @@ class ManageAppointments extends Component
         $appointment = Appointment::findOrFail($id);
         $appointment->update(['status' => 'approved-pending']);
 
+        $isRental = str_starts_with($appointment->purpose, '[Rental Service]');
+
         $appointment->user->notify(new SystemNotification(
-            'Document Ready for Signing',
+            $isRental ? 'Rental Booking Ready for Signing' : 'Document Ready for Signing',
             "Your request for \"{$appointment->purpose}\" has been approved and is awaiting the Kapitan's signature.",
             'clipboard-document-check',
             route('my-appointments')
@@ -111,9 +118,13 @@ class ManageAppointments extends Component
         $appointment = Appointment::findOrFail($id);
         $appointment->update(['status' => 'completed']);
 
+        $isRental = str_starts_with($appointment->purpose, '[Rental Service]');
+
         $appointment->user->notify(new SystemNotification(
-            'Document Ready for Pickup',
-            "Your request for \"{$appointment->purpose}\" is completed. Please pick up your document at the Barangay Hall.",
+            $isRental ? 'Rental Service Completed' : 'Document Ready for Pickup',
+            $isRental
+                ? "Your rental request for \"{$appointment->purpose}\" is completed."
+                : "Your request for \"{$appointment->purpose}\" is completed. Please pick up your document at the Barangay Hall.",
             'document-check',
             route('my-appointments')
         ));
@@ -187,6 +198,13 @@ class ManageAppointments extends Component
 
         if ($this->statusFilter) {
             $query->where('status', $this->statusFilter);
+        }
+
+        // Type filter: document vs rental
+        if ($this->typeFilter === 'rental') {
+            $query->where('purpose', 'like', '[Rental Service]%');
+        } elseif ($this->typeFilter === 'document') {
+            $query->where('purpose', 'not like', '[Rental Service]%');
         }
 
         if ($this->search) {

@@ -1,12 +1,12 @@
-<x-layouts::app :title="__('Physical Document Appointments')">
+<x-layouts::app :title="__('Appointments & Rentals')">
     <div class="space-y-6">
         <div>
-            <h1 class="text-2xl font-bold tracking-tight text-zinc-900 dark:text-white font-outfit">Document Pickup Appointments</h1>
+            <h1 class="text-2xl font-bold tracking-tight text-zinc-900 dark:text-white font-outfit">Appointments & Rentals</h1>
             <p class="text-sm text-zinc-500 dark:text-zinc-400">
                 @if(auth()->user()->isAdmin())
-                    Manage and review all appointment pickup slots submitted by Barangay residents.
+                    Manage and review all document requests and rental service bookings submitted by Barangay residents.
                 @else
-                    Book a physical visit slot at the Barangay Hall to pick up or process your official documents.
+                    Request official barangay documents or book rental services and facilities, then track your appointments.
                 @endif
             </p>
         </div>
@@ -25,3 +25,4 @@
         @endif
     </div>
 </x-layouts::app>
+
