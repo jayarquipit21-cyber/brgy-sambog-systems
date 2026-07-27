@@ -848,7 +848,7 @@
                     </div>
 
                     <!-- Alpine.js Accordion Container -->
-                    <div x-data="{ active: 1 }" class="max-w-4xl mx-auto space-y-3">
+                    <div x-data="{ active: null }" class="max-w-4xl mx-auto space-y-3">
                         
                         <!-- Question 1 -->
                         <div class="glass-panel rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 overflow-hidden transition">
