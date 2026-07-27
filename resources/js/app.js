@@ -5,45 +5,65 @@ import './passkeys';
 
 // Add additional app initialization below as needed.
 import Chart from 'chart.js/auto';
-window.Chart = Chart;
 
-// Core chart instantiation helper
-const processChart = (canvasId, configCallback) => {
-    const canvas = typeof canvasId === 'string' ? document.getElementById(canvasId) : canvasId;
-    if (!canvas) return;
+// Ensure Chart constructor is properly bound across ESM/CJS interop wrappers
+const ChartClass = (Chart && Chart.Chart) ? Chart.Chart : ((Chart && Chart.default) ? Chart.default : Chart);
+window.Chart = ChartClass;
 
-    if (window.Chart && typeof window.Chart.getChart === 'function') {
-        const existingChart = window.Chart.getChart(canvas);
-        if (existingChart) {
-            existingChart.destroy();
-        }
-    }
-
-    const config = typeof configCallback === 'function' ? configCallback() : configCallback;
-    if (config && window.Chart) {
-        new window.Chart(canvas, config);
-    }
-};
-
-// Safe chart renderer & lifecycle manager for Chart.js
+// Core chart renderer & lifecycle manager
 window.renderChartWhenReady = function (canvasId, configCallback, attempts = 0) {
-    if (typeof window.Chart !== 'undefined') {
-        processChart(canvasId, configCallback);
-    } else if (attempts < 50) {
-        setTimeout(() => window.renderChartWhenReady(canvasId, configCallback, attempts + 1), 50);
+    const init = () => {
+        const canvas = typeof canvasId === 'string' ? document.getElementById(canvasId) : canvasId;
+        if (!canvas) {
+            if (attempts < 50) {
+                setTimeout(() => window.renderChartWhenReady(canvasId, configCallback, attempts + 1), 50);
+            }
+            return;
+        }
+
+        const ActiveChart = window.Chart || ChartClass;
+        if (!ActiveChart || typeof ActiveChart !== 'function') {
+            if (attempts < 50) {
+                setTimeout(() => window.renderChartWhenReady(canvasId, configCallback, attempts + 1), 50);
+            }
+            return;
+        }
+
+        // Destroy existing Chart instance on canvas if present to avoid canvas reuse errors
+        if (typeof ActiveChart.getChart === 'function') {
+            const existingChart = ActiveChart.getChart(canvas);
+            if (existingChart) {
+                existingChart.destroy();
+            }
+        }
+
+        // Execute config callback (populates labels, legend HTML, summary text, etc.)
+        const config = typeof configCallback === 'function' ? configCallback() : configCallback;
+        if (config) {
+            new ActiveChart(canvas, config);
+        }
+    };
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init, { once: true });
+    } else {
+        init();
     }
 };
 
-// Flush early queued chart renders (pushed before app.js loaded)
-if (Array.isArray(window._chartQueue) && window._chartQueue.length > 0) {
-    const queue = window._chartQueue.splice(0, window._chartQueue.length);
-    queue.forEach(item => {
-        window.renderChartWhenReady(item.canvasId, item.configCallback);
-    });
-}
+// Drain and execute any early chart render requests queued before app.js loaded
+const drainChartQueue = () => {
+    if (Array.isArray(window._chartQueue) && window._chartQueue.length > 0) {
+        const queue = window._chartQueue.splice(0, window._chartQueue.length);
+        queue.forEach(item => {
+            window.renderChartWhenReady(item.canvasId, item.configCallback);
+        });
+    }
+};
 
 // Function to trigger all charts registered with data-chart-init
 const initAllCharts = () => {
+    drainChartQueue();
     document.querySelectorAll('[data-chart-init]').forEach(el => {
         const fnName = el.getAttribute('data-chart-init');
         if (typeof window[fnName] === 'function') {

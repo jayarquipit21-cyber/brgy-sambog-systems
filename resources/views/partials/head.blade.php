@@ -1,4 +1,7 @@
-<!-- Theme Initialization script to prevent flash of wrong theme -->
+<!-- Chart.js Standalone Library for Instant Head Initialization -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+<!-- Theme Initialization & Robust Chart Lifecycle Manager -->
 <script>
     (function() {
         const theme = localStorage.getItem('flux.appearance') || localStorage.getItem('theme') || 'system';
@@ -9,10 +12,47 @@
         }
     })();
 
-    // Early chart execution queue to handle inline Blade script calls prior to app.js module load
-    window._chartQueue = window._chartQueue || [];
-    window.renderChartWhenReady = window.renderChartWhenReady || function (canvasId, configCallback) {
-        window._chartQueue.push({ canvasId, configCallback });
+    // Robust chart renderer accessible by inline Blade scripts and app.js
+    window.renderChartWhenReady = window.renderChartWhenReady || function (canvasId, configCallback, attempts = 0) {
+        const init = () => {
+            const canvas = typeof canvasId === 'string' ? document.getElementById(canvasId) : canvasId;
+            if (!canvas) {
+                if (attempts < 50) {
+                    setTimeout(() => window.renderChartWhenReady(canvasId, configCallback, attempts + 1), 50);
+                }
+                return;
+            }
+
+            const ChartClass = window.Chart ? (window.Chart.Chart || window.Chart.default || window.Chart) : null;
+            if (!ChartClass || typeof ChartClass !== 'function') {
+                if (attempts < 50) {
+                    setTimeout(() => window.renderChartWhenReady(canvasId, configCallback, attempts + 1), 50);
+                }
+                return;
+            }
+
+            try {
+                if (typeof ChartClass.getChart === 'function') {
+                    const existingChart = ChartClass.getChart(canvas);
+                    if (existingChart) {
+                        existingChart.destroy();
+                    }
+                }
+
+                const config = typeof configCallback === 'function' ? configCallback() : configCallback;
+                if (config) {
+                    new ChartClass(canvas, config);
+                }
+            } catch (err) {
+                console.error('Error rendering chart on canvas ' + canvasId + ':', err);
+            }
+        };
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init, { once: true });
+        } else {
+            init();
+        }
     };
 </script>
 

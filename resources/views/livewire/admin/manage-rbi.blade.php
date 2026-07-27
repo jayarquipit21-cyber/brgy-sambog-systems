@@ -70,6 +70,16 @@
                 />
                 
                 <select 
+                    wire:model.live="nameLetter"
+                    class="rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-1.5 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand text-sm w-full sm:w-auto"
+                >
+                    <option value="">All Names (A–Z)</option>
+                    @foreach(range('A', 'Z') as $letter)
+                        <option value="{{ $letter }}">Name Starts with {{ $letter }}</option>
+                    @endforeach
+                </select>
+
+                <select 
                     wire:model.live="purokFilter"
                     class="rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-1.5 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand text-sm w-full sm:w-auto"
                 >
@@ -120,28 +130,12 @@
                     @if($activeTab === 'pending')
                         <thead>
                             <tr class="border-b border-zinc-200 dark:border-zinc-800 text-zinc-500 text-xs font-semibold uppercase">
-                                <th class="py-3 px-4 cursor-pointer" wire:click="sortBy('last_name')">Resident Name
-                                    @if($sortField === 'last_name')
-                                        <span class="ml-1 text-xs">{{ $sortDirection === 'asc' ? '▲' : '▼' }}</span>
-                                    @endif
-                                </th>
+                                <th class="py-3 px-4">Resident Name</th>
                                 <th class="py-3 px-4">Relationship to Head</th>
-                                <th class="py-3 px-4 cursor-pointer" wire:click="sortBy('purok_no')">Purok
-                                    @if($sortField === 'purok_no')
-                                        <span class="ml-1 text-xs">{{ $sortDirection === 'asc' ? '▲' : '▼' }}</span>
-                                    @endif
-                                </th>
-                                <th class="py-3 px-4 cursor-pointer" wire:click="sortBy('household_no')">Household No.
-                                    @if($sortField === 'household_no')
-                                        <span class="ml-1 text-xs">{{ $sortDirection === 'asc' ? '▲' : '▼' }}</span>
-                                    @endif
-                                </th>
-                                <th class="py-3 px-4 text-center cursor-pointer" wire:click="sortBy('age')">Age / Sex
-                                    @if($sortField === 'age')
-                                        <span class="ml-1 text-xs">{{ $sortDirection === 'asc' ? '▲' : '▼' }}</span>
-                                    @endif
-                                </th>
-                                <th class="py-3 px-4">Contact Info</th>
+                                <th class="py-3 px-4">Purok</th>
+                                <th class="py-3 px-4 text-center">Age / Sex</th>
+                                <th class="py-3 px-4">Email</th>
+                                <th class="py-3 px-4">Contact</th>
                                 <th class="py-3 px-4 text-center">Actions</th>
                             </tr>
                         </thead>
@@ -157,16 +151,15 @@
                                     <td class="py-3 px-4 text-zinc-900 dark:text-white">
                                         Purok {{ $res->household->purok_no ?? 'N/A' }}
                                     </td>
-                                    <td class="py-3 px-4 font-mono text-xs">
-                                        {{ $res->household->household_no ?? 'N/A' }}
-                                    </td>
                                     <td class="py-3 px-4 text-center">
                                         <span class="text-zinc-900 dark:text-white font-medium">{{ $res->age ?? 'N/A' }}</span>
                                         <span class="text-zinc-400 dark:text-zinc-600 text-xs">/ {{ $res->sex }}</span>
                                     </td>
-                                    <td class="py-3 px-4 text-xs">
-                                        <div class="text-zinc-900 dark:text-white font-medium">{{ $res->email_address ?? 'No Email' }}</div>
-                                        <div class="text-zinc-500 dark:text-zinc-400">{{ $res->mobile_number ?? 'No Mobile' }}</div>
+                                    <td class="py-3 px-4 text-xs text-zinc-900 dark:text-white font-medium">
+                                        {{ $res->email_address ?? '—' }}
+                                    </td>
+                                    <td class="py-3 px-4 text-xs text-zinc-500 dark:text-zinc-400">
+                                        {{ $res->mobile_number ?? '—' }}
                                     </td>
                                     <td class="py-3 px-4 text-center">
                                         <div class="flex items-center justify-center gap-2">
@@ -190,28 +183,12 @@
                     @else
                         <thead>
                             <tr class="border-b border-zinc-200 dark:border-zinc-800 text-zinc-500 text-xs font-semibold uppercase">
-                                <th class="py-3 px-4 cursor-pointer" wire:click="sortBy('last_name')">Household Head
-                                    @if($sortField === 'last_name')
-                                        <span class="ml-1 text-xs">{{ $sortDirection === 'asc' ? '▲' : '▼' }}</span>
-                                    @endif
-                                </th>
-                                <th class="py-3 px-4 cursor-pointer" wire:click="sortBy('household_no')">Household No.
-                                    @if($sortField === 'household_no')
-                                        <span class="ml-1 text-xs">{{ $sortDirection === 'asc' ? '▲' : '▼' }}</span>
-                                    @endif
-                                </th>
-                                <th class="py-3 px-4 cursor-pointer" wire:click="sortBy('purok_no')">Purok
-                                    @if($sortField === 'purok_no')
-                                        <span class="ml-1 text-xs">{{ $sortDirection === 'asc' ? '▲' : '▼' }}</span>
-                                    @endif
-                                </th>
+                                <th class="py-3 px-4">Household Head</th>
+                                <th class="py-3 px-4">Purok</th>
                                 <th class="py-3 px-4">Address</th>
-                                <th class="py-3 px-4 text-center cursor-pointer" wire:click="sortBy('age')">Age / Sex
-                                    @if($sortField === 'age')
-                                        <span class="ml-1 text-xs">{{ $sortDirection === 'asc' ? '▲' : '▼' }}</span>
-                                    @endif
-                                </th>
-                                <th class="py-3 px-4">Contact Info</th>
+                                <th class="py-3 px-4 text-center">Age / Sex</th>
+                                <th class="py-3 px-4">Email</th>
+                                <th class="py-3 px-4">Contact</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">
@@ -219,9 +196,6 @@
                                 <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition">
                                     <td class="py-3 px-4">
                                         <span class="text-zinc-900 dark:text-white font-medium">{{ $res->full_name }}</span>
-                                    </td>
-                                    <td class="py-3 px-4 font-mono text-xs">
-                                        {{ $res->household->household_no ?? 'N/A' }}
                                     </td>
                                     <td class="py-3 px-4 text-zinc-900 dark:text-white">
                                         Purok {{ $res->household->purok_no ?? 'N/A' }}
@@ -233,9 +207,11 @@
                                         <span class="text-zinc-900 dark:text-white font-medium">{{ $res->age ?? 'N/A' }}</span>
                                         <span class="text-zinc-400 dark:text-zinc-600 text-xs">/ {{ $res->sex }}</span>
                                     </td>
-                                    <td class="py-3 px-4 text-xs">
-                                        <div class="text-zinc-900 dark:text-white font-medium">{{ $res->email_address ?? 'No Email' }}</div>
-                                        <div class="text-zinc-500 dark:text-zinc-400">{{ $res->mobile_number ?? 'No Mobile' }}</div>
+                                    <td class="py-3 px-4 text-xs text-zinc-900 dark:text-white font-medium">
+                                        {{ $res->email_address ?? '—' }}
+                                    </td>
+                                    <td class="py-3 px-4 text-xs text-zinc-500 dark:text-zinc-400">
+                                        {{ $res->mobile_number ?? '—' }}
                                     </td>
                                 </tr>
                             @endforeach

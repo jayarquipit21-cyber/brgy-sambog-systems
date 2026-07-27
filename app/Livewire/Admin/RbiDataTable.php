@@ -15,15 +15,15 @@ class RbiDataTable extends Component
 
     public string $purokFilter = '';
 
+    public string $nameLetter = '';
+
     public string $sexFilter = '';
 
     public string $voterFilter = '';
 
-    public string $vaccineFilter = '';
+    public string $ageGroup = '';
 
-    public string $healthFilter = '';
-
-    public string $sortField = 'last_name';
+    public string $sortField = 'first_name';
 
     public string $sortDirection = 'asc';
 
@@ -38,6 +38,11 @@ class RbiDataTable extends Component
         $this->resetPage();
     }
 
+    public function updatingNameLetter(): void
+    {
+        $this->resetPage();
+    }
+
     public function updatingSexFilter(): void
     {
         $this->resetPage();
@@ -48,7 +53,7 @@ class RbiDataTable extends Component
         $this->resetPage();
     }
 
-    public function updatingVaccineFilter(): void
+    public function updatingAgeGroup(): void
     {
         $this->resetPage();
     }
@@ -71,11 +76,6 @@ class RbiDataTable extends Component
             $this->sortField = $field;
             $this->sortDirection = 'asc';
         }
-    }
-
-    public function updatingHealthFilter(): void
-    {
-        $this->resetPage();
     }
 
     public function render()
@@ -111,6 +111,10 @@ class RbiDataTable extends Component
             });
         }
 
+        if ($this->nameLetter) {
+            $query->where('first_name', 'like', $this->nameLetter.'%');
+        }
+
         if ($this->sexFilter) {
             $query->where('sex', $this->sexFilter);
         }
@@ -131,28 +135,16 @@ class RbiDataTable extends Component
             }
         }
 
-        if ($this->vaccineFilter) {
-            if ($this->vaccineFilter === 'fully') {
-                $query->where('fully_vaccinated', 'Y');
-            } elseif ($this->vaccineFilter === 'partially') {
-                $query->where('partially_vaccinated', 'Y');
-            } elseif ($this->vaccineFilter === 'unvaccinated') {
-                $query->where('unvaccinated', 'Y');
-            }
-        }
-
-        if ($this->healthFilter) {
-            if ($this->healthFilter === 'has_condition') {
-                $query->whereNotNull('health_condition')
-                    ->where('health_condition', '!=', '')
-                    ->where('health_condition', '!=', 'None');
-            } elseif ($this->healthFilter === 'none') {
-                $query->where(function ($q) {
-                    $q->whereNull('health_condition')
-                        ->orWhere('health_condition', '')
-                        ->orWhere('health_condition', 'None');
-                });
-            }
+        if ($this->ageGroup) {
+            match ($this->ageGroup) {
+                'infant' => $query->whereBetween('age', [0, 5]),
+                'child' => $query->whereBetween('age', [6, 12]),
+                'teen' => $query->whereBetween('age', [13, 17]),
+                'young_adult' => $query->whereBetween('age', [18, 30]),
+                'adult' => $query->whereBetween('age', [31, 59]),
+                'senior' => $query->where('age', '>=', 60),
+                default => null,
+            };
         }
 
         $stats = [

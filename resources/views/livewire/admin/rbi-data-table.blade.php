@@ -57,7 +57,7 @@
                 <flux:heading size="lg" level="2" class="text-zinc-900 dark:text-white font-semibold">Comprehensive RBI Data Grid</flux:heading>
                 <flux:text variant="subtle" class="text-xs text-zinc-500 dark:text-zinc-400">View all details from the Registry of Barangay Inhabitants. Scroll horizontally to explore categories.</flux:text>
             </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-3">
                 <input 
                     type="text" 
                     wire:model.live="search" 
@@ -65,6 +65,16 @@
                     class="rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-1.5 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand text-xs"
                 />
                 
+                <select 
+                    wire:model.live="nameLetter"
+                    class="rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-1.5 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand text-xs"
+                >
+                    <option value="">All Names (A–Z)</option>
+                    @foreach(range('A', 'Z') as $letter)
+                        <option value="{{ $letter }}">Name Starts with {{ $letter }}</option>
+                    @endforeach
+                </select>
+
                 <select 
                     wire:model.live="purokFilter"
                     class="rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-1.5 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand text-xs"
@@ -94,24 +104,17 @@
                     <option value="resident">Resident Voter</option>
                     <option value="unregistered">Not Registered</option>
                 </select>
-
                 <select 
-                    wire:model.live="vaccineFilter"
+                    wire:model.live="ageGroup"
                     class="rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-1.5 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand text-xs"
                 >
-                    <option value="">All Vaccine Status</option>
-                    <option value="fully">Fully Vaccinated</option>
-                    <option value="partially">Partially Vaccinated</option>
-                    <option value="unvaccinated">Unvaccinated</option>
-                </select>
-
-                <select 
-                    wire:model.live="healthFilter"
-                    class="rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-1.5 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand text-xs"
-                >
-                    <option value="">All Health Status</option>
-                    <option value="has_condition">With Medical Condition</option>
-                    <option value="none">No Medical Condition</option>
+                    <option value="">All Ages</option>
+                    <option value="infant">Infant (0–5)</option>
+                    <option value="child">Child (6–12)</option>
+                    <option value="teen">Teen (13–17)</option>
+                    <option value="young_adult">Young Adult (18–30)</option>
+                    <option value="adult">Adult (31–59)</option>
+                    <option value="senior">Senior (60+)</option>
                 </select>
             </div>
         </div>
@@ -141,22 +144,14 @@
                         <!-- Individual Columns Row -->
                         <tr class="bg-zinc-50 dark:bg-zinc-800/40 text-zinc-500 dark:text-zinc-400 font-semibold uppercase text-[9px] border-b border-zinc-200 dark:border-zinc-800">
                             <!-- Resident Name -->
-                            <th class="sticky left-0 bg-zinc-50 dark:bg-zinc-800 py-2.5 px-4 z-20 border-r border-zinc-200 dark:border-zinc-700 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)] cursor-pointer" wire:click="sortBy('last_name')">Full Name
-                                @if($sortField === 'last_name') <span class="ml-1">{{ $sortDirection === 'asc' ? '▲' : '▼' }}</span> @endif
-                            </th>
+                            <th class="sticky left-0 bg-zinc-50 dark:bg-zinc-800 py-2.5 px-4 z-20 border-r border-zinc-200 dark:border-zinc-700 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">Full Name</th>
                             
                             <!-- Basic & Family -->
-                            <th class="py-2.5 px-3 cursor-pointer" wire:click="sortBy('household_no')">HH No.
-                                @if($sortField === 'household_no') <span class="ml-1">{{ $sortDirection === 'asc' ? '▲' : '▼' }}</span> @endif
-                            </th>
-                            <th class="py-2.5 px-3 cursor-pointer" wire:click="sortBy('purok_no')">Purok
-                                @if($sortField === 'purok_no') <span class="ml-1">{{ $sortDirection === 'asc' ? '▲' : '▼' }}</span> @endif
-                            </th>
+                            <th class="py-2.5 px-3">HH No.</th>
+                            <th class="py-2.5 px-3">Purok</th>
                             <th class="py-2.5 px-3">Address</th>
                             <th class="py-2.5 px-3">Relationship to Head</th>
-                            <th class="py-2.5 px-3 cursor-pointer" wire:click="sortBy('age')">Age
-                                @if($sortField === 'age') <span class="ml-1">{{ $sortDirection === 'asc' ? '▲' : '▼' }}</span> @endif
-                            </th>
+                            <th class="py-2.5 px-3">Age</th>
                             <th class="py-2.5 px-3">Sex</th>
                             <th class="py-2.5 px-3">Birthdate</th>
                             <th class="py-2.5 px-3">Place of Birth</th>

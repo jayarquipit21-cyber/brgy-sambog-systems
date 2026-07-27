@@ -18,6 +18,8 @@ class ManageRbi extends Component
 
     public string $purokFilter = '';
 
+    public string $nameLetter = '';
+
     public string $activeTab = 'heads';
 
     public bool $showRejectModal = false;
@@ -26,7 +28,7 @@ class ManageRbi extends Component
 
     public string $rejectionReason = '';
 
-    public string $sortField = 'last_name';
+    public string $sortField = 'first_name';
 
     public string $sortDirection = 'asc';
 
@@ -197,6 +199,11 @@ class ManageRbi extends Component
         $this->resetPage();
     }
 
+    public function updatingNameLetter(): void
+    {
+        $this->resetPage();
+    }
+
     public function updatingActiveTab(): void
     {
         $this->resetPage();
@@ -263,6 +270,10 @@ class ManageRbi extends Component
             $query->whereHas('household', function ($hq) {
                 $hq->where('purok_no', $this->purokFilter);
             });
+        }
+
+        if ($this->nameLetter) {
+            $query->where('residents.first_name', 'like', $this->nameLetter.'%');
         }
 
         // Calculate simple stats for widgets (using only approved residents)
