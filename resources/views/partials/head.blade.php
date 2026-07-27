@@ -8,6 +8,12 @@
             document.documentElement.classList.remove('dark');
         }
     })();
+
+    // Early chart execution queue to handle inline Blade script calls prior to app.js module load
+    window._chartQueue = window._chartQueue || [];
+    window.renderChartWhenReady = window.renderChartWhenReady || function (canvasId, configCallback) {
+        window._chartQueue.push({ canvasId, configCallback });
+    };
 </script>
 
 <meta charset="utf-8" />
