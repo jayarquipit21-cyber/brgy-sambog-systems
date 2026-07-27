@@ -196,7 +196,7 @@ class ManageAppointments extends Component
 
     public function render()
     {
-        $query = Appointment::with('user.resident')
+        $baseQuery = Appointment::with('user.resident')
             ->orderByRaw("CASE 
                 WHEN status = 'pending' THEN 0 
                 WHEN status = 'approved-pending' THEN 1 
@@ -205,25 +205,27 @@ class ManageAppointments extends Component
             ->orderBy('created_at', 'desc');
 
         if ($this->statusFilter) {
-            $query->where('status', $this->statusFilter);
-        }
-
-        // Type filter: document vs rental
-        if ($this->typeFilter === 'rental') {
-            $query->where('purpose', 'like', '[Rental Service]%');
-        } elseif ($this->typeFilter === 'document') {
-            $query->where('purpose', 'not like', '[Rental Service]%');
+            $baseQuery->where('status', $this->statusFilter);
         }
 
         if ($this->search) {
-            $query->whereHas('user', function ($q) {
+            $baseQuery->whereHas('user', function ($q) {
                 $q->where('name', 'like', '%'.$this->search.'%')
                     ->orWhere('email', 'like', '%'.$this->search.'%');
             });
         }
 
+        $documentRequests = (clone $baseQuery)
+            ->where('purpose', 'not like', '[Rental Service]%')
+            ->get();
+
+        $rentalBookings = (clone $baseQuery)
+            ->where('purpose', 'like', '[Rental Service]%')
+            ->get();
+
         return view('livewire.admin.manage-appointments', [
-            'appointments' => $query->get(),
+            'documentRequests' => $documentRequests,
+            'rentalBookings' => $rentalBookings,
         ]);
     }
 }

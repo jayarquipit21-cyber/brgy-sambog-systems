@@ -32,13 +32,21 @@ class MyAppointments extends Component
 
     public function render()
     {
-        $appointments = Appointment::where('user_id', Auth::id())
+        $documentRequests = Appointment::where('user_id', Auth::id())
+            ->where('purpose', 'not like', '[Rental Service]%')
+            ->orderBy('appointment_date', 'desc')
+            ->orderBy('appointment_time', 'desc')
+            ->get();
+
+        $rentalBookings = Appointment::where('user_id', Auth::id())
+            ->where('purpose', 'like', '[Rental Service]%')
             ->orderBy('appointment_date', 'desc')
             ->orderBy('appointment_time', 'desc')
             ->get();
 
         return view('livewire.my-appointments', [
-            'appointments' => $appointments,
+            'documentRequests' => $documentRequests,
+            'rentalBookings' => $rentalBookings,
         ]);
     }
 }

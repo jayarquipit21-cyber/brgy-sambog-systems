@@ -209,11 +209,58 @@
         </ul>
     </div>
 
-    <!-- Right Column: Appointments + Document History + Announcements -->
+    <!-- Right Column: Announcements + Appointments + Document History -->
     <div class="flex flex-col gap-6">
 
-        <!-- Document Request Component with Dropdown Selection -->
-        <livewire:book-appointment />
+        <!-- Barangay Announcements -->
+        <div class="bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-2xl p-6 shadow-lg space-y-4 card-glow-household">
+            <div class="flex items-center gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-3">
+                <div class="p-2 bg-emerald-500/10 text-emerald-600 dark:text-emerald-500 rounded-xl" aria-hidden="true">
+                    <flux:icon name="megaphone" class="size-5" />
+                </div>
+                <div>
+                    <h3 class="text-base font-bold text-zinc-900 dark:text-white font-outfit">Barangay Announcements</h3>
+                    <p class="text-[11px] text-zinc-500 font-light">Latest updates from Brgy. Sambog</p>
+                </div>
+            </div>
+
+            <ul class="space-y-3" role="list" aria-label="Barangay announcements">
+                @forelse($recentAnnouncements as $ann)
+                    <li>
+                        <button
+                            type="button"
+                            onclick="openAnnouncementModal({{ $ann->id }}, {{ Js::from($ann->title) }}, {{ Js::from($ann->body) }}, {{ Js::from($ann->published_at ? $ann->published_at->diffForHumans() : 'Draft') }}, {{ Js::from($ann->type ?? 'General') }}, {{ $ann->is_pinned ? 'true' : 'false' }})"
+                            class="w-full text-left p-3.5 rounded-xl bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-100 dark:border-zinc-700/40 cursor-pointer hover:border-emerald-400/50 hover:bg-emerald-50/50 dark:hover:bg-emerald-900/10 transition-all duration-200 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
+                            aria-label="Read announcement: {{ $ann->title }}"
+                        >
+                            <div class="flex items-start gap-2.5">
+                                @if($ann->is_pinned)
+                                    <flux:icon name="bookmark" class="size-4 text-emerald-500 mt-0.5 shrink-0" aria-hidden="true" />
+                                @else
+                                    <flux:icon name="megaphone" class="size-4 text-emerald-500 mt-0.5 shrink-0" aria-hidden="true" />
+                                @endif
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-center gap-2 mb-0.5">
+                                        <span class="text-[9px] uppercase tracking-widest font-bold px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">{{ $ann->type ?? 'General' }}</span>
+                                    </div>
+                                    <div class="text-xs font-bold text-zinc-800 dark:text-white truncate group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors">{{ $ann->title }}</div>
+                                    <div class="text-[11px] text-zinc-500 dark:text-zinc-400 line-clamp-2 mt-0.5">{{ $ann->body }}</div>
+                                    <div class="text-[9px] text-zinc-400 mt-1.5 flex items-center justify-between">
+                                        <span>{{ $ann->published_at ? $ann->published_at->diffForHumans() : 'Draft' }}</span>
+                                        <span class="text-emerald-600 dark:text-emerald-400 font-bold">Tap to read →</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </button>
+                    </li>
+                @empty
+                    <li class="text-center py-6">
+                        <flux:icon name="megaphone" class="size-8 text-zinc-300 dark:text-zinc-600 mx-auto mb-1" aria-hidden="true" />
+                        <p class="text-xs text-zinc-500">No announcements posted yet.</p>
+                    </li>
+                @endforelse
+            </ul>
+        </div>
 
         <!-- Upcoming Pickup Slots -->
         <div class="bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-2xl p-6 shadow-lg space-y-4 card-glow-household">
@@ -309,52 +356,6 @@
                     <li class="text-center py-4">
                         <flux:icon name="clock" class="size-8 text-zinc-300 dark:text-zinc-600 mx-auto mb-1" aria-hidden="true" />
                         <p class="text-[11px] text-zinc-500">No past pickups found.</p>
-                    </li>
-                @endforelse
-            </ul>
-        </div>
-
-        <!-- Recent Barangay Announcements -->
-        <div class="flex-1 flex flex-col bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-2xl p-6 shadow-lg">
-            <div class="flex items-center gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-3">
-                <div class="p-2 bg-emerald-500/10 text-emerald-600 dark:text-emerald-500 rounded-xl" aria-hidden="true">
-                    <flux:icon name="megaphone" class="size-5" />
-                </div>
-                <div>
-                    <h3 class="text-sm font-bold text-zinc-900 dark:text-white font-outfit">Barangay Announcements</h3>
-                    <p class="text-[10px] text-zinc-500 font-light">Latest from Brgy. Sambog</p>
-                </div>
-            </div>
-
-            <ul class="flex-1 space-y-2 mt-4" role="list" aria-label="Barangay announcements">
-                @forelse($recentAnnouncements as $ann)
-                    <li>
-                        <button
-                            type="button"
-                            onclick="openAnnouncementModal({{ $ann->id }}, {{ Js::from($ann->title) }}, {{ Js::from($ann->body) }}, {{ Js::from($ann->published_at ? $ann->published_at->diffForHumans() : 'Draft') }}, {{ Js::from($ann->type ?? 'General') }}, {{ $ann->is_pinned ? 'true' : 'false' }})"
-                            class="w-full text-left p-3 rounded-xl bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-100 dark:border-zinc-700/40 cursor-pointer hover:border-emerald-400/50 hover:bg-emerald-50/50 dark:hover:bg-emerald-900/10 transition-all duration-200 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
-                            aria-label="Read announcement: {{ $ann->title }}"
-                        >
-                            <div class="flex items-start gap-2">
-                                @if($ann->is_pinned)
-                                    <flux:icon name="bookmark" class="size-3 text-emerald-500 mt-0.5 shrink-0" aria-hidden="true" />
-                                @endif
-                                <div class="flex-1 min-w-0">
-                                    <div class="text-[11px] font-bold text-zinc-800 dark:text-white truncate group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors">{{ $ann->title }}</div>
-                                    <div class="text-[10px] text-zinc-500 dark:text-zinc-400 line-clamp-2 mt-0.5">{{ $ann->body }}</div>
-                                    <div class="text-[9px] text-zinc-400 mt-1 flex items-center gap-1">
-                                        {{ $ann->published_at ? $ann->published_at->diffForHumans() : 'Draft' }}
-                                        <span class="text-emerald-500 font-bold">· Tap to read</span>
-                                    </div>
-                                </div>
-                                <flux:icon name="arrow-right" class="size-3 text-zinc-300 group-hover:text-emerald-500 shrink-0 mt-0.5 transition-colors" aria-hidden="true" />
-                            </div>
-                        </button>
-                    </li>
-                @empty
-                    <li class="text-center py-4">
-                        <flux:icon name="megaphone" class="size-8 text-zinc-300 dark:text-zinc-600 mx-auto mb-1" aria-hidden="true" />
-                        <p class="text-[11px] text-zinc-500">No announcements posted yet.</p>
                     </li>
                 @endforelse
             </ul>
