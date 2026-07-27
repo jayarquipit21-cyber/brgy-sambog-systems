@@ -255,6 +255,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('pages.health');
     })->name('health');
 
+    Route::get('health/edit', function () {
+        if (! auth()->user()->isHealthAdmin() && ! auth()->user()->isAdmin()) {
+            abort(403, 'Unauthorized.');
+        }
+
+        return view('pages.health-edit');
+    })->name('health.edit');
+
     // Household Head routes
     Route::get('household', function () {
         if (! auth()->user()->isHouseholdHead() && ! auth()->user()->isAdmin()) {

@@ -52,7 +52,7 @@
 
                 @if(auth()->user()->isHealthAdmin())
                     <flux:navbar.item icon="heart" :href="route('health')" :current="request()->routeIs('health')" wire:navigate class="{{ request()->routeIs('health') ? $activeNavbarGlow : '' }}">
-                        {{ __('Health Concerns') }}
+                        {{ __('Health-based Data') }}
                     </flux:navbar.item>
                 @endif
 
@@ -129,7 +129,10 @@
 
                     @if(auth()->user()->isHealthAdmin())
                         <flux:sidebar.item icon="heart" :href="route('health')" :current="request()->routeIs('health')" wire:navigate class="{{ request()->routeIs('health') ? $mobileActiveGlow : '' }}">
-                            {{ __('Health Concerns') }}
+                            {{ __('Health-based Data') }}
+                        </flux:sidebar.item>
+                        <flux:sidebar.item icon="pencil-square" :href="route('health.edit')" :current="request()->routeIs('health.edit')" wire:navigate class="{{ request()->routeIs('health.edit') ? $mobileActiveGlow : '' }}">
+                            {{ __('Update Health Records') }}
                         </flux:sidebar.item>
                     @endif
 

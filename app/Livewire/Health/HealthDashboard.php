@@ -12,17 +12,22 @@ class HealthDashboard extends Component
 
     public string $search = '';
 
+    public string $nameLetter = '';
+
     public string $ageGroupFilter = '';
 
     public string $healthFilter = '';
 
-    // Selected columns that are related ONLY to health concerns, preventing exposure of sensitive info
+    // Selected columns related to health and medical history
     protected array $healthRelatedColumns = [
         'id',
         'first_name',
+        'middle_name',
         'last_name',
+        'extension',
         'age',
         'sex',
+        'blood_type',
         'age_classification',
         'health_condition',
         'unvaccinated',
@@ -36,9 +41,16 @@ class HealthDashboard extends Component
         'booster_brand',
         'nutritional_classification',
         'vulnerable_sector',
+        'has_philhealth',
+        'philhealth_no',
     ];
 
     public function updatingSearch(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatingNameLetter(): void
     {
         $this->resetPage();
     }
@@ -55,18 +67,22 @@ class HealthDashboard extends Component
 
     public function render()
     {
-        // Enforce column selection strictly in the database query layer!
         $query = Resident::approved()->select($this->healthRelatedColumns)
-            ->whereNotNull('health_condition')
-            ->where('health_condition', '!=', '')
-            ->orderBy('age', 'asc');
+            ->orderBy('last_name', 'asc')
+            ->orderBy('first_name', 'asc');
 
         if ($this->search) {
             $query->where(function ($q) {
                 $q->where('first_name', 'like', '%'.$this->search.'%')
                     ->orWhere('last_name', 'like', '%'.$this->search.'%')
-                    ->orWhere('health_condition', 'like', '%'.$this->search.'%');
+                    ->orWhere('middle_name', 'like', '%'.$this->search.'%')
+                    ->orWhere('health_condition', 'like', '%'.$this->search.'%')
+                    ->orWhere('blood_type', 'like', '%'.$this->search.'%');
             });
+        }
+
+        if ($this->nameLetter) {
+            $query->where('first_name', 'like', $this->nameLetter.'%');
         }
 
         // Age-Dynamic classification filters
@@ -83,21 +99,33 @@ class HealthDashboard extends Component
         }
 
         if ($this->healthFilter) {
-            $query->where('health_condition', 'like', '%'.$this->healthFilter.'%');
+            if ($this->healthFilter === 'has_condition') {
+                $query->whereNotNull('health_condition')
+                    ->where('health_condition', '!=', '')
+                    ->where('health_condition', '!=', 'None');
+            } elseif ($this->healthFilter === 'none') {
+                $query->where(function ($q) {
+                    $q->whereNull('health_condition')
+                        ->orWhere('health_condition', '')
+                        ->orWhere('health_condition', 'None');
+                });
+            } else {
+                $query->where('health_condition', 'like', '%'.$this->healthFilter.'%');
+            }
         }
 
         // Generate age-dynamic aggregates for widgets
         $stats = [
-            'total_cases' => Resident::approved()->whereNotNull('health_condition')->where('health_condition', '!=', '')->count(),
-            'pediatric_cases' => Resident::approved()->where('age', '<=', 12)->whereNotNull('health_condition')->where('health_condition', '!=', '')->count(),
-            'youth_cases' => Resident::approved()->whereBetween('age', [13, 24])->whereNotNull('health_condition')->where('health_condition', '!=', '')->count(),
-            'adult_cases' => Resident::approved()->whereBetween('age', [25, 59])->whereNotNull('health_condition')->where('health_condition', '!=', '')->count(),
-            'senior_cases' => Resident::approved()->where('age', '>=', 60)->whereNotNull('health_condition')->where('health_condition', '!=', '')->count(),
+            'total_cases' => Resident::approved()->whereNotNull('health_condition')->where('health_condition', '!=', '')->where('health_condition', '!=', 'None')->count(),
+            'pediatric_cases' => Resident::approved()->where('age', '<=', 12)->whereNotNull('health_condition')->where('health_condition', '!=', '')->where('health_condition', '!=', 'None')->count(),
+            'youth_cases' => Resident::approved()->whereBetween('age', [13, 24])->whereNotNull('health_condition')->where('health_condition', '!=', '')->where('health_condition', '!=', 'None')->count(),
+            'adult_cases' => Resident::approved()->whereBetween('age', [25, 59])->whereNotNull('health_condition')->where('health_condition', '!=', '')->where('health_condition', '!=', 'None')->count(),
+            'senior_cases' => Resident::approved()->where('age', '>=', 60)->whereNotNull('health_condition')->where('health_condition', '!=', '')->where('health_condition', '!=', 'None')->count(),
             'fully_vaccinated' => Resident::approved()->where('fully_vaccinated', 'Y')->count(),
         ];
 
         return view('livewire.health.health-dashboard', [
-            'healthRecords' => $query->paginate(10),
+            'healthRecords' => $query->paginate(25),
             'stats' => $stats,
         ]);
     }

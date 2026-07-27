@@ -115,7 +115,7 @@
         <div class="pt-6 flex flex-wrap gap-4">
             <a href="{{ route('health') }}" class="inline-flex items-center justify-center px-5 py-3 bg-gradient-to-r from-violet-500 to-violet-600 hover:from-violet-600 hover:to-violet-650 text-white text-xs font-bold rounded-xl transition duration-300 shadow-md shadow-violet-500/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500">
                 <flux:icon name="heart" class="size-3.5 mr-2" />
-                Open Health Registry
+                Open Health-based Data
             </a>
             <a href="{{ route('appointments') }}" class="inline-flex items-center justify-center px-4 py-3 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 text-xs font-semibold text-zinc-700 dark:text-zinc-300 rounded-xl transition duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500">
                 View Appointments
