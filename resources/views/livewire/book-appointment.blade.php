@@ -69,10 +69,24 @@
                     : \App\Livewire\BookAppointment::$availableDocuments;
             @endphp
             @if($document_type && isset($itemDict[$document_type]))
-                <div class="mt-2.5 p-2.5 rounded-xl flex items-start gap-2.5 animate-fadeIn border @if($appointment_category === 'rental') bg-amber-50/70 dark:bg-amber-950/20 border-amber-200/60 dark:border-amber-800/40 @else bg-emerald-50/70 dark:bg-emerald-950/20 border-emerald-200/60 dark:border-emerald-800/40 @endif">
-                    <flux:icon name="information-circle" class="size-4 shrink-0 mt-0.5 @if($appointment_category === 'rental') text-amber-600 dark:text-amber-400 @else text-emerald-600 dark:text-emerald-400 @endif" aria-hidden="true" />
-                    <div class="text-[11px] @if($appointment_category === 'rental') text-amber-900/80 dark:text-amber-300 @else text-emerald-900/80 dark:text-emerald-300 @endif">
-                        <strong class="font-bold">{{ $document_type }}:</strong> {{ $itemDict[$document_type] }}
+                @php
+                    $itemFee = \App\Models\ServiceFee::getFeeByName($document_type);
+                @endphp
+                <div class="mt-2.5 p-2.5 rounded-xl flex items-start justify-between gap-2.5 animate-fadeIn border @if($appointment_category === 'rental') bg-amber-50/70 dark:bg-amber-950/20 border-amber-200/60 dark:border-amber-800/40 @else bg-emerald-50/70 dark:bg-emerald-950/20 border-emerald-200/60 dark:border-emerald-800/40 @endif">
+                    <div class="flex items-start gap-2">
+                        <flux:icon name="information-circle" class="size-4 shrink-0 mt-0.5 @if($appointment_category === 'rental') text-amber-600 dark:text-amber-400 @else text-emerald-600 dark:text-emerald-400 @endif" aria-hidden="true" />
+                        <div class="text-[11px] @if($appointment_category === 'rental') text-amber-900/80 dark:text-amber-300 @else text-emerald-900/80 dark:text-emerald-300 @endif">
+                            <strong class="font-bold">{{ $document_type }}:</strong> {{ $itemDict[$document_type] }}
+                        </div>
+                    </div>
+                    <div class="shrink-0 text-right">
+                        @if($itemFee == 0.00)
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-100 dark:bg-emerald-900/40 text-emerald-800 dark:text-emerald-300 border border-emerald-300/60">FREE / EXEMPTED</span>
+                        @else
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-extrabold @if($appointment_category === 'rental') bg-amber-100 dark:bg-amber-900/40 text-amber-900 dark:text-amber-300 border border-amber-300/60 @else bg-emerald-100 dark:bg-emerald-900/40 text-emerald-900 dark:text-emerald-300 border border-emerald-300/60 @endif">
+                                ₱{{ number_format($itemFee, 2) }}
+                            </span>
+                        @endif
                     </div>
                 </div>
             @endif

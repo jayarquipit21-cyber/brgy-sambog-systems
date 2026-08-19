@@ -272,7 +272,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('pages.household');
     })->name('household');
 
-    // Admin Services Registry routes
+    // Admin Services & Sales Registry routes
     Route::prefix('admin/services')->group(function () {
         Route::get('documents', function () {
             if (! auth()->user()->isAdmin()) {
@@ -290,6 +290,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
             return view('pages.admin.services-rentals');
         })->name('admin.services.rentals');
     });
+
+    Route::get('admin/sales', function () {
+        if (! auth()->user()->isAdmin()) {
+            abort(403, 'Unauthorized.');
+        }
+
+        return view('pages.admin.sales-report');
+    })->name('admin.sales');
 
     // Resident / Household Services routes (Document Requests & Utility Rentals)
     Route::prefix('services')->group(function () {

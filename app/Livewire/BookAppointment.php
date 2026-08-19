@@ -86,12 +86,37 @@ class BookAppointment extends Component
             $finalPurpose = ! empty($details) ? "{$prefix} — {$details}" : $prefix;
         }
 
-        Appointment::create([
+        $feeAmount = \App\Models\ServiceFee::getFeeByName($selectedItem);
+        if ($feeAmount === 0.00 && ($selectedItem === 'Other / Custom Barangay Document' || $selectedItem === 'Other Facility / Equipment Rental')) {
+            $feeAmount = $isRental ? 100.00 : 50.00;
+        }
+
+        $appointment = Appointment::create([
             'user_id' => Auth::id(),
             'purpose' => $finalPurpose,
             'status' => 'pending',
             'appointment_date' => ($isRental && ! empty($this->rental_date)) ? $this->rental_date : null,
             'appointment_time' => null,
+        ]);
+
+        // Generate Transaction record
+        $isFreeExemption = ($feeAmount == 0.00);
+        $user = Auth::user();
+        \App\Models\Transaction::create([
+            'appointment_id' => $appointment->id,
+            'user_id' => $user->id,
+            'payer_name' => $user->name,
+            'payer_address' => $user->resident?->household?->address ?? ($user->resident?->purok ? 'Purok '.$user->resident->purok.', Brgy. Sambog' : 'Barangay Sambog, Corella, Bohol'),
+            'service_type' => $isRental ? 'rental' : 'document',
+            'item_name' => $selectedItem,
+            'quantity' => 1,
+            'unit_price' => $feeAmount,
+            'total_amount' => $feeAmount,
+            'amount_paid' => $isFreeExemption ? 0.00 : 0.00,
+            'payment_status' => $isFreeExemption ? 'waived' : 'pending',
+            'payment_method' => $isFreeExemption ? 'free_exemption' : 'cash',
+            'notes' => $isFreeExemption ? 'Statutory fee exemption (Free assistance)' : 'Pending payment collection at Barangay Hall',
+            'paid_at' => $isFreeExemption ? now() : null,
         ]);
 
         $this->reset(['document_type', 'purpose_details', 'purpose', 'rental_date']);
@@ -102,15 +127,15 @@ class BookAppointment extends Component
         foreach ($admins as $admin) {
             $admin->notify(new SystemNotification(
                 $notifTitle,
-                Auth::user()->name.' submitted a request for: "'.$finalPurpose.'".',
+                Auth::user()->name.' submitted a request for: "'.$finalPurpose.'". Fee: ₱'.number_format($feeAmount, 2),
                 $isRental ? 'building-office' : 'document-text',
                 route('appointments')
             ));
         }
 
         $toastText = $isRental
-            ? __('Rental service request submitted successfully! Your request is pending review.')
-            : __('Document request submitted successfully! Your request is pending review.');
+            ? __('Rental service request submitted successfully! Fee: ₱:fee (Pending Review)', ['fee' => number_format($feeAmount, 2)])
+            : __('Document request submitted successfully! Fee: ₱:fee (Pending Review)', ['fee' => number_format($feeAmount, 2)]);
 
         Flux::toast(variant: 'success', text: $toastText);
 

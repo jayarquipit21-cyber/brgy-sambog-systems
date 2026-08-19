@@ -45,12 +45,15 @@
                     </flux:sidebar.item>
 
                     @if(auth()->user()->isAdmin())
-                        <flux:sidebar.group expandable icon="briefcase" :heading="__('Manage Services')" :current="request()->routeIs('admin.services.*') || request()->routeIs('appointments')" :expanded="request()->routeIs('admin.services.*') || request()->routeIs('appointments')">
+                        <flux:sidebar.group expandable icon="briefcase" :heading="__('Manage Services')" :current="request()->routeIs('admin.services.*') || request()->routeIs('admin.sales') || request()->routeIs('appointments')" :expanded="request()->routeIs('admin.services.*') || request()->routeIs('admin.sales') || request()->routeIs('appointments')">
                             <flux:sidebar.item icon="document-text" :href="route('admin.services.documents')" :current="request()->routeIs('admin.services.documents') || request()->routeIs('appointments')" wire:navigate class="{{ (request()->routeIs('admin.services.documents') || request()->routeIs('appointments')) ? $activeGlow : '' }}">
                                 {{ __('Document Requests Registry') }}
                             </flux:sidebar.item>
                             <flux:sidebar.item icon="building-office" :href="route('admin.services.rentals')" :current="request()->routeIs('admin.services.rentals')" wire:navigate class="{{ request()->routeIs('admin.services.rentals') ? $activeGlow : '' }}">
                                 {{ __('Utility & Rentals Registry') }}
+                            </flux:sidebar.item>
+                            <flux:sidebar.item icon="banknotes" :href="route('admin.sales')" :current="request()->routeIs('admin.sales')" wire:navigate class="{{ request()->routeIs('admin.sales') ? $activeGlow : '' }}">
+                                {{ __('Sales & Revenue Report') }}
                             </flux:sidebar.item>
                         </flux:sidebar.group>
                         <flux:sidebar.item icon="users" :href="route('rbi')" :current="request()->routeIs('rbi')" wire:navigate class="{{ request()->routeIs('rbi') ? $activeGlow : '' }}">

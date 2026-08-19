@@ -59,6 +59,7 @@
                             <th class="py-3 px-4">Resident</th>
                             <th class="py-3 px-4">Scheduled Slot</th>
                             <th class="py-3 px-4">Requested Document / Purpose</th>
+                            <th class="py-3 px-4">Fee & Payment</th>
                             <th class="py-3 px-4 text-center">Status</th>
                             <th class="py-3 px-4 text-right">Actions</th>
                         </tr>
@@ -86,6 +87,40 @@
                                 </td>
                                 <td class="py-3 px-4 max-w-sm whitespace-normal break-words font-medium">
                                     {{ $apt->purpose }}
+                                </td>
+                                <td class="py-3 px-4 whitespace-nowrap">
+                                    @php
+                                        $txn = $apt->transaction;
+                                        $amt = $txn ? $txn->total_amount : 0.00;
+                                        $payStatus = $txn ? $txn->payment_status : 'pending';
+                                    @endphp
+                                    <div class="font-bold text-zinc-900 dark:text-white text-xs">
+                                        @if($amt == 0)
+                                            <span class="text-emerald-600 dark:text-emerald-400 font-bold">FREE</span>
+                                        @else
+                                            ₱{{ number_format($amt, 2) }}
+                                        @endif
+                                    </div>
+                                    <div class="mt-0.5">
+                                        @if($payStatus === 'paid')
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-extrabold bg-emerald-100 dark:bg-emerald-900/40 text-emerald-800 dark:text-emerald-300">
+                                                Paid @if($txn?->official_receipt_number)({{ $txn->official_receipt_number }})@endif
+                                            </span>
+                                        @elseif($payStatus === 'waived')
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">
+                                                Waived (Exempt)
+                                            </span>
+                                        @else
+                                            <button 
+                                                wire:click="startPayment({{ $apt->id }})"
+                                                class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-extrabold bg-amber-100 hover:bg-amber-200 dark:bg-amber-900/40 dark:hover:bg-amber-900/60 text-amber-900 dark:text-amber-300 border border-amber-300/60 transition cursor-pointer"
+                                                title="Record Payment"
+                                            >
+                                                <span>Unpaid</span>
+                                                <flux:icon name="banknotes" class="size-2.5" />
+                                            </button>
+                                        @endif
+                                    </div>
                                 </td>
                                 <td class="py-3 px-4 text-center">
                                     @if($apt->status === 'pending')
@@ -200,6 +235,7 @@
                             <th class="py-3 px-4">Resident</th>
                             <th class="py-3 px-4">Reserved Slot</th>
                             <th class="py-3 px-4">Rental Item / Venue</th>
+                            <th class="py-3 px-4">Fee & Payment</th>
                             <th class="py-3 px-4 text-center">Status</th>
                             <th class="py-3 px-4 text-right">Actions</th>
                         </tr>
@@ -230,6 +266,36 @@
                                 </td>
                                 <td class="py-3 px-4 max-w-sm whitespace-normal break-words font-bold text-amber-700 dark:text-amber-400">
                                     {{ $displayRentalName }}
+                                </td>
+                                <td class="py-3 px-4 whitespace-nowrap">
+                                    @php
+                                        $txn = $apt->transaction;
+                                        $amt = $txn ? $txn->total_amount : 0.00;
+                                        $payStatus = $txn ? $txn->payment_status : 'pending';
+                                    @endphp
+                                    <div class="font-bold text-zinc-900 dark:text-white text-xs">
+                                        ₱{{ number_format($amt, 2) }}
+                                    </div>
+                                    <div class="mt-0.5">
+                                        @if($payStatus === 'paid')
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-extrabold bg-emerald-100 dark:bg-emerald-900/40 text-emerald-800 dark:text-emerald-300">
+                                                Paid @if($txn?->official_receipt_number)({{ $txn->official_receipt_number }})@endif
+                                            </span>
+                                        @elseif($payStatus === 'waived')
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">
+                                                Waived (Exempt)
+                                            </span>
+                                        @else
+                                            <button 
+                                                wire:click="startPayment({{ $apt->id }})"
+                                                class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-extrabold bg-amber-100 hover:bg-amber-200 dark:bg-amber-900/40 dark:hover:bg-amber-900/60 text-amber-900 dark:text-amber-300 border border-amber-300/60 transition cursor-pointer"
+                                                title="Record Payment"
+                                            >
+                                                <span>Unpaid</span>
+                                                <flux:icon name="banknotes" class="size-2.5" />
+                                            </button>
+                                        @endif
+                                    </div>
                                 </td>
                                 <td class="py-3 px-4 text-center">
                                     @if($apt->status === 'pending')
@@ -407,6 +473,68 @@
             </div>
         </form>
     </flux:modal>
+    <!-- Record Payment & Issue Official Receipt Modal -->
+    <flux:modal name="payment-appointment-modal" class="max-w-md" wire:model="showPaymentModal">
+        <form wire:submit="confirmPayment" class="space-y-6">
+            <div>
+                <flux:heading size="lg">{{ __('Record Payment & Issue Receipt') }}</flux:heading>
+                <flux:subheading>{{ __('Record official collection, assign OR Number, and log transaction into Sales Report.') }}</flux:subheading>
+            </div>
 
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-zinc-700 dark:text-zinc-300 mb-1">Amount to Collect (₱)</label>
+                    <input 
+                        type="number" 
+                        step="0.01"
+                        wire:model="paymentAmount"
+                        class="w-full rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-2 text-zinc-950 dark:text-white font-bold text-sm"
+                        required
+                    />
+                    @error('paymentAmount') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-zinc-700 dark:text-zinc-300 mb-1">Payment Method</label>
+                    <select 
+                        wire:model="paymentMethod"
+                        class="w-full rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-2 text-zinc-950 dark:text-white text-sm"
+                        required
+                    >
+                        <option value="cash">Cash (Over-the-counter)</option>
+                        <option value="gcash">GCash</option>
+                        <option value="maya">Maya</option>
+                        <option value="bank_transfer">Bank Transfer</option>
+                        <option value="free_exemption">Statutory Free Exemption / Indigent</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-zinc-700 dark:text-zinc-300 mb-1">Official Receipt (OR) Number</label>
+                    <input 
+                        type="text" 
+                        wire:model="paymentOrNumber"
+                        placeholder="e.g. OR-2026-0042"
+                        class="w-full rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-2 text-zinc-950 dark:text-white text-sm font-mono"
+                    />
+                    @error('paymentOrNumber') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-zinc-700 dark:text-zinc-300 mb-1">Payment Remarks (Optional)</label>
+                    <input 
+                        type="text" 
+                        wire:model="paymentNotes"
+                        placeholder="e.g. Paid at barangay treasury counter"
+                        class="w-full rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-2 text-zinc-950 dark:text-white text-sm"
+                    />
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-3">
+                <flux:button variant="ghost" type="button" wire:click="$set('showPaymentModal', false)">{{ __('Cancel') }}</flux:button>
+                <flux:button variant="primary" type="submit" class="bg-emerald-600 hover:bg-emerald-700 font-bold text-white">{{ __('Save Payment & Issue Receipt') }}</flux:button>
+            </div>
+        </form>
+    </flux:modal>
 </div>
-

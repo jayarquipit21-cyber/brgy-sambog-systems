@@ -99,12 +99,12 @@
                 <flux:icon.arrow-right class="size-3.5 text-zinc-400 group-hover:text-sky-600 group-hover:translate-x-1 transition" />
             </a>
 
-            <a href="{{ route('health') }}" class="group flex items-center justify-between p-3.5 bg-zinc-50 hover:bg-violet-50/50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 hover:border-violet-500/20 rounded-xl transition duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500">
+            <a href="{{ route('admin.sales') }}" class="group flex items-center justify-between p-3.5 bg-zinc-50 hover:bg-emerald-50/50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 hover:border-emerald-500/20 rounded-xl transition duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500">
                 <div class="flex items-center gap-3">
-                    <flux:icon name="heart" class="size-4 text-violet-650 dark:text-violet-500 group-hover:scale-110 transition" />
-                    <span class="text-xs font-bold text-zinc-700 dark:text-zinc-300 group-hover:text-zinc-900 dark:group-hover:text-white transition">Health-based Data</span>
+                    <flux:icon name="banknotes" class="size-4 text-emerald-650 dark:text-emerald-500 group-hover:scale-110 transition" />
+                    <span class="text-xs font-bold text-zinc-700 dark:text-zinc-300 group-hover:text-zinc-900 dark:group-hover:text-white transition">Sales & Revenue Report</span>
                 </div>
-                <flux:icon.arrow-right class="size-3.5 text-zinc-400 group-hover:text-violet-650 group-hover:translate-x-1 transition" />
+                <flux:icon.arrow-right class="size-3.5 text-zinc-400 group-hover:text-emerald-600 group-hover:translate-x-1 transition" />
             </a>
         </div>
     </div>

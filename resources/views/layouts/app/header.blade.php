@@ -40,12 +40,13 @@
 
                 @if(auth()->user()->isAdmin())
                     <flux:dropdown position="bottom" align="start">
-                        <flux:navbar.item icon="briefcase" icon-trailing="chevron-down" :current="request()->routeIs('admin.services.*') || request()->routeIs('appointments')" class="{{ (request()->routeIs('admin.services.*') || request()->routeIs('appointments')) ? $activeNavbarGlow : '' }}">
+                        <flux:navbar.item icon="briefcase" icon-trailing="chevron-down" :current="request()->routeIs('admin.services.*') || request()->routeIs('admin.sales') || request()->routeIs('appointments')" class="{{ (request()->routeIs('admin.services.*') || request()->routeIs('admin.sales') || request()->routeIs('appointments')) ? $activeNavbarGlow : '' }}">
                             {{ __('Manage Services') }}
                         </flux:navbar.item>
                         <flux:menu>
                             <flux:menu.item icon="document-text" :href="route('admin.services.documents')" wire:navigate>{{ __('Document Requests Registry') }}</flux:menu.item>
                             <flux:menu.item icon="building-office" :href="route('admin.services.rentals')" wire:navigate>{{ __('Utility & Rentals Registry') }}</flux:menu.item>
+                            <flux:menu.item icon="banknotes" :href="route('admin.sales')" wire:navigate>{{ __('Sales & Revenue Report') }}</flux:menu.item>
                         </flux:menu>
                     </flux:dropdown>
 
@@ -129,12 +130,15 @@
                     </flux:sidebar.item>
 
                     @if(auth()->user()->isAdmin())
-                        <flux:sidebar.group expandable icon="briefcase" :heading="__('Manage Services')" :expanded="request()->routeIs('admin.services.*') || request()->routeIs('appointments')">
+                        <flux:sidebar.group expandable icon="briefcase" :heading="__('Manage Services')" :expanded="request()->routeIs('admin.services.*') || request()->routeIs('admin.sales') || request()->routeIs('appointments')">
                             <flux:sidebar.item icon="document-text" :href="route('admin.services.documents')" :current="request()->routeIs('admin.services.documents') || request()->routeIs('appointments')" wire:navigate class="{{ (request()->routeIs('admin.services.documents') || request()->routeIs('appointments')) ? $mobileActiveGlow : '' }}">
                                 {{ __('Document Requests Registry') }}
                             </flux:sidebar.item>
                             <flux:sidebar.item icon="building-office" :href="route('admin.services.rentals')" :current="request()->routeIs('admin.services.rentals')" wire:navigate class="{{ request()->routeIs('admin.services.rentals') ? $mobileActiveGlow : '' }}">
                                 {{ __('Utility & Rentals Registry') }}
+                            </flux:sidebar.item>
+                            <flux:sidebar.item icon="banknotes" :href="route('admin.sales')" :current="request()->routeIs('admin.sales')" wire:navigate class="{{ request()->routeIs('admin.sales') ? $mobileActiveGlow : '' }}">
+                                {{ __('Sales & Revenue Report') }}
                             </flux:sidebar.item>
                         </flux:sidebar.group>
 

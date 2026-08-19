@@ -27,4 +27,12 @@ class Appointment extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * Get the financial transaction associated with this appointment.
+     */
+    public function transaction(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Transaction::class);
+    }
 }

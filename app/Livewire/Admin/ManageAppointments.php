@@ -36,6 +36,93 @@ class ManageAppointments extends Component
 
     public bool $showRejectModal = false;
 
+    // Payment & OR modal state
+    public ?int $selectedPaymentAppointmentId = null;
+
+    public float $paymentAmount = 0.00;
+
+    public string $paymentMethod = 'cash';
+
+    public string $paymentOrNumber = '';
+
+    public string $paymentNotes = '';
+
+    public bool $showPaymentModal = false;
+
+    public function startPayment(int $id): void
+    {
+        $appointment = Appointment::with('transaction')->findOrFail($id);
+        $this->selectedPaymentAppointmentId = $id;
+
+        $transaction = $appointment->transaction;
+        if (! $transaction) {
+            $isRental = str_starts_with($appointment->purpose, '[Rental Service]');
+            $cleanName = $isRental ? str_replace('[Rental Service] ', '', explode('—', $appointment->purpose)[0]) : explode('—', $appointment->purpose)[0];
+            $cleanName = trim($cleanName);
+            $fee = \App\Models\ServiceFee::getFeeByName($cleanName) ?: ($isRental ? 100.00 : 50.00);
+
+            $transaction = \App\Models\Transaction::create([
+                'appointment_id' => $appointment->id,
+                'user_id' => $appointment->user_id,
+                'payer_name' => $appointment->user?->name ?? 'Resident Requester',
+                'payer_address' => $appointment->user?->resident?->household?->address ?? 'Barangay Sambog, Corella, Bohol',
+                'service_type' => $isRental ? 'rental' : 'document',
+                'item_name' => $cleanName,
+                'quantity' => 1,
+                'unit_price' => $fee,
+                'total_amount' => $fee,
+                'amount_paid' => 0.00,
+                'payment_status' => ($fee == 0.00) ? 'waived' : 'pending',
+                'payment_method' => ($fee == 0.00) ? 'free_exemption' : 'cash',
+            ]);
+        }
+
+        $this->paymentAmount = (float) $transaction->total_amount;
+        $this->paymentMethod = $transaction->payment_method ?: 'cash';
+        $this->paymentOrNumber = $transaction->official_receipt_number ?: sprintf('OR-%s-%04d', now()->format('Y'), rand(100, 999));
+        $this->paymentNotes = $transaction->notes ?: '';
+        $this->showPaymentModal = true;
+    }
+
+    public function confirmPayment(): void
+    {
+        $this->validate([
+            'paymentAmount' => 'required|numeric|min:0',
+            'paymentMethod' => 'required|string',
+            'paymentOrNumber' => 'nullable|string|max:50',
+            'paymentNotes' => 'nullable|string|max:500',
+        ]);
+
+        $appointment = Appointment::with('transaction')->findOrFail($this->selectedPaymentAppointmentId);
+        $transaction = $appointment->transaction;
+
+        if ($transaction) {
+            $transaction->update([
+                'amount_paid' => $this->paymentAmount,
+                'payment_status' => ($this->paymentAmount >= $transaction->total_amount || $this->paymentMethod === 'free_exemption') ? 'paid' : 'pending',
+                'payment_method' => $this->paymentMethod,
+                'official_receipt_number' => $this->paymentOrNumber ?: null,
+                'processed_by' => auth()->id(),
+                'notes' => $this->paymentNotes ?: 'Payment received at Barangay Hall',
+                'paid_at' => now(),
+            ]);
+        }
+
+        $this->showPaymentModal = false;
+        $this->selectedPaymentAppointmentId = null;
+
+        Flux::toast(variant: 'success', text: __('Payment recorded & Official Receipt updated successfully!'));
+    }
+
+    public function markAsFreeExemption(int $id): void
+    {
+        $appointment = Appointment::with('transaction')->findOrFail($id);
+        if ($appointment->transaction) {
+            $appointment->transaction->markAsWaived(auth()->id(), 'Statutory Exemption (Indigency / RA 11261)');
+        }
+        Flux::toast(variant: 'success', text: __('Fee waived under statutory exemption.'));
+    }
+
     public function startApprove(int $id): void
     {
         $this->selectedAppointmentId = $id;
@@ -196,7 +283,7 @@ class ManageAppointments extends Component
 
     public function render()
     {
-        $baseQuery = Appointment::with('user.resident')
+        $baseQuery = Appointment::with(['user.resident', 'transaction'])
             ->orderByRaw("CASE 
                 WHEN status = 'pending' THEN 0 
                 WHEN status = 'approved-pending' THEN 1 
