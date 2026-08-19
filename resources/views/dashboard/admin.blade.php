@@ -83,7 +83,7 @@
                 <flux:icon.arrow-right class="size-3.5 text-zinc-400 group-hover:text-emerald-600 group-hover:translate-x-1 transition" />
             </a>
 
-            <a href="{{ route('appointments') }}" class="group flex items-center justify-between p-3.5 bg-zinc-50 hover:bg-amber-50/50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 hover:border-amber-500/20 rounded-xl transition duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500">
+            <a href="{{ route('admin.services.documents') }}" class="group flex items-center justify-between p-3.5 bg-zinc-50 hover:bg-amber-50/50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 hover:border-amber-500/20 rounded-xl transition duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500">
                 <div class="flex items-center gap-3">
                     <flux:icon name="calendar" class="size-4 text-amber-650 dark:text-amber-500 group-hover:scale-110 transition" />
                     <span class="text-xs font-bold text-zinc-700 dark:text-zinc-300 group-hover:text-zinc-900 dark:group-hover:text-white transition">Clearances & Appointments</span>
@@ -516,7 +516,7 @@
             </div>
             <p class="text-xs text-zinc-500 dark:text-zinc-400 font-light">Overview of the latest 5 bookings. Go to Appointments to approve or reject.</p>
         </div>
-        <a href="{{ route('appointments') }}" class="w-fit inline-flex items-center justify-center px-4 py-2 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 hover:border-emerald-500/30 text-xs font-bold text-emerald-650 dark:text-emerald-400 rounded-xl transition duration-300 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500">
+        <a href="{{ route('admin.services.documents') }}" class="w-fit inline-flex items-center justify-center px-4 py-2 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 hover:border-emerald-500/30 text-xs font-bold text-emerald-650 dark:text-emerald-400 rounded-xl transition duration-300 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500">
             Manage Slots
         </a>
     </div>

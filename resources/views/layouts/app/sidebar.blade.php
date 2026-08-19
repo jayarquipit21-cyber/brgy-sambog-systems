@@ -45,14 +45,19 @@
                     </flux:sidebar.item>
 
                     @if(auth()->user()->isAdmin())
+                        <flux:sidebar.group expandable icon="briefcase" :heading="__('Manage Services')" :current="request()->routeIs('admin.services.*') || request()->routeIs('appointments')" :expanded="request()->routeIs('admin.services.*') || request()->routeIs('appointments')">
+                            <flux:sidebar.item icon="document-text" :href="route('admin.services.documents')" :current="request()->routeIs('admin.services.documents') || request()->routeIs('appointments')" wire:navigate class="{{ (request()->routeIs('admin.services.documents') || request()->routeIs('appointments')) ? $activeGlow : '' }}">
+                                {{ __('Document Requests Registry') }}
+                            </flux:sidebar.item>
+                            <flux:sidebar.item icon="building-office" :href="route('admin.services.rentals')" :current="request()->routeIs('admin.services.rentals')" wire:navigate class="{{ request()->routeIs('admin.services.rentals') ? $activeGlow : '' }}">
+                                {{ __('Utility & Rentals Registry') }}
+                            </flux:sidebar.item>
+                        </flux:sidebar.group>
                         <flux:sidebar.item icon="users" :href="route('rbi')" :current="request()->routeIs('rbi')" wire:navigate class="{{ request()->routeIs('rbi') ? $activeGlow : '' }}">
                             {{ __('Population Management') }}
                         </flux:sidebar.item>
                         <flux:sidebar.item icon="table-cells" :href="route('rbi-data')" :current="request()->routeIs('rbi-data')" wire:navigate class="{{ request()->routeIs('rbi-data') ? $activeGlow : '' }}">
                             {{ __('RBI Data Table') }}
-                        </flux:sidebar.item>
-                        <flux:sidebar.item icon="calendar" :href="route('appointments')" :current="request()->routeIs('appointments')" wire:navigate class="{{ request()->routeIs('appointments') ? $activeGlow : '' }}">
-                            {{ __('Appointments & Rentals') }}
                         </flux:sidebar.item>
                         <flux:sidebar.item icon="megaphone" :href="route('admin.announcements')" :current="request()->routeIs('admin.announcements')" wire:navigate class="{{ request()->routeIs('admin.announcements') ? $activeGlow : '' }}">
                             {{ __('Announcements & Events') }}
@@ -78,12 +83,15 @@
                     @endif
 
                     @if(auth()->user()->isHouseholdHead() || auth()->user()->isResident())
-                        <flux:sidebar.item icon="calendar" :href="route('appointments')" :current="request()->routeIs('appointments')" wire:navigate class="{{ request()->routeIs('appointments') ? $activeGlow : '' }}">
-                            {{ __('Bookings & Rentals') }}
-                        </flux:sidebar.item>
-                    @endif
+                        <flux:sidebar.group expandable icon="briefcase" :heading="__('Barangay Services')" :current="request()->routeIs('services.*')" :expanded="request()->routeIs('services.*')">
+                            <flux:sidebar.item icon="document-text" :href="route('services.documents')" :current="request()->routeIs('services.documents')" wire:navigate class="{{ request()->routeIs('services.documents') ? $activeGlow : '' }}">
+                                {{ __('Request Documents') }}
+                            </flux:sidebar.item>
+                            <flux:sidebar.item icon="building-office" :href="route('services.rentals')" :current="request()->routeIs('services.rentals')" wire:navigate class="{{ request()->routeIs('services.rentals') ? $activeGlow : '' }}">
+                                {{ __('Book Utility Rentals') }}
+                            </flux:sidebar.item>
+                        </flux:sidebar.group>
 
-                    @if(auth()->user()->isResident() || auth()->user()->isHouseholdHead())
                         <flux:sidebar.item icon="identification" :href="route('profile.complete')" :current="request()->routeIs('profile.complete')" wire:navigate class="{{ request()->routeIs('profile.complete') ? $activeGlow : '' }}">
                             {{ __('Complete My Profile') }}
                             @if(!auth()->user()->resident?->place_of_birth)

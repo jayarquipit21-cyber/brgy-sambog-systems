@@ -272,13 +272,47 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('pages.household');
     })->name('household');
 
-    // Shared Appointments route (also aliased as 'my-appointments' for notification deep-links)
+    // Admin Services Registry routes
+    Route::prefix('admin/services')->group(function () {
+        Route::get('documents', function () {
+            if (! auth()->user()->isAdmin()) {
+                abort(403, 'Unauthorized.');
+            }
+
+            return view('pages.admin.services-documents');
+        })->name('admin.services.documents');
+
+        Route::get('rentals', function () {
+            if (! auth()->user()->isAdmin()) {
+                abort(403, 'Unauthorized.');
+            }
+
+            return view('pages.admin.services-rentals');
+        })->name('admin.services.rentals');
+    });
+
+    // Resident / Household Services routes (Document Requests & Utility Rentals)
+    Route::prefix('services')->group(function () {
+        Route::get('documents', function () {
+            return view('pages.services-documents');
+        })->name('services.documents');
+
+        Route::get('rentals', function () {
+            return view('pages.services-rentals');
+        })->name('services.rentals');
+    });
+
+    // Backward-compatibility aliases for appointments & my-appointments
     Route::get('appointments', function () {
-        return view('pages.appointments');
+        if (auth()->user()?->isAdmin()) {
+            return redirect()->route('admin.services.documents');
+        }
+
+        return redirect()->route('services.documents');
     })->name('appointments');
 
     Route::get('my-appointments', function () {
-        return view('pages.appointments');
+        return redirect()->route('services.documents');
     })->name('my-appointments');
 
     // Complete My Profile (resident self-service)

@@ -18,6 +18,8 @@ class BookAppointment extends Component
 {
     public string $appointment_category = 'document'; // 'document' or 'rental'
 
+    public bool $lockCategory = false;
+
     public string $document_type = '';
 
     public string $purpose_details = '';

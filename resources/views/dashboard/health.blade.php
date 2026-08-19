@@ -117,7 +117,7 @@
                 <flux:icon name="heart" class="size-3.5 mr-2" />
                 Open Health-based Data
             </a>
-            <a href="{{ route('appointments') }}" class="inline-flex items-center justify-center px-4 py-3 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 text-xs font-semibold text-zinc-700 dark:text-zinc-300 rounded-xl transition duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500">
+            <a href="{{ route('services.documents') }}" class="inline-flex items-center justify-center px-4 py-3 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 text-xs font-semibold text-zinc-700 dark:text-zinc-300 rounded-xl transition duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500">
                 View Appointments
             </a>
         </div>

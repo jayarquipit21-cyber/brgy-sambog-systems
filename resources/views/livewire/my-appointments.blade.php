@@ -1,4 +1,5 @@
 <div class="space-y-8">
+    @if($type === '' || $type === 'document')
     <!-- Dedicated Table 1: Document Requests -->
     <div class="bg-white dark:bg-zinc-900 shadow-md rounded-2xl p-6 border border-zinc-200 dark:border-zinc-800 card-glow-admin">
         <div class="mb-6 flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-4">
@@ -110,7 +111,9 @@
             </div>
         @endif
     </div>
+    @endif
 
+    @if($type === '' || $type === 'rental')
     <!-- Dedicated Table 2: Facility & Equipment Rentals -->
     <div class="bg-white dark:bg-zinc-900 shadow-md rounded-2xl p-6 border border-zinc-200 dark:border-zinc-800 card-glow-household">
         <div class="mb-6 flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-4">
@@ -225,4 +228,5 @@
             </div>
         @endif
     </div>
+    @endif
 </div>

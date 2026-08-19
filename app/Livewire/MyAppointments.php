@@ -10,6 +10,8 @@ use Livewire\Component;
 
 class MyAppointments extends Component
 {
+    public string $type = ''; // 'document', 'rental', or '' for all
+
     #[On('appointment-booked')]
     public function refresh(): void
     {
@@ -22,27 +24,31 @@ class MyAppointments extends Component
             ->where('user_id', Auth::id())
             ->firstOrFail();
 
-        if ($appointment->status === 'approved-pending') {
+        if (in_array($appointment->status, ['pending', 'approved-pending'])) {
             $appointment->update(['status' => 'cancelled']);
             Flux::toast(variant: 'success', text: __('Request has been cancelled.'));
         } else {
-            Flux::toast(variant: 'danger', text: __('Only pending requests can be cancelled.'));
+            Flux::toast(variant: 'danger', text: __('Only pending or pending-approval requests can be cancelled.'));
         }
     }
 
     public function render()
     {
-        $documentRequests = Appointment::where('user_id', Auth::id())
-            ->where('purpose', 'not like', '[Rental Service]%')
-            ->orderBy('appointment_date', 'desc')
-            ->orderBy('appointment_time', 'desc')
-            ->get();
+        $documentRequests = ($this->type === 'rental')
+            ? collect()
+            : Appointment::where('user_id', Auth::id())
+                ->where('purpose', 'not like', '[Rental Service]%')
+                ->orderBy('appointment_date', 'desc')
+                ->orderBy('appointment_time', 'desc')
+                ->get();
 
-        $rentalBookings = Appointment::where('user_id', Auth::id())
-            ->where('purpose', 'like', '[Rental Service]%')
-            ->orderBy('appointment_date', 'desc')
-            ->orderBy('appointment_time', 'desc')
-            ->get();
+        $rentalBookings = ($this->type === 'document')
+            ? collect()
+            : Appointment::where('user_id', Auth::id())
+                ->where('purpose', 'like', '[Rental Service]%')
+                ->orderBy('appointment_date', 'desc')
+                ->orderBy('appointment_time', 'desc')
+                ->get();
 
         return view('livewire.my-appointments', [
             'documentRequests' => $documentRequests,

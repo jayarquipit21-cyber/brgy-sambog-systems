@@ -56,7 +56,7 @@ class ManageAppointments extends Component
                         $dateClosure = AppointmentDateClosure::where('date', $value)->first();
                         if ($dateClosure) {
                             $reason = $dateClosure->reason ? ' ('.$dateClosure->reason.')' : '';
-                            $fail(__('The office is closed on this date:reason', ['reason' => $reason]));
+                            $fail(__('The office is closed on this date: :reason', ['reason' => $reason]));
 
                             return;
                         }
@@ -94,7 +94,7 @@ class ManageAppointments extends Component
         $notifTitle = $isRental ? 'Rental Booking Approved' : 'Appointment Approved';
 
         // Notify the resident who booked
-        $appointment->user->notify(new SystemNotification(
+        $appointment->user?->notify(new SystemNotification(
             $notifTitle,
             "Your request for \"{$appointment->purpose}\" has been approved and scheduled for {$appointment->appointment_date->format('M d, Y')} at {$appointment->appointment_time}.",
             'check-circle',
@@ -111,7 +111,7 @@ class ManageAppointments extends Component
 
         $isRental = str_starts_with($appointment->purpose, '[Rental Service]');
 
-        $appointment->user->notify(new SystemNotification(
+        $appointment->user?->notify(new SystemNotification(
             $isRental ? 'Rental Booking Ready for Signing' : 'Document Ready for Signing',
             "Your request for \"{$appointment->purpose}\" has been approved and is awaiting the Kapitan's signature.",
             'clipboard-document-check',
@@ -128,7 +128,7 @@ class ManageAppointments extends Component
 
         $isRental = str_starts_with($appointment->purpose, '[Rental Service]');
 
-        $appointment->user->notify(new SystemNotification(
+        $appointment->user?->notify(new SystemNotification(
             $isRental ? 'Rental Service Completed' : 'Document Ready for Pickup',
             $isRental
                 ? "Your rental request for \"{$appointment->purpose}\" is completed."
@@ -163,7 +163,7 @@ class ManageAppointments extends Component
         ]);
 
         // Notify the resident (must happen before resetting rejectReason)
-        $appointment->user->notify(new SystemNotification(
+        $appointment->user?->notify(new SystemNotification(
             'Appointment Cancelled',
             "Your request for \"{$appointment->purpose}\" has been cancelled. Reason: {$this->rejectReason}",
             'x-circle',

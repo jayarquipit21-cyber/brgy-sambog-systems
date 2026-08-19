@@ -31,6 +31,7 @@
         </div>
     </div>
 
+    @if($typeFilter === '' || $typeFilter === 'document')
     <!-- Dedicated Registry 1: Document Requests -->
     <div class="bg-white dark:bg-zinc-900 shadow-md rounded-xl p-6 border border-zinc-200 dark:border-zinc-800">
         <div class="mb-4 flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
@@ -66,8 +67,8 @@
                         @foreach($documentRequests as $apt)
                             <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition">
                                 <td class="py-3 px-4 text-zinc-900 dark:text-white font-medium">
-                                    {{ $apt->user->name }}
-                                    <div class="text-xs text-zinc-500 dark:text-zinc-400">{{ $apt->user->email }}</div>
+                                    {{ $apt->user?->name ?? 'N/A' }}
+                                    <div class="text-xs text-zinc-500 dark:text-zinc-400">{{ $apt->user?->email ?? '' }}</div>
                                 </td>
                                 <td class="py-3 px-4">
                                     @if($apt->appointment_date)
@@ -169,7 +170,9 @@
             </div>
         @endif
     </div>
+    @endif
 
+    @if($typeFilter === '' || $typeFilter === 'rental')
     <!-- Dedicated Registry 2: Facility & Equipment Rentals -->
     <div class="bg-white dark:bg-zinc-900 shadow-md rounded-xl p-6 border border-zinc-200 dark:border-zinc-800">
         <div class="mb-4 flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
@@ -208,8 +211,8 @@
                             @endphp
                             <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition">
                                 <td class="py-3 px-4 text-zinc-900 dark:text-white font-medium">
-                                    {{ $apt->user->name }}
-                                    <div class="text-xs text-zinc-500 dark:text-zinc-400">{{ $apt->user->email }}</div>
+                                    {{ $apt->user?->name ?? 'N/A' }}
+                                    <div class="text-xs text-zinc-500 dark:text-zinc-400">{{ $apt->user?->email ?? '' }}</div>
                                 </td>
                                 <td class="py-3 px-4">
                                     @if($apt->appointment_date)
@@ -311,7 +314,7 @@
             </div>
         @endif
     </div>
-</div>
+    @endif
 
     <!-- Approval & Scheduling Modal -->
     <flux:modal name="approve-appointment-modal" class="max-w-md" wire:model="showApproveModal">

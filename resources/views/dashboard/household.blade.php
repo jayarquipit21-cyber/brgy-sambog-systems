@@ -274,7 +274,7 @@
                         <p class="text-[10px] text-zinc-500 font-light">Upcoming document requests</p>
                     </div>
                 </div>
-                <a href="{{ route('appointments') }}" class="text-[10px] font-bold text-sky-600 dark:text-sky-400 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 rounded">View All</a>
+                <a href="{{ route('services.documents') }}" class="text-[10px] font-bold text-sky-600 dark:text-sky-400 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 rounded">View All</a>
             </div>
 
             <ul class="space-y-2" role="list" aria-label="Upcoming appointment slots">
@@ -309,7 +309,7 @@
                     <li class="text-center py-4">
                         <flux:icon name="calendar" class="size-8 text-zinc-300 dark:text-zinc-600 mx-auto mb-1" aria-hidden="true" />
                         <p class="text-[11px] text-zinc-500">No upcoming pickups scheduled.</p>
-                        <a href="{{ route('appointments') }}" class="text-[11px] font-bold text-sky-600 dark:text-sky-400 hover:underline mt-1 inline-block">Book one now →</a>
+                        <a href="{{ route('services.documents') }}" class="text-[11px] font-bold text-sky-600 dark:text-sky-400 hover:underline mt-1 inline-block">Book one now →</a>
                     </li>
                 @endforelse
             </ul>
@@ -327,7 +327,7 @@
                         <p class="text-[10px] text-zinc-500 font-light">Past document requests</p>
                     </div>
                 </div>
-                <a href="{{ route('appointments') }}" class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded">View All</a>
+                <a href="{{ route('services.documents') }}" class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded">View All</a>
             </div>
 
             <ul class="space-y-2" role="list" aria-label="Past appointment history">

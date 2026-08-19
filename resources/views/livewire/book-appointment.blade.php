@@ -9,39 +9,27 @@
                 @endif
             </div>
             <div>
-                <h3 class="text-base font-bold text-zinc-900 dark:text-white font-outfit">Barangay Public Services Request</h3>
-                <p class="text-[11px] text-zinc-500 font-light">Appoint official documents or reserve barangay rental facilities & equipment</p>
+                <h3 class="text-base font-bold text-zinc-900 dark:text-white font-outfit">
+                    @if($appointment_category === 'rental')
+                        Barangay Rental & Facility Reservation
+                    @else
+                        Barangay Official Document Request
+                    @endif
+                </h3>
+                <p class="text-[11px] text-zinc-500 font-light">
+                    @if($appointment_category === 'rental')
+                        Reserve barangay facilities, covered court, tents, chairs, tables, and sound system
+                    @else
+                        Request official clearances, indigency, residency proof, business permits, & inhabitant IDs
+                    @endif
+                </p>
             </div>
         </div>
     </div>
 
     <form wire:submit="book" class="space-y-4">
 
-        <!-- Category Dropdown / Segmented Toggle -->
-        <div>
-            <label for="appointment_category" class="block text-xs font-bold uppercase tracking-wider text-zinc-700 dark:text-zinc-300 mb-1.5">
-                Service Type / Category <span class="text-emerald-500">*</span>
-            </label>
-            <div class="grid grid-cols-2 gap-2.5 p-1 bg-zinc-100 dark:bg-zinc-800/80 rounded-xl border border-zinc-200/60 dark:border-zinc-700/60">
-                <button 
-                    type="button"
-                    wire:click="$set('appointment_category', 'document')"
-                    class="flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-bold transition-all duration-200 @if($appointment_category === 'document') bg-white dark:bg-zinc-900 text-emerald-600 dark:text-emerald-400 shadow-sm border border-zinc-200/80 dark:border-zinc-700 @else text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white @endif"
-                >
-                    <flux:icon name="document-text" class="size-3.5" />
-                    <span>Official Documents</span>
-                </button>
 
-                <button 
-                    type="button"
-                    wire:click="$set('appointment_category', 'rental')"
-                    class="flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-bold transition-all duration-200 @if($appointment_category === 'rental') bg-white dark:bg-zinc-900 text-amber-600 dark:text-amber-400 shadow-sm border border-zinc-200/80 dark:border-zinc-700 @else text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white @endif"
-                >
-                    <flux:icon name="building-office" class="size-3.5" />
-                    <span>Rental Services & Facilities</span>
-                </button>
-            </div>
-        </div>
 
         <!-- Item Dropdown Select (Documents vs Rentals) -->
         <div>

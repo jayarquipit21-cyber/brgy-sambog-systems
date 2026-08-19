@@ -225,7 +225,7 @@
                         <p class="text-[11px] text-zinc-500 font-light">Pickup slots scheduled with the Barangay Hall</p>
                     </div>
                 </div>
-                <a href="{{ route('appointments') }}" class="text-xs font-bold text-sky-600 dark:text-sky-400 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 rounded">Book or View All</a>
+                <a href="{{ route('services.documents') }}" class="text-xs font-bold text-sky-600 dark:text-sky-400 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 rounded">Book or View All</a>
             </div>
 
             <div class="overflow-x-auto">
@@ -267,7 +267,7 @@
                                 <td colspan="3" class="py-8 text-center">
                                     <flux:icon name="calendar" class="size-8 text-zinc-300 dark:text-zinc-600 mx-auto mb-2" aria-hidden="true" />
                                     <p class="text-xs text-zinc-500">No upcoming pickup slots found.</p>
-                                    <a href="{{ route('appointments') }}" class="text-xs font-bold text-sky-600 dark:text-sky-400 hover:underline mt-1 inline-block">Book one now →</a>
+                                    <a href="{{ route('services.documents') }}" class="text-xs font-bold text-sky-600 dark:text-sky-400 hover:underline mt-1 inline-block">Book one now →</a>
                                 </td>
                             </tr>
                         @endforelse
@@ -288,7 +288,7 @@
                         <p class="text-[11px] text-zinc-500 font-light">Past document requests</p>
                     </div>
                 </div>
-                <a href="{{ route('appointments') }}" class="text-xs font-bold text-sky-600 dark:text-sky-400 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 rounded">View All</a>
+                <a href="{{ route('services.documents') }}" class="text-xs font-bold text-sky-600 dark:text-sky-400 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 rounded">View All</a>
             </div>
 
             <div class="overflow-x-auto">
