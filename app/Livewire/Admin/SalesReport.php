@@ -216,12 +216,15 @@ class SalesReport extends Component
         // 1. Base Query with filters
         $query = Transaction::with(['user', 'processor'])->latest('paid_at')->latest('id');
 
-        if ($this->startDate && $this->endDate) {
-            $query->whereBetween('created_at', [
-                Carbon::parse($this->startDate)->startOfDay(),
-                Carbon::parse($this->endDate)->endOfDay(),
-            ]);
+        if ($this->startDate) {
+            $query->whereDate('created_at', '>=', $this->startDate);
         }
+
+        if ($this->endDate) {
+            $query->whereDate('created_at', '<=', $this->endDate);
+        }
+
+
 
         if ($this->serviceTypeFilter) {
             $query->where('service_type', $this->serviceTypeFilter);
@@ -245,8 +248,35 @@ class SalesReport extends Component
             });
         }
 
-        // 2. Metrics & KPI Calculations for filtered scope
-        $metricsQuery = clone $query;
+        // 2. Metrics & KPI Calculations for active filter scope (independent of table status filter)
+        $metricsQuery = Transaction::query();
+
+        if ($this->startDate) {
+            $metricsQuery->whereDate('created_at', '>=', $this->startDate);
+        }
+
+        if ($this->endDate) {
+            $metricsQuery->whereDate('created_at', '<=', $this->endDate);
+        }
+
+        if ($this->serviceTypeFilter) {
+            $metricsQuery->where('service_type', $this->serviceTypeFilter);
+        }
+
+        if ($this->paymentMethodFilter) {
+            $metricsQuery->where('payment_method', $this->paymentMethodFilter);
+        }
+
+        if ($this->search) {
+            $s = '%'.$this->search.'%';
+            $metricsQuery->where(function ($q) use ($s) {
+                $q->where('payer_name', 'like', $s)
+                    ->orWhere('item_name', 'like', $s)
+                    ->orWhere('transaction_code', 'like', $s)
+                    ->orWhere('official_receipt_number', 'like', $s);
+            });
+        }
+
         $allMatching = $metricsQuery->get();
 
         $totalGrossRevenue = $allMatching->where('payment_status', 'paid')->sum('amount_paid');

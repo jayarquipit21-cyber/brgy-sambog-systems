@@ -28,6 +28,8 @@ class Transaction extends Model
         'paid_at',
     ];
 
+    protected $dateFormat = 'Y-m-d H:i:s';
+
     protected $casts = [
         'unit_price' => 'decimal:2',
         'total_amount' => 'decimal:2',
