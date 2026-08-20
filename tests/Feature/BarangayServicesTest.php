@@ -180,7 +180,7 @@ class BarangayServicesTest extends TestCase
         $this->get(route('household'))->assertStatus(403);
 
         $this->get(route('dashboard'))->assertOk();
-        $this->get(route('appointments'))->assertOk();
+        $this->get(route('appointments'))->assertRedirect(route('services.documents'));
     }
 
     public function test_health_officers_cannot_access_rbi_or_household_routes(): void
@@ -194,7 +194,7 @@ class BarangayServicesTest extends TestCase
 
         $this->get(route('health'))->assertOk();
         $this->get(route('dashboard'))->assertOk();
-        $this->get(route('appointments'))->assertOk();
+        $this->get(route('appointments'))->assertRedirect(route('services.documents'));
     }
 
     public function test_household_heads_cannot_access_rbi_or_health_routes(): void
@@ -208,7 +208,7 @@ class BarangayServicesTest extends TestCase
 
         $this->get(route('household'))->assertOk();
         $this->get(route('dashboard'))->assertOk();
-        $this->get(route('appointments'))->assertOk();
+        $this->get(route('appointments'))->assertRedirect(route('services.documents'));
     }
 
     public function test_admins_can_access_all_routes(): void
@@ -221,7 +221,7 @@ class BarangayServicesTest extends TestCase
         $this->get(route('rbi-data'))->assertOk();
         $this->get(route('health'))->assertOk();
         $this->get(route('household'))->assertOk();
-        $this->get(route('appointments'))->assertOk();
+        $this->get(route('appointments'))->assertRedirect(route('admin.services.documents'));
 
         // Check if the component renders successfully
         Livewire::test(RbiDataTable::class)
@@ -312,7 +312,7 @@ class BarangayServicesTest extends TestCase
             'first_name' => 'Basilio',
             'last_name' => 'Ibarra',
             'relationship_to_head' => 'Son',
-            'age' => 10, // relative to 2026-06-01 (Aug 2015 to June 2026 is 10 years, since birthday has not occurred yet!)
+            'age' => \Carbon\Carbon::parse('2015-08-20')->age,
         ]);
     }
 
