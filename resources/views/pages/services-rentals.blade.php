@@ -15,5 +15,7 @@
                 <livewire:my-appointments type="rental" />
             </div>
         </div>
+
+        <livewire:transaction-history serviceType="rental" />
     </div>
 </x-layouts::app>

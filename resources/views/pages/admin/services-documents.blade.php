@@ -8,5 +8,7 @@
         </div>
 
         <livewire:admin.manage-appointments typeFilter="document" />
+
+        <livewire:transaction-history serviceType="document" />
     </div>
 </x-layouts::app>

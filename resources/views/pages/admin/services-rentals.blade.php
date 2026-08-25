@@ -8,5 +8,7 @@
         </div>
 
         <livewire:admin.manage-appointments typeFilter="rental" />
+
+        <livewire:transaction-history serviceType="rental" />
     </div>
 </x-layouts::app>

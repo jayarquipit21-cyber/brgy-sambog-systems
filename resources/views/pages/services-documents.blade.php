@@ -15,5 +15,7 @@
                 <livewire:my-appointments type="document" />
             </div>
         </div>
+
+        <livewire:transaction-history serviceType="document" />
     </div>
 </x-layouts::app>
