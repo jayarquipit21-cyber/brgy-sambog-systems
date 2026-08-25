@@ -47,13 +47,13 @@
                     @if(auth()->user()->isAdmin())
                         <flux:sidebar.group expandable icon="briefcase" :heading="__('Manage Services')" :current="request()->routeIs('admin.services.*') || request()->routeIs('admin.sales') || request()->routeIs('appointments')" :expanded="request()->routeIs('admin.services.*') || request()->routeIs('admin.sales') || request()->routeIs('appointments')">
                             <flux:sidebar.item icon="document-text" :href="route('admin.services.documents')" :current="request()->routeIs('admin.services.documents') || request()->routeIs('appointments')" wire:navigate class="{{ (request()->routeIs('admin.services.documents') || request()->routeIs('appointments')) ? $activeGlow : '' }}">
-                                {{ __('Document Requests Registry') }}
+                                {{ __('Document Requests') }}
                             </flux:sidebar.item>
                             <flux:sidebar.item icon="building-office" :href="route('admin.services.rentals')" :current="request()->routeIs('admin.services.rentals')" wire:navigate class="{{ request()->routeIs('admin.services.rentals') ? $activeGlow : '' }}">
-                                {{ __('Utility & Rentals Registry') }}
+                                {{ __('Utility & Rentals') }}
                             </flux:sidebar.item>
                             <flux:sidebar.item icon="banknotes" :href="route('admin.sales')" :current="request()->routeIs('admin.sales')" wire:navigate class="{{ request()->routeIs('admin.sales') ? $activeGlow : '' }}">
-                                {{ __('Sales & Revenue Report') }}
+                                {{ __('Sales & Revenue') }}
                             </flux:sidebar.item>
                         </flux:sidebar.group>
                         <flux:sidebar.item icon="users" :href="route('rbi')" :current="request()->routeIs('rbi')" wire:navigate class="{{ request()->routeIs('rbi') ? $activeGlow : '' }}">
@@ -87,10 +87,10 @@
 
                     @if(auth()->user()->isHouseholdHead() || auth()->user()->isResident())
                         <flux:sidebar.group expandable icon="briefcase" :heading="__('Barangay Services')" :current="request()->routeIs('services.*')" :expanded="request()->routeIs('services.*')">
-                            <flux:sidebar.item icon="document-text" :href="route('services.documents')" :current="request()->routeIs('services.documents')" wire:navigate class="{{ request()->routeIs('services.documents') ? $activeGlow : '' }}">
+                            <flux:sidebar.item icon="document-text" :href="route('services.documents')" :current="request()->routeIs('services.documents')" wire:navigate class="text-xs! {{ request()->routeIs('services.documents') ? $activeGlow : '' }}">
                                 {{ __('Request Documents') }}
                             </flux:sidebar.item>
-                            <flux:sidebar.item icon="building-office" :href="route('services.rentals')" :current="request()->routeIs('services.rentals')" wire:navigate class="{{ request()->routeIs('services.rentals') ? $activeGlow : '' }}">
+                            <flux:sidebar.item icon="building-office" :href="route('services.rentals')" :current="request()->routeIs('services.rentals')" wire:navigate class="text-xs! {{ request()->routeIs('services.rentals') ? $activeGlow : '' }}">
                                 {{ __('Book Utility Rentals') }}
                             </flux:sidebar.item>
                         </flux:sidebar.group>

@@ -77,18 +77,49 @@ select:focus[data-flux-control] {
     @apply size-4;
 } */
 
-/* Make sidebar items and their fonts bigger */
+/* Clean, sleek sidebar items styling */
 [data-flux-sidebar-item] {
-    font-size: 1.125rem !important; /* text-lg */
-    line-height: 1.75rem !important;
-    padding-top: 0.75rem !important;
-    padding-bottom: 0.75rem !important;
-    height: auto !important;
+    font-size: 0.8125rem !important; /* 13px */
+    line-height: 1.25rem !important;
+    height: 2.25rem !important;
+    padding-top: 0.25rem !important;
+    padding-bottom: 0.25rem !important;
+    padding-left: 0.625rem !important;
+    padding-right: 0.625rem !important;
+}
+
+[data-flux-sidebar-item] [data-content] {
+    font-size: 0.8125rem !important; /* 13px */
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
 }
 
 [data-flux-sidebar-item] svg {
-    width: 1.5rem !important;
-    height: 1.5rem !important;
+    width: 1.125rem !important;
+    height: 1.125rem !important;
+    flex-shrink: 0 !important;
+}
+
+/* Nested sub-items inside groups (e.g. Manage Services, Barangay Services) */
+[data-flux-sidebar-group] [data-flux-sidebar-item] {
+    font-size: 0.75rem !important; /* 12px / text-xs */
+    height: 2rem !important;
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+}
+
+[data-flux-sidebar-group] [data-flux-sidebar-item] [data-content] {
+    font-size: 0.75rem !important; /* 12px / text-xs */
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+}
+
+[data-flux-sidebar-group] [data-flux-sidebar-item] svg {
+    width: 1rem !important;
+    height: 1rem !important;
+    flex-shrink: 0 !important;
 }
 
 /* Project brand and role-based utilities */
@@ -141,5 +172,53 @@ select:focus[data-flux-control] {
 
 .animate-pulse-slow {
     animation: pulse-slow 8s ease-in-out infinite;
+}
+
+/* Global Print Stylesheet for entire application */
+@media print {
+    /* Completely eliminate sidebars, top headers, navbars, and mobile overlays on all printed pages */
+    ui-sidebar,
+    [data-flux-sidebar],
+    ui-header,
+    [data-flux-header],
+    ui-navbar,
+    [data-flux-navbar],
+    nav,
+    header,
+    aside,
+    footer,
+    .print\:hidden,
+    .no-print,
+    [data-flux-modal-close],
+    [data-flux-toast-group] {
+        display: none !important;
+        visibility: hidden !important;
+        width: 0 !important;
+        height: 0 !important;
+        min-width: 0 !important;
+        max-width: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        position: absolute !important;
+        left: -99999px !important;
+        top: -99999px !important;
+        overflow: hidden !important;
+    }
+
+    /* Reset main layout canvas to use 100% of paper width */
+    main,
+    ui-main,
+    [data-flux-main],
+    body,
+    html {
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: white !important;
+        color: black !important;
+    }
 }
 

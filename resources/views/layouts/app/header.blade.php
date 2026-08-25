@@ -43,10 +43,10 @@
                         <flux:navbar.item icon="briefcase" icon-trailing="chevron-down" :current="request()->routeIs('admin.services.*') || request()->routeIs('admin.sales') || request()->routeIs('appointments')" class="{{ (request()->routeIs('admin.services.*') || request()->routeIs('admin.sales') || request()->routeIs('appointments')) ? $activeNavbarGlow : '' }}">
                             {{ __('Manage Services') }}
                         </flux:navbar.item>
-                        <flux:menu>
-                            <flux:menu.item icon="document-text" :href="route('admin.services.documents')" wire:navigate>{{ __('Document Requests Registry') }}</flux:menu.item>
-                            <flux:menu.item icon="building-office" :href="route('admin.services.rentals')" wire:navigate>{{ __('Utility & Rentals Registry') }}</flux:menu.item>
-                            <flux:menu.item icon="banknotes" :href="route('admin.sales')" wire:navigate>{{ __('Sales & Revenue Report') }}</flux:menu.item>
+                        <flux:menu class="text-xs">
+                            <flux:menu.item icon="document-text" :href="route('admin.services.documents')" wire:navigate class="text-xs!">{{ __('Document Requests Registry') }}</flux:menu.item>
+                            <flux:menu.item icon="building-office" :href="route('admin.services.rentals')" wire:navigate class="text-xs!">{{ __('Utility & Rentals Registry') }}</flux:menu.item>
+                            <flux:menu.item icon="banknotes" :href="route('admin.sales')" wire:navigate class="text-xs!">{{ __('Sales & Revenue Report') }}</flux:menu.item>
                         </flux:menu>
                     </flux:dropdown>
 
@@ -75,9 +75,9 @@
                         <flux:navbar.item icon="briefcase" icon-trailing="chevron-down" :current="request()->routeIs('services.*')" class="{{ request()->routeIs('services.*') ? $activeNavbarGlow : '' }}">
                             {{ __('Barangay Services') }}
                         </flux:navbar.item>
-                        <flux:menu>
-                            <flux:menu.item icon="document-text" :href="route('services.documents')" wire:navigate>{{ __('Request Documents') }}</flux:menu.item>
-                            <flux:menu.item icon="building-office" :href="route('services.rentals')" wire:navigate>{{ __('Book Utility Rentals') }}</flux:menu.item>
+                        <flux:menu class="text-xs">
+                            <flux:menu.item icon="document-text" :href="route('services.documents')" wire:navigate class="text-xs!">{{ __('Request Documents') }}</flux:menu.item>
+                            <flux:menu.item icon="building-office" :href="route('services.rentals')" wire:navigate class="text-xs!">{{ __('Book Utility Rentals') }}</flux:menu.item>
                         </flux:menu>
                     </flux:dropdown>
                 @endif
@@ -132,13 +132,13 @@
                     @if(auth()->user()->isAdmin())
                         <flux:sidebar.group expandable icon="briefcase" :heading="__('Manage Services')" :expanded="request()->routeIs('admin.services.*') || request()->routeIs('admin.sales') || request()->routeIs('appointments')">
                             <flux:sidebar.item icon="document-text" :href="route('admin.services.documents')" :current="request()->routeIs('admin.services.documents') || request()->routeIs('appointments')" wire:navigate class="{{ (request()->routeIs('admin.services.documents') || request()->routeIs('appointments')) ? $mobileActiveGlow : '' }}">
-                                {{ __('Document Requests Registry') }}
+                                {{ __('Document Requests') }}
                             </flux:sidebar.item>
                             <flux:sidebar.item icon="building-office" :href="route('admin.services.rentals')" :current="request()->routeIs('admin.services.rentals')" wire:navigate class="{{ request()->routeIs('admin.services.rentals') ? $mobileActiveGlow : '' }}">
-                                {{ __('Utility & Rentals Registry') }}
+                                {{ __('Utility & Rentals') }}
                             </flux:sidebar.item>
                             <flux:sidebar.item icon="banknotes" :href="route('admin.sales')" :current="request()->routeIs('admin.sales')" wire:navigate class="{{ request()->routeIs('admin.sales') ? $mobileActiveGlow : '' }}">
-                                {{ __('Sales & Revenue Report') }}
+                                {{ __('Sales & Revenue') }}
                             </flux:sidebar.item>
                         </flux:sidebar.group>
 
@@ -167,10 +167,10 @@
 
                     @if(auth()->user()->isHouseholdHead() || auth()->user()->isResident())
                         <flux:sidebar.group expandable icon="briefcase" :heading="__('Barangay Services')" :expanded="request()->routeIs('services.*')">
-                            <flux:sidebar.item icon="document-text" :href="route('services.documents')" :current="request()->routeIs('services.documents')" wire:navigate class="{{ request()->routeIs('services.documents') ? $mobileActiveGlow : '' }}">
+                            <flux:sidebar.item icon="document-text" :href="route('services.documents')" :current="request()->routeIs('services.documents')" wire:navigate class="text-xs! {{ request()->routeIs('services.documents') ? $mobileActiveGlow : '' }}">
                                 {{ __('Request Documents') }}
                             </flux:sidebar.item>
-                            <flux:sidebar.item icon="building-office" :href="route('services.rentals')" :current="request()->routeIs('services.rentals')" wire:navigate class="{{ request()->routeIs('services.rentals') ? $mobileActiveGlow : '' }}">
+                            <flux:sidebar.item icon="building-office" :href="route('services.rentals')" :current="request()->routeIs('services.rentals')" wire:navigate class="text-xs! {{ request()->routeIs('services.rentals') ? $mobileActiveGlow : '' }}">
                                 {{ __('Book Utility Rentals') }}
                             </flux:sidebar.item>
                         </flux:sidebar.group>

@@ -44,18 +44,18 @@
                 <select 
                     id="document_type" 
                     wire:model.live="document_type"
-                    class="w-full rounded-xl border border-zinc-200 dark:border-zinc-700/80 bg-white dark:bg-zinc-800/90 px-3.5 py-2.5 text-xs font-bold text-zinc-900 dark:text-white focus:outline-none focus:ring-2 transition shadow-sm cursor-pointer @if($appointment_category === 'rental') focus:border-amber-500 focus:ring-amber-500/20 @else focus:border-emerald-500 focus:ring-emerald-500/20 @endif"
+                    class="w-full rounded-xl border border-zinc-200 dark:border-zinc-700/80 bg-white dark:bg-zinc-800/90 px-3 py-2 text-[11px] font-semibold text-zinc-900 dark:text-white focus:outline-none focus:ring-2 transition shadow-sm cursor-pointer @if($appointment_category === 'rental') focus:border-amber-500 focus:ring-amber-500/20 @else focus:border-emerald-500 focus:ring-emerald-500/20 @endif"
                     required
                 >
                     @if($appointment_category === 'rental')
-                        <option value="" disabled selected>-- Choose Rental Equipment or Facility --</option>
+                        <option value="" disabled selected class="text-[11px]">-- Choose Rental Equipment or Facility --</option>
                         @foreach(\App\Livewire\BookAppointment::$availableRentals as $rental => $desc)
-                            <option value="{{ $rental }}" class="py-1">{{ $rental }}</option>
+                            <option value="{{ $rental }}" class="py-1 text-[11px]">{{ $rental }}</option>
                         @endforeach
                     @else
-                        <option value="" disabled selected>-- Choose Barangay Document --</option>
+                        <option value="" disabled selected class="text-[11px]">-- Choose Barangay Document --</option>
                         @foreach(\App\Livewire\BookAppointment::$availableDocuments as $doc => $desc)
-                            <option value="{{ $doc }}" class="py-1">{{ $doc }}</option>
+                            <option value="{{ $doc }}" class="py-1 text-[11px]">{{ $doc }}</option>
                         @endforeach
                     @endif
                 </select>
