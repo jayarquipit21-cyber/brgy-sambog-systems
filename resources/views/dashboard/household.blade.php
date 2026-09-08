@@ -209,6 +209,130 @@
         </ul>
     </div>
 
+    <!-- Household Demographics Chart -->
+    <div class="bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-2xl p-6 shadow-lg flex flex-col card-glow-household font-outfit">
+        <div class="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3 mb-4">
+            <div class="flex items-center gap-3">
+                <div class="p-2 bg-amber-500/10 text-amber-600 rounded-xl" aria-hidden="true">
+                    <flux:icon name="chart-pie" class="size-5" />
+                </div>
+                <div>
+                    <h3 class="text-base font-bold text-zinc-900 dark:text-white font-outfit">Household Demographics</h3>
+                    <p class="text-[11px] text-zinc-500 font-light">Age and family breakdown of members</p>
+                </div>
+            </div>
+            <span class="text-[10px] font-bold text-amber-700 dark:text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded-full">{{ $householdMembersCount }} registered</span>
+        </div>
+
+        <div class="relative flex-1 w-full flex flex-col gap-4" data-chart-init="initHouseholdChart" data-chart-labels="{{ json_encode($householdAgeLabels ?? []) }}" data-chart-values="{{ json_encode($householdAgeValues ?? []) }}">
+            <div class="w-full h-44 relative">
+                <canvas id="householdAgeChart" class="w-full h-full" aria-label="Bar chart showing Household Age Demographics" role="img"></canvas>
+            </div>
+
+            <div id="household-legend" class="grid grid-cols-2 gap-2 text-xs pt-2 border-t border-zinc-100 dark:border-zinc-800"></div>
+        </div>
+
+        <script data-navigate-eval>
+            window.initHouseholdChart = function (containerEl) {
+                const el = containerEl || document.querySelector('[data-chart-init="initHouseholdChart"]');
+                const labels = el && el.dataset.chartLabels ? JSON.parse(el.dataset.chartLabels) : @json($householdAgeLabels ?? []);
+                const values = el && el.dataset.chartValues ? JSON.parse(el.dataset.chartValues) : @json($householdAgeValues ?? []);
+
+                window.renderChartWhenReady('householdAgeChart', function () {
+                    const isDark = document.documentElement.classList.contains('dark');
+                    const labelColor = isDark ? '#a1a1aa' : '#71717a';
+                    const gridColor = isDark ? 'rgba(63, 63, 70, 0.4)' : 'rgba(228, 228, 231, 0.6)';
+                    const total = values.reduce((a, b) => a + b, 0);
+
+                    const colors = ['bg-amber-500', 'bg-emerald-500', 'bg-blue-500', 'bg-violet-500', 'bg-pink-500'];
+                    let legendHtml = '';
+                    if (total === 0 || labels.length === 0) {
+                        legendHtml = `
+                            <div class="col-span-full text-center py-2 text-xs text-zinc-400 font-medium">
+                                No registered household members yet
+                            </div>
+                        `;
+                    } else {
+                        labels.forEach((label, i) => {
+                            const val = values[i] || 0;
+                            if (val > 0) {
+                                const colorClass = colors[i % colors.length];
+                                legendHtml += `
+                                    <div class="flex items-center justify-between p-2 rounded-xl bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-100 dark:border-zinc-700/40">
+                                        <div class="flex items-center gap-1.5 min-w-0 truncate">
+                                            <span class="w-2 h-2 rounded-full ${colorClass} shrink-0"></span>
+                                            <span class="text-[10px] font-bold text-zinc-700 dark:text-zinc-300 truncate">${label}</span>
+                                        </div>
+                                        <span class="text-xs font-black text-zinc-900 dark:text-white shrink-0 ml-1">${val}</span>
+                                    </div>
+                                `;
+                            }
+                        });
+                        if (!legendHtml) {
+                            legendHtml = `<div class="col-span-full text-center py-2 text-xs text-zinc-400 font-medium">No age data recorded</div>`;
+                        }
+                    }
+                    const legendEl = document.getElementById('household-legend');
+                    if (legendEl) legendEl.innerHTML = legendHtml;
+
+                    return {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Family Members',
+                                data: values,
+                                backgroundColor: [
+                                    'rgba(245, 158, 11, 0.85)',
+                                    'rgba(16, 185, 129, 0.85)',
+                                    'rgba(59, 130, 246, 0.85)',
+                                    'rgba(139, 92, 246, 0.85)',
+                                    'rgba(236, 72, 153, 0.85)'
+                                ],
+                                borderColor: [
+                                    'rgba(217, 119, 6, 0.9)',
+                                    'rgba(5, 150, 105, 0.9)',
+                                    'rgba(37, 99, 235, 0.9)',
+                                    'rgba(124, 58, 237, 0.9)',
+                                    'rgba(219, 39, 119, 0.9)'
+                                ],
+                                borderWidth: 1,
+                                borderRadius: 6
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    grid: { color: gridColor },
+                                    ticks: { color: labelColor, font: { family: 'Instrument Sans' }, precision: 0 }
+                                },
+                                x: {
+                                    grid: { display: false },
+                                    ticks: { color: labelColor, font: { family: 'Instrument Sans' } }
+                                }
+                            },
+                            plugins: {
+                                legend: { display: false },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            const val = context.raw || 0;
+                                            return ` Members: ${val.toLocaleString()}`;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    };
+                });
+            };
+            window.initHouseholdChart();
+        </script>
+    </div>
+
     <!-- Right Column: Announcements + Appointments + Document History -->
     <div class="flex flex-col gap-6">
 

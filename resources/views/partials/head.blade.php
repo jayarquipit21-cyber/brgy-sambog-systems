@@ -33,7 +33,7 @@
 
             try {
                 if (typeof ChartClass.getChart === 'function') {
-                    const existingChart = ChartClass.getChart(canvas);
+                    const existingChart = ChartClass.getChart(canvas) || (typeof canvasId === 'string' ? ChartClass.getChart(canvasId) : null);
                     if (existingChart) {
                         existingChart.destroy();
                     }
@@ -44,7 +44,7 @@
                     new ChartClass(canvas, config);
                 }
             } catch (err) {
-                console.error('Error rendering chart on canvas ' + canvasId + ':', err);
+                console.error('Error rendering chart on canvas ' + (typeof canvasId === 'string' ? canvasId : 'element') + ':', err);
             }
         };
 

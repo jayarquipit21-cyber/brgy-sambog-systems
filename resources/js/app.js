@@ -31,16 +31,20 @@ window.renderChartWhenReady = function (canvasId, configCallback, attempts = 0) 
 
         // Destroy existing Chart instance on canvas if present to avoid canvas reuse errors
         if (typeof ActiveChart.getChart === 'function') {
-            const existingChart = ActiveChart.getChart(canvas);
+            const existingChart = ActiveChart.getChart(canvas) || (typeof canvasId === 'string' ? ActiveChart.getChart(canvasId) : null);
             if (existingChart) {
                 existingChart.destroy();
             }
         }
 
-        // Execute config callback (populates labels, legend HTML, summary text, etc.)
-        const config = typeof configCallback === 'function' ? configCallback() : configCallback;
-        if (config) {
-            new ActiveChart(canvas, config);
+        try {
+            // Execute config callback (populates labels, legend HTML, summary text, etc.)
+            const config = typeof configCallback === 'function' ? configCallback() : configCallback;
+            if (config) {
+                new ActiveChart(canvas, config);
+            }
+        } catch (err) {
+            console.error('Error rendering chart on canvas ' + (typeof canvasId === 'string' ? canvasId : 'element') + ':', err);
         }
     };
 
@@ -67,7 +71,7 @@ const initAllCharts = () => {
     document.querySelectorAll('[data-chart-init]').forEach(el => {
         const fnName = el.getAttribute('data-chart-init');
         if (typeof window[fnName] === 'function') {
-            window[fnName]();
+            window[fnName](el);
         }
     });
 };
@@ -82,6 +86,24 @@ if (document.readyState === 'loading') {
 // Re-initialize charts registered with data-chart-init upon Livewire SPA page navigation
 document.addEventListener('livewire:navigated', initAllCharts);
 document.addEventListener('livewire:initialized', initAllCharts);
+
+// Dynamically re-render charts when dark/light appearance theme changes
+if (typeof window !== 'undefined' && window.MutationObserver) {
+    let themeDebounceTimer = null;
+    const themeObserver = new MutationObserver((mutations) => {
+        for (const mutation of mutations) {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                clearTimeout(themeDebounceTimer);
+                themeDebounceTimer = setTimeout(initAllCharts, 80);
+                break;
+            }
+        }
+    });
+    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+}
+if (typeof window !== 'undefined' && window.matchMedia) {
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', initAllCharts);
+}
 
 import axios from 'axios';
 window.axios = axios;

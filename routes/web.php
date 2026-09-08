@@ -40,8 +40,20 @@ Route::middleware(['auth', 'verified'])->group(function () {
             $data['pendingAppointments'] = Appointment::where('status', 'pending')->count();
             $data['recentAppointments'] = Appointment::with('user')->latest()->take(5)->get();
 
-            // Compute residents per purok (joins households -> residents)
-            $purokCounts = DB::table('households')
+            // Compute residents per purok ensuring all standard Puroks 1-8 are initialized
+            $existingPuroks = DB::table('households')
+                ->whereNotNull('purok_no')
+                ->where('purok_no', '!=', '')
+                ->distinct()
+                ->pluck('purok_no')
+                ->toArray();
+            $defaultPuroks = [1, 2, 3, 4, 5, 6, 7, 8];
+            $allPuroks = array_unique(array_merge($defaultPuroks, $existingPuroks));
+            sort($allPuroks, SORT_NATURAL);
+
+            $purokCounts = array_fill_keys($allPuroks, 0);
+
+            $dbPurokCounts = DB::table('households')
                 ->join('residents', function ($join) {
                     $join->on('households.id', '=', 'residents.household_id')
                         ->where('residents.registration_status', '=', 'approved');
@@ -50,6 +62,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 ->groupBy('households.purok_no')
                 ->pluck('cnt', 'purok_no')
                 ->toArray();
+
+            foreach ($dbPurokCounts as $pNo => $cnt) {
+                $purokCounts[$pNo] = (int) $cnt;
+            }
 
             // Compute gender distribution
             $rawGenderCounts = Resident::approved()->select('sex', DB::raw('count(id) as cnt'))
@@ -92,8 +108,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 }
             }
 
-            // Normalize labels (sort by purok number)
-            ksort($purokCounts);
             $data['purokLabels'] = array_map(function ($n) {
                 return 'Purok '.$n;
             }, array_keys($purokCounts));
@@ -175,6 +189,43 @@ Route::middleware(['auth', 'verified'])->group(function () {
             $data['householdMembers'] = $data['household']
                 ? $data['household']->residents()->orderBy('relationship_to_head')->get()
                 : collect();
+
+            // Compute family demographics for Household Head
+            $hhGenderCounts = [];
+            $hhAgeGroups = [
+                'Children (0-12)' => 0,
+                'Teens (13-19)' => 0,
+                'Young Adults (20-35)' => 0,
+                'Adults (36-59)' => 0,
+                'Seniors (60+)' => 0,
+            ];
+            foreach ($data['householdMembers'] as $m) {
+                $s = ucfirst(strtolower(trim($m->sex ?? '')));
+                if (empty($s)) {
+                    $s = 'Not Specified';
+                }
+                $hhGenderCounts[$s] = ($hhGenderCounts[$s] ?? 0) + 1;
+
+                $age = $m->age;
+                if ($age !== null) {
+                    if ($age <= 12) {
+                        $hhAgeGroups['Children (0-12)']++;
+                    } elseif ($age <= 19) {
+                        $hhAgeGroups['Teens (13-19)']++;
+                    } elseif ($age <= 35) {
+                        $hhAgeGroups['Young Adults (20-35)']++;
+                    } elseif ($age <= 59) {
+                        $hhAgeGroups['Adults (36-59)']++;
+                    } else {
+                        $hhAgeGroups['Seniors (60+)']++;
+                    }
+                }
+            }
+            $data['householdGenderLabels'] = array_keys($hhGenderCounts);
+            $data['householdGenderValues'] = array_values($hhGenderCounts);
+            $data['householdAgeLabels'] = array_keys($hhAgeGroups);
+            $data['householdAgeValues'] = array_values($hhAgeGroups);
+
             $data['upcomingAppointments'] = Appointment::where('user_id', $user->id)
                 ->whereIn('status', ['pending', 'approved-pending', 'approved'])
                 ->orderByRaw('CASE WHEN appointment_date IS NULL THEN 0 ELSE 1 END')
@@ -193,6 +244,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
         } else {
             $resident = $user->resident;
             $data['residentProfile'] = $resident;
+
+            // Compute service activity & appointments distribution for Resident
+            $userAppointments = Appointment::where('user_id', $user->id)->get();
+            $activityCounts = [
+                'Ready / Approved' => $userAppointments->whereIn('status', ['approved', 'approved-pending'])->count(),
+                'Pending Review' => $userAppointments->where('status', 'pending')->count(),
+                'Completed' => $userAppointments->where('status', 'completed')->count(),
+                'Cancelled' => $userAppointments->where('status', 'cancelled')->count(),
+            ];
+            $data['residentActivityLabels'] = array_keys($activityCounts);
+            $data['residentActivityValues'] = array_values($activityCounts);
+            $data['totalAppointmentsCount'] = $userAppointments->count();
+
             $data['upcomingAppointments'] = Appointment::where('user_id', $user->id)
                 ->whereIn('status', ['pending', 'approved-pending', 'approved'])
                 ->orderByRaw('CASE WHEN appointment_date IS NULL THEN 0 ELSE 1 END')

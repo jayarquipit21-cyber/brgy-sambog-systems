@@ -94,56 +94,167 @@
         }
     @endphp
 
-    <!-- Resident Profile Card -->
-    <div class="{{ $cardBgSexClass }} rounded-2xl p-6 shadow-lg flex flex-col card-glow-resident">
-        <div class="flex items-center gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-3 mb-4">
-            <div class="p-2 {{ $resIconBgClass }} rounded-xl" aria-hidden="true">
-                <flux:icon name="identification" class="size-5" />
+    <div class="flex flex-col gap-6">
+        <!-- Resident Profile Card -->
+        <div class="{{ $cardBgSexClass }} rounded-2xl p-6 shadow-lg flex flex-col card-glow-resident">
+            <div class="flex items-center gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-3 mb-4">
+                <div class="p-2 {{ $resIconBgClass }} rounded-xl" aria-hidden="true">
+                    <flux:icon name="identification" class="size-5" />
+                </div>
+                <div>
+                    <h3 class="text-base font-bold text-zinc-900 dark:text-white font-outfit">My Profile</h3>
+                    <p class="text-[11px] text-zinc-500 font-light">Your registered resident information</p>
+                </div>
             </div>
-            <div>
-                <h3 class="text-base font-bold text-zinc-900 dark:text-white font-outfit">My Profile</h3>
-                <p class="text-[11px] text-zinc-500 font-light">Your registered resident information</p>
-            </div>
+
+            @if($residentProfile)
+                <dl class="flex-1 space-y-2.5 overflow-y-auto pr-0.5">
+                    @php
+                        $resItems = [
+                            ['label' => 'Full Name', 'value' => $residentProfile->fullName, 'icon' => 'user'],
+                            ['label' => 'Age', 'value' => $residentProfile->age ? $residentProfile->age . ' years old' : null, 'icon' => 'cake'],
+                            ['label' => 'Sex', 'value' => $residentProfile->sex, 'icon' => 'heart'],
+                            ['label' => 'Civil Status', 'value' => $residentProfile->civil_status, 'icon' => 'sparkles'],
+                            ['label' => 'Blood Type', 'value' => $residentProfile->blood_type, 'icon' => 'beaker'],
+                            ['label' => 'Religion', 'value' => $residentProfile->religion, 'icon' => 'sun'],
+                            ['label' => 'Occupation', 'value' => $residentProfile->occupation, 'icon' => 'briefcase'],
+                            ['label' => 'Work Status', 'value' => $residentProfile->work_status, 'icon' => 'building-office'],
+                            ['label' => 'Education', 'value' => $residentProfile->highest_educational_attainment, 'icon' => 'academic-cap'],
+                            ['label' => 'PhilHealth', 'value' => $residentProfile->has_philhealth === 'Yes' ? 'Enrolled' : ($residentProfile->has_philhealth ?: null), 'icon' => 'shield-check'],
+                            ['label' => 'Health Condition', 'value' => ($residentProfile->health_condition && $residentProfile->health_condition !== 'None') ? $residentProfile->health_condition : null, 'icon' => 'heart'],
+                            ['label' => 'Vulnerable Sector', 'value' => $residentProfile->vulnerable_sector, 'icon' => 'flag'],
+                            ['label' => 'National Voter', 'value' => $residentProfile->registered_national_voter, 'icon' => 'check-badge'],
+                        ];
+                    @endphp
+                    @foreach($resItems as $item)
+                        @if(!empty($item['value']))
+                            <div class="flex items-start gap-3 p-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-100 dark:border-zinc-700/40">
+                                <flux:icon name="{{ $item['icon'] }}" class="size-3.5 {{ $resItemIconClass }} mt-0.5 shrink-0" aria-hidden="true" />
+                                <div class="min-w-0">
+                                    <dt class="text-[9px] uppercase tracking-widest text-zinc-400 dark:text-zinc-500 font-bold">{{ $item['label'] }}</dt>
+                                    <dd class="text-xs font-bold text-zinc-800 dark:text-white truncate">{{ $item['value'] }}</dd>
+                                </div>
+                            </div>
+                        @endif
+                    @endforeach
+                </dl>
+            @else
+                <div class="flex-1 flex flex-col items-center justify-center text-center py-8">
+                    <flux:icon name="user-circle" class="size-12 text-zinc-300 dark:text-zinc-600 mb-2" aria-hidden="true" />
+                    <p class="text-xs text-zinc-500">No resident profile linked to your account.</p>
+                    <p class="text-[11px] text-zinc-400 mt-1">Contact the Barangay Admin to link your record.</p>
+                </div>
+            @endif
         </div>
 
-        @if($residentProfile)
-            <dl class="flex-1 space-y-2.5 overflow-y-auto pr-0.5">
-                @php
-                    $resItems = [
-                        ['label' => 'Full Name', 'value' => $residentProfile->fullName, 'icon' => 'user'],
-                        ['label' => 'Age', 'value' => $residentProfile->age ? $residentProfile->age . ' years old' : null, 'icon' => 'cake'],
-                        ['label' => 'Sex', 'value' => $residentProfile->sex, 'icon' => 'heart'],
-                        ['label' => 'Civil Status', 'value' => $residentProfile->civil_status, 'icon' => 'sparkles'],
-                        ['label' => 'Blood Type', 'value' => $residentProfile->blood_type, 'icon' => 'beaker'],
-                        ['label' => 'Religion', 'value' => $residentProfile->religion, 'icon' => 'sun'],
-                        ['label' => 'Occupation', 'value' => $residentProfile->occupation, 'icon' => 'briefcase'],
-                        ['label' => 'Work Status', 'value' => $residentProfile->work_status, 'icon' => 'building-office'],
-                        ['label' => 'Education', 'value' => $residentProfile->highest_educational_attainment, 'icon' => 'academic-cap'],
-                        ['label' => 'PhilHealth', 'value' => $residentProfile->has_philhealth === 'Yes' ? 'Enrolled' : ($residentProfile->has_philhealth ?: null), 'icon' => 'shield-check'],
-                        ['label' => 'Health Condition', 'value' => ($residentProfile->health_condition && $residentProfile->health_condition !== 'None') ? $residentProfile->health_condition : null, 'icon' => 'heart'],
-                        ['label' => 'Vulnerable Sector', 'value' => $residentProfile->vulnerable_sector, 'icon' => 'flag'],
-                        ['label' => 'National Voter', 'value' => $residentProfile->registered_national_voter, 'icon' => 'check-badge'],
-                    ];
-                @endphp
-                @foreach($resItems as $item)
-                    @if(!empty($item['value']))
-                        <div class="flex items-start gap-3 p-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-100 dark:border-zinc-700/40">
-                            <flux:icon name="{{ $item['icon'] }}" class="size-3.5 {{ $resItemIconClass }} mt-0.5 shrink-0" aria-hidden="true" />
-                            <div class="min-w-0">
-                                <dt class="text-[9px] uppercase tracking-widest text-zinc-400 dark:text-zinc-500 font-bold">{{ $item['label'] }}</dt>
-                                <dd class="text-xs font-bold text-zinc-800 dark:text-white truncate">{{ $item['value'] }}</dd>
-                            </div>
-                        </div>
-                    @endif
-                @endforeach
-            </dl>
-        @else
-            <div class="flex-1 flex flex-col items-center justify-center text-center py-8">
-                <flux:icon name="user-circle" class="size-12 text-zinc-300 dark:text-zinc-600 mb-2" aria-hidden="true" />
-                <p class="text-xs text-zinc-500">No resident profile linked to your account.</p>
-                <p class="text-[11px] text-zinc-400 mt-1">Contact the Barangay Admin to link your record.</p>
+        <!-- Service & Pickup Activity Chart -->
+        <div class="bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-2xl p-6 shadow-lg flex flex-col card-glow-resident font-outfit">
+            <div class="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3 mb-4">
+                <div class="flex items-center gap-3">
+                    <div class="p-2 bg-sky-500/10 text-sky-600 rounded-xl" aria-hidden="true">
+                        <flux:icon name="chart-pie" class="size-5" />
+                    </div>
+                    <div>
+                        <h3 class="text-base font-bold text-zinc-900 dark:text-white font-outfit">My Request Activity</h3>
+                        <p class="text-[11px] text-zinc-500 font-light">Status breakdown of your document requests</p>
+                    </div>
+                </div>
+                <span class="text-[10px] font-bold text-sky-700 dark:text-sky-400 bg-sky-500/10 border border-sky-500/20 px-2 py-0.5 rounded-full">{{ $totalAppointmentsCount ?? 0 }} total</span>
             </div>
-        @endif
+
+            <div class="relative flex-1 w-full flex flex-col gap-4" data-chart-init="initResidentChart" data-chart-labels="{{ json_encode($residentActivityLabels ?? []) }}" data-chart-values="{{ json_encode($residentActivityValues ?? []) }}">
+                <div class="w-full h-44 relative">
+                    <canvas id="residentActivityChart" class="w-full h-full" aria-label="Pie chart showing Service Request Activity" role="img"></canvas>
+                </div>
+
+                <div id="resident-legend" class="grid grid-cols-2 gap-2 text-xs pt-2 border-t border-zinc-100 dark:border-zinc-800"></div>
+            </div>
+
+            <script data-navigate-eval>
+                window.initResidentChart = function (containerEl) {
+                    const el = containerEl || document.querySelector('[data-chart-init="initResidentChart"]');
+                    const labels = el && el.dataset.chartLabels ? JSON.parse(el.dataset.chartLabels) : @json($residentActivityLabels ?? []);
+                    const values = el && el.dataset.chartValues ? JSON.parse(el.dataset.chartValues) : @json($residentActivityValues ?? []);
+
+                    window.renderChartWhenReady('residentActivityChart', function () {
+                        const isDark = document.documentElement.classList.contains('dark');
+                        const total = values.reduce((a, b) => a + b, 0);
+
+                        const colorPalette = [
+                            { bg: 'rgba(14, 165, 233, 0.85)', border: 'rgba(3, 105, 161, 0.9)', badge: 'bg-sky-500' },
+                            { bg: 'rgba(245, 158, 11, 0.85)', border: 'rgba(217, 119, 6, 0.9)', badge: 'bg-amber-500' },
+                            { bg: 'rgba(16, 185, 129, 0.85)', border: 'rgba(5, 150, 105, 0.9)', badge: 'bg-emerald-500' },
+                            { bg: 'rgba(239, 68, 68, 0.85)', border: 'rgba(185, 28, 28, 0.9)', badge: 'bg-red-500' }
+                        ];
+
+                        let legendHtml = '';
+                        if (total === 0 || labels.length === 0) {
+                            legendHtml = `
+                                <div class="col-span-full text-center py-2 text-xs text-zinc-400 font-medium">
+                                    No pickup requests or bookings yet
+                                </div>
+                            `;
+                        } else {
+                            labels.forEach((label, i) => {
+                                const val = values[i] || 0;
+                                const pct = total > 0 ? (Math.floor((val / total) * 10000) / 100).toFixed(1) : '0';
+                                const palette = colorPalette[i % colorPalette.length];
+                                legendHtml += `
+                                    <div class="flex items-center justify-between p-2 rounded-xl bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-100 dark:border-zinc-700/40">
+                                        <div class="flex items-center gap-1.5 min-w-0 truncate">
+                                            <span class="w-2 h-2 rounded-full ${palette.badge} shrink-0"></span>
+                                            <span class="text-[10px] font-bold text-zinc-700 dark:text-zinc-300 truncate">${label}</span>
+                                        </div>
+                                        <span class="text-xs font-black text-zinc-900 dark:text-white shrink-0 ml-1">${val}</span>
+                                    </div>
+                                `;
+                            });
+                        }
+                        const legendEl = document.getElementById('resident-legend');
+                        if (legendEl) legendEl.innerHTML = legendHtml;
+
+                        const chartDatasets = total > 0 ? [{
+                            data: values,
+                            backgroundColor: labels.map((_, i) => colorPalette[i % colorPalette.length].bg),
+                            borderColor: labels.map((_, i) => colorPalette[i % colorPalette.length].border),
+                            borderWidth: 1,
+                            hoverOffset: 4
+                        }] : [{
+                            data: [1],
+                            backgroundColor: [isDark ? 'rgba(63, 63, 70, 0.25)' : 'rgba(228, 228, 231, 0.6)'],
+                            borderColor: [isDark ? 'rgba(63, 63, 70, 0.4)' : 'rgba(212, 212, 216, 0.8)'],
+                            borderWidth: 1
+                        }];
+
+                        return {
+                            type: 'doughnut',
+                            data: {
+                                labels: total > 0 ? labels : ['No Requests'],
+                                datasets: chartDatasets
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: {
+                                    legend: { display: false },
+                                    tooltip: {
+                                        enabled: total > 0,
+                                        callbacks: {
+                                            label: function(context) {
+                                                const val = context.raw || 0;
+                                                const pct = total > 0 ? (Math.floor((val / total) * 10000) / 100).toFixed(1) : '0';
+                                                return ` ${context.label || ''}: ${val} (${pct}%)`;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        };
+                    });
+                };
+                window.initResidentChart();
+            </script>
+        </div>
     </div>
 
     <!-- Announcements + Appointments -->

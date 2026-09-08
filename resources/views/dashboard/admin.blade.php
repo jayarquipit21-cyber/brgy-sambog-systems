@@ -125,7 +125,7 @@
         </div>
 
         <!-- Purok Demographics Chart (Chart.js) -->
-        <div class="relative pt-4 space-y-4" data-chart-init="initPurokChartAdmin">
+        <div class="relative pt-4 space-y-4" data-chart-init="initPurokChartAdmin" data-chart-labels="{{ json_encode($purokLabels ?? []) }}" data-chart-values="{{ json_encode($purokValues ?? []) }}">
             <div class="h-56 px-2">
                 <canvas id="purokChart" class="w-full h-full" aria-label="Bar chart showing Purok Demographics Distribution" role="img"></canvas>
             </div>
@@ -156,10 +156,11 @@
                 <span id="purok-total">Total monitored zones: <strong class="text-zinc-900 dark:text-white font-bold">—</strong></span>
             </div>
 
-            <script>
-                window.initPurokChartAdmin = function () {
-                    const labels = @json($purokLabels ?? []);
-                    const values = @json($purokValues ?? []);
+            <script data-navigate-eval>
+                window.initPurokChartAdmin = function (containerEl) {
+                    const el = containerEl || document.querySelector('[data-chart-init="initPurokChartAdmin"]');
+                    const labels = el && el.dataset.chartLabels ? JSON.parse(el.dataset.chartLabels) : @json($purokLabels ?? []);
+                    const values = el && el.dataset.chartValues ? JSON.parse(el.dataset.chartValues) : @json($purokValues ?? []);
 
                     window.renderChartWhenReady('purokChart', function () {
                         const isDark = document.documentElement.classList.contains('dark');
@@ -169,13 +170,17 @@
                         const highestEl = document.getElementById('purok-highest');
                         const totalEl = document.getElementById('purok-total');
                         if (highestEl && totalEl) {
-                            if (labels.length && values.length) {
+                            const maxVal = values.length ? Math.max(...values) : 0;
+                            if (labels.length && maxVal > 0) {
                                 const totalZones = labels.length;
-                                const maxIndex = values.indexOf(Math.max(...values));
+                                const maxIndex = values.indexOf(maxVal);
                                 const highestLabel = labels[maxIndex] || '—';
                                 const highestValue = values[maxIndex] || 0;
                                 highestEl.innerHTML = `Highest density: <strong class="text-emerald-600 dark:text-emerald-400 font-black">${highestLabel} (${highestValue})</strong>`;
                                 totalEl.innerHTML = `Total monitored zones: <strong class="text-zinc-900 dark:text-white font-bold">${totalZones} Puroks</strong>`;
+                            } else if (labels.length) {
+                                highestEl.innerHTML = `Highest density: <span class="text-zinc-400 font-medium">None yet (0 residents)</span>`;
+                                totalEl.innerHTML = `Total monitored zones: <strong class="text-zinc-900 dark:text-white font-bold">${labels.length} Puroks</strong>`;
                             } else {
                                 highestEl.innerHTML = 'No purok data available';
                                 totalEl.innerHTML = '';
@@ -195,7 +200,10 @@
                                             'rgba(245, 158, 11, 0.85)', // Amber
                                             'rgba(139, 92, 246, 0.85)', // Violet
                                             'rgba(14, 165, 233, 0.85)', // Sky
-                                            'rgba(249, 115, 22, 0.85)'  // Orange
+                                            'rgba(249, 115, 22, 0.85)', // Orange
+                                            'rgba(236, 72, 153, 0.85)', // Pink
+                                            'rgba(6, 182, 212, 0.85)',  // Cyan
+                                            'rgba(132, 204, 22, 0.85)'  // Lime
                                         ];
                                         return colors[i % colors.length];
                                     }),
@@ -205,7 +213,10 @@
                                             'rgba(217, 119, 6, 0.9)',
                                             'rgba(124, 58, 237, 0.9)',
                                             'rgba(3, 105, 161, 0.9)',
-                                            'rgba(194, 65, 12, 0.9)'
+                                            'rgba(194, 65, 12, 0.9)',
+                                            'rgba(190, 24, 93, 0.9)',
+                                            'rgba(8, 145, 178, 0.9)',
+                                            'rgba(101, 163, 13, 0.9)'
                                         ];
                                         return borders[i % borders.length];
                                     }),
@@ -220,7 +231,11 @@
                                     y: { 
                                         beginAtZero: true,
                                         grid: { color: gridColor },
-                                        ticks: { color: labelColor, font: { family: 'Instrument Sans' } }
+                                        ticks: { 
+                                            color: labelColor, 
+                                            font: { family: 'Instrument Sans' },
+                                            precision: 0
+                                        }
                                     },
                                     x: {
                                         grid: { display: false },
@@ -228,7 +243,15 @@
                                     }
                                 },
                                 plugins: {
-                                    legend: { display: false }
+                                    legend: { display: false },
+                                    tooltip: {
+                                        callbacks: {
+                                            label: function(context) {
+                                                const val = context.raw || 0;
+                                                return ` Residents: ${val.toLocaleString()}`;
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         };
@@ -257,7 +280,7 @@
             </div>
         </div>
 
-        <div class="relative pt-4 flex flex-col items-center gap-6" data-chart-init="initGenderChartAdmin">
+        <div class="relative pt-4 flex flex-col items-center gap-6" data-chart-init="initGenderChartAdmin" data-chart-labels="{{ json_encode($genderLabels ?? []) }}" data-chart-values="{{ json_encode($genderValues ?? []) }}">
             <div class="w-48 h-48 relative">
                 <canvas id="genderChartAdmin" class="w-full h-full" aria-label="Pie chart showing Gender Distribution" role="img"></canvas>
             </div>
@@ -288,10 +311,11 @@
             </div>
         </div>
 
-        <script>
-            window.initGenderChartAdmin = function () {
-                const origLabels = @json($genderLabels ?? []);
-                const origValues = @json($genderValues ?? []);
+        <script data-navigate-eval>
+            window.initGenderChartAdmin = function (containerEl) {
+                const el = containerEl || document.querySelector('[data-chart-init="initGenderChartAdmin"]');
+                const origLabels = el && el.dataset.chartLabels ? JSON.parse(el.dataset.chartLabels) : @json($genderLabels ?? []);
+                const origValues = el && el.dataset.chartValues ? JSON.parse(el.dataset.chartValues) : @json($genderValues ?? []);
                 
                 let labels = [];
                 let values = [];
@@ -309,55 +333,81 @@
                 });
 
                 window.renderChartWhenReady('genderChartAdmin', function () {
-                    let legendHtml = '';
-                    const colors = ['bg-blue-500', 'bg-pink-500', 'bg-emerald-500'];
+                    const isDark = document.documentElement.classList.contains('dark');
                     const total = values.reduce((a, b) => a + b, 0);
-                    labels.forEach((label, index) => {
-                        const val = values[index];
-                        const pct = total > 0 ? (Math.floor((val / total) * 10000) / 100).toFixed(2) : '0.00';
-                        const colorClass = colors[index % colors.length];
-                        legendHtml += `
-                            <div class="flex items-center justify-between p-2.5 bg-zinc-50 dark:bg-zinc-800/40 rounded-xl border border-zinc-100 dark:border-zinc-700/50">
-                                <div class="flex items-center gap-2.5">
-                                    <span class="w-3 h-3 rounded-full ${colorClass}"></span>
-                                    <span class="text-xs font-bold text-zinc-700 dark:text-zinc-300">${label || 'Not Specified'}</span>
-                                </div>
-                                <div class="text-right">
-                                    <span class="text-xs font-black text-zinc-900 dark:text-white">${val.toLocaleString()}</span>
-                                    <span class="text-[10px] text-zinc-500 dark:text-zinc-400 ml-1">(${pct}%)</span>
-                                </div>
+
+                    const colorPalette = [
+                        { bg: 'rgba(59, 130, 246, 0.85)', border: 'rgba(29, 78, 216, 0.9)', badge: 'bg-blue-500' },
+                        { bg: 'rgba(236, 72, 153, 0.85)', border: 'rgba(190, 24, 93, 0.9)', badge: 'bg-pink-500' },
+                        { bg: 'rgba(16, 185, 129, 0.85)', border: 'rgba(5, 150, 105, 0.9)', badge: 'bg-emerald-500' },
+                        { bg: 'rgba(139, 92, 246, 0.85)', border: 'rgba(124, 58, 237, 0.9)', badge: 'bg-violet-500' },
+                        { bg: 'rgba(245, 158, 11, 0.85)', border: 'rgba(217, 119, 6, 0.9)', badge: 'bg-amber-500' }
+                    ];
+
+                    let legendHtml = '';
+                    if (total === 0 || labels.length === 0) {
+                        legendHtml = `
+                            <div class="text-center py-3 text-xs text-zinc-400 dark:text-zinc-500 font-medium bg-zinc-50 dark:bg-zinc-800/30 rounded-xl border border-dashed border-zinc-200 dark:border-zinc-700/50">
+                                No gender demographic records available yet
                             </div>
                         `;
-                    });
+                    } else {
+                        labels.forEach((label, index) => {
+                            const val = values[index] || 0;
+                            const pct = total > 0 ? (Math.floor((val / total) * 10000) / 100).toFixed(2) : '0.00';
+                            const palette = colorPalette[index % colorPalette.length];
+                            legendHtml += `
+                                <div class="flex items-center justify-between p-2.5 bg-zinc-50 dark:bg-zinc-800/40 rounded-xl border border-zinc-100 dark:border-zinc-700/50">
+                                    <div class="flex items-center gap-2.5">
+                                        <span class="w-3 h-3 rounded-full ${palette.badge}"></span>
+                                        <span class="text-xs font-bold text-zinc-700 dark:text-zinc-300">${label || 'Not Specified'}</span>
+                                    </div>
+                                    <div class="text-right">
+                                        <span class="text-xs font-black text-zinc-900 dark:text-white">${val.toLocaleString()}</span>
+                                        <span class="text-[10px] text-zinc-500 dark:text-zinc-400 ml-1">(${pct}%)</span>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                    }
+
                     const legendEl = document.getElementById('gender-legend-admin');
                     if (legendEl) legendEl.innerHTML = legendHtml;
+
+                    const chartDatasets = total > 0 ? [{
+                        data: values,
+                        backgroundColor: labels.map((_, i) => colorPalette[i % colorPalette.length].bg),
+                        borderColor: labels.map((_, i) => colorPalette[i % colorPalette.length].border),
+                        borderWidth: 1,
+                        hoverOffset: 4
+                    }] : [{
+                        data: [1],
+                        backgroundColor: [isDark ? 'rgba(63, 63, 70, 0.25)' : 'rgba(228, 228, 231, 0.6)'],
+                        borderColor: [isDark ? 'rgba(63, 63, 70, 0.4)' : 'rgba(212, 212, 216, 0.8)'],
+                        borderWidth: 1
+                    }];
 
                     return {
                         type: 'pie',
                         data: {
-                            labels: labels,
-                            datasets: [{
-                                data: values,
-                                backgroundColor: [
-                                    'rgba(59, 130, 246, 0.85)', // Blue
-                                    'rgba(236, 72, 153, 0.85)', // Pink
-                                    'rgba(16, 185, 129, 0.85)'  // Green
-                                ],
-                                borderColor: [
-                                    'rgba(29, 78, 216, 0.9)',
-                                    'rgba(190, 24, 93, 0.9)',
-                                    'rgba(6, 95, 70, 0.9)'
-                                ],
-                                borderWidth: 1,
-                                hoverOffset: 4
-                            }]
+                            labels: total > 0 ? labels : ['No Data'],
+                            datasets: chartDatasets
                         },
                         options: {
                             responsive: true,
                             maintainAspectRatio: false,
-                            rotation: 180,
                             plugins: {
-                                legend: { display: false }
+                                legend: { display: false },
+                                tooltip: {
+                                    enabled: total > 0,
+                                    callbacks: {
+                                        label: function(context) {
+                                            const val = context.raw || 0;
+                                            const pct = total > 0 ? (Math.floor((val / total) * 10000) / 100).toFixed(2) : '0.00';
+                                            return ` ${context.label || ''}: ${val.toLocaleString()} (${pct}%)`;
+                                        }
+                                    }
+                                }
                             }
                         }
                     };
@@ -381,7 +431,7 @@
             </div>
         </div>
 
-        <div class="relative flex-1 w-full flex flex-col gap-6" data-chart-init="initAgeChartAdmin">
+        <div class="relative flex-1 w-full flex flex-col gap-6" data-chart-init="initAgeChartAdmin" data-chart-labels="{{ json_encode($ageLabels ?? []) }}" data-chart-values="{{ json_encode($ageValues ?? []) }}">
             <div class="w-full min-h-[220px] relative">
                 <canvas id="ageChartAdmin" class="absolute inset-0 w-full h-full" aria-label="Bar chart showing Age Demographics" role="img"></canvas>
             </div>
@@ -412,10 +462,11 @@
             </div>
         </div>
 
-        <script>
-            window.initAgeChartAdmin = function () {
-                const labels = @json($ageLabels ?? []);
-                const values = @json($ageValues ?? []);
+        <script data-navigate-eval>
+            window.initAgeChartAdmin = function (containerEl) {
+                const el = containerEl || document.querySelector('[data-chart-init="initAgeChartAdmin"]');
+                const labels = el && el.dataset.chartLabels ? JSON.parse(el.dataset.chartLabels) : @json($ageLabels ?? []);
+                const values = el && el.dataset.chartValues ? JSON.parse(el.dataset.chartValues) : @json($ageValues ?? []);
 
                 window.renderChartWhenReady('ageChartAdmin', function () {
                     const isDark = document.documentElement.classList.contains('dark');
@@ -425,23 +476,33 @@
                     let legendHtml = '';
                     const colors = ['bg-amber-500', 'bg-emerald-500', 'bg-blue-500', 'bg-violet-500', 'bg-pink-500'];
                     const total = values.reduce((a, b) => a + b, 0);
-                    labels.forEach((label, index) => {
-                        const val = values[index];
-                        const pct = total > 0 ? (Math.floor((val / total) * 10000) / 100).toFixed(2) : '0.00';
-                        const colorClass = colors[index % colors.length];
-                        legendHtml += `
-                            <div class="flex items-center justify-between p-2.5 bg-zinc-50 dark:bg-zinc-800/40 rounded-xl border border-zinc-100 dark:border-zinc-700/50">
-                                <div class="flex items-center gap-2.5">
-                                    <span class="w-3 h-3 rounded-full ${colorClass}"></span>
-                                    <span class="text-xs font-bold text-zinc-700 dark:text-zinc-300">${label || 'Not Specified'}</span>
-                                </div>
-                                <div class="text-right">
-                                    <span class="text-xs font-black text-zinc-900 dark:text-white">${val.toLocaleString()}</span>
-                                    <span class="text-[10px] text-zinc-555 dark:text-zinc-400 ml-1">(${pct}%)</span>
-                                </div>
+
+                    if (total === 0 || labels.length === 0) {
+                        legendHtml = `
+                            <div class="col-span-full text-center py-3 text-xs text-zinc-400 dark:text-zinc-500 font-medium bg-zinc-50 dark:bg-zinc-800/30 rounded-xl border border-dashed border-zinc-200 dark:border-zinc-700/50">
+                                No age demographic records available yet
                             </div>
                         `;
-                    });
+                    } else {
+                        labels.forEach((label, index) => {
+                            const val = values[index] || 0;
+                            const pct = total > 0 ? (Math.floor((val / total) * 10000) / 100).toFixed(2) : '0.00';
+                            const colorClass = colors[index % colors.length];
+                            legendHtml += `
+                                <div class="flex items-center justify-between p-2.5 bg-zinc-50 dark:bg-zinc-800/40 rounded-xl border border-zinc-100 dark:border-zinc-700/50">
+                                    <div class="flex items-center gap-2.5">
+                                        <span class="w-3 h-3 rounded-full ${colorClass}"></span>
+                                        <span class="text-xs font-bold text-zinc-700 dark:text-zinc-300">${label || 'Not Specified'}</span>
+                                    </div>
+                                    <div class="text-right">
+                                        <span class="text-xs font-black text-zinc-900 dark:text-white">${val.toLocaleString()}</span>
+                                        <span class="text-[10px] text-zinc-555 dark:text-zinc-400 ml-1">(${pct}%)</span>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                    }
+
                     const legendEl = document.getElementById('age-legend-admin');
                     if (legendEl) legendEl.innerHTML = legendHtml;
 
@@ -477,7 +538,11 @@
                                 y: { 
                                     beginAtZero: true,
                                     grid: { color: gridColor },
-                                    ticks: { color: labelColor, font: { family: 'Instrument Sans' } }
+                                    ticks: { 
+                                        color: labelColor, 
+                                        font: { family: 'Instrument Sans' },
+                                        precision: 0
+                                    }
                                 },
                                 x: {
                                     grid: { display: false },
