@@ -64,8 +64,8 @@
                 @endif
                 <input 
                     type="text" 
-                    wire:model.live="search" 
-                    placeholder="Search name, email, household..."
+                    wire:model.live.debounce.300ms="search" 
+                    placeholder="Search name, phone, occupation, household..."
                     class="rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-1.5 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand text-sm w-full sm:w-auto"
                 />
                 

@@ -98,6 +98,7 @@ class RbiDataTable extends Component
                     ->orWhere('middle_name', 'like', '%'.$this->search.'%')
                     ->orWhere('email_address', 'like', '%'.$this->search.'%')
                     ->orWhere('occupation', 'like', '%'.$this->search.'%')
+                    ->orWhere('mobile_number', 'like', '%'.$this->search.'%')
                     ->orWhereHas('household', function ($hq) {
                         $hq->where('household_no', 'like', '%'.$this->search.'%')
                             ->orWhere('address', 'like', '%'.$this->search.'%');

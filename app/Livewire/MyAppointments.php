@@ -12,6 +12,10 @@ class MyAppointments extends Component
 {
     public string $type = ''; // 'document', 'rental', or '' for all
 
+    public string $search = '';
+
+    public string $statusFilter = '';
+
     #[On('appointment-booked')]
     public function refresh(): void
     {
@@ -34,21 +38,33 @@ class MyAppointments extends Component
 
     public function render()
     {
+        $baseQuery = Appointment::where('user_id', Auth::id())
+            ->orderBy('appointment_date', 'desc')
+            ->orderBy('appointment_time', 'desc');
+
+        if ($this->statusFilter) {
+            $baseQuery->where('status', $this->statusFilter);
+        }
+
+        if ($this->search) {
+            $s = '%'.$this->search.'%';
+            $baseQuery->where(function ($q) use ($s) {
+                $q->where('purpose', 'like', $s)
+                    ->orWhere('admin_notes', 'like', $s)
+                    ->orWhereHas('transaction', function ($tq) use ($s) {
+                        $tq->where('transaction_code', 'like', $s)
+                            ->orWhere('official_receipt_number', 'like', $s);
+                    });
+            });
+        }
+
         $documentRequests = ($this->type === 'rental')
             ? collect()
-            : Appointment::where('user_id', Auth::id())
-                ->where('purpose', 'not like', '[Rental Service]%')
-                ->orderBy('appointment_date', 'desc')
-                ->orderBy('appointment_time', 'desc')
-                ->get();
+            : (clone $baseQuery)->where('purpose', 'not like', '[Rental Service]%')->get();
 
         $rentalBookings = ($this->type === 'document')
             ? collect()
-            : Appointment::where('user_id', Auth::id())
-                ->where('purpose', 'like', '[Rental Service]%')
-                ->orderBy('appointment_date', 'desc')
-                ->orderBy('appointment_time', 'desc')
-                ->get();
+            : (clone $baseQuery)->where('purpose', 'like', '[Rental Service]%')->get();
 
         return view('livewire.my-appointments', [
             'documentRequests' => $documentRequests,

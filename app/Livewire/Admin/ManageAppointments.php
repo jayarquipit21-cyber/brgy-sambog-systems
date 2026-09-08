@@ -400,9 +400,17 @@ class ManageAppointments extends Component
         }
 
         if ($this->search) {
-            $baseQuery->whereHas('user', function ($q) {
-                $q->where('name', 'like', '%'.$this->search.'%')
-                    ->orWhere('email', 'like', '%'.$this->search.'%');
+            $baseQuery->where(function ($query) {
+                $query->whereHas('user', function ($q) {
+                    $q->where('name', 'like', '%'.$this->search.'%')
+                        ->orWhere('email', 'like', '%'.$this->search.'%');
+                })
+                ->orWhere('purpose', 'like', '%'.$this->search.'%')
+                ->orWhere('admin_notes', 'like', '%'.$this->search.'%')
+                ->orWhereHas('transaction', function ($q) {
+                    $q->where('transaction_code', 'like', '%'.$this->search.'%')
+                        ->orWhere('official_receipt_number', 'like', '%'.$this->search.'%');
+                });
             });
         }
 

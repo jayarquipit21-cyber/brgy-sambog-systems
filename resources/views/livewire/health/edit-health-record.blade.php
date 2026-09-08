@@ -3,8 +3,8 @@
     <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 shadow-sm mb-6 flex flex-col sm:flex-row gap-3 items-start sm:items-center">
         <input
             type="text"
-            wire:model.live="search"
-            placeholder="Search by name or condition..."
+            wire:model.live.debounce.300ms="search"
+            placeholder="Search name, condition, sector, blood type..."
             class="flex-1 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-2 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-violet-500 text-sm"
         />
         <select wire:model.live="nameLetter"

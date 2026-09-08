@@ -156,7 +156,10 @@ class ManageBlotters extends Component
         if ($this->search) {
             $query->where(function ($q) {
                 $q->where('complainant_name', 'like', '%'.$this->search.'%')
-                    ->orWhere('respondent_name', 'like', '%'.$this->search.'%');
+                    ->orWhere('respondent_name', 'like', '%'.$this->search.'%')
+                    ->orWhere('incident_type', 'like', '%'.$this->search.'%')
+                    ->orWhere('incident_location', 'like', '%'.$this->search.'%')
+                    ->orWhere('narrative', 'like', '%'.$this->search.'%');
             });
         }
 

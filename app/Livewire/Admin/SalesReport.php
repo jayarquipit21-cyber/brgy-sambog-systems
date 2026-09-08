@@ -244,7 +244,9 @@ class SalesReport extends Component
                 $q->where('payer_name', 'like', $s)
                     ->orWhere('item_name', 'like', $s)
                     ->orWhere('transaction_code', 'like', $s)
-                    ->orWhere('official_receipt_number', 'like', $s);
+                    ->orWhere('official_receipt_number', 'like', $s)
+                    ->orWhere('payer_address', 'like', $s)
+                    ->orWhere('notes', 'like', $s);
             });
         }
 

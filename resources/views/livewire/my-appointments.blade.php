@@ -1,4 +1,28 @@
 <div class="space-y-8">
+    <div class="bg-white dark:bg-zinc-900 shadow-md rounded-2xl p-4 sm:p-5 border border-zinc-200 dark:border-zinc-800 flex flex-col sm:flex-row gap-3 items-center justify-between">
+        <div class="w-full sm:w-auto flex-1">
+            <input 
+                type="text" 
+                wire:model.live.debounce.300ms="search" 
+                placeholder="Search purpose, notes, OR#, code..."
+                class="w-full rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3.5 py-2 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand text-xs"
+            />
+        </div>
+        <div class="w-full sm:w-auto flex gap-2">
+            <select 
+                wire:model.live="statusFilter"
+                class="w-full sm:w-auto rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-2 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand text-xs font-medium"
+            >
+                <option value="">All Statuses</option>
+                <option value="pending">Pending Review</option>
+                <option value="approved-pending">Pending Signature</option>
+                <option value="approved">Approved / Ready</option>
+                <option value="completed">Completed</option>
+                <option value="cancelled">Cancelled</option>
+            </select>
+        </div>
+    </div>
+
     @if($type === '' || $type === 'document')
     <!-- Dedicated Table 1: Document Requests -->
     <div class="bg-white dark:bg-zinc-900 shadow-md rounded-2xl p-6 border border-zinc-200 dark:border-zinc-800 card-glow-admin">

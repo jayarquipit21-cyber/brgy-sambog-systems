@@ -26,7 +26,7 @@
                     <input
                         type="text"
                         wire:model.live.debounce.300ms="search"
-                        placeholder="Search {{ $isAdmin ? 'payer, ' : '' }}item, OR#..."
+                        placeholder="Search {{ $isAdmin ? 'payer, address, ' : '' }}item, OR#, code..."
                         class="w-full sm:w-56 pl-8 pr-3 py-1.5 text-xs font-medium rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800/90 text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-{{ $serviceType === 'rental' ? 'amber' : 'sky' }}-500/20 focus:border-{{ $serviceType === 'rental' ? 'amber' : 'sky' }}-500"
                     />
                     <flux:icon name="magnifying-glass" class="size-3.5 absolute left-2.5 top-2 text-zinc-400" />

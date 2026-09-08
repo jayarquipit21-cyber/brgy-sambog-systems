@@ -60,8 +60,8 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-3">
                 <input 
                     type="text" 
-                    wire:model.live="search" 
-                    placeholder="Search name, occupation, household..."
+                    wire:model.live.debounce.300ms="search" 
+                    placeholder="Search name, phone, occupation, household, address..."
                     class="rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-1.5 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand text-xs"
                 />
                 

@@ -51,7 +51,25 @@
         </div>
 
         <div class="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm">
-            <h4 class="font-bold mb-3">Existing Announcements</h4>
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
+                <h4 class="font-bold text-base">Existing Announcements</h4>
+                <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+                    <input 
+                        type="text" 
+                        wire:model.live.debounce.300ms="search" 
+                        placeholder="Search announcements..." 
+                        class="px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-xs text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand w-full sm:w-56"
+                    />
+                    <select 
+                        wire:model.live="filterType" 
+                        class="px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-xs text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand"
+                    >
+                        <option value="">All Types</option>
+                        <option value="general">Announcements</option>
+                        <option value="event">Community Events</option>
+                    </select>
+                </div>
+            </div>
             <div class="space-y-3">
                 @forelse($announcements as $a)
                     <div class="flex items-start justify-between p-3 border border-zinc-100 dark:border-zinc-800 rounded-lg">

@@ -181,7 +181,10 @@ class EditHealthRecord extends Component
                 $q->where('first_name', 'like', '%'.$this->search.'%')
                   ->orWhere('last_name', 'like', '%'.$this->search.'%')
                   ->orWhere('middle_name', 'like', '%'.$this->search.'%')
-                  ->orWhere('health_condition', 'like', '%'.$this->search.'%');
+                  ->orWhere('health_condition', 'like', '%'.$this->search.'%')
+                  ->orWhere('blood_type', 'like', '%'.$this->search.'%')
+                  ->orWhere('vulnerable_sector', 'like', '%'.$this->search.'%')
+                  ->orWhere('nutritional_classification', 'like', '%'.$this->search.'%');
             });
         }
 

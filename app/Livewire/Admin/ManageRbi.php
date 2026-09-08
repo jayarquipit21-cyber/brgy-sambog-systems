@@ -260,8 +260,11 @@ class ManageRbi extends Component
                     ->orWhere('residents.last_name', 'like', '%'.$this->search.'%')
                     ->orWhere('residents.middle_name', 'like', '%'.$this->search.'%')
                     ->orWhere('residents.email_address', 'like', '%'.$this->search.'%')
+                    ->orWhere('residents.occupation', 'like', '%'.$this->search.'%')
+                    ->orWhere('residents.mobile_number', 'like', '%'.$this->search.'%')
                     ->orWhereHas('household', function ($hq) {
-                        $hq->where('household_no', 'like', '%'.$this->search.'%');
+                        $hq->where('household_no', 'like', '%'.$this->search.'%')
+                            ->orWhere('address', 'like', '%'.$this->search.'%');
                     });
             });
         }

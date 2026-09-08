@@ -43,10 +43,13 @@ class TransactionHistory extends Component
             $query->where(function ($q) use ($s, $isAdmin) {
                 $q->where('item_name', 'like', $s)
                     ->orWhere('transaction_code', 'like', $s)
-                    ->orWhere('official_receipt_number', 'like', $s);
+                    ->orWhere('official_receipt_number', 'like', $s)
+                    ->orWhere('payment_method', 'like', $s)
+                    ->orWhere('notes', 'like', $s);
 
                 if ($isAdmin) {
-                    $q->orWhere('payer_name', 'like', $s);
+                    $q->orWhere('payer_name', 'like', $s)
+                        ->orWhere('payer_address', 'like', $s);
                 }
             });
         }

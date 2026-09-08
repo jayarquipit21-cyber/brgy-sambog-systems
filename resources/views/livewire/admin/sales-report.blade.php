@@ -237,7 +237,7 @@
                         <input 
                             type="text" 
                             wire:model.live.debounce.300ms="search" 
-                            placeholder="Search payer, OR#, transaction code..." 
+                            placeholder="Search payer, address, OR#, code, notes..." 
                             class="w-full pl-9 pr-3.5 py-2 text-xs font-medium rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800/90 text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"
                         />
                         <flux:icon name="magnifying-glass" class="size-4 absolute left-3 top-2.5 text-zinc-400" />
@@ -245,8 +245,8 @@
                 </div>
             </div>
 
-            <!-- Custom Date Range Picker & Category/Status dropdowns -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 pt-3 border-t border-zinc-100 dark:border-zinc-800 text-xs">
+            <!-- Custom Date Range Picker & Category/Status/Method dropdowns -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 pt-3 border-t border-zinc-100 dark:border-zinc-800 text-xs">
                 <div>
                     <label class="block font-bold text-zinc-600 dark:text-zinc-400 mb-1">Start Date</label>
                     <input 
@@ -287,6 +287,20 @@
                         <option value="paid">Paid Collections Only</option>
                         <option value="pending">Pending Payments</option>
                         <option value="waived">Waived / Free Exemption</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block font-bold text-zinc-600 dark:text-zinc-400 mb-1">Payment Method</label>
+                    <select 
+                        wire:model.live="paymentMethodFilter" 
+                        class="w-full rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800/90 px-3 py-1.5 text-xs text-zinc-900 dark:text-white font-medium"
+                    >
+                        <option value="">All Methods</option>
+                        <option value="cash">Cash Payment</option>
+                        <option value="gcash">GCash</option>
+                        <option value="bank_transfer">Bank Transfer</option>
+                        <option value="other">Other / Waived</option>
                     </select>
                 </div>
             </div>

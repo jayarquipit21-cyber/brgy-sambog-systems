@@ -31,6 +31,10 @@ class AnnouncementsManager extends Component
 
     public ?int $editingId = null;
 
+    public string $search = '';
+
+    public string $filterType = ''; // '', 'event', 'general'
+
     protected function rules(): array
     {
         return [
@@ -190,8 +194,27 @@ class AnnouncementsManager extends Component
 
     public function render()
     {
-        $announcements = Announcement::orderByDesc('is_pinned')->orderByDesc('published_at')->get();
+        $query = Announcement::orderByDesc('is_pinned')->orderByDesc('published_at');
 
-        return view('livewire.announcements-manager', ['announcements' => $announcements]);
+        if ($this->search) {
+            $s = '%'.$this->search.'%';
+            $query->where(function ($q) use ($s) {
+                $q->where('title', 'like', $s)
+                    ->orWhere('body', 'like', $s)
+                    ->orWhere('event_location', 'like', $s);
+            });
+        }
+
+        if ($this->filterType === 'event') {
+            $query->where(function ($q) {
+                $q->where('type', 'event')->orWhereNotNull('event_date');
+            });
+        } elseif ($this->filterType === 'general') {
+            $query->where(function ($q) {
+                $q->where('type', '!=', 'event')->orWhereNull('type');
+            })->whereNull('event_date');
+        }
+
+        return view('livewire.announcements-manager', ['announcements' => $query->get()]);
     }
 }
