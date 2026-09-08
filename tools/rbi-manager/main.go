@@ -304,7 +304,12 @@ func main() {
 		}
 
 		// Non-interactive mode: forward to php artisan
-		runCommand(projectDir, false, filteredArgs...)
+		if err := runCommand(projectDir, true, filteredArgs...); err != nil {
+			if exitErr, ok := err.(*exec.ExitError); ok {
+				os.Exit(exitErr.ExitCode())
+			}
+			os.Exit(1)
+		}
 		return
 	}
 
