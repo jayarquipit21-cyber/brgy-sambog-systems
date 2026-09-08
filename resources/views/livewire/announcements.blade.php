@@ -21,9 +21,12 @@
                     <!-- Header Badges -->
                     <div class="flex items-center justify-between gap-3 flex-wrap">
                         <div class="flex items-center gap-2 flex-wrap">
-                            <span class="text-[10px] uppercase tracking-wider font-extrabold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 dark:bg-emerald-500/20 px-3 py-1 rounded-full border border-emerald-500/20 font-outfit">
-                                {{ ucfirst($a->type) }}
-                            </span>
+                            @if($a->type === 'event' || $a->event_date)
+                                <span class="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-wider font-extrabold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 dark:bg-emerald-500/20 px-3 py-1 rounded-full border border-emerald-500/20 font-outfit">
+                                    <svg class="h-3 w-3 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                                    Community Event
+                                </span>
+                            @endif
                             @if($a->is_pinned)
                                 <span class="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-amber-700 dark:text-amber-300 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20 font-outfit">
                                     <svg class="h-3 w-3 text-amber-500" viewBox="0 0 24 24" fill="currentColor"><path d="M16 12V4h1V2H7v2h1v8l-2 2v2h5.2v6h1.6v-6H18v-2l-2-2z"/></svg>

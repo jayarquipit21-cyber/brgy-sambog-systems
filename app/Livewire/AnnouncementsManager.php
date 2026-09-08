@@ -17,6 +17,8 @@ class AnnouncementsManager extends Component
 
     public string $type = 'general';
 
+    public bool $is_event = false;
+
     public ?string $event_date = null;
 
     public ?string $event_end_date = null;
@@ -34,8 +36,9 @@ class AnnouncementsManager extends Component
         return [
             'title' => 'required|string|max:150',
             'body' => 'required|string|max:2000',
+            'is_event' => 'boolean',
             'type' => 'nullable|string|max:50',
-            'event_date' => 'nullable|date',
+            'event_date' => 'nullable|required_if:is_event,true|date',
             'event_end_date' => 'nullable|date|after_or_equal:event_date',
             'event_location' => 'nullable|string|max:255',
             'is_pinned' => 'boolean',
@@ -55,10 +58,10 @@ class AnnouncementsManager extends Component
             'user_id' => Auth::id(),
             'title' => $this->title,
             'body' => $this->body,
-            'type' => $this->type ?? 'general',
-            'event_date' => $this->type === 'event' ? $this->event_date : null,
-            'event_end_date' => $this->type === 'event' ? $this->event_end_date : null,
-            'event_location' => $this->type === 'event' ? $this->event_location : null,
+            'type' => $this->is_event ? 'event' : 'general',
+            'event_date' => $this->is_event ? $this->event_date : null,
+            'event_end_date' => $this->is_event ? $this->event_end_date : null,
+            'event_location' => $this->is_event ? $this->event_location : null,
             'is_pinned' => $this->is_pinned,
             'published_at' => $this->publish_now ? now() : null,
         ]);
@@ -68,7 +71,7 @@ class AnnouncementsManager extends Component
             $this->notifyAllUsers($announcement);
         }
 
-        $this->reset(['title', 'body', 'type', 'event_date', 'event_end_date', 'event_location', 'is_pinned', 'publish_now']);
+        $this->reset(['title', 'body', 'type', 'is_event', 'event_date', 'event_end_date', 'event_location', 'is_pinned', 'publish_now']);
 
         Flux::toast(variant: 'success', text: __('Announcement published.'));
     }
@@ -85,7 +88,8 @@ class AnnouncementsManager extends Component
         $this->editingId = $a->id;
         $this->title = $a->title;
         $this->body = $a->body;
-        $this->type = $a->type;
+        $this->is_event = ($a->type === 'event' || ! empty($a->event_date));
+        $this->type = $a->type ?? 'general';
         $this->event_date = $a->event_date ? $a->event_date->format('Y-m-d\TH:i') : null;
         $this->event_end_date = $a->event_end_date ? $a->event_end_date->format('Y-m-d\TH:i') : null;
         $this->event_location = $a->event_location;
@@ -109,10 +113,10 @@ class AnnouncementsManager extends Component
         $a->update([
             'title' => $this->title,
             'body' => $this->body,
-            'type' => $this->type ?? 'general',
-            'event_date' => $this->type === 'event' ? $this->event_date : null,
-            'event_end_date' => $this->type === 'event' ? $this->event_end_date : null,
-            'event_location' => $this->type === 'event' ? $this->event_location : null,
+            'type' => $this->is_event ? 'event' : 'general',
+            'event_date' => $this->is_event ? $this->event_date : null,
+            'event_end_date' => $this->is_event ? $this->event_end_date : null,
+            'event_location' => $this->is_event ? $this->event_location : null,
             'is_pinned' => $this->is_pinned,
             'published_at' => $this->publish_now ? now() : null,
         ]);
@@ -123,7 +127,7 @@ class AnnouncementsManager extends Component
     public function cancelEdit()
     {
         $this->editingId = null;
-        $this->reset(['title', 'body', 'type', 'event_date', 'event_end_date', 'event_location', 'is_pinned', 'publish_now']);
+        $this->reset(['title', 'body', 'type', 'is_event', 'event_date', 'event_end_date', 'event_location', 'is_pinned', 'publish_now']);
     }
 
     public function deleteAnnouncement(int $id)

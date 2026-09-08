@@ -43,11 +43,16 @@ class ManageAppointments extends Component
 
     public string $paymentMethod = 'cash';
 
-    public string $paymentOrNumber = '';
+    public ?string $paymentOrNumber = null;
 
-    public string $paymentNotes = '';
+    public ?string $paymentNotes = null;
 
     public bool $showPaymentModal = false;
+
+    // Unpaid warning modal state
+    public ?int $pendingCompleteId = null;
+
+    public bool $showUnpaidWarningModal = false;
 
     public function startPayment(int $id): void
     {
@@ -123,11 +128,48 @@ class ManageAppointments extends Component
         Flux::toast(variant: 'success', text: __('Fee waived under statutory exemption.'));
     }
 
+    public static array $defaultTimeSlots = [
+        '09:00 AM - 10:00 AM',
+        '10:00 AM - 11:00 AM',
+        '11:00 AM - 12:00 PM',
+        '01:00 PM - 02:00 PM',
+        '02:00 PM - 03:00 PM',
+        '03:00 PM - 04:00 PM',
+        '04:00 PM - 05:00 PM',
+    ];
+
+    public function getFirstAvailableSlot(string $date): string
+    {
+        $slots = self::$defaultTimeSlots;
+        if ($date === now()->toDateString()) {
+            $now = now();
+            foreach ($slots as $slot) {
+                $startTimeStr = trim(explode(' - ', $slot)[0]);
+                try {
+                    $slotStart = \Carbon\Carbon::parse("{$date} {$startTimeStr}");
+                    if ($slotStart->gte($now)) {
+                        return $slot;
+                    }
+                } catch (\Exception $e) {
+                }
+            }
+        }
+
+        return $slots[0];
+    }
+
+    public function updatedRedemptionDate(): void
+    {
+        if ($this->redemptionDate) {
+            $this->redemptionTime = $this->getFirstAvailableSlot($this->redemptionDate);
+        }
+    }
+
     public function startApprove(int $id): void
     {
         $this->selectedAppointmentId = $id;
         $this->redemptionDate = now()->toDateString();
-        $this->redemptionTime = '09:00 AM - 10:00 AM';
+        $this->redemptionTime = $this->getFirstAvailableSlot($this->redemptionDate);
         $this->approvalNotes = '';
         $this->showApproveModal = true;
     }
@@ -162,7 +204,22 @@ class ManageAppointments extends Component
                     }
                 },
             ],
-            'redemptionTime' => 'required|string',
+            'redemptionTime' => [
+                'required',
+                'string',
+                function ($attribute, $value, $fail) {
+                    if ($this->redemptionDate === now()->toDateString()) {
+                        $startTimeStr = trim(explode(' - ', $value)[0]);
+                        try {
+                            $slotStart = \Carbon\Carbon::parse("{$this->redemptionDate} {$startTimeStr}");
+                            if ($slotStart->lt(now())) {
+                                $fail(__('The scheduled release time cannot be earlier than the current time.'));
+                            }
+                        } catch (\Exception $e) {
+                        }
+                    }
+                },
+            ],
         ]);
 
         $appointment = Appointment::findOrFail($this->selectedAppointmentId);
@@ -208,10 +265,41 @@ class ManageAppointments extends Component
         Flux::toast(variant: 'success', text: __('Request approved for Kapitan\'s signature (Approved-Pending).'));
     }
 
-    public function complete(int $id): void
+    public function getPendingCompleteAppointmentProperty(): ?Appointment
     {
-        $appointment = Appointment::findOrFail($id);
+        return $this->pendingCompleteId
+            ? Appointment::with(['transaction', 'user'])->find($this->pendingCompleteId)
+            : null;
+    }
+
+    public function complete(int $id, bool $force = false): void
+    {
+        $appointment = Appointment::with(['transaction', 'user'])->findOrFail($id);
+
+        $transaction = $appointment->transaction;
+        $isUnpaid = $transaction
+            && (float) $transaction->total_amount > 0
+            && ! in_array($transaction->payment_status, ['paid', 'waived']);
+
+        if ($isUnpaid && ! $force) {
+            $this->pendingCompleteId = $id;
+            $this->showUnpaidWarningModal = true;
+            $docName = str_replace('[Rental Service] ', '', $appointment->purpose);
+
+            Flux::toast(
+                variant: 'warning',
+                text: __("Warning: The document claim for \":doc\" has not been paid yet! Total Due: ₱:amount.", [
+                    'doc' => \Illuminate\Support\Str::limit($docName, 35),
+                    'amount' => number_format($transaction->total_amount, 2),
+                ])
+            );
+
+            return;
+        }
+
         $appointment->update(['status' => 'completed']);
+        $this->showUnpaidWarningModal = false;
+        $this->pendingCompleteId = null;
 
         $isRental = str_starts_with($appointment->purpose, '[Rental Service]');
 
@@ -225,6 +313,22 @@ class ManageAppointments extends Component
         ));
 
         Flux::toast(variant: 'success', text: __('Appointment marked as completed.'));
+    }
+
+    public function confirmComplete(): void
+    {
+        if ($this->pendingCompleteId) {
+            $this->complete($this->pendingCompleteId, true);
+        }
+    }
+
+    public function payBeforeComplete(): void
+    {
+        $id = $this->pendingCompleteId;
+        $this->showUnpaidWarningModal = false;
+        if ($id) {
+            $this->startPayment($id);
+        }
     }
 
     public function startReject(int $id): void

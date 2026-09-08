@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin;
 
 use App\Models\Blotter;
+use App\Models\Resident;
 use Flux\Flux;
 use Livewire\Component;
 
@@ -18,6 +19,8 @@ class ManageBlotters extends Component
     public ?int $editingId = null;
 
     public string $complainant_name = '';
+
+    public bool $showComplainantSuggestions = false;
 
     public string $respondent_name = '';
 
@@ -35,10 +38,50 @@ class ManageBlotters extends Component
 
     public string $hearing_time = '09:00 AM';
 
+    public function updatedComplainantName(): void
+    {
+        $this->showComplainantSuggestions = strlen(trim($this->complainant_name)) >= 2;
+    }
+
+    public function getComplainantSuggestionsProperty()
+    {
+        $term = trim($this->complainant_name);
+        if (strlen($term) < 2 || ! $this->showComplainantSuggestions) {
+            return collect();
+        }
+
+        $driver = \Illuminate\Support\Facades\DB::connection()->getDriverName();
+        $concatFirstLast = $driver === 'sqlite' ? "(first_name || ' ' || last_name)" : "CONCAT(first_name, ' ', last_name)";
+        $concatLastFirst = $driver === 'sqlite' ? "(last_name || ', ' || first_name)" : "CONCAT(last_name, ', ', first_name)";
+
+        return Resident::with('household')
+            ->where(function ($q) use ($term, $concatFirstLast, $concatLastFirst) {
+                $q->where('first_name', 'like', "%{$term}%")
+                    ->orWhere('last_name', 'like', "%{$term}%")
+                    ->orWhereRaw("{$concatFirstLast} LIKE ?", ["%{$term}%"])
+                    ->orWhereRaw("{$concatLastFirst} LIKE ?", ["%{$term}%"]);
+            })
+            ->take(6)
+            ->get();
+    }
+
+    public function selectComplainant(int $residentId): void
+    {
+        $resident = Resident::with('household')->find($residentId);
+        if ($resident) {
+            $this->complainant_name = $resident->full_name;
+            if (empty($this->incident_location) && $resident->household?->address) {
+                $this->incident_location = $resident->household->address;
+            }
+        }
+        $this->showComplainantSuggestions = false;
+    }
+
     public function create()
     {
         $this->resetValidation();
         $this->reset(['editingId', 'complainant_name', 'respondent_name', 'incident_type', 'incident_date', 'incident_location', 'narrative', 'hearing_date']);
+        $this->showComplainantSuggestions = false;
         $this->status = 'Pending';
         $this->showFormModal = true;
     }

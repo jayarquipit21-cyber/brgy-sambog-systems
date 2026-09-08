@@ -348,7 +348,7 @@ class BarangayServicesTest extends TestCase
 
         $appointment = Appointment::where('user_id', $user->id)->first();
         $this->assertNotNull($appointment);
-        $this->assertEquals('[Rental Service] Plastic Monoblock Chairs Rental — Need 30 chairs for birthday party', $appointment->purpose);
+        $this->assertEquals('[Rental Service] Plastic Monoblock Chairs Rental (Qty: 1) — Need 30 chairs for birthday party', $appointment->purpose);
         $this->assertEquals('pending', $appointment->status);
         $this->assertEquals($rentalDate, $appointment->appointment_date->toDateString());
     }

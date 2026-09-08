@@ -175,6 +175,7 @@
                                     @elseif($apt->status === 'approved')
                                         <button 
                                             wire:click="complete({{ $apt->id }})"
+                                            wire:loading.attr="disabled"
                                             class="text-xs text-blue-500 hover:text-blue-700 font-semibold cursor-pointer"
                                         >
                                             Mark Collected
@@ -266,6 +267,11 @@
                                 </td>
                                 <td class="py-3 px-4 max-w-sm whitespace-normal break-words font-bold text-amber-700 dark:text-amber-400">
                                     {{ $displayRentalName }}
+                                    @if($apt->transaction && $apt->transaction->quantity > 1)
+                                        <span class="inline-flex items-center ml-1.5 px-2 py-0.5 rounded text-[10px] font-black bg-amber-100 dark:bg-amber-900/50 text-amber-900 dark:text-amber-200 border border-amber-300/60">
+                                            Qty: {{ $apt->transaction->quantity }}
+                                        </span>
+                                    @endif
                                 </td>
                                 <td class="py-3 px-4 whitespace-nowrap">
                                     @php
@@ -350,6 +356,7 @@
                                     @elseif($apt->status === 'approved')
                                         <button 
                                             wire:click="complete({{ $apt->id }})"
+                                            wire:loading.attr="disabled"
                                             class="text-xs text-blue-500 hover:text-blue-700 font-semibold cursor-pointer"
                                         >
                                             Mark Completed
@@ -396,7 +403,7 @@
                     <input 
                         id="redemptionDate"
                         type="date" 
-                        wire:model="redemptionDate"
+                        wire:model.live="redemptionDate"
                         class="w-full rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-2 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand text-sm"
                         required
                         min="{{ date('Y-m-d') }}"
@@ -412,12 +419,19 @@
                         class="w-full rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-2 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand text-sm"
                         required
                     >
-                        <option value="09:00 AM - 10:00 AM">09:00 AM - 10:00 AM (Morning)</option>
-                        <option value="10:00 AM - 11:00 AM">10:00 AM - 11:00 AM (Morning)</option>
-                        <option value="11:00 AM - 12:00 PM">11:00 AM - 12:00 PM (Morning)</option>
-                        <option value="01:00 PM - 02:00 PM">01:00 PM - 02:00 PM (Afternoon)</option>
-                        <option value="02:00 PM - 03:00 PM">02:00 PM - 03:00 PM (Afternoon)</option>
-                        <option value="03:00 PM - 04:00 PM">03:00 PM - 04:00 PM (Afternoon)</option>
+                        @php
+                            $isToday = ($redemptionDate === date('Y-m-d'));
+                            $now = now();
+                        @endphp
+                        @foreach(\App\Livewire\Admin\ManageAppointments::$defaultTimeSlots as $slot)
+                            @php
+                                $slotStart = \Carbon\Carbon::parse(date('Y-m-d') . ' ' . explode(' - ', $slot)[0]);
+                                $hasPassed = $isToday && $slotStart->lt($now);
+                            @endphp
+                            <option value="{{ $slot }}" @disabled($hasPassed)>
+                                {{ $slot }} @if($hasPassed)(Unavailable - Time passed)@endif
+                            </option>
+                        @endforeach
                     </select>
                     @error('redemptionTime') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
@@ -440,7 +454,7 @@
                 <flux:modal.close>
                     <flux:button variant="filled">{{ __('Cancel') }}</flux:button>
                 </flux:modal.close>
-                <flux:button variant="primary" type="submit">{{ __('Approve & Set Date') }}</flux:button>
+                <flux:button variant="primary" type="submit" wire:loading.attr="disabled">{{ __('Approve & Set Date') }}</flux:button>
             </div>
         </form>
     </flux:modal>
@@ -469,7 +483,7 @@
                 <flux:modal.close>
                     <flux:button variant="filled">{{ __('Go Back') }}</flux:button>
                 </flux:modal.close>
-                <flux:button variant="danger" type="submit">{{ __('Confirm Rejection') }}</flux:button>
+                <flux:button variant="danger" type="submit" wire:loading.attr="disabled">{{ __('Confirm Rejection') }}</flux:button>
             </div>
         </form>
     </flux:modal>
@@ -533,8 +547,69 @@
 
             <div class="flex justify-end gap-3">
                 <flux:button variant="ghost" type="button" wire:click="$set('showPaymentModal', false)">{{ __('Cancel') }}</flux:button>
-                <flux:button variant="primary" type="submit" class="bg-emerald-600 hover:bg-emerald-700 font-bold text-white">{{ __('Save Payment & Issue Receipt') }}</flux:button>
+                <flux:button variant="primary" type="submit" wire:loading.attr="disabled" class="bg-emerald-600 hover:bg-emerald-700 font-bold text-white">{{ __('Save Payment & Issue Receipt') }}</flux:button>
             </div>
         </form>
+    </flux:modal>
+
+    <!-- Unpaid Document Claim Warning Modal -->
+    <flux:modal name="unpaid-warning-modal" class="max-w-md" wire:model="showUnpaidWarningModal">
+        <div class="space-y-5">
+            <div class="flex items-start gap-3.5">
+                <div class="p-3 bg-amber-500/10 text-amber-600 dark:text-amber-400 rounded-2xl shrink-0 mt-0.5 border border-amber-500/20">
+                    <flux:icon name="exclamation-triangle" class="size-6" />
+                </div>
+                <div>
+                    <flux:heading size="lg" class="text-zinc-900 dark:text-white font-bold">{{ __('Unpaid Document Claim Warning') }}</flux:heading>
+                    <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
+                        {{ __('This document claim has not been marked as paid yet.') }}
+                    </p>
+                </div>
+            </div>
+
+            @if($this->pendingCompleteAppointment)
+                @php
+                    $pendingApt = $this->pendingCompleteAppointment;
+                    $pendingTxn = $pendingApt->transaction;
+                    $isRentalItem = str_starts_with($pendingApt->purpose, '[Rental Service]');
+                    $cleanPurpose = str_replace('[Rental Service] ', '', $pendingApt->purpose);
+                @endphp
+                <div class="rounded-xl border border-amber-200 dark:border-amber-900/40 bg-amber-50/60 dark:bg-amber-950/20 p-4 text-xs space-y-2.5">
+                    <div class="flex justify-between items-center pb-2 border-b border-amber-200/60 dark:border-amber-900/40">
+                        <span class="text-zinc-600 dark:text-zinc-400 font-medium">Claim Type:</span>
+                        <span class="font-bold text-zinc-900 dark:text-white">{{ $isRentalItem ? 'Utility Rental' : 'Document Request' }}</span>
+                    </div>
+                    <div class="flex justify-between items-start pb-2 border-b border-amber-200/60 dark:border-amber-900/40">
+                        <span class="text-zinc-600 dark:text-zinc-400 font-medium">Claim Details:</span>
+                        <span class="font-semibold text-zinc-900 dark:text-white text-right max-w-[220px]">{{ $cleanPurpose }}</span>
+                    </div>
+                    <div class="flex justify-between items-center pb-2 border-b border-amber-200/60 dark:border-amber-900/40">
+                        <span class="text-zinc-600 dark:text-zinc-400 font-medium">Resident:</span>
+                        <span class="font-bold text-zinc-900 dark:text-white">{{ $pendingApt->user?->name ?? 'N/A' }}</span>
+                    </div>
+                    <div class="flex justify-between items-center pt-0.5">
+                        <span class="text-amber-800 dark:text-amber-300 font-bold uppercase tracking-wider text-[11px]">Total Unpaid Fee:</span>
+                        <span class="text-base font-extrabold text-amber-700 dark:text-amber-400">₱{{ number_format($pendingTxn?->total_amount ?? 0, 2) }}</span>
+                    </div>
+                </div>
+
+                <p class="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                    Warning: The official fee for this claim has not been collected. Are you sure you want to mark this claim as collected without payment? It is recommended to collect payment and issue a receipt first.
+                </p>
+            @endif
+
+            <div class="flex flex-col-reverse sm:flex-row justify-end gap-2 pt-3 border-t border-zinc-200 dark:border-zinc-800">
+                <flux:button variant="ghost" wire:click="$set('showUnpaidWarningModal', false)" class="text-xs">
+                    {{ __('Cancel') }}
+                </flux:button>
+                <flux:button variant="primary" wire:click="payBeforeComplete" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs">
+                    <flux:icon name="banknotes" class="size-3.5 mr-1" />
+                    {{ __('Collect Payment First') }}
+                </flux:button>
+                <flux:button variant="danger" wire:click="confirmComplete" wire:loading.attr="disabled" class="text-xs">
+                    {{ __('Mark Collected Anyway') }}
+                </flux:button>
+            </div>
+        </div>
     </flux:modal>
 </div>

@@ -84,9 +84,42 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Complainant Name</label>
-                    <input type="text" wire:model="complainant_name" class="w-full rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-2 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand text-sm" required />
+                <div class="relative">
+                    <label class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">
+                        Complainant Name <span class="text-xs text-zinc-400 font-normal">(Type to search RBI records)</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        wire:model.live.debounce.250ms="complainant_name" 
+                        wire:focus="$set('showComplainantSuggestions', true)"
+                        placeholder="Type complainant name..."
+                        autocomplete="off"
+                        class="w-full rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-2 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand text-sm" 
+                        required 
+                    />
+                    @if($this->complainantSuggestions->isNotEmpty())
+                        <div class="absolute z-50 left-0 right-0 mt-1 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl shadow-xl overflow-hidden max-h-48 overflow-y-auto divide-y divide-zinc-100 dark:divide-zinc-700">
+                            <div class="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-zinc-400 bg-zinc-50 dark:bg-zinc-900/50">
+                                Matching RBI Inhabitants
+                            </div>
+                            @foreach($this->complainantSuggestions as $res)
+                                <button
+                                    type="button"
+                                    wire:click="selectComplainant({{ $res->id }})"
+                                    class="w-full text-left px-3 py-2 text-xs hover:bg-emerald-50 dark:hover:bg-emerald-950/30 flex items-center justify-between transition cursor-pointer"
+                                >
+                                    <div>
+                                        <span class="font-bold text-zinc-900 dark:text-white">{{ $res->full_name }}</span>
+                                        <span class="text-[11px] text-zinc-500 dark:text-zinc-400 ml-1.5">
+                                            Purok {{ $res->household?->purok_no ?? 'N/A' }}
+                                            @if($res->household?->address) • {{ $res->household->address }} @endif
+                                        </span>
+                                    </div>
+                                    <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold bg-emerald-500/10 px-2 py-0.5 rounded">Select</span>
+                                </button>
+                            @endforeach
+                        </div>
+                    @endif
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Respondent Name</label>
@@ -134,7 +167,7 @@
                 <flux:modal.close>
                     <flux:button variant="filled">{{ __('Cancel') }}</flux:button>
                 </flux:modal.close>
-                <flux:button variant="primary" type="submit">{{ __('Save Record') }}</flux:button>
+                <flux:button variant="primary" type="submit" wire:loading.attr="disabled">{{ __('Save Record') }}</flux:button>
             </div>
         </form>
     </flux:modal>

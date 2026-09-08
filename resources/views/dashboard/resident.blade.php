@@ -163,39 +163,47 @@
 
             <ul class="grid grid-cols-1 sm:grid-cols-3 gap-3" role="list" aria-label="Barangay announcements">
                 @forelse($recentAnnouncements as $ann)
+                    @php
+                        $eventSchedule = '';
+                        if (($ann->type === 'event' || $ann->event_date) && $ann->event_date) {
+                            if ($ann->event_end_date) {
+                                $eventSchedule = $ann->event_date->isSameDay($ann->event_end_date)
+                                    ? $ann->event_date->format('F j, Y \a\t g:i A') . ' – ' . $ann->event_end_date->format('g:i A')
+                                    : $ann->event_date->format('M j, Y g:i A') . ' → ' . $ann->event_end_date->format('M j, Y g:i A');
+                            } else {
+                                $eventSchedule = $ann->event_date->format('F j, Y \a\t g:i A');
+                            }
+                        }
+                    @endphp
                     <li>
                         <button
                             type="button"
-                            onclick="openAnnouncementModal({{ $ann->id }}, {{ Js::from($ann->title) }}, {{ Js::from($ann->body) }}, {{ Js::from($ann->published_at ? $ann->published_at->diffForHumans() : 'Draft') }}, {{ Js::from($ann->type ?? 'General') }}, {{ $ann->is_pinned ? 'true' : 'false' }})"
+                            onclick="openAnnouncementModal({{ $ann->id }}, {{ Js::from($ann->title) }}, {{ Js::from($ann->body) }}, {{ Js::from($ann->published_at ? $ann->published_at->diffForHumans() : 'Draft') }}, '', {{ $ann->is_pinned ? 'true' : 'false' }}, {{ Js::from($eventSchedule) }}, {{ Js::from($ann->event_location ?? '') }})"
                             class="w-full text-left p-4 rounded-2xl bg-gradient-to-b from-zinc-50 to-white dark:from-zinc-800/40 dark:to-zinc-900/40 border border-zinc-100 dark:border-zinc-700/40 space-y-2 cursor-pointer hover:border-sky-400/50 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 h-full flex flex-col justify-between"
                             aria-label="Read announcement: {{ $ann->title }}"
                         >
                             <div class="space-y-1.5">
-                                <div class="flex items-center gap-2">
-                                    @php
-                                        $annColor = 'text-zinc-400';
-                                        $typeBadgeColor = 'text-emerald-600 dark:text-emerald-400';
-                                        if ($ann->type) {
-                                            if (strtolower($ann->type) === 'alert') {
-                                                $annColor = 'text-red-500';
-                                                $typeBadgeColor = 'text-red-600 dark:text-red-400';
-                                            } elseif (strtolower($ann->type) === 'event') {
-                                                $annColor = 'text-violet-500';
-                                                $typeBadgeColor = 'text-violet-600 dark:text-violet-400';
-                                            } elseif (strtolower($ann->type) === 'general') {
-                                                $annColor = 'text-emerald-500';
-                                                $typeBadgeColor = 'text-emerald-600 dark:text-emerald-400';
-                                            }
-                                        }
-                                    @endphp
+                                <div class="flex items-center gap-2 flex-wrap">
                                     @if($ann->is_pinned)
-                                        <flux:icon name="bookmark" class="size-3.5 text-amber-500 shrink-0" aria-hidden="true" />
-                                    @else
-                                        <flux:icon name="megaphone" class="size-3.5 {{ $annColor }} shrink-0" aria-hidden="true" />
+                                        <span class="inline-flex items-center gap-1 text-[9px] uppercase tracking-wider font-bold text-amber-600 dark:text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20">
+                                            <flux:icon name="bookmark" class="size-3 text-amber-500 shrink-0" aria-hidden="true" />
+                                            Pinned
+                                        </span>
                                     @endif
-                                    <span class="text-[9px] uppercase tracking-widest font-bold {{ $typeBadgeColor }}">{{ $ann->type ?? 'General' }}</span>
+                                    @if($ann->type === 'event' || $ann->event_date)
+                                        <span class="inline-flex items-center gap-1 text-[9px] uppercase tracking-wider font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+                                            <flux:icon name="calendar" class="size-3 text-emerald-500 shrink-0" aria-hidden="true" />
+                                            Event
+                                        </span>
+                                    @endif
                                 </div>
                                 <div class="text-xs font-bold text-zinc-800 dark:text-white line-clamp-2 group-hover:text-sky-700 dark:group-hover:text-sky-400 transition-colors">{{ $ann->title }}</div>
+                                @if($eventSchedule)
+                                    <div class="text-[10px] font-semibold text-emerald-700 dark:text-emerald-300 flex items-center gap-1 bg-emerald-50 dark:bg-emerald-950/30 px-2 py-1 rounded-lg border border-emerald-500/20">
+                                        <flux:icon name="calendar" class="size-3 shrink-0 text-emerald-500" />
+                                        <span class="truncate">{{ $eventSchedule }}</span>
+                                    </div>
+                                @endif
                                 <div class="text-[10px] text-zinc-500 dark:text-zinc-400 line-clamp-3">{{ $ann->body }}</div>
                             </div>
                             <div class="text-[9px] text-zinc-400 pt-2 border-t border-zinc-100 dark:border-zinc-700/50 flex items-center justify-between">

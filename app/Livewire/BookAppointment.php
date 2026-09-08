@@ -24,9 +24,9 @@ class BookAppointment extends Component
 
     public string $purpose_details = '';
 
-    public string $purpose = '';
-
     public ?string $rental_date = null;
+
+    public int $rental_quantity = 1;
 
     public static array $availableDocuments = [
         'Barangay Clearance' => 'Official clearance for employment, IDs, or legal requirements',
@@ -57,6 +57,7 @@ class BookAppointment extends Component
             'document_type' => 'required|string',
             'purpose_details' => 'nullable|string|max:500',
             'rental_date' => 'nullable|date|after_or_equal:today',
+            'rental_quantity' => 'nullable|integer|min:1|max:1000',
         ];
     }
 
@@ -64,6 +65,7 @@ class BookAppointment extends Component
     {
         $this->document_type = '';
         $this->rental_date = null;
+        $this->rental_quantity = 1;
     }
 
     public function book(): void
@@ -73,6 +75,19 @@ class BookAppointment extends Component
         $selectedItem = $this->document_type;
         $details = trim($this->purpose_details);
         $isRental = ($this->appointment_category === 'rental');
+        $quantity = $isRental ? max(1, (int) $this->rental_quantity) : 1;
+
+        // Prevent duplicate pending requests for the same service
+        $existingPending = Appointment::where('user_id', Auth::id())
+            ->where('status', 'pending')
+            ->where('purpose', 'like', "%{$selectedItem}%")
+            ->first();
+
+        if ($existingPending) {
+            $this->addError('document_type', __('You already have a pending request for this service. Please wait for it to be processed before submitting another.'));
+
+            return;
+        }
 
         if ($selectedItem === 'Other / Custom Barangay Document' || $selectedItem === 'Other Facility / Equipment Rental') {
             if (empty($details)) {
@@ -80,16 +95,18 @@ class BookAppointment extends Component
 
                 return;
             }
-            $finalPurpose = $isRental ? "[Rental Service] {$details}" : $details;
+            $finalPurpose = $isRental ? "[Rental Service] {$details} (Qty: {$quantity})" : $details;
         } else {
             $prefix = $isRental ? "[Rental Service] {$selectedItem}" : $selectedItem;
-            $finalPurpose = ! empty($details) ? "{$prefix} — {$details}" : $prefix;
+            $qtySuffix = $isRental ? " (Qty: {$quantity})" : "";
+            $finalPurpose = ! empty($details) ? "{$prefix}{$qtySuffix} — {$details}" : "{$prefix}{$qtySuffix}";
         }
 
-        $feeAmount = \App\Models\ServiceFee::getFeeByName($selectedItem);
-        if ($feeAmount === 0.00 && ($selectedItem === 'Other / Custom Barangay Document' || $selectedItem === 'Other Facility / Equipment Rental')) {
-            $feeAmount = $isRental ? 100.00 : 50.00;
+        $unitFee = \App\Models\ServiceFee::getFeeByName($selectedItem);
+        if ($unitFee === 0.00 && ($selectedItem === 'Other / Custom Barangay Document' || $selectedItem === 'Other Facility / Equipment Rental')) {
+            $unitFee = $isRental ? 100.00 : 50.00;
         }
+        $totalFee = $isRental ? ($unitFee * $quantity) : $unitFee;
 
         $appointment = Appointment::create([
             'user_id' => Auth::id(),
@@ -100,7 +117,7 @@ class BookAppointment extends Component
         ]);
 
         // Generate Transaction record
-        $isFreeExemption = ($feeAmount == 0.00);
+        $isFreeExemption = ($totalFee == 0.00);
         $user = Auth::user();
         \App\Models\Transaction::create([
             'appointment_id' => $appointment->id,
@@ -109,17 +126,18 @@ class BookAppointment extends Component
             'payer_address' => $user->resident?->household?->address ?? ($user->resident?->purok ? 'Purok '.$user->resident->purok.', Brgy. Sambog' : 'Barangay Sambog, Corella, Bohol'),
             'service_type' => $isRental ? 'rental' : 'document',
             'item_name' => $selectedItem,
-            'quantity' => 1,
-            'unit_price' => $feeAmount,
-            'total_amount' => $feeAmount,
-            'amount_paid' => $isFreeExemption ? 0.00 : 0.00,
+            'quantity' => $quantity,
+            'unit_price' => $unitFee,
+            'total_amount' => $totalFee,
+            'amount_paid' => 0.00,
             'payment_status' => $isFreeExemption ? 'waived' : 'pending',
             'payment_method' => $isFreeExemption ? 'free_exemption' : 'cash',
             'notes' => $isFreeExemption ? 'Statutory fee exemption (Free assistance)' : 'Pending payment collection at Barangay Hall',
             'paid_at' => $isFreeExemption ? now() : null,
         ]);
 
-        $this->reset(['document_type', 'purpose_details', 'purpose', 'rental_date']);
+        $this->reset(['document_type', 'purpose_details', 'rental_date']);
+        $this->rental_quantity = 1;
 
         // Notify all admins about the new request
         $admins = User::where('role', 'admin')->where('id', '!=', Auth::id())->get();
@@ -127,15 +145,15 @@ class BookAppointment extends Component
         foreach ($admins as $admin) {
             $admin->notify(new SystemNotification(
                 $notifTitle,
-                Auth::user()->name.' submitted a request for: "'.$finalPurpose.'". Fee: ₱'.number_format($feeAmount, 2),
+                Auth::user()->name.' submitted a request for: "'.$finalPurpose.'". Fee: ₱'.number_format($totalFee, 2),
                 $isRental ? 'building-office' : 'document-text',
                 route('appointments')
             ));
         }
 
         $toastText = $isRental
-            ? __('Rental service request submitted successfully! Fee: ₱:fee (Pending Review)', ['fee' => number_format($feeAmount, 2)])
-            : __('Document request submitted successfully! Fee: ₱:fee (Pending Review)', ['fee' => number_format($feeAmount, 2)]);
+            ? __('Rental service request submitted successfully! Fee: ₱:fee (Pending Review)', ['fee' => number_format($totalFee, 2)])
+            : __('Document request submitted successfully! Fee: ₱:fee (Pending Review)', ['fee' => number_format($totalFee, 2)]);
 
         Flux::toast(variant: 'success', text: $toastText);
 

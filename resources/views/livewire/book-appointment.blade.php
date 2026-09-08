@@ -29,7 +29,27 @@
 
     <form wire:submit="book" class="space-y-4">
 
+        @if(!$lockCategory)
+            <div class="grid grid-cols-2 gap-2.5 p-1 bg-zinc-100 dark:bg-zinc-800/80 rounded-xl border border-zinc-200/60 dark:border-zinc-700/60">
+                <button 
+                    type="button"
+                    wire:click="$set('appointment_category', 'document')"
+                    class="flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-bold transition-all duration-200 @if($appointment_category === 'document') bg-white dark:bg-zinc-900 text-emerald-600 dark:text-emerald-400 shadow-sm border border-zinc-200/80 dark:border-zinc-700 @else text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white @endif cursor-pointer"
+                >
+                    <flux:icon name="document-text" class="size-3.5" />
+                    <span>Official Documents</span>
+                </button>
 
+                <button 
+                    type="button"
+                    wire:click="$set('appointment_category', 'rental')"
+                    class="flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-bold transition-all duration-200 @if($appointment_category === 'rental') bg-white dark:bg-zinc-900 text-amber-600 dark:text-amber-400 shadow-sm border border-zinc-200/80 dark:border-zinc-700 @else text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white @endif cursor-pointer"
+                >
+                    <flux:icon name="building-office" class="size-3.5" />
+                    <span>Rental & Facilities</span>
+                </button>
+            </div>
+        @endif
 
         <!-- Item Dropdown Select (Documents vs Rentals) -->
         <div>
@@ -71,6 +91,11 @@
             @if($document_type && isset($itemDict[$document_type]))
                 @php
                     $itemFee = \App\Models\ServiceFee::getFeeByName($document_type);
+                    if ($itemFee === 0.00 && ($document_type === 'Other / Custom Barangay Document' || $document_type === 'Other Facility / Equipment Rental')) {
+                        $itemFee = ($appointment_category === 'rental') ? 100.00 : 50.00;
+                    }
+                    $qty = ($appointment_category === 'rental') ? max(1, (int) $rental_quantity) : 1;
+                    $calcTotal = $itemFee * $qty;
                 @endphp
                 <div class="mt-2.5 p-2.5 rounded-xl flex items-start justify-between gap-2.5 animate-fadeIn border @if($appointment_category === 'rental') bg-amber-50/70 dark:bg-amber-950/20 border-amber-200/60 dark:border-amber-800/40 @else bg-emerald-50/70 dark:bg-emerald-950/20 border-emerald-200/60 dark:border-emerald-800/40 @endif">
                     <div class="flex items-start gap-2">
@@ -83,14 +108,38 @@
                         @if($itemFee == 0.00)
                             <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-100 dark:bg-emerald-900/40 text-emerald-800 dark:text-emerald-300 border border-emerald-300/60">FREE / EXEMPTED</span>
                         @else
-                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-extrabold @if($appointment_category === 'rental') bg-amber-100 dark:bg-amber-900/40 text-amber-900 dark:text-amber-300 border border-amber-300/60 @else bg-emerald-100 dark:bg-emerald-900/40 text-emerald-900 dark:text-emerald-300 border border-emerald-300/60 @endif">
-                                ₱{{ number_format($itemFee, 2) }}
-                            </span>
+                            <div class="text-[11px] font-extrabold @if($appointment_category === 'rental') text-amber-900 dark:text-amber-300 @else text-emerald-900 dark:text-emerald-300 @endif">
+                                @if($appointment_category === 'rental' && $qty > 1)
+                                    <div class="text-[10px] font-normal opacity-80">₱{{ number_format($itemFee, 2) }} × {{ $qty }}</div>
+                                @endif
+                                <span>₱{{ number_format($calcTotal, 2) }}</span>
+                            </div>
                         @endif
                     </div>
                 </div>
             @endif
         </div>
+
+        <!-- Quantity Input (Rental Category Only) -->
+        @if($appointment_category === 'rental')
+            <div>
+                <label for="rental_quantity" class="block text-xs font-bold uppercase tracking-wider text-zinc-700 dark:text-zinc-300 mb-1.5">
+                    Rental Quantity / Units <span class="text-amber-500">*</span>
+                </label>
+                <div class="relative">
+                    <input 
+                        type="number" 
+                        id="rental_quantity" 
+                        wire:model.live="rental_quantity"
+                        min="1"
+                        max="1000"
+                        class="w-full rounded-xl border border-zinc-200 dark:border-zinc-700/80 bg-white dark:bg-zinc-800/90 px-3.5 py-2.5 text-xs font-bold text-zinc-900 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 transition shadow-sm focus:border-amber-500 focus:ring-amber-500/20"
+                        required
+                    />
+                </div>
+                @error('rental_quantity') <p class="text-red-500 text-[11px] mt-1 font-medium">{{ $message }}</p> @enderror
+            </div>
+        @endif
 
         <!-- Preferred Rental / Event Date Picker (Rental Category Only) -->
         @if($appointment_category === 'rental')
@@ -113,7 +162,7 @@
         <div>
             <label for="purpose_details" class="block text-xs font-bold uppercase tracking-wider text-zinc-700 dark:text-zinc-300 mb-1.5">
                 @if($appointment_category === 'rental')
-                    Quantity & Rental Remarks @if(str_contains($document_type, 'Other')) <span class="text-amber-500">*</span> @else <span class="text-zinc-400 font-normal lowercase">(optional)</span> @endif
+                    Rental Notes & Event Remarks @if(str_contains($document_type, 'Other')) <span class="text-amber-500">*</span> @else <span class="text-zinc-400 font-normal lowercase">(optional)</span> @endif
                 @else
                     Purpose & Additional Remarks @if(str_contains($document_type, 'Other')) <span class="text-emerald-500">*</span> @else <span class="text-zinc-400 font-normal lowercase">(optional)</span> @endif
                 @endif
@@ -122,7 +171,7 @@
                  id="purpose_details"
                  wire:model="purpose_details"
                  rows="3"
-                 placeholder="@if($appointment_category === 'rental') e.g. Requesting 50 monoblock chairs and 2 tents for a family event at Purok 2 on Saturday, Aug 15. @else e.g. For employment application at ABC Company, or medical financial assistance at Bohol Doctors Hospital. @endif"
+                 placeholder="@if($appointment_category === 'rental') e.g. Requesting chairs and tents for a family reunion at Purok 2. @else e.g. For employment application at ABC Company, or medical financial assistance at Bohol Doctors Hospital. @endif"
                  class="w-full rounded-xl border border-zinc-200 dark:border-zinc-700/80 bg-white dark:bg-zinc-800/90 px-3.5 py-2.5 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 transition shadow-sm @if($appointment_category === 'rental') focus:border-amber-500 focus:ring-amber-500/20 @else focus:border-emerald-500 focus:ring-emerald-500/20 @endif"
                  @if(str_contains($document_type, 'Other')) required @endif
             ></textarea>
@@ -138,7 +187,7 @@
                     Official document request for Barangay Sambog
                 @endif
             </span>
-            <flux:button id="book_submit" variant="primary" type="submit" class="font-bold py-2 px-4 rounded-xl text-xs shadow-md transition-all duration-200 hover:-translate-y-0.5 text-white @if($appointment_category === 'rental') bg-amber-600 hover:bg-amber-700 @else bg-emerald-600 hover:bg-emerald-700 @endif">
+            <flux:button id="book_submit" variant="primary" type="submit" wire:loading.attr="disabled" class="font-bold py-2 px-4 rounded-xl text-xs shadow-md transition-all duration-200 hover:-translate-y-0.5 text-white @if($appointment_category === 'rental') bg-amber-600 hover:bg-amber-700 @else bg-emerald-600 hover:bg-emerald-700 @endif">
                 @if($appointment_category === 'rental')
                     Submit Rental Request
                 @else

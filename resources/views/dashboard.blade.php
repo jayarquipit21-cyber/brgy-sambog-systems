@@ -88,7 +88,6 @@
                         <svg class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" /></svg>
                     </div>
                     <div>
-                        <p id="modal-ann-type" class="text-[9px] uppercase tracking-widest font-extrabold text-emerald-600 dark:text-emerald-400 mb-0.5"></p>
                         <h2 id="modal-ann-title" class="text-base font-black text-zinc-900 dark:text-white font-outfit leading-snug"></h2>
                     </div>
                 </div>
@@ -102,7 +101,12 @@
             </div>
 
             {{-- Body --}}
-            <div class="px-6 py-5 max-h-[60vh] overflow-y-auto">
+            <div class="px-6 py-5 max-h-[60vh] overflow-y-auto space-y-4">
+                {{-- Event schedule banner (when event) --}}
+                <div id="modal-ann-event" class="hidden items-center gap-2 text-xs text-emerald-700 dark:text-emerald-300 bg-emerald-500/10 px-4 py-2.5 rounded-xl border border-emerald-500/20 font-semibold font-outfit">
+                    <svg class="size-4 text-emerald-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                    <span id="modal-ann-event-text"></span>
+                </div>
                 <p id="modal-ann-body" class="text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed whitespace-pre-line"></p>
             </div>
 
@@ -121,11 +125,26 @@
     </div>
 
     <script>
-        function openAnnouncementModal(id, title, body, date, type, isPinned) {
+        function openAnnouncementModal(id, title, body, date, type, isPinned, eventSchedule = '', eventLocation = '') {
             document.getElementById('modal-ann-title').textContent = title;
             document.getElementById('modal-ann-body').textContent = body;
             document.getElementById('modal-ann-date').textContent = date;
-            document.getElementById('modal-ann-type').textContent = type;
+            
+            const eventEl = document.getElementById('modal-ann-event');
+            const eventText = document.getElementById('modal-ann-event-text');
+            if (eventSchedule) {
+                eventEl.classList.remove('hidden');
+                eventEl.classList.add('flex');
+                let text = 'Event Date: ' + eventSchedule;
+                if (eventLocation) {
+                    text += ' • Location: ' + eventLocation;
+                }
+                eventText.textContent = text;
+            } else {
+                eventEl.classList.add('hidden');
+                eventEl.classList.remove('flex');
+            }
+
             const pinnedEl = document.getElementById('modal-ann-pinned');
             pinnedEl.classList.toggle('hidden', !isPinned);
             pinnedEl.classList.toggle('flex', isPinned);
