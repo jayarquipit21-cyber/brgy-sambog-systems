@@ -13,9 +13,23 @@ class EditHealthRecord extends Component
 
     // ─── Search / Filter state ───────────────────────────────────────────────
     public string $search = '';
-    public string $nameLetter = '';
     public string $ageGroupFilter = '';
     public string $healthFilter = '';
+
+    public function updatingSearch(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatingAgeGroupFilter(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatingHealthFilter(): void
+    {
+        $this->resetPage();
+    }
 
     // ─── Modal state ─────────────────────────────────────────────────────────
     public bool $showEditModal = false;
@@ -77,11 +91,6 @@ class EditHealthRecord extends Component
             'philhealth_membership_type' => 'nullable|string|max:100',
         ];
     }
-
-    public function updatingSearch(): void    { $this->resetPage(); }
-    public function updatingNameLetter(): void  { $this->resetPage(); }
-    public function updatingAgeGroupFilter(): void { $this->resetPage(); }
-    public function updatingHealthFilter(): void   { $this->resetPage(); }
 
     /** Open the edit modal and populate fields from the selected resident. */
     public function openEdit(int $id): void
@@ -177,19 +186,27 @@ class EditHealthRecord extends Component
             ->orderBy('first_name', 'asc');
 
         if ($this->search) {
-            $query->where(function ($q) {
-                $q->where('first_name', 'like', '%'.$this->search.'%')
-                  ->orWhere('last_name', 'like', '%'.$this->search.'%')
-                  ->orWhere('middle_name', 'like', '%'.$this->search.'%')
-                  ->orWhere('health_condition', 'like', '%'.$this->search.'%')
-                  ->orWhere('blood_type', 'like', '%'.$this->search.'%')
-                  ->orWhere('vulnerable_sector', 'like', '%'.$this->search.'%')
-                  ->orWhere('nutritional_classification', 'like', '%'.$this->search.'%');
-            });
-        }
+            $term = trim($this->search);
+            $driver = \Illuminate\Support\Facades\DB::connection()->getDriverName();
+            $concatFirstLast = $driver === 'sqlite' ? "(first_name || ' ' || last_name)" : "CONCAT(first_name, ' ', last_name)";
+            $concatLastFirst = $driver === 'sqlite' ? "(last_name || ', ' || first_name)" : "CONCAT(last_name, ', ', first_name)";
 
-        if ($this->nameLetter) {
-            $query->where('first_name', 'like', $this->nameLetter.'%');
+            $query->where(function ($q) use ($term, $concatFirstLast, $concatLastFirst) {
+                $q->where('first_name', 'like', '%'.$term.'%')
+                  ->orWhere('last_name', 'like', '%'.$term.'%')
+                  ->orWhere('middle_name', 'like', '%'.$term.'%')
+                  ->orWhereRaw("{$concatFirstLast} LIKE ?", ['%'.$term.'%'])
+                  ->orWhereRaw("{$concatLastFirst} LIKE ?", ['%'.$term.'%'])
+                  ->orWhere('health_condition', 'like', '%'.$term.'%')
+                  ->orWhere('blood_type', 'like', '%'.$term.'%')
+                  ->orWhere('vulnerable_sector', 'like', '%'.$term.'%')
+                  ->orWhere('nutritional_classification', 'like', '%'.$term.'%')
+                  ->orWhere('philhealth_id', 'like', '%'.$term.'%');
+
+                if (is_numeric($term) && (int) $term <= 125) {
+                    $q->orWhere('age', (int) $term);
+                }
+            });
         }
 
         if ($this->ageGroupFilter) {

@@ -18,9 +18,22 @@ class ManageRbi extends Component
 
     public string $purokFilter = '';
 
-    public string $nameLetter = '';
-
     public string $activeTab = 'heads';
+
+    public function updatedSearch(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatedPurokFilter(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatedActiveTab(): void
+    {
+        $this->resetPage();
+    }
 
     public bool $showRejectModal = false;
 
@@ -255,16 +268,24 @@ class ManageRbi extends Component
         }
 
         if ($this->search) {
-            $query->where(function ($q) {
-                $q->where('residents.first_name', 'like', '%'.$this->search.'%')
-                    ->orWhere('residents.last_name', 'like', '%'.$this->search.'%')
-                    ->orWhere('residents.middle_name', 'like', '%'.$this->search.'%')
-                    ->orWhere('residents.email_address', 'like', '%'.$this->search.'%')
-                    ->orWhere('residents.occupation', 'like', '%'.$this->search.'%')
-                    ->orWhere('residents.mobile_number', 'like', '%'.$this->search.'%')
-                    ->orWhereHas('household', function ($hq) {
-                        $hq->where('household_no', 'like', '%'.$this->search.'%')
-                            ->orWhere('address', 'like', '%'.$this->search.'%');
+            $term = trim($this->search);
+            $driver = \Illuminate\Support\Facades\DB::connection()->getDriverName();
+            $concatFirstLast = $driver === 'sqlite' ? "(residents.first_name || ' ' || residents.last_name)" : "CONCAT(residents.first_name, ' ', residents.last_name)";
+            $concatLastFirst = $driver === 'sqlite' ? "(residents.last_name || ', ' || residents.first_name)" : "CONCAT(residents.last_name, ', ', residents.first_name)";
+
+            $query->where(function ($q) use ($term, $concatFirstLast, $concatLastFirst) {
+                $q->where('residents.first_name', 'like', '%'.$term.'%')
+                    ->orWhere('residents.last_name', 'like', '%'.$term.'%')
+                    ->orWhere('residents.middle_name', 'like', '%'.$term.'%')
+                    ->orWhereRaw("{$concatFirstLast} LIKE ?", ['%'.$term.'%'])
+                    ->orWhereRaw("{$concatLastFirst} LIKE ?", ['%'.$term.'%'])
+                    ->orWhere('residents.email_address', 'like', '%'.$term.'%')
+                    ->orWhere('residents.occupation', 'like', '%'.$term.'%')
+                    ->orWhere('residents.mobile_number', 'like', '%'.$term.'%')
+                    ->orWhere('residents.philhealth_id', 'like', '%'.$term.'%')
+                    ->orWhereHas('household', function ($hq) use ($term) {
+                        $hq->where('household_no', 'like', '%'.$term.'%')
+                            ->orWhere('address', 'like', '%'.$term.'%');
                     });
             });
         }
@@ -273,10 +294,6 @@ class ManageRbi extends Component
             $query->whereHas('household', function ($hq) {
                 $hq->where('purok_no', $this->purokFilter);
             });
-        }
-
-        if ($this->nameLetter) {
-            $query->where('residents.first_name', 'like', $this->nameLetter.'%');
         }
 
         // Calculate simple stats for widgets (using only approved residents)

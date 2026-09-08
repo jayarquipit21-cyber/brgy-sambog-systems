@@ -29,28 +29,6 @@
 
     <form wire:submit="book" class="space-y-4">
 
-        @if(!$lockCategory)
-            <div class="grid grid-cols-2 gap-2.5 p-1 bg-zinc-100 dark:bg-zinc-800/80 rounded-xl border border-zinc-200/60 dark:border-zinc-700/60">
-                <button 
-                    type="button"
-                    wire:click="$set('appointment_category', 'document')"
-                    class="flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-bold transition-all duration-200 @if($appointment_category === 'document') bg-white dark:bg-zinc-900 text-emerald-600 dark:text-emerald-400 shadow-sm border border-zinc-200/80 dark:border-zinc-700 @else text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white @endif cursor-pointer"
-                >
-                    <flux:icon name="document-text" class="size-3.5" />
-                    <span>Official Documents</span>
-                </button>
-
-                <button 
-                    type="button"
-                    wire:click="$set('appointment_category', 'rental')"
-                    class="flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-bold transition-all duration-200 @if($appointment_category === 'rental') bg-white dark:bg-zinc-900 text-amber-600 dark:text-amber-400 shadow-sm border border-zinc-200/80 dark:border-zinc-700 @else text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white @endif cursor-pointer"
-                >
-                    <flux:icon name="building-office" class="size-3.5" />
-                    <span>Rental & Facilities</span>
-                </button>
-            </div>
-        @endif
-
         <!-- Item Dropdown Select (Documents vs Rentals) -->
         <div>
             <label for="document_type" class="block text-xs font-bold uppercase tracking-wider text-zinc-700 dark:text-zinc-300 mb-1.5">

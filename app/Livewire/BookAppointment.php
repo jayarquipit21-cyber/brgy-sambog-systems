@@ -61,6 +61,11 @@ class BookAppointment extends Component
         ];
     }
 
+    public function mount(string $appointment_category = 'document'): void
+    {
+        $this->appointment_category = in_array($appointment_category, ['document', 'rental']) ? $appointment_category : 'document';
+    }
+
     public function updatedAppointmentCategory(): void
     {
         $this->document_type = '';

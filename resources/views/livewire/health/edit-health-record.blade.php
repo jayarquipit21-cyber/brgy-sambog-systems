@@ -4,16 +4,9 @@
         <input
             type="text"
             wire:model.live.debounce.300ms="search"
-            placeholder="Search name, condition, sector, blood type..."
+            placeholder="Search name, condition, PhilHealth, blood type, sector..."
             class="flex-1 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-2 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-violet-500 text-sm"
         />
-        <select wire:model.live="nameLetter"
-            class="rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-2 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-violet-500 text-sm">
-            <option value="">First Name (A–Z)</option>
-            @foreach(range('A', 'Z') as $letter)
-                <option value="{{ $letter }}">First Name Starts with {{ $letter }}</option>
-            @endforeach
-        </select>
         <select wire:model.live="ageGroupFilter"
             class="rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-2 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-violet-500 text-sm">
             <option value="">All Age Groups</option>
@@ -24,15 +17,9 @@
         </select>
         <select wire:model.live="healthFilter"
             class="rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-2 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-violet-500 text-sm">
-            <option value="">All Residents</option>
+            <option value="">All Health Statuses</option>
             <option value="has_condition">With Health Condition</option>
             <option value="none">No Health Condition</option>
-            <option value="Hypertension">Hypertension</option>
-            <option value="Diabetes">Diabetes</option>
-            <option value="Asthma">Asthma</option>
-            <option value="Arthritis">Arthritis</option>
-            <option value="Heart">Heart Conditions</option>
-            <option value="SAM">Malnutrition (SAM/MAM)</option>
         </select>
     </div>
 

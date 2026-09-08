@@ -57,23 +57,13 @@
                 <flux:heading size="lg" level="2" class="text-zinc-900 dark:text-white font-semibold">Comprehensive RBI Data Grid</flux:heading>
                 <flux:text variant="subtle" class="text-xs text-zinc-500 dark:text-zinc-400">View all details from the Registry of Barangay Inhabitants. Scroll horizontally to explore categories.</flux:text>
             </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
                 <input 
                     type="text" 
                     wire:model.live.debounce.300ms="search" 
-                    placeholder="Search name, phone, occupation, household, address..."
+                    placeholder="Search name, phone, occupation, household, PhilHealth..."
                     class="rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-1.5 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand text-xs"
                 />
-                
-                <select 
-                    wire:model.live="nameLetter"
-                    class="rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-1.5 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand text-xs"
-                >
-                    <option value="">All Names (A–Z)</option>
-                    @foreach(range('A', 'Z') as $letter)
-                        <option value="{{ $letter }}">Name Starts with {{ $letter }}</option>
-                    @endforeach
-                </select>
 
                 <select 
                     wire:model.live="purokFilter"

@@ -400,27 +400,33 @@ class ManageAppointments extends Component
         }
 
         if ($this->search) {
-            $baseQuery->where(function ($query) {
-                $query->whereHas('user', function ($q) {
-                    $q->where('name', 'like', '%'.$this->search.'%')
-                        ->orWhere('email', 'like', '%'.$this->search.'%');
+            $term = trim($this->search);
+            $baseQuery->where(function ($query) use ($term) {
+                $query->whereHas('user', function ($q) use ($term) {
+                    $q->where('name', 'like', '%'.$term.'%')
+                        ->orWhere('email', 'like', '%'.$term.'%')
+                        ->orWhereHas('resident', function ($rq) use ($term) {
+                            $rq->where('mobile_number', 'like', '%'.$term.'%')
+                                ->orWhere('first_name', 'like', '%'.$term.'%')
+                                ->orWhere('last_name', 'like', '%'.$term.'%');
+                        });
                 })
-                ->orWhere('purpose', 'like', '%'.$this->search.'%')
-                ->orWhere('admin_notes', 'like', '%'.$this->search.'%')
-                ->orWhereHas('transaction', function ($q) {
-                    $q->where('transaction_code', 'like', '%'.$this->search.'%')
-                        ->orWhere('official_receipt_number', 'like', '%'.$this->search.'%');
+                ->orWhere('purpose', 'like', '%'.$term.'%')
+                ->orWhere('admin_notes', 'like', '%'.$term.'%')
+                ->orWhereHas('transaction', function ($q) use ($term) {
+                    $q->where('transaction_code', 'like', '%'.$term.'%')
+                        ->orWhere('official_receipt_number', 'like', '%'.$term.'%');
                 });
             });
         }
 
-        $documentRequests = (clone $baseQuery)
-            ->where('purpose', 'not like', '[Rental Service]%')
-            ->get();
+        $documentRequests = ($this->typeFilter === 'rental')
+            ? collect()
+            : (clone $baseQuery)->where('purpose', 'not like', '[Rental Service]%')->get();
 
-        $rentalBookings = (clone $baseQuery)
-            ->where('purpose', 'like', '[Rental Service]%')
-            ->get();
+        $rentalBookings = ($this->typeFilter === 'document')
+            ? collect()
+            : (clone $baseQuery)->where('purpose', 'like', '[Rental Service]%')->get();
 
         return view('livewire.admin.manage-appointments', [
             'documentRequests' => $documentRequests,

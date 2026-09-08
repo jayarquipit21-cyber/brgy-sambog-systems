@@ -15,8 +15,6 @@ class RbiDataTable extends Component
 
     public string $purokFilter = '';
 
-    public string $nameLetter = '';
-
     public string $sexFilter = '';
 
     public string $voterFilter = '';
@@ -34,11 +32,6 @@ class RbiDataTable extends Component
     }
 
     public function updatingPurokFilter(): void
-    {
-        $this->resetPage();
-    }
-
-    public function updatingNameLetter(): void
     {
         $this->resetPage();
     }
@@ -92,16 +85,24 @@ class RbiDataTable extends Component
         }
 
         if ($this->search) {
-            $query->where(function ($q) {
-                $q->where('first_name', 'like', '%'.$this->search.'%')
-                    ->orWhere('last_name', 'like', '%'.$this->search.'%')
-                    ->orWhere('middle_name', 'like', '%'.$this->search.'%')
-                    ->orWhere('email_address', 'like', '%'.$this->search.'%')
-                    ->orWhere('occupation', 'like', '%'.$this->search.'%')
-                    ->orWhere('mobile_number', 'like', '%'.$this->search.'%')
-                    ->orWhereHas('household', function ($hq) {
-                        $hq->where('household_no', 'like', '%'.$this->search.'%')
-                            ->orWhere('address', 'like', '%'.$this->search.'%');
+            $term = trim($this->search);
+            $driver = \Illuminate\Support\Facades\DB::connection()->getDriverName();
+            $concatFirstLast = $driver === 'sqlite' ? "(first_name || ' ' || last_name)" : "CONCAT(first_name, ' ', last_name)";
+            $concatLastFirst = $driver === 'sqlite' ? "(last_name || ', ' || first_name)" : "CONCAT(last_name, ', ', first_name)";
+
+            $query->where(function ($q) use ($term, $concatFirstLast, $concatLastFirst) {
+                $q->where('first_name', 'like', '%'.$term.'%')
+                    ->orWhere('last_name', 'like', '%'.$term.'%')
+                    ->orWhere('middle_name', 'like', '%'.$term.'%')
+                    ->orWhereRaw("{$concatFirstLast} LIKE ?", ['%'.$term.'%'])
+                    ->orWhereRaw("{$concatLastFirst} LIKE ?", ['%'.$term.'%'])
+                    ->orWhere('email_address', 'like', '%'.$term.'%')
+                    ->orWhere('occupation', 'like', '%'.$term.'%')
+                    ->orWhere('mobile_number', 'like', '%'.$term.'%')
+                    ->orWhere('philhealth_id', 'like', '%'.$term.'%')
+                    ->orWhereHas('household', function ($hq) use ($term) {
+                        $hq->where('household_no', 'like', '%'.$term.'%')
+                            ->orWhere('address', 'like', '%'.$term.'%');
                     });
             });
         }
@@ -110,10 +111,6 @@ class RbiDataTable extends Component
             $query->whereHas('household', function ($hq) {
                 $hq->where('purok_no', $this->purokFilter);
             });
-        }
-
-        if ($this->nameLetter) {
-            $query->where('first_name', 'like', $this->nameLetter.'%');
         }
 
         if ($this->sexFilter) {

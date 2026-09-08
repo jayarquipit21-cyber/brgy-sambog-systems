@@ -144,7 +144,20 @@ class SearchQueryImprovementsTest extends TestCase
             'registration_status' => 'approved',
             'occupation' => 'Master Electrician',
             'mobile_number' => '09171234567',
+            'philhealth_id' => 'PH-987654',
         ]);
+
+        // ManageRbi search by full name
+        Livewire::test(ManageRbi::class)
+            ->set('search', 'Roberto Gomez')
+            ->assertSee('Roberto')
+            ->assertSee('Gomez');
+
+        // ManageRbi search by reverse full name
+        Livewire::test(ManageRbi::class)
+            ->set('search', 'Gomez, Roberto')
+            ->assertSee('Roberto')
+            ->assertSee('Gomez');
 
         // ManageRbi search by occupation
         Livewire::test(ManageRbi::class)
@@ -155,6 +168,16 @@ class SearchQueryImprovementsTest extends TestCase
         // ManageRbi search by phone
         Livewire::test(ManageRbi::class)
             ->set('search', '09171234567')
+            ->assertSee('Roberto');
+
+        // ManageRbi search by PhilHealth
+        Livewire::test(ManageRbi::class)
+            ->set('search', 'PH-987654')
+            ->assertSee('Roberto');
+
+        // RbiDataTable search by full name
+        Livewire::test(RbiDataTable::class)
+            ->set('search', 'Roberto Gomez')
             ->assertSee('Roberto');
 
         // RbiDataTable search by address
@@ -190,13 +213,52 @@ class SearchQueryImprovementsTest extends TestCase
             'health_condition' => 'Hypertension',
             'vulnerable_sector' => 'PWD / Person with Disability',
             'nutritional_classification' => 'Normal',
+            'philhealth_id' => 'PH-554433',
         ]);
+
+        Resident::create([
+            'household_id' => $household->id,
+            'first_name' => 'Benito',
+            'last_name' => 'Cruz',
+            'middle_name' => 'C',
+            'relationship_to_head' => 'Head',
+            'registration_status' => 'approved',
+            'blood_type' => 'O+',
+            'health_condition' => null,
+            'vulnerable_sector' => 'Senior Citizen',
+            'nutritional_classification' => 'Normal',
+        ]);
+
+        // HealthDashboard search by full name
+        Livewire::test(HealthDashboard::class)
+            ->set('search', 'Clara Reyes')
+            ->assertSee('Clara')
+            ->assertSee('Reyes')
+            ->assertDontSee('Benito');
+
+        // HealthDashboard search by PhilHealth ID
+        Livewire::test(HealthDashboard::class)
+            ->set('search', 'PH-554433')
+            ->assertSee('Clara')
+            ->assertDontSee('Benito');
 
         // HealthDashboard search by sector
         Livewire::test(HealthDashboard::class)
             ->set('search', 'Disability')
             ->assertSee('Clara')
             ->assertSee('Reyes');
+
+        // HealthDashboard filter by has_condition
+        Livewire::test(HealthDashboard::class)
+            ->set('healthFilter', 'has_condition')
+            ->assertSee('Clara')
+            ->assertDontSee('Benito');
+
+        // HealthDashboard filter by none
+        Livewire::test(HealthDashboard::class)
+            ->set('healthFilter', 'none')
+            ->assertSee('Benito')
+            ->assertDontSee('Clara');
 
         // EditHealthRecord search by blood type
         Livewire::test(EditHealthRecord::class)
@@ -332,5 +394,22 @@ class SearchQueryImprovementsTest extends TestCase
             ->set('filterType', 'general')
             ->assertSee('Water Interruption')
             ->assertDontSee('Sports Fest');
+    }
+
+    public function test_category_toggle_buttons_are_removed_from_user_booking_view(): void
+    {
+        $resident = User::factory()->create(['role' => 'resident']);
+        $this->actingAs($resident);
+
+        // In document window, Official Documents and Rental & Facilities buttons are removed
+        Livewire::test(\App\Livewire\BookAppointment::class, ['appointment_category' => 'document'])
+            ->assertDontSee('Official Documents')
+            ->assertDontSee('Rental & Facilities')
+            ->assertSee('Barangay Official Document Request');
+
+        // In rental window, category switcher buttons are removed and rental form is shown
+        Livewire::test(\App\Livewire\BookAppointment::class, ['appointment_category' => 'rental'])
+            ->assertDontSee('Official Documents')
+            ->assertSee('Barangay Rental', false);
     }
 }

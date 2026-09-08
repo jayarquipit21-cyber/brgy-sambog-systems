@@ -28,6 +28,36 @@ class SalesReport extends Component
 
     public string $paymentMethodFilter = ''; // '', 'cash', 'gcash', 'maya', 'free_exemption'
 
+    public function updatingSearch(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatingStartDate(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatingEndDate(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatingServiceTypeFilter(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatingPaymentStatusFilter(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatingPaymentMethodFilter(): void
+    {
+        $this->resetPage();
+    }
+
     // Walk-in / Direct Sale Modal state
     public bool $showDirectSaleModal = false;
 
@@ -213,34 +243,28 @@ class SalesReport extends Component
 
     public function render()
     {
-        // 1. Base Query with filters
-        $query = Transaction::with(['user', 'processor'])->latest('paid_at')->latest('id');
+        // 1. Build Base Filtered Query
+        $baseQuery = Transaction::query();
 
         if ($this->startDate) {
-            $query->whereDate('created_at', '>=', $this->startDate);
+            $baseQuery->whereDate('created_at', '>=', $this->startDate);
         }
 
         if ($this->endDate) {
-            $query->whereDate('created_at', '<=', $this->endDate);
+            $baseQuery->whereDate('created_at', '<=', $this->endDate);
         }
-
-
 
         if ($this->serviceTypeFilter) {
-            $query->where('service_type', $this->serviceTypeFilter);
-        }
-
-        if ($this->paymentStatusFilter) {
-            $query->where('payment_status', $this->paymentStatusFilter);
+            $baseQuery->where('service_type', $this->serviceTypeFilter);
         }
 
         if ($this->paymentMethodFilter) {
-            $query->where('payment_method', $this->paymentMethodFilter);
+            $baseQuery->where('payment_method', $this->paymentMethodFilter);
         }
 
         if ($this->search) {
             $s = '%'.$this->search.'%';
-            $query->where(function ($q) use ($s) {
+            $baseQuery->where(function ($q) use ($s) {
                 $q->where('payer_name', 'like', $s)
                     ->orWhere('item_name', 'like', $s)
                     ->orWhere('transaction_code', 'like', $s)
@@ -251,34 +275,7 @@ class SalesReport extends Component
         }
 
         // 2. Metrics & KPI Calculations for active filter scope (independent of table status filter)
-        $metricsQuery = Transaction::query();
-
-        if ($this->startDate) {
-            $metricsQuery->whereDate('created_at', '>=', $this->startDate);
-        }
-
-        if ($this->endDate) {
-            $metricsQuery->whereDate('created_at', '<=', $this->endDate);
-        }
-
-        if ($this->serviceTypeFilter) {
-            $metricsQuery->where('service_type', $this->serviceTypeFilter);
-        }
-
-        if ($this->paymentMethodFilter) {
-            $metricsQuery->where('payment_method', $this->paymentMethodFilter);
-        }
-
-        if ($this->search) {
-            $s = '%'.$this->search.'%';
-            $metricsQuery->where(function ($q) use ($s) {
-                $q->where('payer_name', 'like', $s)
-                    ->orWhere('item_name', 'like', $s)
-                    ->orWhere('transaction_code', 'like', $s)
-                    ->orWhere('official_receipt_number', 'like', $s);
-            });
-        }
-
+        $metricsQuery = clone $baseQuery;
         $allMatching = $metricsQuery->get();
 
         $totalGrossRevenue = $allMatching->where('payment_status', 'paid')->sum('amount_paid');
@@ -289,14 +286,14 @@ class SalesReport extends Component
         $pendingAmount = $allMatching->where('payment_status', 'pending')->sum('total_amount');
         $waivedCount = $allMatching->where('payment_status', 'waived')->count();
 
-        // 3. Breakdown by item ranking
+        // 3. Service Item Rankings & Breakdown
         $itemBreakdown = $allMatching->where('payment_status', 'paid')
             ->groupBy('item_name')
             ->map(function ($items, $itemName) use ($totalGrossRevenue) {
                 $itemTotal = $items->sum('amount_paid');
                 $itemQty = $items->sum('quantity');
-                $type = $items->first()->service_type ?? 'document';
                 $pct = $totalGrossRevenue > 0 ? ($itemTotal / $totalGrossRevenue) * 100 : 0;
+                $type = $items->first()->service_type;
 
                 return [
                     'name' => $itemName,
@@ -309,8 +306,17 @@ class SalesReport extends Component
             ->sortByDesc('total')
             ->values();
 
-        // 4. Paginated Transactions
-        $transactions = $query->paginate(15);
+        // 4. Paginated Table Records Query with Status Filter
+        $tableQuery = (clone $baseQuery)
+            ->with(['user', 'processor'])
+            ->latest('paid_at')
+            ->latest('id');
+
+        if ($this->paymentStatusFilter) {
+            $tableQuery->where('payment_status', $this->paymentStatusFilter);
+        }
+
+        $transactions = $tableQuery->paginate(15);
 
         // 5. Available Service Fees for direct sale modal
         $availableDocumentFees = ServiceFee::where('category', 'document')->where('is_active', true)->get();
