@@ -9,7 +9,7 @@
                 <h3 class="text-base font-bold text-amber-900 dark:text-amber-300">Complete Your Profile</h3>
                 <p class="text-[11px] text-amber-800/80 dark:text-amber-400/80 mt-1">Please provide your extended personal details to ensure the Barangay registry is accurate.</p>
             </div>
-            <a href="{{ route('profile.complete') }}" wire:navigate class="shrink-0 px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold rounded-xl shadow-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500">
+            <a href="{{ route('profile.edit') }}" wire:navigate class="shrink-0 px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold rounded-xl shadow-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500">
                 Complete Now
             </a>
         </div>
@@ -74,79 +74,10 @@
     </div>
 </div>
 
-<!-- Main Content: Profile + Appointments + Announcements -->
+<!-- Main Content: Activity Chart + Appointments + Announcements -->
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-    @php
-        $resIconBgClass = 'bg-violet-500/10 text-violet-650 dark:text-violet-400';
-        $resItemIconClass = 'text-violet-500';
-        $cardBgSexClass = 'bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80';
-        if ($residentProfile) {
-            if (strtolower($residentProfile->sex) === 'male') {
-                $resIconBgClass = 'bg-blue-500/10 text-blue-650 dark:text-blue-400';
-                $resItemIconClass = 'text-blue-500';
-                $cardBgSexClass = 'bg-blue-50/20 dark:bg-blue-950/10 border-blue-200/50 dark:border-blue-800/40';
-            } elseif (strtolower($residentProfile->sex) === 'female') {
-                $resIconBgClass = 'bg-pink-500/10 text-pink-650 dark:text-pink-400';
-                $resItemIconClass = 'text-pink-500';
-                $cardBgSexClass = 'bg-pink-50/20 dark:bg-pink-950/10 border-pink-200/50 dark:border-pink-800/40';
-            }
-        }
-    @endphp
-
     <div class="flex flex-col gap-6">
-        <!-- Resident Profile Card -->
-        <div class="{{ $cardBgSexClass }} rounded-2xl p-6 shadow-lg flex flex-col card-glow-resident">
-            <div class="flex items-center gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-3 mb-4">
-                <div class="p-2 {{ $resIconBgClass }} rounded-xl" aria-hidden="true">
-                    <flux:icon name="identification" class="size-5" />
-                </div>
-                <div>
-                    <h3 class="text-base font-bold text-zinc-900 dark:text-white font-outfit">My Profile</h3>
-                    <p class="text-[11px] text-zinc-500 font-light">Your registered resident information</p>
-                </div>
-            </div>
-
-            @if($residentProfile)
-                <dl class="flex-1 space-y-2.5 overflow-y-auto pr-0.5">
-                    @php
-                        $resItems = [
-                            ['label' => 'Full Name', 'value' => $residentProfile->fullName, 'icon' => 'user'],
-                            ['label' => 'Age', 'value' => $residentProfile->age ? $residentProfile->age . ' years old' : null, 'icon' => 'cake'],
-                            ['label' => 'Sex', 'value' => $residentProfile->sex, 'icon' => 'heart'],
-                            ['label' => 'Civil Status', 'value' => $residentProfile->civil_status, 'icon' => 'sparkles'],
-                            ['label' => 'Blood Type', 'value' => $residentProfile->blood_type, 'icon' => 'beaker'],
-                            ['label' => 'Religion', 'value' => $residentProfile->religion, 'icon' => 'sun'],
-                            ['label' => 'Occupation', 'value' => $residentProfile->occupation, 'icon' => 'briefcase'],
-                            ['label' => 'Work Status', 'value' => $residentProfile->work_status, 'icon' => 'building-office'],
-                            ['label' => 'Education', 'value' => $residentProfile->highest_educational_attainment, 'icon' => 'academic-cap'],
-                            ['label' => 'PhilHealth', 'value' => $residentProfile->has_philhealth === 'Yes' ? 'Enrolled' : ($residentProfile->has_philhealth ?: null), 'icon' => 'shield-check'],
-                            ['label' => 'Health Condition', 'value' => ($residentProfile->health_condition && $residentProfile->health_condition !== 'None') ? $residentProfile->health_condition : null, 'icon' => 'heart'],
-                            ['label' => 'Vulnerable Sector', 'value' => $residentProfile->vulnerable_sector, 'icon' => 'flag'],
-                            ['label' => 'National Voter', 'value' => $residentProfile->registered_national_voter, 'icon' => 'check-badge'],
-                        ];
-                    @endphp
-                    @foreach($resItems as $item)
-                        @if(!empty($item['value']))
-                            <div class="flex items-start gap-3 p-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-100 dark:border-zinc-700/40">
-                                <flux:icon name="{{ $item['icon'] }}" class="size-3.5 {{ $resItemIconClass }} mt-0.5 shrink-0" aria-hidden="true" />
-                                <div class="min-w-0">
-                                    <dt class="text-[9px] uppercase tracking-widest text-zinc-400 dark:text-zinc-500 font-bold">{{ $item['label'] }}</dt>
-                                    <dd class="text-xs font-bold text-zinc-800 dark:text-white truncate">{{ $item['value'] }}</dd>
-                                </div>
-                            </div>
-                        @endif
-                    @endforeach
-                </dl>
-            @else
-                <div class="flex-1 flex flex-col items-center justify-center text-center py-8">
-                    <flux:icon name="user-circle" class="size-12 text-zinc-300 dark:text-zinc-600 mb-2" aria-hidden="true" />
-                    <p class="text-xs text-zinc-500">No resident profile linked to your account.</p>
-                    <p class="text-[11px] text-zinc-400 mt-1">Contact the Barangay Admin to link your record.</p>
-                </div>
-            @endif
-        </div>
-
         <!-- Service & Pickup Activity Chart -->
         <div class="bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-2xl p-6 shadow-lg flex flex-col card-glow-resident font-outfit">
             <div class="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3 mb-4">

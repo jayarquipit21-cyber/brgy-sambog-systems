@@ -80,82 +80,7 @@
 </div>
 
 <!-- Main Content Grid -->
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-
-    @php
-        $headIconBgClass = 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-500';
-        $headItemIconClass = 'text-emerald-500';
-        $cardBgSexClass = 'bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80';
-        if ($residentProfile) {
-            if (strtolower($residentProfile->sex) === 'male') {
-                $headIconBgClass = 'bg-blue-500/10 text-blue-650 dark:text-blue-400';
-                $headItemIconClass = 'text-blue-500';
-                $cardBgSexClass = 'bg-blue-50/20 dark:bg-blue-950/10 border-blue-200/50 dark:border-blue-800/40';
-            } elseif (strtolower($residentProfile->sex) === 'female') {
-                $headIconBgClass = 'bg-pink-500/10 text-pink-650 dark:text-pink-400';
-                $headItemIconClass = 'text-pink-500';
-                $cardBgSexClass = 'bg-pink-50/20 dark:bg-pink-950/10 border-pink-200/50 dark:border-pink-800/40';
-            }
-        }
-    @endphp
-
-    <!-- Household Profile Card -->
-    <div class="{{ $cardBgSexClass }} rounded-2xl p-6 shadow-lg flex flex-col card-glow-household">
-        <div class="flex items-center gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-3 mb-4">
-            <div class="p-2 {{ $headIconBgClass }} rounded-xl" aria-hidden="true">
-                <flux:icon name="identification" class="size-5" />
-            </div>
-            <div>
-                <h3 class="text-base font-bold text-zinc-900 dark:text-white font-outfit">My Profile</h3>
-                <p class="text-[11px] text-zinc-500 font-light">Your registered resident information</p>
-            </div>
-        </div>
-
-        @if($residentProfile)
-            <dl class="flex-1 space-y-2.5 overflow-y-auto pr-0.5">
-                @php
-                    $profileItems = [
-                        ['label' => 'Full Name', 'value' => $residentProfile->fullName, 'icon' => 'user'],
-                        ['label' => 'Age', 'value' => $residentProfile->age ? $residentProfile->age . ' years old' : null, 'icon' => 'cake'],
-                        ['label' => 'Sex', 'value' => $residentProfile->sex, 'icon' => 'heart'],
-                        ['label' => 'Civil Status', 'value' => $residentProfile->civil_status, 'icon' => 'sparkles'],
-                        ['label' => 'Blood Type', 'value' => $residentProfile->blood_type, 'icon' => 'beaker'],
-                        ['label' => 'Religion', 'value' => $residentProfile->religion, 'icon' => 'sun'],
-                        ['label' => 'Address', 'value' => $household?->address, 'icon' => 'map-pin'],
-                        ['label' => 'Occupation', 'value' => $residentProfile->occupation, 'icon' => 'briefcase'],
-                        ['label' => 'Work Status', 'value' => $residentProfile->work_status, 'icon' => 'building-office'],
-                        ['label' => 'Education', 'value' => $residentProfile->highest_educational_attainment, 'icon' => 'academic-cap'],
-                        ['label' => 'PhilHealth', 'value' => $residentProfile->has_philhealth === 'Yes' ? 'Enrolled' : ($residentProfile->has_philhealth ?: null), 'icon' => 'shield-check'],
-                        ['label' => 'National Voter', 'value' => $residentProfile->registered_national_voter, 'icon' => 'check-badge'],
-                    ];
-                @endphp
-                @foreach($profileItems as $item)
-                    @if(!empty($item['value']))
-                        <div class="flex items-start gap-3 p-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-100 dark:border-zinc-700/40">
-                            <flux:icon name="{{ $item['icon'] }}" class="size-3.5 {{ $headItemIconClass }} mt-0.5 shrink-0" aria-hidden="true" />
-                            <div class="min-w-0">
-                                <dt class="text-[9px] uppercase tracking-widest text-zinc-400 dark:text-zinc-500 font-bold">{{ $item['label'] }}</dt>
-                                <dd class="text-xs font-bold text-zinc-800 dark:text-white truncate">{{ $item['value'] }}</dd>
-                            </div>
-                        </div>
-                    @endif
-                @endforeach
-            </dl>
-        @else
-            <div class="flex-1 flex flex-col items-center justify-center text-center py-6">
-                <flux:icon name="user-circle" class="size-12 text-zinc-300 dark:text-zinc-600 mb-2" aria-hidden="true" />
-                <p class="text-xs text-zinc-500">No resident profile linked to your account.</p>
-                <p class="text-[11px] text-zinc-400 mt-1">Contact the Barangay Admin to link your record.</p>
-            </div>
-        @endif
-
-        <div class="pt-4 mt-4 border-t border-zinc-100 dark:border-zinc-800">
-            <a href="{{ route('household') }}" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 hover:border-amber-400/30 text-xs font-semibold text-zinc-700 dark:text-zinc-300 rounded-xl transition duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500">
-                <flux:icon name="home" class="size-3.5" aria-hidden="true" />
-                View Household Details
-            </a>
-        </div>
-    </div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
     <!-- Household Members List -->
     <div class="bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-2xl p-6 shadow-lg flex flex-col card-glow-household">
@@ -333,8 +258,8 @@
         </script>
     </div>
 
-    <!-- Right Column: Announcements + Appointments + Document History -->
-    <div class="flex flex-col gap-6">
+    <!-- Row 2: Announcements + Appointments + Document History (spans full 2 cols) -->
+    <div class="lg:col-span-2 grid grid-cols-1 lg:grid-cols-2 gap-8">
 
         <!-- Barangay Announcements -->
         <div class="bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-2xl p-6 shadow-lg space-y-4 card-glow-household">
@@ -409,103 +334,106 @@
             </ul>
         </div>
 
-        <!-- Upcoming Pickup Slots -->
-        <div class="bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-2xl p-6 shadow-lg space-y-4 card-glow-household">
-            <div class="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
-                <div class="flex items-center gap-3">
-                    <div class="p-2 bg-sky-500/10 text-sky-600 rounded-xl" aria-hidden="true">
-                        <flux:icon name="calendar" class="size-5" />
+        <!-- Column 2: Pickup Slots & History -->
+        <div class="space-y-6">
+            <!-- Upcoming Pickup Slots -->
+            <div class="bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-2xl p-6 shadow-lg space-y-4 card-glow-household">
+                <div class="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2 bg-sky-500/10 text-sky-600 rounded-xl" aria-hidden="true">
+                            <flux:icon name="calendar" class="size-5" />
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-bold text-zinc-900 dark:text-white font-outfit">My Pickup Slots</h3>
+                            <p class="text-[10px] text-zinc-500 font-light">Upcoming document requests</p>
+                        </div>
                     </div>
-                    <div>
-                        <h3 class="text-sm font-bold text-zinc-900 dark:text-white font-outfit">My Pickup Slots</h3>
-                        <p class="text-[10px] text-zinc-500 font-light">Upcoming document requests</p>
-                    </div>
+                    <a href="{{ route('services.documents') }}" class="text-[10px] font-bold text-sky-600 dark:text-sky-400 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 rounded">View All</a>
                 </div>
-                <a href="{{ route('services.documents') }}" class="text-[10px] font-bold text-sky-600 dark:text-sky-400 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 rounded">View All</a>
+
+                <ul class="space-y-2" role="list" aria-label="Upcoming appointment slots">
+                    @forelse($upcomingAppointments as $apt)
+                        <li class="flex items-start gap-3 p-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-100 dark:border-zinc-700/40">
+                            <div class="p-1.5 rounded-lg bg-sky-500/10 text-sky-600 shrink-0" aria-hidden="true">
+                                <flux:icon name="document-text" class="size-3.5" />
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <div class="text-[11px] font-bold text-zinc-800 dark:text-white truncate">{{ $apt->purpose }}</div>
+                                <div class="text-[10px] text-zinc-500 dark:text-zinc-400">
+                                    @if($apt->appointment_date)
+                                        {{ $apt->appointment_date->format('M d, Y') }} @ {{ $apt->appointment_time }}
+                                    @elseif($apt->status === 'approved-pending')
+                                        <span class="text-[9px] text-amber-600 dark:text-amber-400 font-semibold bg-amber-50 dark:bg-amber-950/20 px-2 py-0.5 rounded">Pending Signature</span>
+                                    @elseif($apt->status === 'cancelled')
+                                        <span class="text-[9px] text-red-500 dark:text-red-400 font-semibold bg-red-50 dark:bg-red-950/20 px-2 py-0.5 rounded">Cancelled</span>
+                                    @else
+                                        <span class="text-[9px] text-zinc-400 dark:text-zinc-500 font-semibold bg-zinc-100 dark:bg-zinc-800 px-2 py-0.5 rounded">Pending Review</span>
+                                    @endif
+                                </div>
+                            </div>
+                            @if($apt->status === 'approved-pending')
+                                <span class="shrink-0 text-[8px] font-bold px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20">Approved-Pending</span>
+                            @elseif($apt->status === 'approved')
+                                <span class="shrink-0 text-[8px] font-bold px-1.5 py-0.5 rounded bg-sky-500/10 text-sky-700 dark:text-sky-500 border border-sky-500/20">Approved (Ready)</span>
+                            @else
+                                <span class="shrink-0 text-[8px] font-bold px-1.5 py-0.5 rounded bg-zinc-100 text-zinc-500 border border-zinc-200">{{ ucfirst($apt->status) }}</span>
+                            @endif
+                        </li>
+                    @empty
+                        <li class="text-center py-4">
+                            <flux:icon name="calendar" class="size-8 text-zinc-300 dark:text-zinc-600 mx-auto mb-1" aria-hidden="true" />
+                            <p class="text-[11px] text-zinc-500">No upcoming pickups scheduled.</p>
+                            <a href="{{ route('services.documents') }}" class="text-[11px] font-bold text-sky-600 dark:text-sky-400 hover:underline mt-1 inline-block">Book one now →</a>
+                        </li>
+                    @endforelse
+                </ul>
             </div>
 
-            <ul class="space-y-2" role="list" aria-label="Upcoming appointment slots">
-                @forelse($upcomingAppointments as $apt)
-                    <li class="flex items-start gap-3 p-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-100 dark:border-zinc-700/40">
-                        <div class="p-1.5 rounded-lg bg-sky-500/10 text-sky-600 shrink-0" aria-hidden="true">
-                            <flux:icon name="document-text" class="size-3.5" />
+            <!-- Document Pickup History -->
+            <div class="bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-2xl p-6 shadow-lg space-y-4">
+                <div class="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2 bg-zinc-500/10 text-zinc-600 dark:text-zinc-500 rounded-xl" aria-hidden="true">
+                            <flux:icon name="clock" class="size-5" />
                         </div>
-                        <div class="flex-1 min-w-0">
-                            <div class="text-[11px] font-bold text-zinc-800 dark:text-white truncate">{{ $apt->purpose }}</div>
-                            <div class="text-[10px] text-zinc-500 dark:text-zinc-400">
-                                @if($apt->appointment_date)
-                                    {{ $apt->appointment_date->format('M d, Y') }} @ {{ $apt->appointment_time }}
-                                @elseif($apt->status === 'approved-pending')
-                                    <span class="text-[9px] text-amber-600 dark:text-amber-400 font-semibold bg-amber-50 dark:bg-amber-950/20 px-2 py-0.5 rounded">Pending Signature</span>
-                                @elseif($apt->status === 'cancelled')
-                                    <span class="text-[9px] text-red-500 dark:text-red-400 font-semibold bg-red-50 dark:bg-red-950/20 px-2 py-0.5 rounded">Cancelled</span>
-                                @else
-                                    <span class="text-[9px] text-zinc-400 dark:text-zinc-500 font-semibold bg-zinc-100 dark:bg-zinc-800 px-2 py-0.5 rounded">Pending Review</span>
-                                @endif
-                            </div>
+                        <div>
+                            <h3 class="text-sm font-bold text-zinc-900 dark:text-white font-outfit">Pickup History</h3>
+                            <p class="text-[10px] text-zinc-500 font-light">Past document requests</p>
                         </div>
-                        @if($apt->status === 'approved-pending')
-                            <span class="shrink-0 text-[8px] font-bold px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20">Approved-Pending</span>
-                        @elseif($apt->status === 'approved')
-                            <span class="shrink-0 text-[8px] font-bold px-1.5 py-0.5 rounded bg-sky-500/10 text-sky-700 dark:text-sky-500 border border-sky-500/20">Approved (Ready)</span>
-                        @else
-                            <span class="shrink-0 text-[8px] font-bold px-1.5 py-0.5 rounded bg-zinc-100 text-zinc-500 border border-zinc-200">{{ ucfirst($apt->status) }}</span>
-                        @endif
-                    </li>
-                @empty
-                    <li class="text-center py-4">
-                        <flux:icon name="calendar" class="size-8 text-zinc-300 dark:text-zinc-600 mx-auto mb-1" aria-hidden="true" />
-                        <p class="text-[11px] text-zinc-500">No upcoming pickups scheduled.</p>
-                        <a href="{{ route('services.documents') }}" class="text-[11px] font-bold text-sky-600 dark:text-sky-400 hover:underline mt-1 inline-block">Book one now →</a>
-                    </li>
-                @endforelse
-            </ul>
-        </div>
-
-        <!-- Document Pickup History -->
-        <div class="bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800/80 rounded-2xl p-6 shadow-lg space-y-4">
-            <div class="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
-                <div class="flex items-center gap-3">
-                    <div class="p-2 bg-zinc-500/10 text-zinc-600 dark:text-zinc-500 rounded-xl" aria-hidden="true">
-                        <flux:icon name="clock" class="size-5" />
                     </div>
-                    <div>
-                        <h3 class="text-sm font-bold text-zinc-900 dark:text-white font-outfit">Pickup History</h3>
-                        <p class="text-[10px] text-zinc-500 font-light">Past document requests</p>
-                    </div>
+                    <a href="{{ route('services.documents') }}" class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded">View All</a>
                 </div>
-                <a href="{{ route('services.documents') }}" class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded">View All</a>
-            </div>
 
-            <ul class="space-y-2" role="list" aria-label="Past appointment history">
-                @forelse($appointmentHistory as $apt)
-                    <li class="flex items-start gap-3 p-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-100 dark:border-zinc-700/40">
-                        <div class="p-1.5 rounded-lg bg-zinc-500/10 text-zinc-600 dark:text-zinc-400 shrink-0" aria-hidden="true">
-                            <flux:icon name="document-text" class="size-3.5" />
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <div class="text-[11px] font-bold text-zinc-800 dark:text-white truncate">{{ $apt->purpose }}</div>
-                            <div class="text-[10px] text-zinc-500 dark:text-zinc-400">
-                                @if($apt->appointment_date)
-                                    {{ $apt->appointment_date->format('M d, Y') }} @ {{ $apt->appointment_time }}
-                                @endif
+                <ul class="space-y-2" role="list" aria-label="Past appointment history">
+                    @forelse($appointmentHistory as $apt)
+                        <li class="flex items-start gap-3 p-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-100 dark:border-zinc-700/40">
+                            <div class="p-1.5 rounded-lg bg-zinc-500/10 text-zinc-600 dark:text-zinc-400 shrink-0" aria-hidden="true">
+                                <flux:icon name="document-text" class="size-3.5" />
                             </div>
-                        </div>
-                        @if($apt->status === 'completed')
-                            <span class="shrink-0 text-[8px] font-bold px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">Completed</span>
-                        @elseif($apt->status === 'cancelled')
-                            <span class="shrink-0 text-[8px] font-bold px-1.5 py-0.5 rounded bg-red-500/10 text-red-700 dark:text-red-400 border border-red-500/20">Cancelled</span>
-                        @else
-                            <span class="shrink-0 text-[8px] font-bold px-1.5 py-0.5 rounded bg-zinc-100 text-zinc-500 border border-zinc-200">{{ ucfirst($apt->status) }}</span>
-                        @endif
-                    </li>
-                @empty
-                    <li class="text-center py-4">
-                        <flux:icon name="clock" class="size-8 text-zinc-300 dark:text-zinc-600 mx-auto mb-1" aria-hidden="true" />
-                        <p class="text-[11px] text-zinc-500">No past pickups found.</p>
-                    </li>
-                @endforelse
-            </ul>
+                            <div class="flex-1 min-w-0">
+                                <div class="text-[11px] font-bold text-zinc-800 dark:text-white truncate">{{ $apt->purpose }}</div>
+                                <div class="text-[10px] text-zinc-500 dark:text-zinc-400">
+                                    @if($apt->appointment_date)
+                                        {{ $apt->appointment_date->format('M d, Y') }} @ {{ $apt->appointment_time }}
+                                    @endif
+                                </div>
+                            </div>
+                            @if($apt->status === 'completed')
+                                <span class="shrink-0 text-[8px] font-bold px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">Completed</span>
+                            @elseif($apt->status === 'cancelled')
+                                <span class="shrink-0 text-[8px] font-bold px-1.5 py-0.5 rounded bg-red-500/10 text-red-700 dark:text-red-400 border border-red-500/20">Cancelled</span>
+                            @else
+                                <span class="shrink-0 text-[8px] font-bold px-1.5 py-0.5 rounded bg-zinc-100 text-zinc-500 border border-zinc-200">{{ ucfirst($apt->status) }}</span>
+                            @endif
+                        </li>
+                    @empty
+                        <li class="text-center py-4">
+                            <flux:icon name="clock" class="size-8 text-zinc-300 dark:text-zinc-600 mx-auto mb-1" aria-hidden="true" />
+                            <p class="text-[11px] text-zinc-500">No past pickups found.</p>
+                        </li>
+                    @endforelse
+                </ul>
+            </div>
         </div>
     </div>
 </div>

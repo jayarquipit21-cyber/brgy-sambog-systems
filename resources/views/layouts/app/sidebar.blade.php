@@ -95,8 +95,8 @@
                             </flux:sidebar.item>
                         </flux:sidebar.group>
 
-                        <flux:sidebar.item icon="identification" :href="route('profile.complete')" :current="request()->routeIs('profile.complete')" wire:navigate class="{{ request()->routeIs('profile.complete') ? $activeGlow : '' }}">
-                            {{ __('Complete My Profile') }}
+                        <flux:sidebar.item icon="user-circle" :href="route('profile.edit')" :current="request()->routeIs('profile*')" wire:navigate class="{{ request()->routeIs('profile*') ? $activeGlow : '' }}">
+                            {{ __('My Profile') }}
                             @if(!auth()->user()->resident?->place_of_birth)
                                 <span class="ml-auto inline-flex h-2 w-2 rounded-full bg-amber-400 animate-pulse"></span>
                             @endif
@@ -136,6 +136,7 @@
                 
                 <flux:dropdown position="top" align="end">
                     <flux:profile
+                        :avatar="auth()->user()->avatar_url"
                         :initials="auth()->user()->initials()"
                         icon-trailing="chevron-down"
                     />
@@ -145,6 +146,7 @@
                         <div class="p-0 text-sm font-normal">
                             <div class="flex items-center gap-2 px-1 py-1.5 text-start text-sm">
                                 <flux:avatar
+                                    :src="auth()->user()->avatar_url"
                                     :name="auth()->user()->name"
                                     :initials="auth()->user()->initials()"
                                 />
@@ -160,7 +162,10 @@
                     <flux:menu.separator />
 
                     <flux:menu.radio.group>
-                        <flux:menu.item :href="route('profile.edit')" icon="cog" wire:navigate>
+                        <flux:menu.item :href="route('profile.edit')" icon="user-circle" wire:navigate>
+                            {{ __('My Profile') }}
+                        </flux:menu.item>
+                        <flux:menu.item :href="route('security.edit')" icon="cog" wire:navigate>
                             {{ __('Settings') }}
                         </flux:menu.item>
                     </flux:menu.radio.group>
