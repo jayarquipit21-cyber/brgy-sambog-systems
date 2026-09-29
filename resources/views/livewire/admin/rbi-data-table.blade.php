@@ -196,7 +196,13 @@
                             <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/40 transition">
                                 <!-- Sticky Name Column -->
                                 <td class="sticky left-0 bg-white dark:bg-zinc-900 py-3 px-4 font-medium text-zinc-900 dark:text-white border-r border-zinc-200 dark:border-zinc-800 z-10 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">
-                                    {{ $res->full_name }}
+                                    <button type="button" 
+                                            wire:click="$dispatch('show-resident-profile', { id: {{ $res->id }} })" 
+                                            class="group text-left inline-flex items-center gap-1.5 hover:text-sky-600 dark:hover:text-sky-400 transition cursor-pointer"
+                                            title="Click to view complete profile card">
+                                        <span class="font-semibold group-hover:underline">{{ $res->full_name }}</span>
+                                        <flux:icon name="identification" class="size-3.5 text-sky-500 opacity-0 group-hover:opacity-100 transition" />
+                                    </button>
                                 </td>
 
                                 <!-- Basic & Family -->
@@ -299,4 +305,7 @@
             </div>
         @endif
     </div>
+
+    <!-- Resident Full Profile Card Modal -->
+    <livewire:admin.resident-profile-modal />
 </div>

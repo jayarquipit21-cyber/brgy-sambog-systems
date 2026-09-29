@@ -133,7 +133,13 @@
                             @foreach($residents as $res)
                                 <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition">
                                     <td class="py-3 px-4">
-                                        <span class="text-zinc-900 dark:text-white font-medium">{{ $res->full_name }}</span>
+                                        <button type="button" 
+                                                wire:click="$dispatch('show-resident-profile', { id: {{ $res->id }} })" 
+                                                class="group text-left inline-flex items-center gap-1.5 hover:text-sky-600 dark:hover:text-sky-400 transition cursor-pointer"
+                                                title="Click to view complete profile card">
+                                            <span class="text-zinc-900 dark:text-white font-semibold group-hover:underline">{{ $res->full_name }}</span>
+                                            <flux:icon name="identification" class="size-3.5 text-sky-500 opacity-0 group-hover:opacity-100 transition" />
+                                        </button>
                                     </td>
                                     <td class="py-3 px-4 capitalize text-xs">
                                         {{ strtolower($res->relationship_to_head ?? 'Member') }}
@@ -185,7 +191,13 @@
                             @foreach($residents as $res)
                                 <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition">
                                     <td class="py-3 px-4">
-                                        <span class="text-zinc-900 dark:text-white font-medium">{{ $res->full_name }}</span>
+                                        <button type="button" 
+                                                wire:click="$dispatch('show-resident-profile', { id: {{ $res->id }} })" 
+                                                class="group text-left inline-flex items-center gap-1.5 hover:text-sky-600 dark:hover:text-sky-400 transition cursor-pointer"
+                                                title="Click to view complete profile card">
+                                            <span class="text-zinc-900 dark:text-white font-semibold group-hover:underline">{{ $res->full_name }}</span>
+                                            <flux:icon name="identification" class="size-3.5 text-sky-500 opacity-0 group-hover:opacity-100 transition" />
+                                        </button>
                                     </td>
                                     <td class="py-3 px-4 text-zinc-900 dark:text-white">
                                         Purok {{ $res->household->purok_no ?? 'N/A' }}
@@ -336,4 +348,7 @@
             </div>
         </form>
     </flux:modal>
+
+    <!-- Resident Full Profile Card Modal -->
+    <livewire:admin.resident-profile-modal />
 </div>

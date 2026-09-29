@@ -234,6 +234,15 @@ class Profile extends Component
             'avatarFile' => 'image|max:3072', // 3MB Max
         ]);
 
+        Flux::toast(variant: 'info', text: __('New photo selected. Please click Confirm & Save to update your profile.'));
+    }
+
+    public function saveAvatar(): void
+    {
+        $this->validate([
+            'avatarFile' => 'required|image|max:3072', // 3MB Max
+        ]);
+
         $user = Auth::user();
 
         // Delete old avatar if present
@@ -246,8 +255,16 @@ class Profile extends Component
         $user->save();
 
         $this->avatarFile = null;
+        $this->dispatch('avatar-saved');
 
         Flux::toast(variant: 'success', text: __('Profile picture updated successfully!'));
+    }
+
+    public function cancelAvatarUpload(): void
+    {
+        $this->avatarFile = null;
+        $this->resetErrorBag('avatarFile');
+        $this->dispatch('avatar-saved');
     }
 
     public function removeAvatar(): void
@@ -260,6 +277,9 @@ class Profile extends Component
 
         $user->avatar = null;
         $user->save();
+
+        $this->dispatch('avatar-saved');
+        $this->dispatch('profile-updated');
 
         Flux::toast(variant: 'success', text: __('Profile picture removed.'));
     }
@@ -280,6 +300,8 @@ class Profile extends Component
         }
 
         $user->save();
+
+        $this->dispatch('profile-updated');
 
         Flux::toast(variant: 'success', text: __('Account details updated successfully.'));
     }

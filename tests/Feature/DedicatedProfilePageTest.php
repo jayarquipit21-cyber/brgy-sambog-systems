@@ -150,14 +150,28 @@ class DedicatedProfilePageTest extends TestCase
 
         $file = UploadedFile::fake()->image('profile.jpg', 300, 300);
 
-        Livewire::actingAs($user)
+        // Selecting file should not save immediately until confirmed
+        $test = Livewire::actingAs($user)
             ->test(Profile::class)
             ->set('avatarFile', $file);
+
+        $user->refresh();
+        $this->assertNull($user->avatar);
+
+        // Confirm save
+        $test->call('saveAvatar')
+            ->assertHasNoErrors();
 
         $user->refresh();
         $this->assertNotNull($user->avatar);
         $this->assertNotNull($user->avatar_url);
         Storage::disk('public')->assertExists($user->avatar);
+
+        // Test cancelling an upload
+        $newFile = UploadedFile::fake()->image('new_profile.jpg', 300, 300);
+        $test->set('avatarFile', $newFile)
+            ->call('cancelAvatarUpload')
+            ->assertSet('avatarFile', null);
 
         // Test removing avatar
         Livewire::actingAs($user)

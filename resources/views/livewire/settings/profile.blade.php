@@ -4,35 +4,75 @@
         <div class="absolute -right-16 -top-16 w-80 h-80 bg-sky-500/10 rounded-full blur-3xl pointer-events-none"></div>
         <div class="absolute -left-16 -bottom-16 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
-        <div class="relative flex flex-col sm:flex-row items-center sm:items-start gap-6 z-10">
+        <div x-data="{ 
+                 localPreview: null,
+                 handleFileChange(e) {
+                     const file = e.target.files[0];
+                     if (file) {
+                         this.localPreview = URL.createObjectURL(file);
+                     }
+                 },
+                 clear() {
+                     this.localPreview = null;
+                     $wire.cancelAvatarUpload();
+                 }
+             }"
+             x-on:avatar-saved.window="localPreview = null"
+             class="relative flex flex-col sm:flex-row items-center sm:items-start gap-6 z-10">
             <!-- Avatar Upload Area -->
-            <div class="relative group shrink-0">
-                <div class="size-28 sm:size-32 rounded-3xl overflow-hidden ring-4 ring-white/10 shadow-2xl bg-gradient-to-tr from-zinc-800 to-zinc-700 flex items-center justify-center relative">
-                    @if($user->avatar)
-                        <img src="{{ $user->avatar_url }}" alt="{{ $user->name }}" class="size-full object-cover">
-                    @else
-                        <span class="text-3xl sm:text-4xl font-black font-outfit text-zinc-300">
-                            {{ $user->initials() }}
-                        </span>
+            <div class="relative group shrink-0 flex flex-col items-center">
+                <div class="size-28 sm:size-32 rounded-3xl overflow-hidden ring-4 {{ $avatarFile ? 'ring-amber-400 ring-offset-2 ring-offset-zinc-900 shadow-amber-500/30' : 'ring-white/10' }} shadow-2xl bg-gradient-to-tr from-zinc-800 to-zinc-700 flex items-center justify-center relative transition-all duration-300">
+                    <template x-if="localPreview">
+                        <img :src="localPreview" alt="New Profile Photo Preview" class="size-full object-cover">
+                    </template>
+                    
+                    <div x-show="!localPreview" class="size-full">
+                        @if($avatarFile && method_exists($avatarFile, 'temporaryUrl'))
+                            <img src="{{ $avatarFile->temporaryUrl() }}" alt="New Profile Photo Preview" class="size-full object-cover">
+                        @elseif($user->avatar)
+                            <img src="{{ $user->avatar_url }}" alt="{{ $user->name }}" class="size-full object-cover">
+                        @else
+                            <div class="size-full flex items-center justify-center">
+                                <span class="text-3xl sm:text-4xl font-black font-outfit text-zinc-300">
+                                    {{ $user->initials() }}
+                                </span>
+                            </div>
+                        @endif
+                    </div>
+
+                    @if($avatarFile)
+                        <!-- Pending Confirmation Badge -->
+                        <div class="absolute bottom-1 inset-x-1 py-0.5 bg-amber-500/95 backdrop-blur-xs text-[10px] font-black tracking-wider text-zinc-950 uppercase rounded-lg text-center shadow pointer-events-none">
+                            Preview
+                        </div>
                     @endif
 
                     <!-- Upload overlay hover -->
                     <label for="avatar-file-input" class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center cursor-pointer transition-all duration-200 text-white text-xs font-semibold gap-1 backdrop-blur-xs">
                         <flux:icon name="camera" class="size-6 text-white" />
-                        <span>Change Photo</span>
+                        <span>{{ $avatarFile ? 'Change Image' : 'Change Photo' }}</span>
                     </label>
                 </div>
 
-                <input type="file" id="avatar-file-input" wire:model="avatarFile" accept="image/png, image/jpeg, image/webp" class="sr-only">
+                <input type="file" 
+                       id="avatar-file-input" 
+                       wire:model="avatarFile" 
+                       x-on:change="handleFileChange($event)"
+                       accept="image/png, image/jpeg, image/webp" 
+                       class="sr-only">
 
-                <!-- Loading spinner while uploading -->
-                <div wire:loading wire:target="avatarFile" class="absolute inset-0 bg-black/75 rounded-3xl flex items-center justify-center text-white text-xs font-bold gap-2">
+                <!-- Loading spinner while uploading to temporary storage -->
+                <div wire:loading wire:target="avatarFile" class="absolute inset-0 bg-black/75 rounded-3xl flex items-center justify-center text-white text-xs font-bold gap-2 z-20">
                     <flux:icon name="arrow-path" class="size-5 animate-spin" />
                     <span>Uploading...</span>
                 </div>
 
-                @if($user->avatar)
-                    <button type="button" wire:click="removeAvatar" wire:confirm="Remove your profile photo?" class="mt-2 text-[11px] text-red-400 hover:text-red-300 block text-center w-full transition">
+                @error('avatarFile')
+                    <span class="mt-1.5 text-[11px] text-red-400 font-medium text-center max-w-[130px]">{{ $message }}</span>
+                @enderror
+
+                @if(!$avatarFile && $user->avatar)
+                    <button type="button" wire:click="removeAvatar" wire:confirm="Are you sure you want to remove your profile photo?" class="mt-2 text-[11px] text-red-400 hover:text-red-300 block text-center w-full transition">
                         Remove photo
                     </button>
                 @endif
@@ -116,6 +156,47 @@
                 </button>
             </div>
         </div>
+
+        @if($avatarFile)
+            <!-- Sign / Banner to Confirm Saving New Profile Photo -->
+            <div class="relative z-10 mt-6 pt-5 border-t border-zinc-800 flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-2xl bg-gradient-to-r from-amber-500/15 via-emerald-500/10 to-sky-500/10 border border-amber-400/30 shadow-lg animate-in fade-in duration-300">
+                <div class="flex items-center gap-3 text-center sm:text-left">
+                    <div class="p-2.5 bg-amber-500/20 border border-amber-400/30 text-amber-300 rounded-2xl shrink-0">
+                        <flux:icon name="photo" class="size-6" />
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2 justify-center sm:justify-start">
+                            <h4 class="text-sm font-black font-outfit text-white tracking-wide">Confirm New Profile Photo</h4>
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-amber-400/20 text-amber-300 border border-amber-400/30">
+                                Confirmation Required
+                            </span>
+                        </div>
+                        <p class="text-xs text-zinc-300 mt-0.5">
+                            You've selected a new photo. Please confirm to apply and save this photo to your official profile.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2 shrink-0 w-full sm:w-auto justify-end">
+                    <button type="button" 
+                            x-on:click="clear()"
+                            wire:click="cancelAvatarUpload" 
+                            class="flex-1 sm:flex-initial px-3.5 py-2 text-xs font-bold rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 transition">
+                        Cancel
+                    </button>
+                    <button type="button" 
+                            wire:click="saveAvatar" 
+                            wire:loading.attr="disabled"
+                            wire:target="saveAvatar"
+                            class="flex-1 sm:flex-initial px-4 py-2 text-xs font-black rounded-xl bg-emerald-500 hover:bg-emerald-400 active:bg-emerald-600 text-zinc-950 shadow-lg shadow-emerald-500/20 transition flex items-center justify-center gap-1.5 cursor-pointer">
+                        <flux:icon name="check" class="size-4" wire:loading.remove wire:target="saveAvatar" />
+                        <flux:icon name="arrow-path" class="size-4 animate-spin" wire:loading wire:target="saveAvatar" />
+                        <span wire:loading.remove wire:target="saveAvatar">Confirm & Save Photo</span>
+                        <span wire:loading wire:target="saveAvatar">Saving...</span>
+                    </button>
+                </div>
+            </div>
+        @endif
     </div>
 
     <!-- TAB 1: COMPLETE DETAILS OVERVIEW -->
