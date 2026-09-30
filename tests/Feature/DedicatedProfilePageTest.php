@@ -225,4 +225,21 @@ class DedicatedProfilePageTest extends TestCase
         $this->assertEquals('Software Developer', $resident->occupation);
         $this->assertEquals('45000', $resident->income);
     }
+
+    public function test_profile_renders_photo_viewer_modal_with_change_option(): void
+    {
+        $user = User::factory()->create([
+            'name' => 'Clara Bautista',
+            'email' => 'clara@example.com',
+            'role' => 'resident',
+            'avatar' => 'avatars/test.jpg',
+        ]);
+
+        Livewire::actingAs($user)
+            ->test(Profile::class)
+            ->assertSee('View Photo')
+            ->assertSee('Profile Photo')
+            ->assertSee('Change Photo')
+            ->assertSee('Remove Photo');
+    }
 }

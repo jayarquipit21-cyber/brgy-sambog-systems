@@ -6,6 +6,7 @@
 
         <div x-data="{ 
                  localPreview: null,
+                 showPhotoModal: false,
                  handleFileChange(e) {
                      const file = e.target.files[0];
                      if (file) {
@@ -15,20 +16,26 @@
                  clear() {
                      this.localPreview = null;
                      $wire.cancelAvatarUpload();
+                 },
+                 triggerFileInput() {
+                     document.getElementById('avatar-file-input').click();
                  }
              }"
              x-on:avatar-saved.window="localPreview = null"
              class="relative flex flex-col sm:flex-row items-center sm:items-start gap-6 z-10">
-            <!-- Avatar Upload Area -->
+            <!-- Avatar Area (Click to view full photo) -->
             <div class="relative group shrink-0 flex flex-col items-center">
-                <div class="size-28 sm:size-32 rounded-3xl overflow-hidden ring-4 {{ $avatarFile ? 'ring-amber-400 ring-offset-2 ring-offset-zinc-900 shadow-amber-500/30' : 'ring-white/10' }} shadow-2xl bg-gradient-to-tr from-zinc-800 to-zinc-700 flex items-center justify-center relative transition-all duration-300">
+                <button type="button" 
+                        @click="showPhotoModal = true"
+                        class="size-28 sm:size-32 rounded-3xl overflow-hidden ring-4 {{ $avatarFile ? 'ring-amber-400 ring-offset-2 ring-offset-zinc-900 shadow-amber-500/30' : 'ring-white/10 hover:ring-white/30' }} shadow-2xl bg-gradient-to-tr from-zinc-800 to-zinc-700 flex items-center justify-center relative transition-all duration-300 cursor-pointer group text-left"
+                        title="Click to view photo">
                     <template x-if="localPreview">
-                        <img :src="localPreview" alt="New Profile Photo Preview" class="size-full object-cover">
+                        <img :src="localPreview" alt="Profile Photo Preview" class="size-full object-cover">
                     </template>
                     
                     <div x-show="!localPreview" class="size-full">
                         @if($avatarFile && method_exists($avatarFile, 'temporaryUrl'))
-                            <img src="{{ $avatarFile->temporaryUrl() }}" alt="New Profile Photo Preview" class="size-full object-cover">
+                            <img src="{{ $avatarFile->temporaryUrl() }}" alt="Profile Photo Preview" class="size-full object-cover">
                         @elseif($user->avatar)
                             <img src="{{ $user->avatar_url }}" alt="{{ $user->name }}" class="size-full object-cover">
                         @else
@@ -47,12 +54,12 @@
                         </div>
                     @endif
 
-                    <!-- Upload overlay hover -->
-                    <label for="avatar-file-input" class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center cursor-pointer transition-all duration-200 text-white text-xs font-semibold gap-1 backdrop-blur-xs">
-                        <flux:icon name="camera" class="size-6 text-white" />
-                        <span>{{ $avatarFile ? 'Change Image' : 'Change Photo' }}</span>
-                    </label>
-                </div>
+                    <!-- View Overlay on Hover -->
+                    <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center transition-all duration-200 text-white text-xs font-semibold gap-1 backdrop-blur-xs">
+                        <flux:icon name="eye" class="size-6 text-white" />
+                        <span>View Photo</span>
+                    </div>
+                </button>
 
                 <input type="file" 
                        id="avatar-file-input" 
@@ -72,10 +79,118 @@
                 @enderror
 
                 @if(!$avatarFile && $user->avatar)
-                    <button type="button" wire:click="removeAvatar" wire:confirm="Are you sure you want to remove your profile photo?" class="mt-2 text-[11px] text-red-400 hover:text-red-300 block text-center w-full transition">
-                        Remove photo
+                    <button type="button" @click="showPhotoModal = true" class="mt-2 text-[11px] text-zinc-400 hover:text-zinc-200 block text-center w-full transition inline-flex items-center justify-center gap-1">
+                        <flux:icon name="eye" class="size-3" />
+                        View / Edit
                     </button>
                 @endif
+            </div>
+
+            <!-- Full Photo Viewer & Change Photo Lightbox Modal -->
+            <div x-show="showPhotoModal" 
+                 x-cloak
+                 x-transition:enter="transition ease-out duration-200"
+                 x-transition:enter-start="opacity-0"
+                 x-transition:enter-end="opacity-100"
+                 x-transition:leave="transition ease-in duration-150"
+                 x-transition:leave-start="opacity-100"
+                 x-transition:leave-end="opacity-0"
+                 class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/85 backdrop-blur-md"
+                 @keydown.escape.window="showPhotoModal = false"
+                 role="dialog"
+                 aria-modal="true">
+                
+                <div @click.away="showPhotoModal = false"
+                     class="relative w-full max-w-md rounded-3xl bg-zinc-900 border border-zinc-800 shadow-2xl p-6 sm:p-7 text-white space-y-5 animate-in zoom-in-95 duration-200">
+                    
+                    <!-- Modal Header -->
+                    <div class="flex items-center justify-between border-b border-zinc-800 pb-3">
+                        <div class="flex items-center gap-2.5">
+                            <div class="p-1.5 bg-sky-500/15 text-sky-400 rounded-lg">
+                                <flux:icon name="user" class="size-4" />
+                            </div>
+                            <div>
+                                <h3 class="text-base font-bold font-outfit text-white">Profile Photo</h3>
+                                <p class="text-xs text-zinc-400">{{ $resident ? $resident->fullName : $user->name }}</p>
+                            </div>
+                        </div>
+                        <button type="button" 
+                                @click="showPhotoModal = false"
+                                class="size-8 rounded-full bg-zinc-800 hover:bg-zinc-700 text-zinc-400 hover:text-white flex items-center justify-center transition cursor-pointer"
+                                title="Close">
+                            <flux:icon name="x-mark" class="size-4" />
+                        </button>
+                    </div>
+
+                    <!-- Photo Display Canvas -->
+                    <div class="relative w-full min-h-[260px] max-h-[50vh] rounded-2xl bg-zinc-950 flex items-center justify-center overflow-hidden border border-zinc-800/80 shadow-inner p-2">
+                        <template x-if="localPreview">
+                            <img :src="localPreview" alt="Selected Preview Photo" class="max-h-[46vh] w-auto max-w-full rounded-xl object-contain shadow-2xl">
+                        </template>
+                        
+                        <div x-show="!localPreview" class="size-full flex items-center justify-center">
+                            @if($avatarFile && method_exists($avatarFile, 'temporaryUrl'))
+                                <img src="{{ $avatarFile->temporaryUrl() }}" alt="Preview Photo" class="max-h-[46vh] w-auto max-w-full rounded-xl object-contain shadow-2xl">
+                            @elseif($user->avatar)
+                                <img src="{{ $user->avatar_url }}" alt="{{ $user->name }}" class="max-h-[46vh] w-auto max-w-full rounded-xl object-contain shadow-2xl">
+                            @else
+                                <div class="py-10 flex flex-col items-center justify-center text-center text-zinc-400 gap-3">
+                                    <div class="size-24 rounded-2xl bg-zinc-800 flex items-center justify-center text-3xl font-black font-outfit text-zinc-300">
+                                        {{ $user->initials() }}
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-semibold text-zinc-300">No profile photo uploaded yet</p>
+                                        <p class="text-xs text-zinc-500">Click below to upload a portrait for your account.</p>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+
+                        @if($avatarFile)
+                            <div class="absolute top-3 right-3 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-500 text-zinc-950 shadow">
+                                Pending Save
+                            </div>
+                        @endif
+                    </div>
+
+                    <!-- Action Options inside the View Modal -->
+                    <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-1">
+                        <div>
+                            @if(!$avatarFile && $user->avatar)
+                                <button type="button" 
+                                        wire:click="removeAvatar" 
+                                        @click="showPhotoModal = false"
+                                        wire:confirm="Are you sure you want to remove your profile photo?" 
+                                        class="text-xs font-semibold text-red-400 hover:text-red-300 transition inline-flex items-center gap-1.5 cursor-pointer py-1.5 px-2.5 rounded-lg hover:bg-red-500/10">
+                                    <flux:icon name="trash" class="size-3.5" />
+                                    Remove Photo
+                                </button>
+                            @elseif($avatarFile)
+                                <button type="button" 
+                                        @click="clear(); showPhotoModal = false"
+                                        class="text-xs font-semibold text-zinc-400 hover:text-zinc-200 transition inline-flex items-center gap-1.5 cursor-pointer py-1.5 px-2.5 rounded-lg hover:bg-zinc-800">
+                                    <flux:icon name="x-mark" class="size-3.5" />
+                                    Discard Changes
+                                </button>
+                            @endif
+                        </div>
+
+                        <div class="flex items-center gap-2.5 w-full sm:w-auto justify-end">
+                            <button type="button" 
+                                    @click="triggerFileInput()"
+                                    class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs rounded-xl shadow transition flex items-center gap-2 cursor-pointer">
+                                <flux:icon name="camera" class="size-4" />
+                                <span>{{ ($user->avatar || $avatarFile) ? 'Change Photo' : 'Upload Photo' }}</span>
+                            </button>
+                            
+                            <button type="button" 
+                                    @click="showPhotoModal = false"
+                                    class="px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 hover:text-white font-semibold text-xs rounded-xl transition cursor-pointer">
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Profile Overview Info -->
