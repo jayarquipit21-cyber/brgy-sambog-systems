@@ -14,15 +14,54 @@ import (
 	"sync"
 	"syscall"
 	"time"
+	"unsafe"
 )
 
 // ─── Version ────────────────────────────────────────────────────────────────
 
 const version = "2.0.0"
 
-// ─── ANSI Colors ────────────────────────────────────────────────────────────
+// ─── ANSI Colors & Windows Console Initialization ──────────────────────────
 
 var noColor bool
+
+func initTerminal() {
+	if runtime.GOOS != "windows" {
+		return
+	}
+	kernel32 := syscall.NewLazyDLL("kernel32.dll")
+	setConsoleOutputCP := kernel32.NewProc("SetConsoleOutputCP")
+	setConsoleCP := kernel32.NewProc("SetConsoleCP")
+	getStdHandle := kernel32.NewProc("GetStdHandle")
+	getConsoleMode := kernel32.NewProc("GetConsoleMode")
+	setConsoleMode := kernel32.NewProc("SetConsoleMode")
+
+	// Set console code page to UTF-8 (65001) for both input and output
+	if setConsoleOutputCP.Find() == nil {
+		setConsoleOutputCP.Call(65001)
+	}
+	if setConsoleCP.Find() == nil {
+		setConsoleCP.Call(65001)
+	}
+
+	// Enable Virtual Terminal Processing (ANSI VT100 colors) on stdout and stderr
+	const stdOutputHandle = uint32(0xFFFFFFF5) // STD_OUTPUT_HANDLE (-11)
+	const stdErrorHandle = uint32(0xFFFFFFF4)  // STD_ERROR_HANDLE (-12)
+	const enableVirtualTerminalProcessing = 0x0004
+	const enableProcessedOutput = 0x0001
+	const enableWrapAtEOL = 0x0002
+
+	for _, handleType := range []uint32{stdOutputHandle, stdErrorHandle} {
+		handle, _, _ := getStdHandle.Call(uintptr(handleType))
+		if handle != 0 && handle != uintptr(syscall.InvalidHandle) {
+			var mode uint32
+			ret, _, _ := getConsoleMode.Call(handle, uintptr(unsafe.Pointer(&mode)))
+			if ret != 0 {
+				setConsoleMode.Call(handle, uintptr(mode|enableVirtualTerminalProcessing|enableProcessedOutput|enableWrapAtEOL))
+			}
+		}
+	}
+}
 
 func color(code string) string {
 	if noColor {
@@ -79,19 +118,19 @@ func addHistory(action string, ok bool) {
 // ─── Output Helpers ─────────────────────────────────────────────────────────
 
 func printSuccess(msg string) {
-	fmt.Printf("  %s✓%s %s%s%s\n", green(), reset(), green(), msg, reset())
+	fmt.Printf("  %s[OK]%s %s%s%s\n", green(), reset(), green(), msg, reset())
 }
 
 func printError(msg string) {
-	fmt.Printf("  %s✗%s %s%s%s\n", red(), reset(), red(), msg, reset())
+	fmt.Printf("  %s[ERR]%s %s%s%s\n", red(), reset(), red(), msg, reset())
 }
 
 func printWarning(msg string) {
-	fmt.Printf("  %s⚠%s %s%s%s\n", yellow(), reset(), yellow(), msg, reset())
+	fmt.Printf("  %s[!]%s %s%s%s\n", yellow(), reset(), yellow(), msg, reset())
 }
 
 func printInfo(msg string) {
-	fmt.Printf("  %sℹ%s %s\n", cyan(), reset(), msg)
+	fmt.Printf("  %s[i]%s %s\n", cyan(), reset(), msg)
 }
 
 func printDivider() {
@@ -110,7 +149,7 @@ type spinner struct {
 
 func newSpinner(msg string) *spinner {
 	return &spinner{
-		frames: []string{"⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"},
+		frames: []string{"-", "\\", "|", "/"},
 		msg:    msg,
 		done:   make(chan struct{}),
 	}
@@ -125,7 +164,7 @@ func (s *spinner) start() {
 				return
 			default:
 				frame := s.frames[i%len(s.frames)]
-				fmt.Printf("\r  %s%s%s %s", cyan(), frame, reset(), s.msg)
+				fmt.Printf("\r  %s[%s]%s %s", cyan(), frame, reset(), s.msg)
 				i++
 				time.Sleep(80 * time.Millisecond)
 			}
@@ -163,11 +202,11 @@ func printBanner() {
 	rs := reset()
 
 	fmt.Printf("%s%s  ══════════════════════════════════════════════════%s\n", b, c, rs)
-	fmt.Printf("%s%s   ██████  ██████  ██    ██████%s\n", b, bl, rs)
-	fmt.Printf("%s%s   ██   █  ██   █  ██    ██   █%s\n", b, bl, rs)
-	fmt.Printf("%s%s   ██████  ██████  ██    ██████%s   [ %sManager%s ]\n", b, bl, rs, b+c, rs)
-	fmt.Printf("%s%s   ██   █  ██   █  ██    ██%s\n", b, bl, rs)
-	fmt.Printf("%s%s   ██   █  ██████  ██    ██%s       v%s\n", b, bl, rs, version)
+	fmt.Printf("%s%s   ██████  ██████  ██%s\n", b, bl, rs)
+	fmt.Printf("%s%s   ██   ██ ██   ██ ██%s\n", b, bl, rs)
+	fmt.Printf("%s%s   ██████  ██████  ██%s   [ %sManager%s ]\n", b, bl, rs, b+c, rs)
+	fmt.Printf("%s%s   ██   ██ ██   ██ ██%s\n", b, bl, rs)
+	fmt.Printf("%s%s   ██   ██ ██████  ██%s       v%s\n", b, bl, rs, version)
 	fmt.Printf("%s%s  ──────────────────────────────────────────────────%s\n", b, c, rs)
 	fmt.Printf("   %sRegistry of Barangay Inhabitants Manager%s\n", d, rs)
 	fmt.Printf("%s%s  ══════════════════════════════════════════════════%s\n", b, c, rs)
@@ -187,23 +226,23 @@ func printMenu() {
 	rs := reset()
 	m := magenta()
 
-	fmt.Printf("  %s%s📊 DATA%s\n", b, c, rs)
+	fmt.Printf("  %s%s[ DATA & SEARCH ]%s\n", b, c, rs)
 	fmt.Printf("    %s%s1%s) %sView Statistics%s          %s— Dashboard with counts & breakdowns%s\n", b, g, rs, w, rs, d, rs)
-	fmt.Printf("    %s%s2%s) %sSearch Residents%s         %s— Find residents by name or purok%s\n", b, g, rs, w, rs, d, rs)
+	fmt.Printf("    %s%s2%s) %sSearch Residents%s         %s— Find residents by name%s\n", b, g, rs, w, rs, d, rs)
 	fmt.Printf("    %s%s3%s) %sExport to CSV%s            %s— Download data as spreadsheet%s\n", b, g, rs, w, rs, d, rs)
 	fmt.Println()
 
-	fmt.Printf("  %s%s📥 IMPORT%s\n", b, c, rs)
+	fmt.Printf("  %s%s[ IMPORT ]%s\n", b, y, rs)
 	fmt.Printf("    %s%s4%s) %sImport CSV / XLSX File%s    %s— Load residents from a file%s\n", b, y, rs, w, rs, d, rs)
 	fmt.Println()
 
-	fmt.Printf("  %s%s🗑  MANAGE%s\n", b, c, rs)
+	fmt.Printf("  %s%s[ MANAGE & DELETE ]%s\n", b, r, rs)
 	fmt.Printf("    %s%s5%s) %sTruncate Residents%s       %s— Remove all resident records%s\n", b, r, rs, w, rs, d, rs)
 	fmt.Printf("    %s%s6%s) %sTruncate All%s             %s— Remove residents + households%s\n", b, r, rs, w, rs, d, rs)
 	fmt.Printf("    %s%s7%s) %sDelete Rows by Condition%s %s— Delete with a where clause%s\n", b, r, rs, w, rs, d, rs)
 	fmt.Println()
 
-	fmt.Printf("  %s%s⚙  SYSTEM%s\n", b, c, rs)
+	fmt.Printf("  %s%s[ SYSTEM ]%s\n", b, m, rs)
 	fmt.Printf("    %s%s8%s) %sClear Application Cache%s  %s— Flush caches & restart workers%s\n", b, m, rs, w, rs, d, rs)
 	fmt.Printf("    %s%s9%s) %sCommand History%s          %s— Show recent actions this session%s\n", b, m, rs, w, rs, d, rs)
 	fmt.Printf("    %s%sh%s) %sHelp%s                     %s— Detailed usage guide%s\n", b, m, rs, w, rs, d, rs)
@@ -214,16 +253,15 @@ func printMenu() {
 // ─── Main ───────────────────────────────────────────────────────────────────
 
 func main() {
-	// Handle --no-color flag
+	// Initialize Windows ANSI and UTF-8 console output
+	initTerminal()
+
+	// Check NO_COLOR environment variable or --no-color flag
+	if os.Getenv("NO_COLOR") != "" {
+		noColor = true
+	}
 	for _, arg := range os.Args[1:] {
 		if arg == "--no-color" {
-			noColor = true
-		}
-	}
-
-	// Detect if output is not a terminal (piped)
-	if fi, err := os.Stdout.Stat(); err == nil {
-		if (fi.Mode() & os.ModeCharDevice) == 0 {
 			noColor = true
 		}
 	}
@@ -238,22 +276,8 @@ func main() {
 	}()
 
 	// Resolve project directory
-	exePath, err := os.Executable()
-	if err != nil {
-		printError("Unable to resolve executable path: " + err.Error())
-		os.Exit(2)
-	}
-	exeDir := filepath.Dir(exePath)
+	projectDir := findProjectDir()
 
-	// allow optional --project-dir flag
-	projectDir := exeDir
-	// If artisan doesn't exist in projectDir, check the parent directory
-	if _, err := os.Stat(filepath.Join(projectDir, "artisan")); os.IsNotExist(err) {
-		parentDir := filepath.Dir(projectDir)
-		if _, err := os.Stat(filepath.Join(parentDir, "artisan")); err == nil {
-			projectDir = parentDir
-		}
-	}
 	args := os.Args[1:]
 	filteredArgs := []string{}
 	for i := 0; i < len(args); i++ {
@@ -276,7 +300,7 @@ func main() {
 
 		if isFileDrop {
 			printBanner()
-			fmt.Printf("  %s📂 File dropped:%s %s\n\n", bold(), reset(), firstArg)
+			fmt.Printf("  %sFile dropped:%s %s\n\n", bold(), reset(), firstArg)
 
 			if !authenticateUser(projectDir) {
 				fmt.Printf("\n  %sPress Enter to close...%s", dim(), reset())
@@ -327,13 +351,13 @@ func interactiveMenu(projectDir string) {
 		clearScreen()
 		printBanner()
 		printMenu()
-		fmt.Printf("  %s%s❯%s Select an option: ", bold(), cyan(), reset())
+		fmt.Printf("  %s%s>%s Select an option: ", bold(), cyan(), reset())
 		choice, _ := reader.ReadString('\n')
 		choice = strings.TrimSpace(choice)
 		fmt.Println()
 
 		if choice == "0" || choice == "q" || choice == "Q" {
-			fmt.Printf("  %s%sGoodbye! 👋%s\n\n", bold(), cyan(), reset())
+			fmt.Printf("  %s%sGoodbye!%s\n\n", bold(), cyan(), reset())
 			return
 		}
 
@@ -537,7 +561,7 @@ func getStr(m map[string]interface{}, key string) string {
 }
 
 func handleSearchResidents(projectDir string, reader *bufio.Reader) {
-	fmt.Printf("  %s🔍 Enter search query%s %s(name, purok, or household #)%s: ", bold(), reset(), dim(), reset())
+	fmt.Printf("  %sEnter search query%s %s(name of resident)%s: ", bold(), reset(), dim(), reset())
 	query, _ := reader.ReadString('\n')
 	query = strings.TrimSpace(query)
 
@@ -610,7 +634,7 @@ func handleSearchResidents(projectDir string, reader *bufio.Reader) {
 }
 
 func handleExportCSV(projectDir string, reader *bufio.Reader) {
-	fmt.Printf("  %s📁 Export path%s %s(press Enter for default)%s: ", bold(), reset(), dim(), reset())
+	fmt.Printf("  %sExport path%s %s(press Enter for default)%s: ", bold(), reset(), dim(), reset())
 	file, _ := reader.ReadString('\n')
 	file = strings.TrimSpace(file)
 
@@ -637,7 +661,7 @@ func handleExportCSV(projectDir string, reader *bufio.Reader) {
 }
 
 func handleImportCSV(projectDir string, reader *bufio.Reader) {
-	fmt.Printf("  %s📄 Enter file path %s(.csv or .xlsx, press Enter for default 'RBI 2025 all.xlsx'):%s ", bold(), dim(), reset())
+	fmt.Printf("  %sEnter file path %s(.csv or .xlsx, press Enter for default 'RBI 2025 all.xlsx'):%s ", bold(), dim(), reset())
 	file, _ := reader.ReadString('\n')
 	file = strings.TrimSpace(file)
 
@@ -688,7 +712,7 @@ func handleImportCSV(projectDir string, reader *bufio.Reader) {
 }
 
 func handleTruncateResidents(projectDir string, reader *bufio.Reader) {
-	fmt.Printf("  %s%s⚠  WARNING: This will permanently delete ALL resident records.%s\n", bold(), red(), reset())
+	fmt.Printf("  %s%s[!] WARNING: This will permanently delete ALL resident records.%s\n", bold(), red(), reset())
 
 	if !confirmPrompt(reader, fmt.Sprintf("  %sType 'yes' to confirm: %s", yellow(), reset())) {
 		printInfo("Aborted.")
@@ -707,8 +731,8 @@ func handleTruncateResidents(projectDir string, reader *bufio.Reader) {
 }
 
 func handleTruncateAll(projectDir string, reader *bufio.Reader) {
-	fmt.Printf("  %s%s⚠  DANGER: This will permanently delete ALL residents AND households.%s\n", bold(), red(), reset())
-	fmt.Printf("  %s%s   This action cannot be undone!%s\n", bold(), red(), reset())
+	fmt.Printf("  %s%s[!] DANGER: This will permanently delete ALL residents AND households.%s\n", bold(), red(), reset())
+	fmt.Printf("  %s%s    This action cannot be undone!%s\n", bold(), red(), reset())
 
 	if !confirmPrompt(reader, fmt.Sprintf("  %sType 'yes' to confirm: %s", red(), reset())) {
 		printInfo("Aborted.")
@@ -794,12 +818,12 @@ func handleShowHistory() {
 		return
 	}
 
-	fmt.Printf("  %s%s📋 Recent Commands%s\n\n", bold(), cyan(), reset())
+	fmt.Printf("  %s%s[ Recent Commands ]%s\n\n", bold(), cyan(), reset())
 
 	for i, entry := range cmdHistory {
-		status := green() + "✓" + reset()
+		status := green() + "[OK]" + reset()
 		if !entry.ok {
-			status = red() + "✗" + reset()
+			status = red() + "[X]" + reset()
 		}
 		timeStr := entry.time.Format("15:04:05")
 		fmt.Printf("    %s %s%d.%s %s  %s%s%s\n", status, dim(), i+1, reset(), entry.action, dim(), timeStr, reset())
@@ -814,7 +838,7 @@ func handleHelp() {
 	rs := reset()
 
 	fmt.Printf("  %s%s══════════════════════════════════════════════════%s\n", b, c, rs)
-	fmt.Printf("  %s%s  📖 RBI Manager Help%s\n", b, c, rs)
+	fmt.Printf("  %s%s  [ RBI Manager Help ]%s\n", b, c, rs)
 	fmt.Printf("  %s%s══════════════════════════════════════════════════%s\n\n", b, c, rs)
 
 	fmt.Printf("  %s%s1) View Statistics%s\n", b, w, rs)
@@ -941,30 +965,39 @@ func authenticateUser(projectDir string) bool {
 	reader := bufio.NewReader(os.Stdin)
 	b := bold()
 	c := cyan()
-	y := yellow()
 	r := red()
 	g := green()
 	rs := reset()
 
-	fmt.Printf("  %s%s🔑 Authentication Required%s\n", b, c, rs)
-	fmt.Printf("  %s%s──────────────────────────────────────────────────%s\n", b, c, rs)
+	var lastErr string
 
 	for attempt := 1; attempt <= 3; attempt++ {
+		clearScreen()
+		printBanner()
+
+		fmt.Printf("  %s%s[ AUTHENTICATION REQUIRED ]%s\n", b, c, rs)
+		fmt.Printf("  %s%s──────────────────────────────────────────────────%s\n\n", b, c, rs)
+
+		if lastErr != "" {
+			fmt.Printf("  %s%s%s\n\n", r, lastErr, rs)
+			lastErr = ""
+		}
+
 		fmt.Printf("   Email: ")
 		email, _ := reader.ReadString('\n')
 		email = strings.TrimSpace(email)
 
 		fmt.Printf("   Password: ")
 		password, err := readPassword()
-		fmt.Println() // print newline since echo was disabled
+		fmt.Println() // newline after password input
 
 		if err != nil {
-			fmt.Printf("  %sError reading password: %s%s\n\n", r, err.Error(), rs)
+			lastErr = fmt.Sprintf("Error reading password: %s", err.Error())
 			continue
 		}
 
 		if email == "" || password == "" {
-			fmt.Printf("  %sEmail and password cannot be empty. (%d/3)%s\n\n", y, attempt, rs)
+			lastErr = fmt.Sprintf("Email and password cannot be empty. (Attempt %d of 3)", attempt)
 			continue
 		}
 
@@ -976,15 +1009,20 @@ func authenticateUser(projectDir string) bool {
 		sp.stop(err == nil)
 
 		if err != nil {
-			fmt.Printf("  %sInvalid credentials or unauthorized role. (%d/3)%s\n\n", r, attempt, rs)
+			lastErr = fmt.Sprintf("Invalid credentials or unauthorized role. (Attempt %d of 3)", attempt)
 		} else {
+			fmt.Println()
 			fmt.Printf("  %sAccess Granted. Welcome back!%s\n\n", g, rs)
-			time.Sleep(600 * time.Millisecond) // short pause to let the user see the success message
+			time.Sleep(600 * time.Millisecond)
 			clearScreen()
 			return true
 		}
 	}
 
+	clearScreen()
+	printBanner()
+	fmt.Printf("  %s%s[ AUTHENTICATION REQUIRED ]%s\n", b, c, rs)
+	fmt.Printf("  %s%s──────────────────────────────────────────────────%s\n\n", b, c, rs)
 	fmt.Printf("  %sToo many failed attempts. Exiting.%s\n\n", r, rs)
 	return false
 }
@@ -1051,4 +1089,38 @@ func clearScreen() {
 	} else {
 		fmt.Print("\033[H\033[2J")
 	}
+}
+
+func findProjectDir() string {
+	// Check cwd first
+	if cwd, err := os.Getwd(); err == nil {
+		dir := cwd
+		for i := 0; i < 5; i++ {
+			if _, err := os.Stat(filepath.Join(dir, "artisan")); err == nil {
+				return dir
+			}
+			parent := filepath.Dir(dir)
+			if parent == dir {
+				break
+			}
+			dir = parent
+		}
+	}
+
+	// Check executable directory
+	if exePath, err := os.Executable(); err == nil {
+		dir := filepath.Dir(exePath)
+		for i := 0; i < 5; i++ {
+			if _, err := os.Stat(filepath.Join(dir, "artisan")); err == nil {
+				return dir
+			}
+			parent := filepath.Dir(dir)
+			if parent == dir {
+				break
+			}
+			dir = parent
+		}
+	}
+
+	return "."
 }
