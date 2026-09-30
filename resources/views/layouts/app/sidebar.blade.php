@@ -45,7 +45,7 @@
                     </flux:sidebar.item>
 
                     @if(auth()->user()->isAdmin())
-                        <flux:sidebar.group expandable icon="briefcase" :heading="__('Manage Services')" :current="request()->routeIs('admin.services.*') || request()->routeIs('admin.sales') || request()->routeIs('appointments')" :expanded="request()->routeIs('admin.services.*') || request()->routeIs('admin.sales') || request()->routeIs('appointments')">
+                        <flux:sidebar.group expandable icon="briefcase" :heading="__('Manage Services')" :expanded="request()->routeIs('admin.services.*') || request()->routeIs('admin.sales') || request()->routeIs('appointments')">
                             <flux:sidebar.item icon="document-text" :href="route('admin.services.documents')" :current="request()->routeIs('admin.services.documents') || request()->routeIs('appointments')" wire:navigate class="{{ (request()->routeIs('admin.services.documents') || request()->routeIs('appointments')) ? $activeGlow : '' }}">
                                 {{ __('Document Requests') }}
                             </flux:sidebar.item>
@@ -86,7 +86,7 @@
                     @endif
 
                     @if(auth()->user()->isHouseholdHead() || auth()->user()->isResident())
-                        <flux:sidebar.group expandable icon="briefcase" :heading="__('Barangay Services')" :current="request()->routeIs('services.*')" :expanded="request()->routeIs('services.*')">
+                        <flux:sidebar.group expandable icon="briefcase" :heading="__('Barangay Services')" :expanded="request()->routeIs('services.*')">
                             <flux:sidebar.item icon="document-text" :href="route('services.documents')" :current="request()->routeIs('services.documents')" wire:navigate class="text-xs! {{ request()->routeIs('services.documents') ? $activeGlow : '' }}">
                                 {{ __('Request Documents') }}
                             </flux:sidebar.item>

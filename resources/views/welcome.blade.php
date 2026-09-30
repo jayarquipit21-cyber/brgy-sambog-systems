@@ -181,99 +181,99 @@
             <!-- LAYER 1: HERO SECTION (0% - 15%) -->
             <div class="absolute top-10 left-1/2 -translate-x-1/2 w-[1300px] h-[650px] bg-gradient-to-tr from-emerald-400/25 via-teal-400/20 to-transparent blur-[110px] rounded-full animate-pulse-slow"></div>
             <!-- Glowing Hero Pills -->
-            <div class="absolute top-24 left-4 sm:left-12 w-48 h-16 rounded-full border-2 border-emerald-500 dark:border-emerald-400/60 bg-emerald-100 dark:bg-emerald-950/60 backdrop-blur-sm -rotate-12 shadow-lg shadow-emerald-500/10 dark:shadow-[0_0_25px_rgba(16,185,129,0.35)] animate-float hidden lg:flex items-center justify-center">
+            <div class="absolute top-24 left-4 sm:left-12 w-48 h-16 rounded-full border-2 border-emerald-500 dark:border-emerald-400/60 bg-emerald-100 dark:bg-emerald-950/60 backdrop-blur-sm -rotate-12 shadow-lg shadow-emerald-500/15 dark:shadow-[0_0_25px_rgba(16,185,129,0.35)] animate-float hidden lg:flex items-center justify-center">
                 <div class="w-24 h-3 rounded-full bg-emerald-500 dark:bg-emerald-400/50"></div>
             </div>
-            <div class="absolute top-44 right-6 sm:right-16 w-56 h-16 rounded-full border-2 border-teal-500 dark:border-teal-400/60 bg-teal-100 dark:bg-teal-950/60 backdrop-blur-sm rotate-6 shadow-lg shadow-teal-500/10 dark:shadow-[0_0_25px_rgba(20,184,166,0.35)] animate-float hidden lg:flex items-center justify-center" style="animation-delay: -3s;">
+            <div class="absolute top-44 right-6 sm:right-16 w-56 h-16 rounded-full border-2 border-teal-500 dark:border-teal-400/60 bg-teal-100 dark:bg-teal-950/60 backdrop-blur-sm rotate-6 shadow-lg shadow-teal-500/15 dark:shadow-[0_0_25px_rgba(20,184,166,0.35)] animate-float hidden lg:flex items-center justify-center" style="animation-delay: -3s;">
                 <div class="w-28 h-3 rounded-full bg-teal-500 dark:bg-teal-400/50"></div>
             </div>
             <!-- Hero Floating Glowing Diamond Nodes -->
-            <div class="absolute top-72 left-1/4 w-14 h-14 rounded-2xl border-2 border-emerald-400 dark:border-emerald-400/70 bg-emerald-100 dark:bg-emerald-950/60 rotate-45 shadow-md dark:shadow-[0_0_20px_rgba(16,185,129,0.4)] animate-float hidden md:block" style="animation-delay: -1.5s;"></div>
-            <div class="absolute top-96 right-1/3 w-16 h-16 rounded-2xl border-2 border-teal-400 dark:border-teal-400/70 bg-teal-100 dark:bg-teal-950/60 rotate-12 shadow-md dark:shadow-[0_0_20px_rgba(20,184,166,0.4)] animate-float hidden md:block" style="animation-delay: -4.5s;"></div>
+            <div class="absolute top-72 left-1/4 w-14 h-14 rounded-2xl border-2 border-emerald-400 dark:border-emerald-400/70 bg-emerald-100 dark:bg-emerald-950/60 rotate-45 shadow-md shadow-emerald-500/20 dark:shadow-[0_0_20px_rgba(16,185,129,0.4)] animate-float hidden md:block" style="animation-delay: -1.5s;"></div>
+            <div class="absolute top-96 right-1/3 w-16 h-16 rounded-2xl border-2 border-teal-400 dark:border-teal-400/70 bg-teal-100 dark:bg-teal-950/60 rotate-12 shadow-md shadow-teal-500/20 dark:shadow-[0_0_20px_rgba(20,184,166,0.4)] animate-float hidden md:block" style="animation-delay: -4.5s;"></div>
 
             <!-- Small Hero Shapes -->
-            <div class="absolute top-36 left-[18%] w-6 h-6 rounded-lg border border-emerald-400 bg-emerald-200 dark:bg-emerald-900/60 dark:border-emerald-400/80 rotate-12 shadow-sm dark:shadow-[0_0_12px_rgba(16,185,129,0.5)] animate-float hidden sm:block" style="animation-delay: -0.8s;"></div>
-            <div class="absolute top-52 right-[22%] w-8 h-8 rounded-full border border-teal-400 bg-teal-200 dark:bg-teal-900/60 dark:border-teal-400/80 shadow-sm dark:shadow-[0_0_12px_rgba(20,184,166,0.5)] animate-float hidden sm:block" style="animation-delay: -2.4s;"></div>
-            <div class="absolute top-80 right-[15%] w-5 h-5 rounded-md border border-sky-400 bg-sky-200 dark:bg-sky-900/60 dark:border-sky-400/80 rotate-45 shadow-sm dark:shadow-[0_0_10px_rgba(56,189,248,0.5)] animate-float hidden sm:block" style="animation-delay: -3.8s;"></div>
-            <div class="absolute top-[12%] left-[10%] w-7 h-7 rounded-full border border-amber-400 bg-amber-200 dark:bg-amber-900/60 dark:border-amber-400/80 shadow-sm dark:shadow-[0_0_12px_rgba(251,191,36,0.5)] animate-float hidden sm:block" style="animation-delay: -1.2s;"></div>
+            <div class="absolute top-36 left-[18%] w-6 h-6 rounded-lg border-2 border-emerald-400 bg-emerald-200 dark:bg-emerald-900/60 dark:border-emerald-400/80 rotate-12 shadow-sm shadow-emerald-500/20 dark:shadow-[0_0_12px_rgba(16,185,129,0.5)] animate-float hidden sm:block" style="animation-delay: -0.8s;"></div>
+            <div class="absolute top-52 right-[22%] w-8 h-8 rounded-full border-2 border-teal-400 bg-teal-200 dark:bg-teal-900/60 dark:border-teal-400/80 shadow-sm shadow-teal-500/20 dark:shadow-[0_0_12px_rgba(20,184,166,0.5)] animate-float hidden sm:block" style="animation-delay: -2.4s;"></div>
+            <div class="absolute top-80 right-[15%] w-5 h-5 rounded-md border-2 border-sky-400 bg-sky-200 dark:bg-sky-900/60 dark:border-sky-400/80 rotate-45 shadow-sm shadow-sky-500/20 dark:shadow-[0_0_10px_rgba(56,189,248,0.5)] animate-float hidden sm:block" style="animation-delay: -3.8s;"></div>
+            <div class="absolute top-[12%] left-[10%] w-7 h-7 rounded-full border-2 border-amber-400 bg-amber-200 dark:bg-amber-900/60 dark:border-amber-400/80 shadow-sm shadow-amber-500/20 dark:shadow-[0_0_12px_rgba(251,191,36,0.5)] animate-float hidden sm:block" style="animation-delay: -1.2s;"></div>
 
             <!-- LAYER 2: ABOUT & SERVICES SECTION (15% - 35%) -->
-            <div class="absolute top-[16%] -left-32 w-[520px] h-[520px] rounded-[80px] border-2 border-emerald-400 dark:border-emerald-400/50 bg-emerald-100 dark:bg-emerald-950/50 rotate-45 dark:shadow-[0_0_35px_rgba(16,185,129,0.25)]"></div>
-            <div class="absolute top-[20%] -right-28 w-[440px] h-[440px] rounded-full border-2 border-teal-400 dark:border-teal-400/50 bg-teal-100 dark:bg-teal-950/50 dark:shadow-[0_0_35px_rgba(20,184,166,0.25)]"></div>
-            <div class="absolute top-[26%] left-10 w-40 h-14 rounded-full border-2 border-sky-400 dark:border-sky-400/60 bg-sky-100 dark:bg-sky-950/60 -rotate-6 shadow-md dark:shadow-[0_0_20px_rgba(56,189,248,0.3)] animate-float hidden lg:block" style="animation-delay: -2s;"></div>
-            <div class="absolute top-[30%] right-12 w-44 h-14 rounded-full border-2 border-emerald-400 dark:border-emerald-400/60 bg-emerald-100 dark:bg-emerald-950/60 rotate-12 shadow-md dark:shadow-[0_0_20px_rgba(16,185,129,0.3)] animate-float hidden lg:block" style="animation-delay: -5s;"></div>
+            <div class="absolute top-[16%] -left-32 w-[520px] h-[520px] rounded-[80px] border-2 border-emerald-400 dark:border-emerald-400/50 bg-emerald-100/90 dark:bg-emerald-950/50 rotate-45 shadow-lg shadow-emerald-500/10 dark:shadow-[0_0_35px_rgba(16,185,129,0.25)]"></div>
+            <div class="absolute top-[20%] -right-28 w-[440px] h-[440px] rounded-full border-2 border-teal-400 dark:border-teal-400/50 bg-teal-100/90 dark:bg-teal-950/50 shadow-lg shadow-teal-500/10 dark:shadow-[0_0_35px_rgba(20,184,166,0.25)]"></div>
+            <div class="absolute top-[26%] left-10 w-40 h-14 rounded-full border-2 border-sky-400 dark:border-sky-400/60 bg-sky-100 dark:bg-sky-950/60 -rotate-6 shadow-md shadow-sky-500/15 dark:shadow-[0_0_20px_rgba(56,189,248,0.3)] animate-float hidden lg:block" style="animation-delay: -2s;"></div>
+            <div class="absolute top-[30%] right-12 w-44 h-14 rounded-full border-2 border-emerald-400 dark:border-emerald-400/60 bg-emerald-100 dark:bg-emerald-950/60 rotate-12 shadow-md shadow-emerald-500/15 dark:shadow-[0_0_20px_rgba(16,185,129,0.3)] animate-float hidden lg:block" style="animation-delay: -5s;"></div>
             <!-- Glowing Concentric Service Ring Accent -->
-            <div class="absolute top-[28%] left-1/2 -translate-x-1/2 w-[620px] h-[620px] rounded-full border-2 border-emerald-400 dark:border-emerald-400/45 flex items-center justify-center dark:shadow-[0_0_40px_rgba(16,185,129,0.2)]">
-                <div class="w-[440px] h-[440px] rounded-full border-2 border-teal-400 dark:border-teal-400/45 dark:shadow-[0_0_30px_rgba(20,184,166,0.2)]"></div>
+            <div class="absolute top-[28%] left-1/2 -translate-x-1/2 w-[620px] h-[620px] rounded-full border-2 border-emerald-400/70 dark:border-emerald-400/45 flex items-center justify-center dark:shadow-[0_0_40px_rgba(16,185,129,0.2)]">
+                <div class="w-[440px] h-[440px] rounded-full border-2 border-teal-400/70 dark:border-teal-400/45 dark:shadow-[0_0_30px_rgba(20,184,166,0.2)]"></div>
             </div>
 
             <!-- Small Layer 2 Shapes -->
-            <div class="absolute top-[18%] left-[32%] w-7 h-7 rounded-xl border border-violet-400 bg-violet-200 dark:bg-violet-900/60 dark:border-violet-400/80 rotate-12 shadow-sm dark:shadow-[0_0_12px_rgba(167,139,250,0.5)] animate-float hidden sm:block" style="animation-delay: -1.7s;"></div>
-            <div class="absolute top-[22%] right-[28%] w-6 h-6 rounded-md border border-emerald-400 bg-emerald-200 dark:bg-emerald-900/60 dark:border-emerald-400/80 rotate-45 shadow-sm dark:shadow-[0_0_10px_rgba(16,185,129,0.5)] animate-float hidden sm:block" style="animation-delay: -4.1s;"></div>
-            <div class="absolute top-[25%] left-[22%] w-8 h-8 rounded-full border border-sky-400 bg-sky-200 dark:bg-sky-900/60 dark:border-sky-400/80 shadow-sm dark:shadow-[0_0_12px_rgba(56,189,248,0.5)] animate-float hidden sm:block" style="animation-delay: -0.5s;"></div>
-            <div class="absolute top-[32%] left-[45%] w-6 h-6 rounded-lg border border-teal-400 bg-teal-200 dark:bg-teal-900/60 dark:border-teal-400/80 rotate-12 shadow-sm dark:shadow-[0_0_10px_rgba(20,184,166,0.5)] animate-float hidden sm:block" style="animation-delay: -3.1s;"></div>
-            <div class="absolute top-[34%] right-[38%] w-7 h-7 rounded-full border border-amber-400 bg-amber-200 dark:bg-amber-900/60 dark:border-amber-400/80 shadow-sm dark:shadow-[0_0_12px_rgba(251,191,36,0.5)] animate-float hidden sm:block" style="animation-delay: -2.3s;"></div>
+            <div class="absolute top-[18%] left-[32%] w-7 h-7 rounded-xl border-2 border-violet-400 bg-violet-200 dark:bg-violet-900/60 dark:border-violet-400/80 rotate-12 shadow-sm shadow-violet-500/20 dark:shadow-[0_0_12px_rgba(167,139,250,0.5)] animate-float hidden sm:block" style="animation-delay: -1.7s;"></div>
+            <div class="absolute top-[22%] right-[28%] w-6 h-6 rounded-md border-2 border-emerald-400 bg-emerald-200 dark:bg-emerald-900/60 dark:border-emerald-400/80 rotate-45 shadow-sm shadow-emerald-500/20 dark:shadow-[0_0_10px_rgba(16,185,129,0.5)] animate-float hidden sm:block" style="animation-delay: -4.1s;"></div>
+            <div class="absolute top-[25%] left-[22%] w-8 h-8 rounded-full border-2 border-sky-400 bg-sky-200 dark:bg-sky-900/60 dark:border-sky-400/80 shadow-sm shadow-sky-500/20 dark:shadow-[0_0_12px_rgba(56,189,248,0.5)] animate-float hidden sm:block" style="animation-delay: -0.5s;"></div>
+            <div class="absolute top-[32%] left-[45%] w-6 h-6 rounded-lg border-2 border-teal-400 bg-teal-200 dark:bg-teal-900/60 dark:border-teal-400/80 rotate-12 shadow-sm shadow-teal-500/20 dark:shadow-[0_0_10px_rgba(20,184,166,0.5)] animate-float hidden sm:block" style="animation-delay: -3.1s;"></div>
+            <div class="absolute top-[34%] right-[38%] w-7 h-7 rounded-full border-2 border-amber-400 bg-amber-200 dark:bg-amber-900/60 dark:border-amber-400/80 shadow-sm shadow-amber-500/20 dark:shadow-[0_0_12px_rgba(251,191,36,0.5)] animate-float hidden sm:block" style="animation-delay: -2.3s;"></div>
 
             <!-- LAYER 3: POPULATION STATISTICS SECTION (35% - 55%) -->
-            <div class="absolute top-[42%] left-1/2 -translate-x-1/2 w-[850px] h-[850px] rounded-full border-2 border-emerald-400 dark:border-emerald-400/50 flex items-center justify-center dark:shadow-[0_0_50px_rgba(16,185,129,0.25)]">
-                <div class="w-[650px] h-[650px] rounded-full border-2 border-teal-400 dark:border-teal-400/50 flex items-center justify-center dark:shadow-[0_0_40px_rgba(20,184,166,0.2)]">
-                    <div class="w-[450px] h-[450px] rounded-full border-2 border-sky-400 dark:border-sky-400/50 flex items-center justify-center dark:shadow-[0_0_30px_rgba(56,189,248,0.2)]">
-                        <div class="w-[250px] h-[250px] rounded-full border-2 border-emerald-400 dark:border-emerald-400/40"></div>
+            <div class="absolute top-[42%] left-1/2 -translate-x-1/2 w-[850px] h-[850px] rounded-full border-2 border-emerald-400/70 dark:border-emerald-400/50 flex items-center justify-center dark:shadow-[0_0_50px_rgba(16,185,129,0.25)]">
+                <div class="w-[650px] h-[650px] rounded-full border-2 border-teal-400/70 dark:border-teal-400/50 flex items-center justify-center dark:shadow-[0_0_40px_rgba(20,184,166,0.2)]">
+                    <div class="w-[450px] h-[450px] rounded-full border-2 border-sky-400/70 dark:border-sky-400/50 flex items-center justify-center dark:shadow-[0_0_30px_rgba(56,189,248,0.2)]">
+                        <div class="w-[250px] h-[250px] rounded-full border-2 border-emerald-400/60 dark:border-emerald-400/40"></div>
                     </div>
                 </div>
             </div>
             <!-- Statistics Side Geometry -->
-            <div class="absolute top-[45%] -left-20 w-72 h-72 rounded-[50px] border-2 border-violet-400 dark:border-violet-400/50 bg-violet-100 dark:bg-violet-950/50 rotate-12 dark:shadow-[0_0_30px_rgba(167,139,250,0.25)]"></div>
-            <div class="absolute top-[48%] -right-20 w-80 h-80 rounded-[60px] border-2 border-amber-400 dark:border-amber-400/50 bg-amber-100 dark:bg-amber-950/50 -rotate-12 dark:shadow-[0_0_30px_rgba(251,191,36,0.25)]"></div>
+            <div class="absolute top-[45%] -left-20 w-72 h-72 rounded-[50px] border-2 border-violet-400 dark:border-violet-400/50 bg-violet-100/90 dark:bg-violet-950/50 rotate-12 shadow-md shadow-violet-500/10 dark:shadow-[0_0_30px_rgba(167,139,250,0.25)]"></div>
+            <div class="absolute top-[48%] -right-20 w-80 h-80 rounded-[60px] border-2 border-amber-400 dark:border-amber-400/50 bg-amber-100/90 dark:bg-amber-950/50 -rotate-12 shadow-md shadow-amber-500/10 dark:shadow-[0_0_30px_rgba(251,191,36,0.25)]"></div>
 
             <!-- Small Layer 3 Shapes -->
-            <div class="absolute top-[38%] left-[15%] w-8 h-8 rounded-2xl border border-indigo-400 bg-indigo-200 dark:bg-indigo-900/60 dark:border-indigo-400/80 rotate-45 shadow-sm dark:shadow-[0_0_12px_rgba(129,140,248,0.5)] animate-float hidden sm:block" style="animation-delay: -1.9s;"></div>
-            <div class="absolute top-[41%] right-[18%] w-6 h-6 rounded-md border border-emerald-400 bg-emerald-200 dark:bg-emerald-900/60 dark:border-emerald-400/80 rotate-12 shadow-sm dark:shadow-[0_0_10px_rgba(16,185,129,0.5)] animate-float hidden sm:block" style="animation-delay: -4.4s;"></div>
-            <div class="absolute top-[46%] left-[35%] w-7 h-7 rounded-full border border-teal-400 bg-teal-200 dark:bg-teal-900/60 dark:border-teal-400/80 shadow-sm dark:shadow-[0_0_12px_rgba(20,184,166,0.5)] animate-float hidden sm:block" style="animation-delay: -0.9s;"></div>
-            <div class="absolute top-[50%] right-[32%] w-7 h-7 rounded-lg border border-sky-400 bg-sky-200 dark:bg-sky-900/60 dark:border-sky-400/80 rotate-45 shadow-sm dark:shadow-[0_0_12px_rgba(56,189,248,0.5)] animate-float hidden sm:block" style="animation-delay: -2.8s;"></div>
-            <div class="absolute top-[53%] left-[24%] w-6 h-6 rounded-md border border-amber-400 bg-amber-200 dark:bg-amber-900/60 dark:border-amber-400/80 rotate-12 shadow-sm dark:shadow-[0_0_10px_rgba(251,191,36,0.5)] animate-float hidden sm:block" style="animation-delay: -3.5s;"></div>
+            <div class="absolute top-[38%] left-[15%] w-8 h-8 rounded-2xl border-2 border-indigo-400 bg-indigo-200 dark:bg-indigo-900/60 dark:border-indigo-400/80 rotate-45 shadow-sm shadow-indigo-500/20 dark:shadow-[0_0_12px_rgba(129,140,248,0.5)] animate-float hidden sm:block" style="animation-delay: -1.9s;"></div>
+            <div class="absolute top-[41%] right-[18%] w-6 h-6 rounded-md border-2 border-emerald-400 bg-emerald-200 dark:bg-emerald-900/60 dark:border-emerald-400/80 rotate-12 shadow-sm shadow-emerald-500/20 dark:shadow-[0_0_10px_rgba(16,185,129,0.5)] animate-float hidden sm:block" style="animation-delay: -4.4s;"></div>
+            <div class="absolute top-[46%] left-[35%] w-7 h-7 rounded-full border-2 border-teal-400 bg-teal-200 dark:bg-teal-900/60 dark:border-teal-400/80 shadow-sm shadow-teal-500/20 dark:shadow-[0_0_12px_rgba(20,184,166,0.5)] animate-float hidden sm:block" style="animation-delay: -0.9s;"></div>
+            <div class="absolute top-[50%] right-[32%] w-7 h-7 rounded-lg border-2 border-sky-400 bg-sky-200 dark:bg-sky-900/60 dark:border-sky-400/80 rotate-45 shadow-sm shadow-sky-500/20 dark:shadow-[0_0_12px_rgba(56,189,248,0.5)] animate-float hidden sm:block" style="animation-delay: -2.8s;"></div>
+            <div class="absolute top-[53%] left-[24%] w-6 h-6 rounded-md border-2 border-amber-400 bg-amber-200 dark:bg-amber-900/60 dark:border-amber-400/80 rotate-12 shadow-sm shadow-amber-500/20 dark:shadow-[0_0_10px_rgba(251,191,36,0.5)] animate-float hidden sm:block" style="animation-delay: -3.5s;"></div>
 
             <!-- LAYER 4: COUNCIL & PROJECTS SECTION (55% - 75%) -->
-            <div class="absolute top-[58%] -right-36 w-[550px] h-[550px] rounded-[90px] border-2 border-amber-400 dark:border-amber-400/45 bg-amber-100 dark:bg-amber-950/40 -rotate-12 dark:shadow-[0_0_35px_rgba(251,191,36,0.2)]"></div>
-            <div class="absolute top-[62%] -left-24 w-96 h-96 rounded-[70px] border-2 border-indigo-400 dark:border-indigo-400/45 bg-indigo-100 dark:bg-indigo-950/40 rotate-45 dark:shadow-[0_0_35px_rgba(129,140,248,0.2)]"></div>
+            <div class="absolute top-[58%] -right-36 w-[550px] h-[550px] rounded-[90px] border-2 border-amber-400 dark:border-amber-400/45 bg-amber-100/90 dark:bg-amber-950/40 -rotate-12 shadow-md shadow-amber-500/10 dark:shadow-[0_0_35px_rgba(251,191,36,0.2)]"></div>
+            <div class="absolute top-[62%] -left-24 w-96 h-96 rounded-[70px] border-2 border-indigo-400 dark:border-indigo-400/45 bg-indigo-100/90 dark:bg-indigo-950/40 rotate-45 shadow-md shadow-indigo-500/10 dark:shadow-[0_0_35px_rgba(129,140,248,0.2)]"></div>
             <!-- Floating Mid Solid Glowing Pills -->
-            <div class="absolute top-[65%] left-16 w-48 h-16 rounded-full border-2 border-emerald-400 dark:border-emerald-400/60 bg-emerald-100 dark:bg-emerald-950/60 -rotate-6 shadow-md dark:shadow-[0_0_25px_rgba(16,185,129,0.3)] animate-float hidden lg:flex items-center justify-center">
+            <div class="absolute top-[65%] left-16 w-48 h-16 rounded-full border-2 border-emerald-400 dark:border-emerald-400/60 bg-emerald-100 dark:bg-emerald-950/60 -rotate-6 shadow-md shadow-emerald-500/15 dark:shadow-[0_0_25px_rgba(16,185,129,0.3)] animate-float hidden lg:flex items-center justify-center">
                 <div class="w-24 h-3 rounded-full bg-emerald-500 dark:bg-emerald-400/50"></div>
             </div>
-            <div class="absolute top-[69%] right-16 w-48 h-16 rounded-full border-2 border-teal-400 dark:border-teal-400/60 bg-teal-100 dark:bg-teal-950/60 rotate-12 shadow-md dark:shadow-[0_0_25px_rgba(20,184,166,0.3)] animate-float hidden lg:flex items-center justify-center" style="animation-delay: -3.5s;">
+            <div class="absolute top-[69%] right-16 w-48 h-16 rounded-full border-2 border-teal-400 dark:border-teal-400/60 bg-teal-100 dark:bg-teal-950/60 rotate-12 shadow-md shadow-teal-500/15 dark:shadow-[0_0_25px_rgba(20,184,166,0.3)] animate-float hidden lg:flex items-center justify-center" style="animation-delay: -3.5s;">
                 <div class="w-24 h-3 rounded-full bg-teal-500 dark:bg-teal-400/50"></div>
             </div>
 
             <!-- Small Layer 4 Shapes -->
-            <div class="absolute top-[56%] right-[25%] w-8 h-8 rounded-full border border-violet-400 bg-violet-200 dark:bg-violet-900/60 dark:border-violet-400/80 shadow-sm dark:shadow-[0_0_12px_rgba(167,139,250,0.5)] animate-float hidden sm:block" style="animation-delay: -1.1s;"></div>
-            <div class="absolute top-[60%] left-[28%] w-6 h-6 rounded-md border border-emerald-400 bg-emerald-200 dark:bg-emerald-900/60 dark:border-emerald-400/80 rotate-12 shadow-sm dark:shadow-[0_0_10px_rgba(16,185,129,0.5)] animate-float hidden sm:block" style="animation-delay: -4.7s;"></div>
-            <div class="absolute top-[64%] right-[42%] w-7 h-7 rounded-xl border border-sky-400 bg-sky-200 dark:bg-sky-900/60 dark:border-sky-400/80 rotate-45 shadow-sm dark:shadow-[0_0_12px_rgba(56,189,248,0.5)] animate-float hidden sm:block" style="animation-delay: -2.1s;"></div>
-            <div class="absolute top-[68%] left-[40%] w-6 h-6 rounded-full border border-teal-400 bg-teal-200 dark:bg-teal-900/60 dark:border-teal-400/80 shadow-sm dark:shadow-[0_0_10px_rgba(20,184,166,0.5)] animate-float hidden sm:block" style="animation-delay: -0.3s;"></div>
-            <div class="absolute top-[72%] right-[20%] w-8 h-8 rounded-2xl border border-amber-400 bg-amber-200 dark:bg-amber-900/60 dark:border-amber-400/80 rotate-12 shadow-sm dark:shadow-[0_0_12px_rgba(251,191,36,0.5)] animate-float hidden sm:block" style="animation-delay: -3.9s;"></div>
+            <div class="absolute top-[56%] right-[25%] w-8 h-8 rounded-full border-2 border-violet-400 bg-violet-200 dark:bg-violet-900/60 dark:border-violet-400/80 shadow-sm shadow-violet-500/20 dark:shadow-[0_0_12px_rgba(167,139,250,0.5)] animate-float hidden sm:block" style="animation-delay: -1.1s;"></div>
+            <div class="absolute top-[60%] left-[28%] w-6 h-6 rounded-md border-2 border-emerald-400 bg-emerald-200 dark:bg-emerald-900/60 dark:border-emerald-400/80 rotate-12 shadow-sm shadow-emerald-500/20 dark:shadow-[0_0_10px_rgba(16,185,129,0.5)] animate-float hidden sm:block" style="animation-delay: -4.7s;"></div>
+            <div class="absolute top-[64%] right-[42%] w-7 h-7 rounded-xl border-2 border-sky-400 bg-sky-200 dark:bg-sky-900/60 dark:border-sky-400/80 rotate-45 shadow-sm shadow-sky-500/20 dark:shadow-[0_0_12px_rgba(56,189,248,0.5)] animate-float hidden sm:block" style="animation-delay: -2.1s;"></div>
+            <div class="absolute top-[68%] left-[40%] w-6 h-6 rounded-full border-2 border-teal-400 bg-teal-200 dark:bg-teal-900/60 dark:border-teal-400/80 shadow-sm shadow-teal-500/20 dark:shadow-[0_0_10px_rgba(20,184,166,0.5)] animate-float hidden sm:block" style="animation-delay: -0.3s;"></div>
+            <div class="absolute top-[72%] right-[20%] w-8 h-8 rounded-2xl border-2 border-amber-400 bg-amber-200 dark:bg-amber-900/60 dark:border-amber-400/80 rotate-12 shadow-sm shadow-amber-500/20 dark:shadow-[0_0_12px_rgba(251,191,36,0.5)] animate-float hidden sm:block" style="animation-delay: -3.9s;"></div>
 
             <!-- LAYER 5: ORDINANCES & PLACES SECTION (75% - 88%) -->
             <div class="absolute top-[75%] left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-gradient-to-r from-emerald-400/20 via-teal-400/18 to-emerald-500/15 blur-[120px] rounded-full"></div>
-            <div class="absolute top-[78%] left-8 w-52 h-16 rounded-full border-2 border-sky-400 dark:border-sky-400/60 bg-sky-100 dark:bg-sky-950/60 rotate-12 shadow-md dark:shadow-[0_0_25px_rgba(56,189,248,0.3)] animate-float hidden lg:block" style="animation-delay: -2.5s;"></div>
-            <div class="absolute top-[82%] right-10 w-48 h-16 rounded-full border-2 border-emerald-400 dark:border-emerald-400/60 bg-emerald-100 dark:bg-emerald-950/60 -rotate-12 shadow-md dark:shadow-[0_0_25px_rgba(16,185,129,0.3)] animate-float hidden lg:block" style="animation-delay: -4s;"></div>
+            <div class="absolute top-[78%] left-8 w-52 h-16 rounded-full border-2 border-sky-400 dark:border-sky-400/60 bg-sky-100 dark:bg-sky-950/60 rotate-12 shadow-md shadow-sky-500/15 dark:shadow-[0_0_25px_rgba(56,189,248,0.3)] animate-float hidden lg:block" style="animation-delay: -2.5s;"></div>
+            <div class="absolute top-[82%] right-10 w-48 h-16 rounded-full border-2 border-emerald-400 dark:border-emerald-400/60 bg-emerald-100 dark:bg-emerald-950/60 -rotate-12 shadow-md shadow-emerald-500/15 dark:shadow-[0_0_25px_rgba(16,185,129,0.3)] animate-float hidden lg:block" style="animation-delay: -4s;"></div>
             <!-- Rotated Solid Diamond Pattern Grid -->
-            <div class="absolute top-[80%] left-1/3 w-20 h-20 rounded-2xl border-2 border-teal-400 dark:border-teal-400/60 bg-teal-100 dark:bg-teal-950/60 rotate-45 shadow-sm dark:shadow-[0_0_20px_rgba(20,184,166,0.35)]"></div>
-            <div class="absolute top-[84%] right-1/3 w-24 h-24 rounded-3xl border-2 border-emerald-400 dark:border-emerald-400/60 bg-emerald-100 dark:bg-emerald-950/60 -rotate-12 shadow-sm dark:shadow-[0_0_20px_rgba(16,185,129,0.35)]"></div>
+            <div class="absolute top-[80%] left-1/3 w-20 h-20 rounded-2xl border-2 border-teal-400 dark:border-teal-400/60 bg-teal-100 dark:bg-teal-950/60 rotate-45 shadow-md shadow-teal-500/15 dark:shadow-[0_0_20px_rgba(20,184,166,0.35)]"></div>
+            <div class="absolute top-[84%] right-1/3 w-24 h-24 rounded-3xl border-2 border-emerald-400 dark:border-emerald-400/60 bg-emerald-100 dark:bg-emerald-950/60 -rotate-12 shadow-md shadow-emerald-500/15 dark:shadow-[0_0_20px_rgba(16,185,129,0.35)]"></div>
 
             <!-- Small Layer 5 Shapes -->
-            <div class="absolute top-[76%] left-[20%] w-7 h-7 rounded-lg border border-emerald-400 bg-emerald-200 dark:bg-emerald-900/60 dark:border-emerald-400/80 rotate-12 shadow-sm dark:shadow-[0_0_12px_rgba(16,185,129,0.5)] animate-float hidden sm:block" style="animation-delay: -1.6s;"></div>
-            <div class="absolute top-[79%] right-[22%] w-6 h-6 rounded-full border border-sky-400 bg-sky-200 dark:bg-sky-900/60 dark:border-sky-400/80 shadow-sm dark:shadow-[0_0_10px_rgba(56,189,248,0.5)] animate-float hidden sm:block" style="animation-delay: -3.3s;"></div>
-            <div class="absolute top-[83%] left-[42%] w-8 h-8 rounded-2xl border border-teal-400 bg-teal-200 dark:bg-teal-900/60 dark:border-teal-400/80 rotate-45 shadow-sm dark:shadow-[0_0_12px_rgba(20,184,166,0.5)] animate-float hidden sm:block" style="animation-delay: -0.7s;"></div>
-            <div class="absolute top-[86%] right-[38%] w-6 h-6 rounded-md border border-indigo-400 bg-indigo-200 dark:bg-indigo-900/60 dark:border-indigo-400/80 rotate-12 shadow-sm dark:shadow-[0_0_10px_rgba(129,140,248,0.5)] animate-float hidden sm:block" style="animation-delay: -4.2s;"></div>
+            <div class="absolute top-[76%] left-[20%] w-7 h-7 rounded-lg border-2 border-emerald-400 bg-emerald-200 dark:bg-emerald-900/60 dark:border-emerald-400/80 rotate-12 shadow-sm shadow-emerald-500/20 dark:shadow-[0_0_12px_rgba(16,185,129,0.5)] animate-float hidden sm:block" style="animation-delay: -1.6s;"></div>
+            <div class="absolute top-[79%] right-[22%] w-6 h-6 rounded-full border-2 border-sky-400 bg-sky-200 dark:bg-sky-900/60 dark:border-sky-400/80 shadow-sm shadow-sky-500/20 dark:shadow-[0_0_10px_rgba(56,189,248,0.5)] animate-float hidden sm:block" style="animation-delay: -3.3s;"></div>
+            <div class="absolute top-[83%] left-[42%] w-8 h-8 rounded-2xl border-2 border-teal-400 bg-teal-200 dark:bg-teal-900/60 dark:border-teal-400/80 rotate-45 shadow-sm shadow-teal-500/20 dark:shadow-[0_0_12px_rgba(20,184,166,0.5)] animate-float hidden sm:block" style="animation-delay: -0.7s;"></div>
+            <div class="absolute top-[86%] right-[38%] w-6 h-6 rounded-md border-2 border-indigo-400 bg-indigo-200 dark:bg-indigo-900/60 dark:border-indigo-400/80 rotate-12 shadow-sm shadow-indigo-500/20 dark:shadow-[0_0_10px_rgba(129,140,248,0.5)] animate-float hidden sm:block" style="animation-delay: -4.2s;"></div>
 
             <!-- LAYER 6: FAQS & CONTACT FOOTER SECTION (88% - 100%) -->
-            <div class="absolute top-[89%] -left-44 w-[650px] h-[650px] rounded-full border-2 border-emerald-400 dark:border-emerald-400/50 bg-emerald-100 dark:bg-emerald-950/40 dark:shadow-[0_0_40px_rgba(16,185,129,0.25)]"></div>
-            <div class="absolute top-[92%] -right-28 w-[550px] h-[550px] rounded-full border-2 border-teal-400 dark:border-teal-400/50 bg-teal-100 dark:bg-teal-950/40 dark:shadow-[0_0_40px_rgba(20,184,166,0.25)]"></div>
-            <div class="absolute top-[94%] right-1/2 translate-x-1/2 w-[1100px] h-[500px] bg-gradient-to-tr from-emerald-500/20 via-teal-500/15 to-zinc-900/5 blur-[130px] rounded-full"></div>
+            <div class="absolute top-[89%] -left-44 w-[650px] h-[650px] rounded-full border-2 border-emerald-400/80 dark:border-emerald-400/50 bg-emerald-100/80 dark:bg-emerald-950/40 shadow-lg shadow-emerald-500/10 dark:shadow-[0_0_40px_rgba(16,185,129,0.25)]"></div>
+            <div class="absolute top-[92%] -right-28 w-[550px] h-[550px] rounded-full border-2 border-teal-400/80 dark:border-teal-400/50 bg-teal-100/80 dark:bg-teal-950/40 shadow-lg shadow-teal-500/10 dark:shadow-[0_0_40px_rgba(20,184,166,0.25)]"></div>
+            <div class="absolute top-[94%] right-1/2 translate-x-1/2 w-[1100px] h-[500px] bg-gradient-to-tr from-emerald-500/20 via-teal-500/15 to-transparent blur-[130px] rounded-full"></div>
 
             <!-- Small Layer 6 Shapes -->
-            <div class="absolute top-[90%] left-[25%] w-7 h-7 rounded-full border border-emerald-400 bg-emerald-200 dark:bg-emerald-900/60 dark:border-emerald-400/80 shadow-sm dark:shadow-[0_0_12px_rgba(16,185,129,0.5)] animate-float hidden sm:block" style="animation-delay: -2.0s;"></div>
-            <div class="absolute top-[93%] right-[25%] w-6 h-6 rounded-lg border border-teal-400 bg-teal-200 dark:bg-teal-900/60 dark:border-teal-400/80 rotate-45 shadow-sm dark:shadow-[0_0_10px_rgba(20,184,166,0.5)] animate-float hidden sm:block" style="animation-delay: -3.7s;"></div>
-            <div class="absolute top-[96%] left-[38%] w-8 h-8 rounded-2xl border border-sky-400 bg-sky-200 dark:bg-sky-900/60 dark:border-sky-400/80 rotate-12 shadow-sm dark:shadow-[0_0_12px_rgba(56,189,248,0.5)] animate-float hidden sm:block" style="animation-delay: -1.3s;"></div>
+            <div class="absolute top-[90%] left-[25%] w-7 h-7 rounded-full border-2 border-emerald-400 bg-emerald-200 dark:bg-emerald-900/60 dark:border-emerald-400/80 shadow-sm shadow-emerald-500/20 dark:shadow-[0_0_12px_rgba(16,185,129,0.5)] animate-float hidden sm:block" style="animation-delay: -2.0s;"></div>
+            <div class="absolute top-[93%] right-[25%] w-6 h-6 rounded-lg border-2 border-teal-400 bg-teal-200 dark:bg-teal-900/60 dark:border-teal-400/80 rotate-45 shadow-sm shadow-teal-500/20 dark:shadow-[0_0_10px_rgba(20,184,166,0.5)] animate-float hidden sm:block" style="animation-delay: -3.7s;"></div>
+            <div class="absolute top-[96%] left-[38%] w-8 h-8 rounded-2xl border-2 border-sky-400 bg-sky-200 dark:bg-sky-900/60 dark:border-sky-400/80 rotate-12 shadow-sm shadow-sky-500/20 dark:shadow-[0_0_12px_rgba(56,189,248,0.5)] animate-float hidden sm:block" style="animation-delay: -1.3s;"></div>
         </div>
 
         <!-- Header / Navigation Bar -->
@@ -481,7 +481,7 @@
         </header>
 
         <!-- Main Content -->
-        <main class="flex-grow z-10 space-y-24 py-12">
+        <main class="relative z-10 flex-grow space-y-24 py-12">
 
             <!-- HERO SECTION: Bento Grid Hero -->
             <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -976,7 +976,7 @@
         </main>
 
         <!-- Footer -->
-        <footer class="border-t border-zinc-200/80 dark:border-zinc-800/80 bg-zinc-100/50 dark:bg-zinc-900/50 py-12 text-zinc-600 dark:text-zinc-400 text-xs">
+        <footer class="relative z-10 border-t border-zinc-200/80 dark:border-zinc-800/80 bg-zinc-100/90 dark:bg-zinc-900/90 backdrop-blur-md py-12 text-zinc-600 dark:text-zinc-400 text-xs">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div class="space-y-3">
                     <div class="flex items-center gap-2 font-bold text-zinc-950 dark:text-white font-outfit text-base">
