@@ -3,8 +3,18 @@
         <div class="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm">
             <h3 class="font-bold text-lg mb-3">Create Announcement</h3>
             <div class="space-y-3">
-                <input wire:model.defer="title" type="text" placeholder="Title" class="w-full p-3 rounded border border-zinc-200 dark:border-zinc-800 bg-transparent text-sm" />
-                <textarea wire:model.defer="body" rows="4" placeholder="Message" class="w-full p-3 rounded border border-zinc-200 dark:border-zinc-800 bg-transparent text-sm"></textarea>
+                <div>
+                    <input wire:model.defer="title" name="title" id="announcement-title" type="text" placeholder="Title" class="w-full p-3 rounded border @error('title') border-red-500 ring-1 ring-red-500 @else border-zinc-200 dark:border-zinc-800 @enderror bg-transparent text-sm" />
+                    @error('title')
+                        <p class="text-red-500 text-xs mt-1 font-medium">{{ $message }}</p>
+                    @enderror
+                </div>
+                <div>
+                    <textarea wire:model.defer="body" name="body" id="announcement-body" rows="4" placeholder="Message" class="w-full p-3 rounded border @error('body') border-red-500 ring-1 ring-red-500 @else border-zinc-200 dark:border-zinc-800 @enderror bg-transparent text-sm"></textarea>
+                    @error('body')
+                        <p class="text-red-500 text-xs mt-1 font-medium">{{ $message }} </p>
+                    @enderror
+                </div>
                 <div class="flex items-center gap-4 flex-wrap">
                     <label class="flex items-center gap-2 text-xs font-semibold text-zinc-700 dark:text-zinc-300 cursor-pointer">
                         <input wire:model.live="is_event" type="checkbox" class="rounded text-brand focus:ring-brand" />

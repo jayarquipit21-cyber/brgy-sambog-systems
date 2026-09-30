@@ -17,6 +17,8 @@ class AnnouncementsManager extends Component
 
     public string $body = '';
 
+    public string $description = '';
+
     public string $type = 'general';
 
     public bool $is_event = false;
@@ -49,11 +51,18 @@ class AnnouncementsManager extends Component
 
     public string $filterType = ''; // '', 'event', 'general'
 
+    protected $messages = [
+        'title.required' => 'No announcement title entered',
+        'body.required' => 'No announcement content/body entered',
+        'description.required' => 'No announcement content/body entered',
+    ];
+
     protected function rules(): array
     {
         return [
             'title' => 'required|string|max:150',
             'body' => 'required|string|max:2000',
+            'description' => 'required|string|max:2000',
             'is_event' => 'boolean',
             'type' => 'nullable|string|max:50',
             'event_date' => 'nullable|required_if:is_event,true|date',
@@ -62,6 +71,25 @@ class AnnouncementsManager extends Component
             'is_pinned' => 'boolean',
             'publish_now' => 'boolean',
         ];
+    }
+
+    protected function messages(): array
+    {
+        return [
+            'title.required' => 'No announcement title entered',
+            'body.required' => 'No announcement content/body entered',
+            'description.required' => 'No announcement content/body entered',
+        ];
+    }
+
+    public function updatedBody($value): void
+    {
+        $this->description = $value;
+    }
+
+    public function updatedDescription($value): void
+    {
+        $this->body = $value;
     }
 
     public function updatedIsEvent($value): void
@@ -295,10 +323,21 @@ class AnnouncementsManager extends Component
         }
     }
 
+    public function publish()
+    {
+        return $this->createAnnouncement();
+    }
+
     public function createAnnouncement()
     {
         if (! Auth::check() || ! Auth::user()->isAdmin()) {
             abort(403);
+        }
+
+        if (empty($this->body) && ! empty($this->description)) {
+            $this->body = $this->description;
+        } elseif (empty($this->description) && ! empty($this->body)) {
+            $this->description = $this->body;
         }
 
         if ($this->is_event) {
@@ -329,7 +368,7 @@ class AnnouncementsManager extends Component
         }
 
         $this->reset([
-            'title', 'body', 'type', 'is_event', 'event_date', 'event_end_date', 'event_location', 'is_pinned', 'publish_now',
+            'title', 'body', 'description', 'type', 'is_event', 'event_date', 'event_end_date', 'event_location', 'is_pinned', 'publish_now',
             'start_date', 'start_time', 'end_date', 'end_time', 'is_multi_day', 'has_end_time'
         ]);
 
@@ -348,6 +387,7 @@ class AnnouncementsManager extends Component
         $this->editingId = $a->id;
         $this->title = $a->title;
         $this->body = $a->body;
+        $this->description = $a->body;
         $this->is_event = ($a->type === 'event' || ! empty($a->event_date));
         $this->type = $a->type ?? 'general';
         $this->event_date = $a->event_date ? $a->event_date->format('Y-m-d\TH:i') : null;
@@ -366,6 +406,12 @@ class AnnouncementsManager extends Component
         }
         if (! $this->editingId) {
             return;
+        }
+
+        if (empty($this->body) && ! empty($this->description)) {
+            $this->body = $this->description;
+        } elseif (empty($this->description) && ! empty($this->body)) {
+            $this->description = $this->body;
         }
 
         if ($this->is_event) {
@@ -399,7 +445,7 @@ class AnnouncementsManager extends Component
     {
         $this->editingId = null;
         $this->reset([
-            'title', 'body', 'type', 'is_event', 'event_date', 'event_end_date', 'event_location', 'is_pinned', 'publish_now',
+            'title', 'body', 'description', 'type', 'is_event', 'event_date', 'event_end_date', 'event_location', 'is_pinned', 'publish_now',
             'start_date', 'start_time', 'end_date', 'end_time', 'is_multi_day', 'has_end_time'
         ]);
     }

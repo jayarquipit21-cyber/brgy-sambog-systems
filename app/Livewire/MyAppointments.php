@@ -36,6 +36,27 @@ class MyAppointments extends Component
         }
     }
 
+    public function deleteCancelled(int $id): void
+    {
+        $appointment = Appointment::where('id', $id)
+            ->where('user_id', Auth::id())
+            ->where('status', 'cancelled')
+            ->firstOrFail();
+
+        if ($appointment->transaction) {
+            $appointment->transaction->delete();
+        }
+
+        $appointment->delete();
+
+        Flux::toast(variant: 'success', text: __('Cancelled request deleted successfully.'));
+    }
+
+    public function delete(int $id): void
+    {
+        $this->deleteCancelled($id);
+    }
+
     public function render()
     {
         $baseQuery = Appointment::where('user_id', Auth::id())

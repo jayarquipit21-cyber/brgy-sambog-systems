@@ -66,4 +66,32 @@ class AnnouncementsManagerTest extends TestCase
 
         $this->assertDatabaseCount('notifications', 10);
     }
+
+    public function test_validation_errors_when_publishing_empty_announcement_title_and_description(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+        $this->actingAs($admin);
+
+        Livewire::test(AnnouncementsManager::class)
+            ->set('title', '')
+            ->set('body', '')
+            ->call('createAnnouncement')
+            ->assertHasErrors(['title', 'body', 'description'])
+            ->assertSee('No announcement title entered')
+            ->assertSee('No announcement content/body entered');
+    }
+
+    public function test_validation_errors_via_publish_method_alias(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+        $this->actingAs($admin);
+
+        Livewire::test(AnnouncementsManager::class)
+            ->set('title', '')
+            ->set('description', '')
+            ->call('publish')
+            ->assertHasErrors(['title', 'body', 'description'])
+            ->assertSee('No announcement title entered')
+            ->assertSee('No announcement content/body entered');
+    }
 }

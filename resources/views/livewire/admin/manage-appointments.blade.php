@@ -180,16 +180,26 @@
                                         >
                                             Mark Collected
                                         </button>
-                                    @else
-                                        <span class="text-xs text-zinc-400 dark:text-zinc-600">-</span>
-                                    @endif
-                                    @if(!in_array($apt->status, ['pending', 'approved-pending', 'approved']))
+                                    @elseif($apt->status === 'cancelled')
                                         <button 
                                             wire:click="delete({{ $apt->id }})"
-                                            class="text-xs text-red-500 hover:text-red-700 font-semibold ml-2"
+                                            wire:confirm="Are you sure you want to delete this cancelled request?"
+                                            class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-red-200 bg-red-50/50 hover:bg-red-100 hover:text-red-700 text-red-600 dark:border-red-900/50 dark:bg-red-950/20 dark:text-red-400 dark:hover:bg-red-950/40 text-xs font-semibold transition cursor-pointer"
+                                            title="Delete Cancelled Request"
+                                        >
+                                            <flux:icon name="trash" class="size-3" />
+                                            <span>Delete</span>
+                                        </button>
+                                    @elseif($apt->status === 'completed')
+                                        <button 
+                                            wire:click="delete({{ $apt->id }})"
+                                            wire:confirm="Are you sure you want to delete this completed record?"
+                                            class="text-xs text-red-500 hover:text-red-700 font-semibold cursor-pointer"
                                         >
                                             Delete
                                         </button>
+                                    @else
+                                        <span class="text-xs text-zinc-400 dark:text-zinc-600">-</span>
                                     @endif
                                 </td>
                             </tr>
@@ -361,16 +371,26 @@
                                         >
                                             Mark Completed
                                         </button>
-                                    @else
-                                        <span class="text-xs text-zinc-400 dark:text-zinc-600">-</span>
-                                    @endif
-                                    @if(!in_array($apt->status, ['pending', 'approved-pending', 'approved']))
+                                    @elseif($apt->status === 'cancelled')
                                         <button 
                                             wire:click="delete({{ $apt->id }})"
-                                            class="text-xs text-red-500 hover:text-red-700 font-semibold ml-2"
+                                            wire:confirm="Are you sure you want to delete this cancelled rental booking?"
+                                            class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-red-200 bg-red-50/50 hover:bg-red-100 hover:text-red-700 text-red-600 dark:border-red-900/50 dark:bg-red-950/20 dark:text-red-400 dark:hover:bg-red-950/40 text-xs font-semibold transition cursor-pointer"
+                                            title="Delete Cancelled Rental Booking"
+                                        >
+                                            <flux:icon name="trash" class="size-3" />
+                                            <span>Delete</span>
+                                        </button>
+                                    @elseif($apt->status === 'completed')
+                                        <button 
+                                            wire:click="delete({{ $apt->id }})"
+                                            wire:confirm="Are you sure you want to delete this completed record?"
+                                            class="text-xs text-red-500 hover:text-red-700 font-semibold cursor-pointer"
                                         >
                                             Delete
                                         </button>
+                                    @else
+                                        <span class="text-xs text-zinc-400 dark:text-zinc-600">-</span>
                                     @endif
                                 </td>
                             </tr>

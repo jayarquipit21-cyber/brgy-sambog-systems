@@ -242,12 +242,7 @@
                 <h3 class="text-sm font-semibold text-zinc-900 dark:text-white mb-3">Household Details</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <flux:input wire:model="household_no" label="Household Number" placeholder="e.g. 0001" required />
-                    <flux:select wire:model="purok_no" label="Purok" required>
-                        <option value="">Select Purok</option>
-                        @for($i=1; $i<=8; $i++)
-                            <option value="{{ $i }}">Purok {{ $i }}</option>
-                        @endfor
-                    </flux:select>
+                    <flux:input wire:model="purok_no" label="Purok Number" placeholder="e.g. 1" required />
                     <flux:input wire:model="address" label="Address" placeholder="e.g. Sambog, Corella, Bohol" required />
                 </div>
             </div>

@@ -104,6 +104,15 @@ class ManageRbi extends Component
         ];
     }
 
+    protected function messages(): array
+    {
+        return [
+            'purok_no.between' => 'Purok number must be between 1 and 8.',
+            'purok_no.integer' => 'Purok number must be an integer between 1 and 8.',
+            'purok_no.required' => 'Purok number is required.',
+        ];
+    }
+
     public function openCreateModal(): void
     {
         $this->resetErrorBag();

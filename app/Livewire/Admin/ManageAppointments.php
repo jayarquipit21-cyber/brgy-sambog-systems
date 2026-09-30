@@ -381,8 +381,16 @@ class ManageAppointments extends Component
     public function delete(int $id): void
     {
         $appointment = Appointment::findOrFail($id);
+        if ($appointment->transaction && in_array($appointment->transaction->payment_status, ['pending', 'waived'])) {
+            $appointment->transaction->delete();
+        }
         $appointment->delete();
         Flux::toast(variant: 'success', text: __('Appointment record deleted.'));
+    }
+
+    public function deleteCancelled(int $id): void
+    {
+        $this->delete($id);
     }
 
     public function render()

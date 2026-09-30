@@ -267,6 +267,27 @@ class BarangayServicesTest extends TestCase
         ]);
     }
 
+    public function test_household_head_creation_rejects_purok_greater_than_eight(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+        $this->actingAs($admin);
+
+        Livewire::test(ManageRbi::class)
+            ->set('household_no', 'HH-9999')
+            ->set('purok_no', '9')
+            ->set('address', 'Purok 9, Sambog, Corella, Bohol')
+            ->set('first_name', 'Maria')
+            ->set('last_name', 'Clara')
+            ->set('birthdate', '1990-05-15')
+            ->set('sex', 'Female')
+            ->set('civil_status', 'Married')
+            ->set('citizenship', 'Filipino')
+            ->set('email', 'mariaclara@test.com')
+            ->set('password', 'secret123')
+            ->call('saveHouseholdHead')
+            ->assertHasErrors(['purok_no' => 'between']);
+    }
+
     public function test_household_head_can_create_resident(): void
     {
         // Setup household head

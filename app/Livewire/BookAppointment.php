@@ -82,14 +82,32 @@ class BookAppointment extends Component
         $isRental = ($this->appointment_category === 'rental');
         $quantity = $isRental ? max(1, (int) $this->rental_quantity) : 1;
 
-        // Prevent duplicate pending requests for the same service
-        $existingPending = Appointment::where('user_id', Auth::id())
-            ->where('status', 'pending')
-            ->where('purpose', 'like', "%{$selectedItem}%")
+        // Prevent duplicate active requests for the same service or document
+        $existingActive = Appointment::where('user_id', Auth::id())
+            ->whereIn('status', ['pending', 'approved-pending', 'approved'])
+            ->where(function ($query) use ($selectedItem, $details) {
+                $query->where('purpose', 'like', "%{$selectedItem}%")
+                    ->orWhereHas('transaction', function ($tq) use ($selectedItem) {
+                        $tq->where('item_name', $selectedItem);
+                    });
+
+                if ($selectedItem === 'Other / Custom Barangay Document' || $selectedItem === 'Other Facility / Equipment Rental') {
+                    if (! empty($details)) {
+                        $query->orWhere('purpose', 'like', "%{$details}%");
+                    }
+                    $query->orWhereHas('transaction', function ($tq) {
+                        $tq->whereIn('item_name', ['Other / Custom Barangay Document', 'Other Facility / Equipment Rental']);
+                    });
+                }
+            })
             ->first();
 
-        if ($existingPending) {
-            $this->addError('document_type', __('You already have a pending request for this service. Please wait for it to be processed before submitting another.'));
+        if ($existingActive) {
+            $msg = $isRental
+                ? __('You already have an active request or reservation for this rental service. Please wait for it to be processed before submitting another.')
+                : __('You already have an active request for this document. Please wait for it to be processed before submitting another.');
+
+            $this->addError('document_type', $msg);
 
             return;
         }

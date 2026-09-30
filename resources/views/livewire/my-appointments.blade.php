@@ -114,6 +114,16 @@
                                         >
                                             Cancel Request
                                         </button>
+                                    @elseif($apt->status === 'cancelled')
+                                        <button 
+                                            wire:click="deleteCancelled({{ $apt->id }})"
+                                            wire:confirm="Are you sure you want to delete this cancelled request?"
+                                            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-red-200 dark:border-red-900/50 bg-red-50/60 dark:bg-red-950/30 hover:bg-red-100 dark:hover:bg-red-950/60 text-red-700 dark:text-red-400 text-xs font-bold transition-all focus:outline-none focus:ring-2 focus:ring-red-500 cursor-pointer"
+                                            title="Delete Cancelled Request"
+                                        >
+                                            <flux:icon name="trash" class="size-3.5" />
+                                            <span>Delete</span>
+                                        </button>
                                     @else
                                         <span class="text-xs text-zinc-400 dark:text-zinc-600 font-semibold">-</span>
                                     @endif
@@ -230,6 +240,16 @@
                                             class="px-3 py-1.5 rounded-lg border border-red-200 bg-red-50/50 hover:bg-red-50 hover:text-red-700 hover:border-red-300 text-red-650 dark:border-red-950/50 dark:bg-red-950/20 dark:text-red-400 dark:hover:bg-red-950/40 text-xs font-bold transition-all focus:outline-none focus:ring-2 focus:ring-red-500 cursor-pointer"
                                         >
                                             Cancel Booking
+                                        </button>
+                                    @elseif($apt->status === 'cancelled')
+                                        <button 
+                                            wire:click="deleteCancelled({{ $apt->id }})"
+                                            wire:confirm="Are you sure you want to delete this cancelled rental booking?"
+                                            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-red-200 dark:border-red-900/50 bg-red-50/60 dark:bg-red-950/30 hover:bg-red-100 dark:hover:bg-red-950/60 text-red-700 dark:text-red-400 text-xs font-bold transition-all focus:outline-none focus:ring-2 focus:ring-red-500 cursor-pointer"
+                                            title="Delete Cancelled Request"
+                                        >
+                                            <flux:icon name="trash" class="size-3.5" />
+                                            <span>Delete</span>
                                         </button>
                                     @else
                                         <span class="text-xs text-zinc-400 dark:text-zinc-600 font-semibold">-</span>
