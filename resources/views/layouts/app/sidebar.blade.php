@@ -5,17 +5,18 @@
     $activeGlow = 'bg-emerald-500/10 text-emerald-600 dark:bg-emerald-500/15 dark:text-emerald-400 border-l-4 border-emerald-500 font-bold';
     $sidebarBg = 'border-e border-zinc-200/50 bg-white/80 backdrop-blur-glass dark:border-zinc-800/80 dark:bg-gradient-to-b dark:from-slate-950 dark:via-zinc-950 dark:to-slate-950';
     
-    if (auth()->user()->isHealthAdmin()) {
+    $user = auth()->user();
+    if ($user?->isHealthAdmin()) {
         $roleColor = 'violet';
         $roleClass = 'stripe-left-health card-glow-health';
         $roleBadgeColor = 'violet-500';
         $activeGlow = 'bg-violet-500/10 text-violet-600 dark:bg-violet-500/15 dark:text-violet-400 border-l-4 border-violet-500 font-bold';
-    } elseif (auth()->user()->isHouseholdHead()) {
+    } elseif ($user?->isHouseholdHead()) {
         $roleColor = 'amber';
         $roleClass = 'stripe-left-household card-glow-household';
         $roleBadgeColor = 'amber-500';
         $activeGlow = 'bg-amber-500/10 text-amber-600 dark:bg-amber-500/15 dark:text-amber-400 border-l-4 border-amber-500 font-bold';
-    } elseif (auth()->user()->isResident()) {
+    } elseif ($user?->isResident()) {
         $roleColor = 'sky';
         $roleClass = 'stripe-left-resident card-glow-resident';
         $roleBadgeColor = 'sky-500';
@@ -40,11 +41,17 @@
                         {{ __('Public Homepage') }}
                     </flux:sidebar.item>
 
-                    <flux:sidebar.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate class="{{ request()->routeIs('dashboard') ? $activeGlow : '' }}">
-                        {{ __('Dashboard') }}
+                    @if($user)
+                        <flux:sidebar.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate class="{{ request()->routeIs('dashboard') ? $activeGlow : '' }}">
+                            {{ __('Dashboard') }}
+                        </flux:sidebar.item>
+                    @endif
+
+                    <flux:sidebar.item icon="calendar-days" :href="route('holidays')" :current="request()->routeIs('holidays')" wire:navigate class="{{ request()->routeIs('holidays') ? $activeGlow : '' }}">
+                        {{ __('National Holidays') }}
                     </flux:sidebar.item>
 
-                    @if(auth()->user()->isAdmin())
+                    @if($user?->isAdmin())
                         <flux:sidebar.group expandable icon="briefcase" :heading="__('Manage Services')" :expanded="request()->routeIs('admin.services.*') || request()->routeIs('admin.sales') || request()->routeIs('appointments')">
                             <flux:sidebar.item icon="document-text" :href="route('admin.services.documents')" :current="request()->routeIs('admin.services.documents') || request()->routeIs('appointments')" wire:navigate class="{{ (request()->routeIs('admin.services.documents') || request()->routeIs('appointments')) ? $activeGlow : '' }}">
                                 {{ __('Document Requests') }}
@@ -70,7 +77,7 @@
                         </flux:sidebar.item>
                     @endif
 
-                    @if(auth()->user()->isHealthAdmin())
+                    @if($user?->isHealthAdmin())
                         <flux:sidebar.item icon="heart" :href="route('health')" :current="request()->routeIs('health')" wire:navigate class="{{ request()->routeIs('health') ? $activeGlow : '' }}">
                             {{ __('Health-based Data') }}
                         </flux:sidebar.item>
@@ -79,13 +86,13 @@
                         </flux:sidebar.item>
                     @endif
 
-                    @if(auth()->user()->isHouseholdHead())
+                    @if($user?->isHouseholdHead())
                         <flux:sidebar.item icon="users" :href="route('household')" :current="request()->routeIs('household')" wire:navigate class="{{ request()->routeIs('household') ? $activeGlow : '' }}">
                             {{ __('My Household') }}
                         </flux:sidebar.item>
                     @endif
 
-                    @if(auth()->user()->isHouseholdHead() || auth()->user()->isResident())
+                    @if($user && ($user->isHouseholdHead() || $user->isResident()))
                         <flux:sidebar.group expandable icon="briefcase" :heading="__('Barangay Services')" :expanded="request()->routeIs('services.*')">
                             <flux:sidebar.item icon="document-text" :href="route('services.documents')" :current="request()->routeIs('services.documents')" wire:navigate class="text-xs! {{ request()->routeIs('services.documents') ? $activeGlow : '' }}">
                                 {{ __('Request Documents') }}
@@ -97,7 +104,7 @@
 
                         <flux:sidebar.item icon="user-circle" :href="route('profile.edit')" :current="request()->routeIs('profile*')" wire:navigate class="{{ request()->routeIs('profile*') ? $activeGlow : '' }}">
                             {{ __('My Profile') }}
-                            @if(!auth()->user()->resident?->place_of_birth)
+                            @if(!$user->resident?->place_of_birth)
                                 <span class="ml-auto inline-flex h-2 w-2 rounded-full bg-amber-400 animate-pulse"></span>
                             @endif
                         </flux:sidebar.item>
@@ -107,12 +114,20 @@
 
             <flux:spacer />
 
-            <div class="hidden lg:flex items-center gap-2 mt-auto p-2.5 bg-zinc-50/50 border border-zinc-200/60 dark:bg-zinc-950/40 dark:border-zinc-800/80 rounded-2xl shadow-sm">
-                <div class="flex-1 min-w-0">
-                    <x-desktop-user-menu :name="auth()->user()->name" />
+            @if($user)
+                <div class="hidden lg:flex items-center gap-2 mt-auto p-2.5 bg-zinc-50/50 border border-zinc-200/60 dark:bg-zinc-950/40 dark:border-zinc-800/80 rounded-2xl shadow-sm">
+                    <div class="flex-1 min-w-0">
+                        <x-desktop-user-menu :name="$user->name" />
+                    </div>
+                    <livewire:notifications-dropdown />
                 </div>
-                <livewire:notifications-dropdown />
-            </div>
+            @else
+                <div class="mt-auto p-2.5">
+                    <a href="{{ route('login') }}" class="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-brand text-white font-semibold text-xs hover:bg-brand-dark transition shadow-sm">
+                        {{ __('Sign In to Portal') }}
+                    </a>
+                </div>
+            @endif
         </flux:sidebar>
 
         <!-- Mobile User Menu -->
@@ -121,11 +136,17 @@
 
             <flux:spacer />
 
-            <div class="flex items-center gap-1">
-                <livewire:notifications-dropdown />
-                
-                <livewire:desktop-user-menu :mobile="true" />
-            </div>
+            @if($user)
+                <div class="flex items-center gap-1">
+                    <livewire:notifications-dropdown />
+                    
+                    <livewire:desktop-user-menu :mobile="true" />
+                </div>
+            @else
+                <a href="{{ route('login') }}" class="text-xs px-3 py-1.5 rounded-lg bg-brand text-white font-medium">
+                    {{ __('Sign In') }}
+                </a>
+            @endif
         </flux:header>
 
         {{ $slot }}

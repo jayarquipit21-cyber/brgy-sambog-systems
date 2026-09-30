@@ -997,12 +997,13 @@
                         <li><a href="#ordinances" class="hover:text-emerald-600 transition">Ordinances</a></li>
                         <li><a href="#places" class="hover:text-emerald-600 transition">Places</a></li>
                         <li><a href="#announcements" class="hover:text-emerald-600 transition">Announcements</a></li>
+                        <li><a href="{{ route('holidays') }}" class="hover:text-emerald-600 transition font-medium text-emerald-600 dark:text-emerald-400">National Holidays Schedule →</a></li>
                     </ul>
                 </div>
 
                 <div>
                     <h5 class="font-bold text-zinc-950 dark:text-white font-outfit mb-3">Operating Hours</h5>
-                    <p class="text-zinc-500 leading-relaxed">Monday – Friday<br>8:00 AM – 5:00 PM<br>(Closed on Public Holidays)</p>
+                    <p class="text-zinc-500 leading-relaxed">Monday – Friday<br>8:00 AM – 5:00 PM<br>(Closed on <a href="{{ route('holidays') }}" class="underline hover:text-emerald-600 transition">Public Holidays</a>)</p>
                 </div>
 
                 <div>

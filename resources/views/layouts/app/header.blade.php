@@ -4,15 +4,16 @@
     $mobileActiveGlow = 'bg-emerald-500/10 text-emerald-600 dark:bg-emerald-500/15 dark:text-emerald-400 border-l-4 border-emerald-500 font-bold';
     $sidebarBg = 'border-e border-zinc-200/50 bg-white/80 backdrop-blur-glass dark:border-zinc-800/80 dark:bg-gradient-to-b dark:from-slate-950 dark:via-zinc-950 dark:to-slate-950';
     
-    if (auth()->user()->isHealthAdmin()) {
+    $user = auth()->user();
+    if ($user?->isHealthAdmin()) {
         $roleColor = 'violet';
         $activeNavbarGlow = 'font-bold border-b-2 border-violet-500 text-violet-600 dark:text-violet-400';
         $mobileActiveGlow = 'bg-violet-500/10 text-violet-600 dark:bg-violet-500/15 dark:text-violet-400 border-l-4 border-violet-500 font-bold';
-    } elseif (auth()->user()->isHouseholdHead()) {
+    } elseif ($user?->isHouseholdHead()) {
         $roleColor = 'amber';
         $activeNavbarGlow = 'font-bold border-b-2 border-amber-500 text-amber-600 dark:text-amber-450';
         $mobileActiveGlow = 'bg-amber-500/10 text-amber-600 dark:bg-amber-500/15 dark:text-amber-400 border-l-4 border-amber-500 font-bold';
-    } elseif (auth()->user()->isResident()) {
+    } elseif ($user?->isResident()) {
         $roleColor = 'sky';
         $activeNavbarGlow = 'font-bold border-b-2 border-sky-500 text-sky-600 dark:text-sky-400';
         $mobileActiveGlow = 'bg-sky-500/10 text-sky-600 dark:bg-sky-500/15 dark:text-sky-400 border-l-4 border-sky-500 font-bold';
