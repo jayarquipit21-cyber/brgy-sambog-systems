@@ -7,6 +7,8 @@ use App\Models\User;
 use App\Notifications\SystemNotification;
 use Flux\Flux;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Livewire\Component;
 
 class AnnouncementsManager extends Component
@@ -181,14 +183,36 @@ class AnnouncementsManager extends Component
      */
     private function notifyAllUsers(Announcement $announcement): void
     {
-        $users = User::where('id', '!=', Auth::id())->get();
-        foreach ($users as $user) {
-            $user->notify(new SystemNotification(
-                'New Announcement',
-                $announcement->title,
-                'megaphone',
-                route('dashboard')
-            ));
+        $userIds = User::where('id', '!=', Auth::id())->pluck('id');
+        if ($userIds->isEmpty()) {
+            return;
+        }
+
+        $now = now();
+        $payload = json_encode([
+            'title' => 'New Announcement',
+            'message' => $announcement->title,
+            'icon' => 'megaphone',
+            'url' => route('dashboard'),
+        ]);
+
+        $records = [];
+        foreach ($userIds as $userId) {
+            $records[] = [
+                'id' => (string) Str::uuid(),
+                'type' => SystemNotification::class,
+                'notifiable_type' => User::class,
+                'notifiable_id' => $userId,
+                'data' => $payload,
+                'read_at' => null,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ];
+        }
+
+        // Fast chunked bulk insert
+        foreach (array_chunk($records, 200) as $chunk) {
+            DB::table('notifications')->insert($chunk);
         }
     }
 
