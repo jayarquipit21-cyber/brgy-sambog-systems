@@ -90,23 +90,6 @@
                 <flux:tooltip :content="__('Search')" position="bottom">
                     <flux:navbar.item class="!h-10 [&>div>svg]:size-5" icon="magnifying-glass" href="#" :label="__('Search')" />
                 </flux:tooltip>
-                <flux:tooltip :content="__('Repository')" position="bottom">
-                    <flux:navbar.item
-                         class="h-10 max-lg:hidden [&>div>svg]:size-5"
-                         icon="folder-open"
-                         href="https://github.com/jayarquipit21-cyber/brgy-sambog-systems"
-                         target="_blank"
-                         :label="__('Repository')"
-                    />
-                </flux:tooltip>
-                <flux:tooltip :content="__('Documentation')" position="bottom">
-                    <flux:navbar.item
-                         class="h-10 max-lg:hidden [&>div>svg]:size-5"
-                         icon="book-open-text"
-                         href="#"
-                         :label="__('Documentation')"
-                    />
-                </flux:tooltip>
             </flux:navbar>
 
             <x-desktop-user-menu />
@@ -179,15 +162,6 @@
             </flux:sidebar.nav>
 
             <flux:spacer />
-
-            <flux:sidebar.nav>
-                <flux:sidebar.item icon="folder-open" href="https://github.com/jayarquipit21-cyber/brgy-sambog-systems" target="_blank">
-                        {{ __('Repository') }}
-                    </flux:sidebar.item>
-                    <flux:sidebar.item icon="book-open-text" href="#">
-                        {{ __('Documentation') }}
-                    </flux:sidebar.item>
-            </flux:sidebar.nav>
         </flux:sidebar>
 
         {{ $slot }}

@@ -107,16 +107,6 @@
 
             <flux:spacer />
 
-            <flux:sidebar.nav>
-                <flux:sidebar.item icon="folder-open" href="https://github.com/jayarquipit21-cyber/brgy-sambog-systems" target="_blank">
-                    {{ __('Repository') }}
-                </flux:sidebar.item>
-
-                <flux:sidebar.item icon="book-open-text" href="#">
-                    {{ __('Documentation') }}
-                </flux:sidebar.item>
-            </flux:sidebar.nav>
-
             <div class="hidden lg:flex items-center gap-2 mt-auto p-2.5 bg-zinc-50/50 border border-zinc-200/60 dark:bg-zinc-950/40 dark:border-zinc-800/80 rounded-2xl shadow-sm">
                 <div class="flex-1 min-w-0">
                     <x-desktop-user-menu :name="auth()->user()->name" />

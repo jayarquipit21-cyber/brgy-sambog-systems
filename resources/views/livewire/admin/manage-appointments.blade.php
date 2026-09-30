@@ -13,14 +13,6 @@
                     class="rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-1.5 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand text-sm"
                 />
                 <select 
-                    wire:model.live="typeFilter"
-                    class="rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-1.5 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand text-sm"
-                >
-                    <option value="">All Registries</option>
-                    <option value="document">Document Requests</option>
-                    <option value="rental">Rental Services</option>
-                </select>
-                <select 
                     wire:model.live="statusFilter"
                     class="rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-1.5 text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand text-sm"
                 >
