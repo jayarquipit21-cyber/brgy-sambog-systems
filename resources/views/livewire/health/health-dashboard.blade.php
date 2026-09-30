@@ -90,10 +90,20 @@
                         @foreach($healthRecords as $rec)
                             <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition">
                                 {{-- Resident Name --}}
-                                <td class="py-3 px-4 font-semibold text-zinc-900 dark:text-white whitespace-nowrap">
-                                    {{ $rec->last_name }}, {{ $rec->first_name }}
-                                    @if($rec->middle_name) {{ substr($rec->middle_name, 0, 1) }}.@endif
-                                    @if($rec->extension) {{ $rec->extension }}@endif
+                                <td class="py-3 px-4 font-semibold whitespace-nowrap">
+                                    <button type="button" 
+                                            wire:click="openResidentHealthCard({{ $rec->id }})"
+                                            class="group inline-flex items-center gap-2 text-left cursor-pointer hover:text-emerald-600 dark:hover:text-emerald-400 transition"
+                                            title="Click to view comprehensive health card & profile">
+                                        <span class="text-zinc-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 font-semibold group-hover:underline">
+                                            {{ $rec->last_name }}, {{ $rec->first_name }}
+                                            @if($rec->middle_name) {{ substr($rec->middle_name, 0, 1) }}.@endif
+                                            @if($rec->extension) {{ $rec->extension }}@endif
+                                        </span>
+                                        <span class="inline-flex items-center justify-center size-5 rounded-full bg-emerald-500/10 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400 opacity-60 group-hover:opacity-100 group-hover:scale-110 transition shadow-xs">
+                                            <flux:icon name="heart" class="size-3" />
+                                        </span>
+                                    </button>
                                 </td>
 
                                 {{-- Age / Sex --}}
@@ -239,4 +249,474 @@
             </div>
         @endif
     </div>
+
+    <!-- Resident Health Card & Comprehensive Profile Modal -->
+    <flux:modal name="resident-health-card-modal" class="max-w-4xl p-0 overflow-hidden" wire:model="showHealthCardModal">
+        @if($selectedResident)
+            <div class="space-y-6 max-h-[85vh] overflow-y-auto p-6 sm:p-8 font-sans">
+                <!-- Top Header: Health-Themed Hero Banner -->
+                <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-zinc-950 via-slate-900 to-emerald-950 text-white p-6 border border-emerald-900/40 shadow-xl">
+                    <div class="absolute -right-10 -top-10 w-64 h-64 bg-emerald-500/20 rounded-full blur-3xl pointer-events-none"></div>
+                    <div class="absolute -left-10 -bottom-10 w-64 h-64 bg-teal-500/15 rounded-full blur-3xl pointer-events-none"></div>
+
+                    <div class="relative flex flex-col sm:flex-row items-center sm:items-start gap-5 z-10">
+                        <!-- Profile Avatar -->
+                        <div class="relative shrink-0">
+                            @if($selectedResident->user?->avatar)
+                                <img src="{{ $selectedResident->user->avatar_url }}" alt="{{ $selectedResident->full_name }}" class="size-24 rounded-2xl object-cover ring-4 ring-emerald-500/30 shadow-xl">
+                            @else
+                                <div class="size-24 rounded-2xl bg-gradient-to-tr from-emerald-600 via-teal-600 to-cyan-600 text-white font-black font-outfit text-3xl flex items-center justify-center ring-4 ring-emerald-500/30 shadow-xl">
+                                    {{ strtoupper(substr($selectedResident->first_name, 0, 1) . substr($selectedResident->last_name, 0, 1)) }}
+                                </div>
+                            @endif
+
+                            @if($selectedResident->registration_status === 'approved')
+                                <div class="absolute -bottom-1.5 -right-1.5 bg-emerald-500 text-white p-1 rounded-full ring-2 ring-zinc-900 shadow-sm" title="Verified Resident">
+                                    <flux:icon name="check" class="size-3.5" />
+                                </div>
+                            @endif
+                        </div>
+
+                        <!-- Core Profile & Key Health Status -->
+                        <div class="flex-1 text-center sm:text-left space-y-2">
+                            <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+                                <h2 class="text-xl sm:text-2xl font-black font-outfit text-white tracking-tight">
+                                    {{ $selectedResident->full_name }}
+                                </h2>
+
+                                <!-- Relationship Badge -->
+                                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider
+                                    @if(strtolower($selectedResident->relationship_to_head) === 'household head' || strtolower($selectedResident->relationship_to_head) === 'hh')
+                                        bg-amber-500/20 text-amber-300 border border-amber-500/30
+                                    @else
+                                        bg-sky-500/20 text-sky-300 border border-sky-500/30
+                                    @endif">
+                                    {{ $selectedResident->relationship_to_head ?: 'Resident Member' }}
+                                </span>
+
+                                <!-- Age Category Badge -->
+                                @if($selectedResident->age !== null && $selectedResident->age <= 12)
+                                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-500/20 text-blue-300 border border-blue-500/30">
+                                        Pediatric
+                                    </span>
+                                @elseif($selectedResident->age !== null && $selectedResident->age <= 24)
+                                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                                        Youth
+                                    </span>
+                                @elseif($selectedResident->age !== null && $selectedResident->age <= 59)
+                                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                                        Adult
+                                    </span>
+                                @elseif($selectedResident->age !== null)
+                                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-red-500/20 text-red-300 border border-red-500/30">
+                                        Senior Citizen
+                                    </span>
+                                @endif
+                            </div>
+
+                            <div class="text-xs text-zinc-300 flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-1">
+                                @if($selectedResident->household)
+                                    <span class="inline-flex items-center gap-1.5 text-zinc-300">
+                                        <flux:icon name="home" class="size-3.5 text-emerald-400" />
+                                        HH #{{ $selectedResident->household->household_no }} (Purok {{ $selectedResident->household->purok_no ?? '—' }})
+                                    </span>
+                                @endif
+                                @if($selectedResident->mobile_number)
+                                    <span class="inline-flex items-center gap-1.5 text-zinc-300">
+                                        <flux:icon name="phone" class="size-3.5 text-emerald-400" />
+                                        {{ $selectedResident->mobile_number }}
+                                    </span>
+                                @endif
+                                @if($selectedResident->email_address || $selectedResident->user?->email)
+                                    <span class="inline-flex items-center gap-1.5 text-zinc-300">
+                                        <flux:icon name="envelope" class="size-3.5 text-emerald-400" />
+                                        {{ $selectedResident->email_address ?: $selectedResident->user?->email }}
+                                    </span>
+                                @endif
+                            </div>
+
+                            <!-- Quick Health Highlight Tags -->
+                            <div class="pt-2 flex flex-wrap items-center justify-center sm:justify-start gap-2">
+                                @if($selectedResident->blood_type)
+                                    <span class="inline-flex items-center gap-1 text-[11px] bg-rose-500/20 text-rose-200 border border-rose-500/30 px-2.5 py-0.5 rounded-lg font-semibold">
+                                        <flux:icon name="heart" class="size-3 text-rose-400" />
+                                        Blood: <strong class="text-white">{{ $selectedResident->blood_type }}</strong>
+                                    </span>
+                                @endif
+
+                                @if($selectedResident->fully_vaccinated === 'Y')
+                                    <span class="inline-flex items-center gap-1 text-[11px] bg-emerald-500/20 text-emerald-200 border border-emerald-500/30 px-2.5 py-0.5 rounded-lg font-semibold">
+                                        <flux:icon name="check-circle" class="size-3 text-emerald-400" />
+                                        Fully Vaccinated
+                                    </span>
+                                @elseif($selectedResident->partially_vaccinated === 'Y')
+                                    <span class="inline-flex items-center gap-1 text-[11px] bg-amber-500/20 text-amber-200 border border-amber-500/30 px-2.5 py-0.5 rounded-lg font-semibold">
+                                        Partially Vaccinated
+                                    </span>
+                                @else
+                                    <span class="inline-flex items-center gap-1 text-[11px] bg-red-500/20 text-red-200 border border-red-500/30 px-2.5 py-0.5 rounded-lg font-semibold">
+                                        Unvaccinated
+                                    </span>
+                                @endif
+
+                                @if($selectedResident->has_philhealth === 'Y')
+                                    <span class="inline-flex items-center gap-1 text-[11px] bg-blue-500/20 text-blue-200 border border-blue-500/30 px-2.5 py-0.5 rounded-lg font-semibold">
+                                        <flux:icon name="shield-check" class="size-3 text-blue-400" />
+                                        PhilHealth: {{ $selectedResident->philhealth_id ?: 'Enrolled' }}
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4 Quick Health Stat Cards -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <!-- 1. Blood & Vitals -->
+                    <div class="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-3.5 space-y-1">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">Vitals & Body Stats</span>
+                        <div class="flex items-baseline gap-2">
+                            <span class="text-sm font-bold text-zinc-900 dark:text-white">
+                                {{ $selectedResident->blood_type ? 'Type ' . $selectedResident->blood_type : 'Type —' }}
+                            </span>
+                            @if($this->bmi)
+                                <span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-{{ $this->bmi['color'] }}-100 text-{{ $this->bmi['color'] }}-800 dark:bg-{{ $this->bmi['color'] }}-900/30 dark:text-{{ $this->bmi['color'] }}-300">
+                                    BMI {{ $this->bmi['value'] }}
+                                </span>
+                            @endif
+                        </div>
+                        <div class="text-[11px] text-zinc-500 dark:text-zinc-400">
+                            {{ $selectedResident->height ? $selectedResident->height . ' cm' : '— cm' }} / {{ $selectedResident->weight ? $selectedResident->weight . ' kg' : '— kg' }}
+                            @if($this->bmi) ({{ $this->bmi['label'] }}) @endif
+                        </div>
+                    </div>
+
+                    <!-- 2. Medical Condition -->
+                    <div class="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-3.5 space-y-1">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">Medical Condition</span>
+                        <div class="text-sm font-bold truncate {{ ($selectedResident->health_condition && $selectedResident->health_condition !== 'None') ? 'text-amber-600 dark:text-amber-400' : 'text-emerald-600 dark:text-emerald-400' }}">
+                            {{ $selectedResident->health_condition ?: 'No Condition' }}
+                        </div>
+                        <div class="text-[11px] text-zinc-500 dark:text-zinc-400 truncate">
+                            Nutritional: {{ $selectedResident->nutritional_classification ?: 'Normal' }}
+                        </div>
+                    </div>
+
+                    <!-- 3. Immunization & Booster -->
+                    <div class="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-3.5 space-y-1">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">COVID & Booster</span>
+                        <div class="text-sm font-bold text-zinc-900 dark:text-white truncate">
+                            {{ $selectedResident->covid_brand ?: ($selectedResident->fully_vaccinated === 'Y' ? 'Vaccinated' : 'Unvaccinated') }}
+                        </div>
+                        <div class="text-[11px] text-zinc-500 dark:text-zinc-400">
+                            Booster: {{ $selectedResident->has_booster === 'Y' ? 'Received (' . ($selectedResident->booster_brand ?: 'Yes') . ')' : 'None' }}
+                        </div>
+                    </div>
+
+                    <!-- 4. PhilHealth & Welfare -->
+                    <div class="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-3.5 space-y-1">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">PhilHealth & Welfare</span>
+                        <div class="text-sm font-bold text-zinc-900 dark:text-white truncate">
+                            {{ $selectedResident->has_philhealth === 'Y' ? 'PhilHealth Member' : 'Not Enrolled' }}
+                        </div>
+                        <div class="text-[11px] text-zinc-500 dark:text-zinc-400 truncate">
+                            Sector: {{ $selectedResident->vulnerable_sector ?: 'General' }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab Navigation Buttons -->
+                <div class="flex border-b border-zinc-200 dark:border-zinc-800 gap-6 text-sm font-medium">
+                    <button type="button" 
+                            wire:click="$set('cardActiveTab', 'health')"
+                            class="pb-2.5 transition border-b-2 cursor-pointer inline-flex items-center gap-1.5 {{ $cardActiveTab === 'health' ? 'border-emerald-500 text-emerald-600 dark:text-emerald-400 font-bold' : 'border-transparent text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200' }}">
+                        <flux:icon name="heart" class="size-4" />
+                        Health & Medical Record
+                    </button>
+                    <button type="button" 
+                            wire:click="$set('cardActiveTab', 'profile')"
+                            class="pb-2.5 transition border-b-2 cursor-pointer inline-flex items-center gap-1.5 {{ $cardActiveTab === 'profile' ? 'border-emerald-500 text-emerald-600 dark:text-emerald-400 font-bold' : 'border-transparent text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200' }}">
+                        <flux:icon name="user" class="size-4" />
+                        Personal & Demographics
+                    </button>
+                    <button type="button" 
+                            wire:click="$set('cardActiveTab', 'household')"
+                            class="pb-2.5 transition border-b-2 cursor-pointer inline-flex items-center gap-1.5 {{ $cardActiveTab === 'household' ? 'border-emerald-500 text-emerald-600 dark:text-emerald-400 font-bold' : 'border-transparent text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200' }}">
+                        <flux:icon name="home" class="size-4" />
+                        Household & Living Condition
+                    </button>
+                </div>
+
+                <!-- Tab 1: Health & Medical Record -->
+                @if($cardActiveTab === 'health')
+                    <div class="space-y-4">
+                        <!-- Medical Condition & Clinical Notes -->
+                        <div class="bg-zinc-50/70 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800/80 rounded-2xl p-5 space-y-3">
+                            <div class="flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-2">
+                                <flux:icon name="clipboard-document-list" class="size-4 text-emerald-500" />
+                                <h4 class="text-xs font-bold uppercase tracking-wider text-zinc-900 dark:text-white">Clinical & Medical History</h4>
+                            </div>
+
+                            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 text-xs">
+                                <div class="sm:col-span-2">
+                                    <span class="text-[10px] uppercase tracking-wider text-zinc-400 block font-semibold">Diagnosed Condition / Chronic Illness</span>
+                                    <span class="font-bold text-zinc-800 dark:text-zinc-200 text-sm">
+                                        {{ $selectedResident->health_condition ?: 'None reported (Healthy)' }}
+                                    </span>
+                                </div>
+                                <div>
+                                    <span class="text-[10px] uppercase tracking-wider text-zinc-400 block font-semibold">Blood Type</span>
+                                    <span class="font-bold text-zinc-800 dark:text-zinc-200">
+                                        {{ $selectedResident->blood_type ? 'Type ' . $selectedResident->blood_type : 'Not recorded' }}
+                                    </span>
+                                </div>
+                                <div>
+                                    <span class="text-[10px] uppercase tracking-wider text-zinc-400 block font-semibold">Nutritional Classification</span>
+                                    <span class="font-bold text-zinc-800 dark:text-zinc-200">
+                                        {{ $selectedResident->nutritional_classification ?: 'Normal' }}
+                                    </span>
+                                </div>
+                                <div>
+                                    <span class="text-[10px] uppercase tracking-wider text-zinc-400 block font-semibold">Height & Weight</span>
+                                    <span class="font-bold text-zinc-800 dark:text-zinc-200">
+                                        {{ $selectedResident->height ? $selectedResident->height . ' cm' : '—' }} / {{ $selectedResident->weight ? $selectedResident->weight . ' kg' : '—' }}
+                                    </span>
+                                </div>
+                                <div>
+                                    <span class="text-[10px] uppercase tracking-wider text-zinc-400 block font-semibold">Body Mass Index (BMI)</span>
+                                    <span class="font-bold text-zinc-800 dark:text-zinc-200">
+                                        @if($this->bmi)
+                                            {{ $this->bmi['value'] }} ({{ $this->bmi['label'] }})
+                                        @else
+                                            Not enough data
+                                        @endif
+                                    </span>
+                                </div>
+                                <div>
+                                    <span class="text-[10px] uppercase tracking-wider text-zinc-400 block font-semibold">Vulnerable Sector</span>
+                                    <span class="font-bold text-zinc-800 dark:text-zinc-200">
+                                        {{ $selectedResident->vulnerable_sector ?: 'None' }}
+                                    </span>
+                                </div>
+                                <div>
+                                    <span class="text-[10px] uppercase tracking-wider text-zinc-400 block font-semibold">Social Welfare Availed</span>
+                                    <span class="font-bold text-zinc-800 dark:text-zinc-200">
+                                        {{ $selectedResident->social_welfare_availed ?: 'None' }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Immunization Tracker -->
+                        <div class="bg-zinc-50/70 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800/80 rounded-2xl p-5 space-y-3">
+                            <div class="flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-2">
+                                <flux:icon name="shield-check" class="size-4 text-teal-500" />
+                                <h4 class="text-xs font-bold uppercase tracking-wider text-zinc-900 dark:text-white">Vaccination & Immunization Record</h4>
+                            </div>
+
+                            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 text-xs">
+                                <div>
+                                    <span class="text-[10px] uppercase tracking-wider text-zinc-400 block font-semibold">COVID Vaccine Status</span>
+                                    <span class="font-bold text-zinc-800 dark:text-zinc-200">
+                                        @if($selectedResident->fully_vaccinated === 'Y') Fully Vaccinated
+                                        @elseif($selectedResident->partially_vaccinated === 'Y') Partially Vaccinated
+                                        @else Unvaccinated @endif
+                                    </span>
+                                </div>
+                                <div>
+                                    <span class="text-[10px] uppercase tracking-wider text-zinc-400 block font-semibold">Vaccine Brand</span>
+                                    <span class="font-bold text-zinc-800 dark:text-zinc-200">{{ $selectedResident->covid_brand ?: '—' }}</span>
+                                </div>
+                                <div>
+                                    <span class="text-[10px] uppercase tracking-wider text-zinc-400 block font-semibold">Dose 1 Administration</span>
+                                    <span class="font-bold text-zinc-800 dark:text-zinc-200">
+                                        {{ $selectedResident->covid_dose_1_date ? date('M d, Y', strtotime($selectedResident->covid_dose_1_date)) : '—' }}
+                                    </span>
+                                </div>
+                                <div>
+                                    <span class="text-[10px] uppercase tracking-wider text-zinc-400 block font-semibold">Dose 2 Administration</span>
+                                    <span class="font-bold text-zinc-800 dark:text-zinc-200">
+                                        {{ $selectedResident->covid_dose_2_date ? date('M d, Y', strtotime($selectedResident->covid_dose_2_date)) : '—' }}
+                                    </span>
+                                </div>
+                                <div>
+                                    <span class="text-[10px] uppercase tracking-wider text-zinc-400 block font-semibold">Booster Received?</span>
+                                    <span class="font-bold text-zinc-800 dark:text-zinc-200">
+                                        {{ $selectedResident->has_booster === 'Y' ? 'Yes' : ($selectedResident->has_booster === 'N' ? 'No' : '—') }}
+                                    </span>
+                                </div>
+                                <div>
+                                    <span class="text-[10px] uppercase tracking-wider text-zinc-400 block font-semibold">Booster Date</span>
+                                    <span class="font-bold text-zinc-800 dark:text-zinc-200">
+                                        {{ $selectedResident->booster_date ? date('M d, Y', strtotime($selectedResident->booster_date)) : '—' }}
+                                    </span>
+                                </div>
+                                <div class="sm:col-span-2">
+                                    <span class="text-[10px] uppercase tracking-wider text-zinc-400 block font-semibold">Booster Brand</span>
+                                    <span class="font-bold text-zinc-800 dark:text-zinc-200">{{ $selectedResident->booster_brand ?: '—' }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PhilHealth & Insurance -->
+                        <div class="bg-zinc-50/70 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800/80 rounded-2xl p-5 space-y-3">
+                            <div class="flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-2">
+                                <flux:icon name="identification" class="size-4 text-blue-500" />
+                                <h4 class="text-xs font-bold uppercase tracking-wider text-zinc-900 dark:text-white">PhilHealth & Health Insurance</h4>
+                            </div>
+
+                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
+                                <div>
+                                    <span class="text-[10px] uppercase tracking-wider text-zinc-400 block font-semibold">Enrollment Status</span>
+                                    <span class="font-bold text-zinc-800 dark:text-zinc-200">
+                                        {{ $selectedResident->has_philhealth === 'Y' ? 'Enrolled / Active' : 'Not Enrolled' }}
+                                    </span>
+                                </div>
+                                <div>
+                                    <span class="text-[10px] uppercase tracking-wider text-zinc-400 block font-semibold">PhilHealth Identification No.</span>
+                                    <span class="font-mono font-bold text-zinc-800 dark:text-zinc-200">
+                                        {{ $selectedResident->philhealth_id ?: '—' }}
+                                    </span>
+                                </div>
+                                <div>
+                                    <span class="text-[10px] uppercase tracking-wider text-zinc-400 block font-semibold">Membership Type</span>
+                                    <span class="font-bold text-zinc-800 dark:text-zinc-200">
+                                        {{ $selectedResident->philhealth_membership_type ?: 'Not specified' }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
+                <!-- Tab 2: Personal & Demographics -->
+                @if($cardActiveTab === 'profile')
+                    <div class="bg-zinc-50/70 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800/80 rounded-2xl p-5 space-y-3">
+                        <div class="flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-2">
+                            <flux:icon name="user" class="size-4 text-sky-500" />
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-zinc-900 dark:text-white">Personal Identity & Demographics</h4>
+                        </div>
+
+                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 text-xs">
+                            <div>
+                                <span class="text-[10px] uppercase tracking-wider text-zinc-400 block font-semibold">Full Legal Name</span>
+                                <span class="font-bold text-zinc-800 dark:text-zinc-200">{{ $selectedResident->full_name }}</span>
+                            </div>
+                            <div>
+                                <span class="text-[10px] uppercase tracking-wider text-zinc-400 block font-semibold">Sex</span>
+                                <span class="font-bold text-zinc-800 dark:text-zinc-200">{{ $selectedResident->sex ?? '—' }}</span>
+                            </div>
+                            <div>
+                                <span class="text-[10px] uppercase tracking-wider text-zinc-400 block font-semibold">Birthdate & Age</span>
+                                <span class="font-bold text-zinc-800 dark:text-zinc-200">
+                                    {{ $selectedResident->birthdate ? date('M d, Y', strtotime($selectedResident->birthdate)) : '—' }}
+                                    @if($selectedResident->age) ({{ $selectedResident->age }} yrs old) @endif
+                                </span>
+                            </div>
+                            <div>
+                                <span class="text-[10px] uppercase tracking-wider text-zinc-400 block font-semibold">Place of Birth</span>
+                                <span class="font-bold text-zinc-800 dark:text-zinc-200">{{ $selectedResident->place_of_birth ?? '—' }}</span>
+                            </div>
+                            <div>
+                                <span class="text-[10px] uppercase tracking-wider text-zinc-400 block font-semibold">Civil Status</span>
+                                <span class="font-bold text-zinc-800 dark:text-zinc-200">{{ $selectedResident->civil_status ?? '—' }}</span>
+                            </div>
+                            <div>
+                                <span class="text-[10px] uppercase tracking-wider text-zinc-400 block font-semibold">Citizenship</span>
+                                <span class="font-bold text-zinc-800 dark:text-zinc-200">{{ $selectedResident->citizenship ?? 'Filipino' }}</span>
+                            </div>
+                            <div>
+                                <span class="text-[10px] uppercase tracking-wider text-zinc-400 block font-semibold">Religion</span>
+                                <span class="font-bold text-zinc-800 dark:text-zinc-200">{{ $selectedResident->religion ?? '—' }}</span>
+                            </div>
+                            <div>
+                                <span class="text-[10px] uppercase tracking-wider text-zinc-400 block font-semibold">Mobile Number</span>
+                                <span class="font-bold text-zinc-800 dark:text-zinc-200">{{ $selectedResident->mobile_number ?? '—' }}</span>
+                            </div>
+                            <div class="sm:col-span-2">
+                                <span class="text-[10px] uppercase tracking-wider text-zinc-400 block font-semibold">Email Address</span>
+                                <span class="font-bold text-zinc-800 dark:text-zinc-200">{{ $selectedResident->email_address ?: ($selectedResident->user?->email ?? '—') }}</span>
+                            </div>
+                            <div>
+                                <span class="text-[10px] uppercase tracking-wider text-zinc-400 block font-semibold">Occupation</span>
+                                <span class="font-bold text-zinc-800 dark:text-zinc-200">{{ $selectedResident->occupation ?? '—' }}</span>
+                            </div>
+                            <div>
+                                <span class="text-[10px] uppercase tracking-wider text-zinc-400 block font-semibold">Work Status</span>
+                                <span class="font-bold text-zinc-800 dark:text-zinc-200">{{ $selectedResident->work_status ?? '—' }}</span>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
+                <!-- Tab 3: Household & Living Condition -->
+                @if($cardActiveTab === 'household')
+                    <div class="bg-zinc-50/70 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800/80 rounded-2xl p-5 space-y-3">
+                        <div class="flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-2">
+                            <flux:icon name="home" class="size-4 text-amber-500" />
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-zinc-900 dark:text-white">Household & Environmental Health</h4>
+                        </div>
+
+                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 text-xs">
+                            <div>
+                                <span class="text-[10px] uppercase tracking-wider text-zinc-400 block font-semibold">Household Number</span>
+                                <span class="font-bold text-zinc-800 dark:text-zinc-200">{{ $selectedResident->household?->household_no ?? '—' }}</span>
+                            </div>
+                            <div>
+                                <span class="text-[10px] uppercase tracking-wider text-zinc-400 block font-semibold">Purok</span>
+                                <span class="font-bold text-zinc-800 dark:text-zinc-200">Purok {{ $selectedResident->household?->purok_no ?? '—' }}</span>
+                            </div>
+                            <div class="sm:col-span-2">
+                                <span class="text-[10px] uppercase tracking-wider text-zinc-400 block font-semibold">Address / Street</span>
+                                <span class="font-bold text-zinc-800 dark:text-zinc-200">{{ $selectedResident->household?->address ?? 'Barangay Sambog, Corella' }}</span>
+                            </div>
+                            <div>
+                                <span class="text-[10px] uppercase tracking-wider text-zinc-400 block font-semibold">Role in Household</span>
+                                <span class="font-bold text-zinc-800 dark:text-zinc-200">{{ $selectedResident->relationship_to_head ?? '—' }}</span>
+                            </div>
+                            <div>
+                                <span class="text-[10px] uppercase tracking-wider text-zinc-400 block font-semibold">House Ownership</span>
+                                <span class="font-bold text-zinc-800 dark:text-zinc-200">
+                                    @if($selectedResident->is_house_owner === 'Y') Owned
+                                    @elseif($selectedResident->is_renter === 'Y') Renting
+                                    @else — @endif
+                                </span>
+                            </div>
+                            <div>
+                                <span class="text-[10px] uppercase tracking-wider text-zinc-400 block font-semibold">Water Source</span>
+                                <span class="font-bold text-zinc-800 dark:text-zinc-200">{{ $selectedResident->water_source ?? '—' }}</span>
+                            </div>
+                            <div>
+                                <span class="text-[10px] uppercase tracking-wider text-zinc-400 block font-semibold">Sanitary Toilet</span>
+                                <span class="font-bold text-zinc-800 dark:text-zinc-200">{{ $selectedResident->sanitary_toilet ?? '—' }}</span>
+                            </div>
+                            <div>
+                                <span class="text-[10px] uppercase tracking-wider text-zinc-400 block font-semibold">Waste Management</span>
+                                <span class="font-bold text-zinc-800 dark:text-zinc-200">{{ $selectedResident->waste_management ?? '—' }}</span>
+                            </div>
+                            <div>
+                                <span class="text-[10px] uppercase tracking-wider text-zinc-400 block font-semibold">Blind Drainage</span>
+                                <span class="font-bold text-zinc-800 dark:text-zinc-200">
+                                    {{ $selectedResident->has_blind_drainage === 'Y' ? 'Yes' : ($selectedResident->has_blind_drainage === 'N' ? 'No' : '—') }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
+                <!-- Modal Actions Footer -->
+                <div class="flex items-center justify-between pt-4 border-t border-zinc-200 dark:border-zinc-800">
+                    <a href="{{ route('health.edit') }}" 
+                       class="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300">
+                        <flux:icon name="pencil-square" class="size-4" />
+                        Go to Health Records Editor
+                    </a>
+
+                    <div class="flex items-center gap-2">
+                        <flux:button variant="ghost" wire:click="closeResidentHealthCard">Close</flux:button>
+                    </div>
+                </div>
+            </div>
+        @endif
+    </flux:modal>
 </div>

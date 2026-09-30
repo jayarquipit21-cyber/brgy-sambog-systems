@@ -16,6 +16,56 @@ class HealthDashboard extends Component
 
     public string $healthFilter = '';
 
+    // Health Card Modal state
+    public bool $showHealthCardModal = false;
+
+    public ?Resident $selectedResident = null;
+
+    public string $cardActiveTab = 'health'; // 'health', 'profile', 'household'
+
+    public function openResidentHealthCard(int $id): void
+    {
+        $this->selectedResident = Resident::with(['household', 'user'])->find($id);
+        $this->cardActiveTab = 'health';
+        $this->showHealthCardModal = true;
+    }
+
+    public function closeResidentHealthCard(): void
+    {
+        $this->showHealthCardModal = false;
+        $this->selectedResident = null;
+    }
+
+    public function getBmiProperty(): ?array
+    {
+        if (! $this->selectedResident) {
+            return null;
+        }
+
+        $h = floatval($this->selectedResident->height);
+        $w = floatval($this->selectedResident->weight);
+
+        if ($h <= 0 || $w <= 0) {
+            return null;
+        }
+
+        $hm = $h / 100;
+        $bmi = round($w / ($hm * $hm), 1);
+
+        $category = match (true) {
+            $bmi < 18.5 => ['label' => 'Underweight', 'color' => 'amber'],
+            $bmi < 25.0 => ['label' => 'Normal Weight', 'color' => 'emerald'],
+            $bmi < 30.0 => ['label' => 'Overweight', 'color' => 'orange'],
+            default => ['label' => 'Obese', 'color' => 'rose'],
+        };
+
+        return [
+            'value' => $bmi,
+            'label' => $category['label'],
+            'color' => $category['color'],
+        ];
+    }
+
     // Selected columns related to health and medical history
     protected array $healthRelatedColumns = [
         'id',
