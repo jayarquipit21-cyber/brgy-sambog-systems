@@ -82,31 +82,26 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 $formattedCounts[$label] = ($formattedCounts[$label] ?? 0) + $count;
             }
 
-            // Compute age demographics
-            $ages = Resident::approved()->pluck('age')->toArray();
+            // Compute age demographics using efficient SQL aggregation
+            $ageStats = DB::table('residents')
+                ->where('registration_status', 'approved')
+                ->whereNotNull('age')
+                ->selectRaw("
+                    SUM(CASE WHEN age <= 12 THEN 1 ELSE 0 END) as children,
+                    SUM(CASE WHEN age >= 13 AND age <= 19 THEN 1 ELSE 0 END) as teens,
+                    SUM(CASE WHEN age >= 20 AND age <= 35 THEN 1 ELSE 0 END) as young_adults,
+                    SUM(CASE WHEN age >= 36 AND age <= 59 THEN 1 ELSE 0 END) as adults,
+                    SUM(CASE WHEN age >= 60 THEN 1 ELSE 0 END) as seniors
+                ")
+                ->first();
+
             $ageGroups = [
-                'Children (0-12)' => 0,
-                'Teens (13-19)' => 0,
-                'Young Adults (20-35)' => 0,
-                'Adults (36-59)' => 0,
-                'Seniors (60+)' => 0,
+                'Children (0-12)' => (int) ($ageStats->children ?? 0),
+                'Teens (13-19)' => (int) ($ageStats->teens ?? 0),
+                'Young Adults (20-35)' => (int) ($ageStats->young_adults ?? 0),
+                'Adults (36-59)' => (int) ($ageStats->adults ?? 0),
+                'Seniors (60+)' => (int) ($ageStats->seniors ?? 0),
             ];
-            foreach ($ages as $age) {
-                if ($age === null) {
-                    continue;
-                }
-                if ($age <= 12) {
-                    $ageGroups['Children (0-12)']++;
-                } elseif ($age <= 19) {
-                    $ageGroups['Teens (13-19)']++;
-                } elseif ($age <= 35) {
-                    $ageGroups['Young Adults (20-35)']++;
-                } elseif ($age <= 59) {
-                    $ageGroups['Adults (36-59)']++;
-                } else {
-                    $ageGroups['Seniors (60+)']++;
-                }
-            }
 
             $data['purokLabels'] = array_map(function ($n) {
                 return 'Purok '.$n;
@@ -139,31 +134,26 @@ Route::middleware(['auth', 'verified'])->group(function () {
             $data['genderLabels'] = array_keys($formattedCounts);
             $data['genderValues'] = array_values($formattedCounts);
 
-            // Compute age demographics for Health Admin
-            $ages = Resident::approved()->pluck('age')->toArray();
+            // Compute age demographics for Health Admin using efficient SQL aggregation
+            $ageStats = DB::table('residents')
+                ->where('registration_status', 'approved')
+                ->whereNotNull('age')
+                ->selectRaw("
+                    SUM(CASE WHEN age <= 12 THEN 1 ELSE 0 END) as children,
+                    SUM(CASE WHEN age >= 13 AND age <= 19 THEN 1 ELSE 0 END) as teens,
+                    SUM(CASE WHEN age >= 20 AND age <= 35 THEN 1 ELSE 0 END) as young_adults,
+                    SUM(CASE WHEN age >= 36 AND age <= 59 THEN 1 ELSE 0 END) as adults,
+                    SUM(CASE WHEN age >= 60 THEN 1 ELSE 0 END) as seniors
+                ")
+                ->first();
+
             $ageGroups = [
-                'Children (0-12)' => 0,
-                'Teens (13-19)' => 0,
-                'Young Adults (20-35)' => 0,
-                'Adults (36-59)' => 0,
-                'Seniors (60+)' => 0,
+                'Children (0-12)' => (int) ($ageStats->children ?? 0),
+                'Teens (13-19)' => (int) ($ageStats->teens ?? 0),
+                'Young Adults (20-35)' => (int) ($ageStats->young_adults ?? 0),
+                'Adults (36-59)' => (int) ($ageStats->adults ?? 0),
+                'Seniors (60+)' => (int) ($ageStats->seniors ?? 0),
             ];
-            foreach ($ages as $age) {
-                if ($age === null) {
-                    continue;
-                }
-                if ($age <= 12) {
-                    $ageGroups['Children (0-12)']++;
-                } elseif ($age <= 19) {
-                    $ageGroups['Teens (13-19)']++;
-                } elseif ($age <= 35) {
-                    $ageGroups['Young Adults (20-35)']++;
-                } elseif ($age <= 59) {
-                    $ageGroups['Adults (36-59)']++;
-                } else {
-                    $ageGroups['Seniors (60+)']++;
-                }
-            }
             $data['ageLabels'] = array_keys($ageGroups);
             $data['ageValues'] = array_values($ageGroups);
 
