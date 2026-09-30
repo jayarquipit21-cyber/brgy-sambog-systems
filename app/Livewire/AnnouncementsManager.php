@@ -27,6 +27,18 @@ class AnnouncementsManager extends Component
 
     public ?string $event_location = null;
 
+    public ?string $start_date = null;
+
+    public ?string $start_time = '08:00';
+
+    public ?string $end_date = null;
+
+    public ?string $end_time = null;
+
+    public bool $has_end_time = false;
+
+    public bool $is_multi_day = false;
+
     public bool $is_pinned = false;
 
     public bool $publish_now = true;
@@ -52,10 +64,249 @@ class AnnouncementsManager extends Component
         ];
     }
 
+    public function updatedIsEvent($value): void
+    {
+        if ($value) {
+            if (! $this->start_date) {
+                $this->start_date = now()->format('Y-m-d');
+            }
+            if (! $this->start_time) {
+                $this->start_time = '08:00';
+            }
+            $this->syncToEventDates();
+        }
+    }
+
+    public function updatedStartDate($value): void
+    {
+        if (! $this->is_multi_day) {
+            $this->end_date = $value;
+        } elseif ($this->end_date && $this->end_date < $value) {
+            $this->end_date = $value;
+        }
+        $this->syncToEventDates();
+    }
+
+    public function updatedStartTime($value): void
+    {
+        if ($this->has_end_time && $this->end_time && ! $this->is_multi_day) {
+            if ($this->end_time <= $value) {
+                try {
+                    $this->end_time = \Carbon\Carbon::parse($value)->addHours(2)->format('H:i');
+                } catch (\Throwable $e) {}
+            }
+        }
+        $this->syncToEventDates();
+    }
+
+    public function updatedEndDate(): void
+    {
+        $this->syncToEventDates();
+    }
+
+    public function updatedEndTime(): void
+    {
+        $this->syncToEventDates();
+    }
+
+    public function updatedHasEndTime($value): void
+    {
+        if ($value) {
+            if (! $this->end_time) {
+                try {
+                    $this->end_time = \Carbon\Carbon::parse($this->start_time ?? '08:00')->addHours(2)->format('H:i');
+                } catch (\Throwable $e) {
+                    $this->end_time = '12:00';
+                }
+            }
+            if (! $this->end_date) {
+                $this->end_date = $this->start_date ?: now()->format('Y-m-d');
+            }
+        }
+        $this->syncToEventDates();
+    }
+
+    public function updatedIsMultiDay($value): void
+    {
+        if (! $value) {
+            $this->end_date = $this->start_date;
+        } elseif (! $this->end_date || $this->end_date <= $this->start_date) {
+            try {
+                $this->end_date = \Carbon\Carbon::parse($this->start_date ?? now())->addDay()->format('Y-m-d');
+            } catch (\Throwable $e) {
+                $this->end_date = now()->addDay()->format('Y-m-d');
+            }
+        }
+        $this->syncToEventDates();
+    }
+
+    public function updatedEventDate($value): void
+    {
+        $this->syncFromEventDates();
+    }
+
+    public function updatedEventEndDate($value): void
+    {
+        $this->syncFromEventDates();
+    }
+
+    public function applyTimePreset(string $preset): void
+    {
+        match ($preset) {
+            'morning' => [
+                $this->start_time = '08:00',
+                $this->end_time = '12:00',
+                $this->has_end_time = true,
+            ],
+            'afternoon' => [
+                $this->start_time = '13:00',
+                $this->end_time = '17:00',
+                $this->has_end_time = true,
+            ],
+            'whole_day' => [
+                $this->start_time = '08:00',
+                $this->end_time = '17:00',
+                $this->has_end_time = true,
+            ],
+            'evening' => [
+                $this->start_time = '18:00',
+                $this->end_time = '21:00',
+                $this->has_end_time = true,
+            ],
+            default => null,
+        };
+        $this->syncToEventDates();
+    }
+
+    public function applyDuration(int $hours): void
+    {
+        $base = $this->start_time ?: '08:00';
+        try {
+            $start = \Carbon\Carbon::parse($base);
+            $this->end_time = $start->addHours($hours)->format('H:i');
+            $this->has_end_time = true;
+        } catch (\Throwable $e) {}
+        $this->syncToEventDates();
+    }
+
+    public function setStartTimePreset(string $time): void
+    {
+        $this->start_time = $time;
+        $this->updatedStartTime($time);
+    }
+
+    public function setEndTimePreset(string $time): void
+    {
+        $this->end_time = $time;
+        $this->has_end_time = true;
+        $this->syncToEventDates();
+    }
+
+    public function setLocationSuggestion(string $location): void
+    {
+        $this->event_location = $location;
+    }
+
+    public function syncToEventDates(): void
+    {
+        if (! $this->is_event) {
+            $this->event_date = null;
+            $this->event_end_date = null;
+            return;
+        }
+
+        if ($this->start_date) {
+            $time = $this->start_time ?: '08:00';
+            $this->event_date = "{$this->start_date}T{$time}";
+        }
+
+        if ($this->has_end_time && $this->end_time) {
+            $endDate = ($this->is_multi_day && $this->end_date) ? $this->end_date : $this->start_date;
+            if ($endDate) {
+                $this->event_end_date = "{$endDate}T{$this->end_time}";
+            }
+        } else {
+            $this->event_end_date = null;
+        }
+    }
+
+    public function syncFromEventDates(): void
+    {
+        if ($this->event_date) {
+            try {
+                $dt = \Carbon\Carbon::parse($this->event_date);
+                $this->start_date = $dt->format('Y-m-d');
+                $this->start_time = $dt->format('H:i');
+            } catch (\Throwable $e) {}
+        }
+
+        if ($this->event_end_date) {
+            try {
+                $dt = \Carbon\Carbon::parse($this->event_end_date);
+                $this->end_date = $dt->format('Y-m-d');
+                $this->end_time = $dt->format('H:i');
+                $this->has_end_time = true;
+                $this->is_multi_day = ($this->start_date && $this->end_date !== $this->start_date);
+            } catch (\Throwable $e) {}
+        } else {
+            $this->has_end_time = false;
+            $this->end_date = $this->start_date;
+        }
+    }
+
+    public function getTimeSlots(): array
+    {
+        $slots = [];
+        $time = \Carbon\Carbon::createFromTime(6, 0);
+        $end = \Carbon\Carbon::createFromTime(22, 0);
+
+        while ($time->lte($end)) {
+            $slots[$time->format('H:i')] = $time->format('g:i A');
+            $time->addMinutes(30);
+        }
+
+        return $slots;
+    }
+
+    public function getScheduleSummary(): ?string
+    {
+        if (! $this->is_event || ! $this->start_date) {
+            return null;
+        }
+
+        try {
+            $start = \Carbon\Carbon::parse("{$this->start_date} " . ($this->start_time ?: '08:00'));
+            if ($this->has_end_time && $this->end_time) {
+                $endDate = ($this->is_multi_day && $this->end_date) ? $this->end_date : $this->start_date;
+                $end = \Carbon\Carbon::parse("{$endDate} {$this->end_time}");
+
+                if ($start->isSameDay($end)) {
+                    $duration = $start->diffInHours($end);
+                    $durationText = $duration > 0 ? " ({$duration} " . ($duration == 1 ? 'hr' : 'hrs') . ')' : '';
+                    return $start->format('l, F j, Y') . ' • ' . $start->format('g:i A') . ' – ' . $end->format('g:i A') . $durationText;
+                } else {
+                    return $start->format('M j, Y g:i A') . ' → ' . $end->format('M j, Y g:i A');
+                }
+            }
+
+            return $start->format('l, F j, Y \a\t g:i A');
+        } catch (\Throwable $e) {
+            return null;
+        }
+    }
+
     public function createAnnouncement()
     {
         if (! Auth::check() || ! Auth::user()->isAdmin()) {
             abort(403);
+        }
+
+        if ($this->is_event) {
+            if ($this->start_date) {
+                $this->syncToEventDates();
+            } elseif ($this->event_date) {
+                $this->syncFromEventDates();
+            }
         }
 
         $this->validate();
@@ -77,7 +328,10 @@ class AnnouncementsManager extends Component
             $this->notifyAllUsers($announcement);
         }
 
-        $this->reset(['title', 'body', 'type', 'is_event', 'event_date', 'event_end_date', 'event_location', 'is_pinned', 'publish_now']);
+        $this->reset([
+            'title', 'body', 'type', 'is_event', 'event_date', 'event_end_date', 'event_location', 'is_pinned', 'publish_now',
+            'start_date', 'start_time', 'end_date', 'end_time', 'is_multi_day', 'has_end_time'
+        ]);
 
         Flux::toast(variant: 'success', text: __('Announcement published.'));
     }
@@ -101,6 +355,8 @@ class AnnouncementsManager extends Component
         $this->event_location = $a->event_location;
         $this->is_pinned = (bool) $a->is_pinned;
         $this->publish_now = (bool) $a->published_at;
+
+        $this->syncFromEventDates();
     }
 
     public function updateAnnouncement()
@@ -111,6 +367,15 @@ class AnnouncementsManager extends Component
         if (! $this->editingId) {
             return;
         }
+
+        if ($this->is_event) {
+            if ($this->start_date) {
+                $this->syncToEventDates();
+            } elseif ($this->event_date) {
+                $this->syncFromEventDates();
+            }
+        }
+
         $this->validate();
         $a = Announcement::find($this->editingId);
         if (! $a) {
@@ -133,7 +398,10 @@ class AnnouncementsManager extends Component
     public function cancelEdit()
     {
         $this->editingId = null;
-        $this->reset(['title', 'body', 'type', 'is_event', 'event_date', 'event_end_date', 'event_location', 'is_pinned', 'publish_now']);
+        $this->reset([
+            'title', 'body', 'type', 'is_event', 'event_date', 'event_end_date', 'event_location', 'is_pinned', 'publish_now',
+            'start_date', 'start_time', 'end_date', 'end_time', 'is_multi_day', 'has_end_time'
+        ]);
     }
 
     public function deleteAnnouncement(int $id)
