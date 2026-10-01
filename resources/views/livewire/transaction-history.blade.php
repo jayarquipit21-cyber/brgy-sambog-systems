@@ -21,16 +21,18 @@
             </div>
 
             <div class="flex items-center gap-3">
-                {{-- Search --}}
-                <div class="relative">
-                    <input
-                        type="text"
-                        wire:model.live.debounce.300ms="search"
-                        placeholder="Search {{ $isAdmin ? 'payer, address, ' : '' }}item, OR#, code..."
-                        class="w-full sm:w-56 pl-8 pr-3 py-1.5 text-xs font-medium rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800/90 text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-{{ $serviceType === 'rental' ? 'amber' : 'sky' }}-500/20 focus:border-{{ $serviceType === 'rental' ? 'amber' : 'sky' }}-500"
-                    />
-                    <flux:icon name="magnifying-glass" class="size-3.5 absolute left-2.5 top-2 text-zinc-400" />
-                </div>
+                @if($isAdmin)
+                    {{-- Search (Admin Only) --}}
+                    <div class="relative">
+                        <input
+                            type="text"
+                            wire:model.live.debounce.300ms="search"
+                            placeholder="Search payer, address, item, OR#, code..."
+                            class="w-full sm:w-56 pl-8 pr-3 py-1.5 text-xs font-medium rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800/90 text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-{{ $serviceType === 'rental' ? 'amber' : 'sky' }}-500/20 focus:border-{{ $serviceType === 'rental' ? 'amber' : 'sky' }}-500"
+                        />
+                        <flux:icon name="magnifying-glass" class="size-3.5 absolute left-2.5 top-2 text-zinc-400" />
+                    </div>
+                @endif
 
                 <span class="text-xs font-bold {{ $serviceType === 'rental' ? 'text-amber-700 dark:text-amber-400 bg-amber-500/10 border-amber-500/20' : 'text-sky-700 dark:text-sky-400 bg-sky-500/10 border-sky-500/20' }} border px-2.5 py-1 rounded-full whitespace-nowrap">
                     {{ $transactions->total() }} {{ $transactions->total() === 1 ? 'Record' : 'Records' }}

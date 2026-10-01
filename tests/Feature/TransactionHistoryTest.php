@@ -126,4 +126,46 @@ class TransactionHistoryTest extends TestCase
             ->assertOk()
             ->assertSeeLivewire('transaction-history');
     }
+
+    public function test_search_bar_is_hidden_for_resident_and_household_head_on_document_and_rental_payments(): void
+    {
+        $resident = User::factory()->create(['role' => 'resident']);
+        $head = User::factory()->create(['role' => 'household_head']);
+
+        // Resident on document payments
+        $this->actingAs($resident);
+        Livewire::test(TransactionHistory::class, ['serviceType' => 'document'])
+            ->assertDontSeeHtml('wire:model.live.debounce.300ms="search"')
+            ->assertDontSee('Search payer, address');
+
+        // Resident on rental payments
+        Livewire::test(TransactionHistory::class, ['serviceType' => 'rental'])
+            ->assertDontSeeHtml('wire:model.live.debounce.300ms="search"')
+            ->assertDontSee('Search payer, address');
+
+        // Household Head on document payments
+        $this->actingAs($head);
+        Livewire::test(TransactionHistory::class, ['serviceType' => 'document'])
+            ->assertDontSeeHtml('wire:model.live.debounce.300ms="search"')
+            ->assertDontSee('Search payer, address');
+
+        // Household Head on rental payments
+        Livewire::test(TransactionHistory::class, ['serviceType' => 'rental'])
+            ->assertDontSeeHtml('wire:model.live.debounce.300ms="search"')
+            ->assertDontSee('Search payer, address');
+    }
+
+    public function test_search_bar_remains_visible_for_admin_on_document_and_rental_payments(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+        $this->actingAs($admin);
+
+        Livewire::test(TransactionHistory::class, ['serviceType' => 'document'])
+            ->assertSeeHtml('wire:model.live.debounce.300ms="search"')
+            ->assertSee('Search payer, address, item, OR#, code...');
+
+        Livewire::test(TransactionHistory::class, ['serviceType' => 'rental'])
+            ->assertSeeHtml('wire:model.live.debounce.300ms="search"')
+            ->assertSee('Search payer, address, item, OR#, code...');
+    }
 }
