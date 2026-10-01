@@ -24,6 +24,17 @@ class HealthDashboardTest extends TestCase
         $response->assertSeeLivewire(HealthDashboard::class);
     }
 
+    public function test_health_role_dashboard_does_not_have_view_appointments_button(): void
+    {
+        $healthAdmin = User::factory()->create(['role' => 'health_admin']);
+        $this->actingAs($healthAdmin);
+
+        $response = $this->get(route('dashboard'));
+        $response->assertOk();
+        $response->assertDontSee('View Appointments');
+        $response->assertSee('Open Health-based Data');
+    }
+
     public function test_clicking_resident_name_opens_health_card_with_profile_and_vitals(): void
     {
         $healthAdmin = User::factory()->create(['role' => 'health_admin']);
