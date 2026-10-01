@@ -189,7 +189,7 @@
                 <!-- Branding header -->
                 <div class="flex flex-col items-center gap-3 text-center">
                     <a href="{{ route('home') }}" class="flex flex-col items-center gap-3 group">
-                        <div class="auth-logo-wrap group-hover:scale-105">BC</div>
+                        <img src="{{ asset('images/logo.png') }}" alt="Brgy. Sambog Official Seal" class="h-16 w-16 object-contain rounded-full drop-shadow-md group-hover:scale-105 transition-transform duration-300" />
                         <div class="space-y-1">
                             <div class="auth-site-name">Brgy. Sambog, Corella, Bohol</div>
                             <div class="auth-brand-badge">

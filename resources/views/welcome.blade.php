@@ -282,9 +282,7 @@
                 
                 <!-- Municipal Brand Logo -->
                 <a href="#" class="flex items-center gap-3.5 group flex-shrink-0">
-                    <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white font-black text-base shadow-md font-outfit group-hover:scale-105 transition duration-200">
-                        BS
-                    </div>
+                    <img src="{{ asset('images/logo.png') }}" alt="Brgy. Sambog Official Seal" class="h-11 w-11 rounded-full object-contain drop-shadow-sm group-hover:scale-105 transition duration-200" />
                     <div class="min-w-0">
                         <span class="text-lg font-black tracking-tight text-zinc-950 dark:text-white font-outfit truncate block">Brgy. Sambog</span>
                         <span class="text-[10px] text-zinc-500 dark:text-zinc-400 font-bold uppercase tracking-widest block -mt-0.5">Corella, Bohol</span>
@@ -980,7 +978,7 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div class="space-y-3">
                     <div class="flex items-center gap-2 font-bold text-zinc-950 dark:text-white font-outfit text-base">
-                        <div class="h-6 w-6 rounded-lg bg-emerald-600 text-white flex items-center justify-center text-xs font-black">BS</div>
+                        <img src="{{ asset('images/logo.png') }}" alt="Brgy. Sambog Official Seal" class="h-7 w-7 rounded-full object-contain drop-shadow-xs" />
                         <span>Brgy. Sambog</span>
                     </div>
                     <p class="text-zinc-500 leading-relaxed">Official Municipal Inhabitant Portal of Barangay Sambog, Municipality of Corella, Province of Bohol.</p>
